@@ -1,75 +1,48 @@
-# Nuxt Minimal Starter
+# 🫧 Bubbles.space
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+**Bubbles.space is a persistent AI workspace that's always open, always in sync, and helps you think, build, and get things done in the AI era.**
 
-## Setup
+Stop managing apps. Open one space, stay there, and let AI help you get things done. That's Bubbles.space. It acts like a personal operating system powered by AI—your own Jarvis for work and life.
 
-Make sure to install dependencies:
+## 🚀 Tech Stack
+
+This project is built using a modern, AI-first stack:
+- **[Nuxt](https://nuxt.com/)**: The intuitive Vue framework, handling our frontend UI and server routes.
+- **[Eve Framework](https://github.com/jagreehal/eve)**: A filesystem-first framework for durable backend AI agents.
+- **[Ollama](https://ollama.com/)**: Running local, powerful language models (specifically `gemma4:31b-cloud`) via the Vercel AI SDK.
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+1. Ensure you have Node.js and [pnpm](https://pnpm.io/) installed.
+2. Install and start [Ollama](https://ollama.com/). Make sure you have the `gemma4:31b-cloud` model pulled and running.
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-# npm
-npm install
-
-# pnpm
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+### Development
 
-Start the development server on `http://localhost:3000`:
+Start the development server:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+pnpm run dev
 ```
 
-## Production
+The application will be available at `http://localhost:3000`. The Eve agent runs seamlessly alongside the Nuxt frontend, requiring no additional server startup.
 
-Build the application for production:
+## 📁 Project Structure
 
-```bash
-# npm
-npm run build
+- `app/app.vue`: The main chat interface where you interact with the agent.
+- `agent/agent.ts`: The Eve agent configuration and model definitions.
+- `agent/channels/eve.ts`: Authentication and routing configurations for the agent.
+- `.info2ai/`: Documentation and AI system prompts.
 
-# pnpm
-pnpm build
+## 💡 Vision
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Bubbles.space is an always-on AI workspace that remembers, syncs, and helps you get things done—like having your own Jarvis for the AI era.
