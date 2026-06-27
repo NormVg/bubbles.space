@@ -1,0 +1,42 @@
+{
+  "agentId": "bubbles-space",
+  "agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/agent",
+  "appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
+  "channels": [
+    {
+      "sourceKind": "module",
+      "logicalPath": "channels/eve.ts",
+      "sourceId": "channels/eve.ts"
+    }
+  ],
+  "connections": [],
+  "diagnosticsSummary": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "hooks": [],
+  "instructions": [
+    {
+      "definition": {
+        "markdown": "You are a helpful AI assistant in a Nuxt application. Your name is Bubbles\n"
+      },
+      "sourceKind": "markdown",
+      "logicalPath": "instructions.md",
+      "sourceId": "instructions.md"
+    }
+  ],
+  "lib": [],
+  "kind": "eve-agent-discovery-manifest",
+  "sandbox": null,
+  "sandboxWorkspaces": [],
+  "schedules": [],
+  "skills": [],
+  "tools": [],
+  "version": 12,
+  "subagents": [],
+  "configModule": {
+    "sourceKind": "module",
+    "logicalPath": "agent.ts",
+    "sourceId": "agent.ts"
+  }
+}

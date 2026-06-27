@@ -1,0 +1,16 @@
+{
+  "eventType": "step_completed",
+  "specVersion": 5,
+  "correlationId": "step_01KW59ZE7BYK9CYYS387QFCK15",
+  "eventData": {
+    "stepName": "step//eve@0.16.2//createSessionStep",
+    "workflowName": "workflow//eve//workflowEntry",
+    "result": {
+      "__type": "Uint8Array",
+      "data": "ZGV2bFt7InN0YXRlIjoxfSx7ImNvbnRpbnVhdGlvblRva2VuIjoyLCJlbWlzc2lvblN0YXRlIjozLCJoYXNQcm94eUlucHV0UmVxdWVzdHMiOjQsInNlc3Npb25JZCI6NywidmVyc2lvbiI6OCwic25hcHNob3QiOjl9LCJldmU6ZXZlOmVjYWZlMzdiLTkzYjUtNDdiNS1hYmQ1LWZkY2RjYWRhMDExNiIseyJzZXNzaW9uU3RhcnRlZCI6NCwic2VxdWVuY2UiOjUsInN0ZXBJbmRleCI6NSwidHVybklkIjo2fSxmYWxzZSwwLCIiLCJ3cnVuXzAxS1c1OVpFN0JXMFM1TjU0S1pIRlpFU05DIiwxLHsic2Vzc2lvbiI6MTAsInZlcnNpb24iOjh9LHsiYWdlbnQiOjExLCJjb250aW51YXRpb25Ub2tlbiI6MiwiaGlzdG9yeSI6MTMsInNlc3Npb25JZCI6N30seyJzeXN0ZW0iOjEyfSwiSW5zdHJ1Y3Rpb25zIChpbnN0cnVjdGlvbnMpXG5Zb3UgYXJlIGEgaGVscGZ1bCBBSSBhc3Npc3RhbnQgaW4gYSBOdXh0IGFwcGxpY2F0aW9uLiBZb3VyIG5hbWUgaXMgQnViYmxlc1xuXG5Ub29sIGV4ZWN1dGlvblxuQSBzaW5nbGUgdG9vbCBvciBzdWJhZ2VudCBjYWxsIHJ1bnMgYXMgb25lIHNlcmlhbCBhY3Rpb24uIElmIHlvdSBjYWxsIG11bHRpcGxlIGluZGVwZW5kZW50IHRvb2xzIG9yIHN1YmFnZW50cyBpbiBvbmUgcmVzcG9uc2UsIGV2ZSB0cmVhdHMgdGhhdCBiYXRjaCBhcyBwYXJhbGxlbCB3b3JrLiBPbmx5IGJhdGNoIHdvcmsgdGhhdCBpcyBpbmRlcGVuZGVudCBhbmQgZG9lcyBub3QgcmVseSBvbiBhbm90aGVyIGNhbGwgaW4gdGhlIHNhbWUgcmVzcG9uc2UuIixbXV0="
+    }
+  },
+  "runId": "wrun_01KW59ZE7BW0S5N54KZHFZESNC",
+  "eventId": "evnt_01KW59ZE84DTDW6PA3G91FJ539",
+  "createdAt": "2026-06-27T19:47:47.588Z"
+}

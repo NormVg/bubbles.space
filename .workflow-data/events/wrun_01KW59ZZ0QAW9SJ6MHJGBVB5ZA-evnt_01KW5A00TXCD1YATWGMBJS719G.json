@@ -1,0 +1,41 @@
+{
+  "eventType": "attr_set",
+  "specVersion": 5,
+  "eventData": {
+    "changes": [
+      {
+        "key": "$eve.model",
+        "value": "ollama/gemma4:31b-cloud"
+      },
+      {
+        "key": "$eve.input_tokens",
+        "value": "2532"
+      },
+      {
+        "key": "$eve.output_tokens",
+        "value": "27"
+      },
+      {
+        "key": "$eve.cache_read_tokens",
+        "value": "0"
+      },
+      {
+        "key": "$eve.cache_write_tokens",
+        "value": "0"
+      },
+      {
+        "key": "$eve.tool_count",
+        "value": "11"
+      }
+    ],
+    "writer": {
+      "type": "step",
+      "stepId": "step_01KW59ZZ0QHRG08KFTTFAZAQY6",
+      "attempt": 1
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01KW59ZZ0QAW9SJ6MHJGBVB5ZA",
+  "eventId": "evnt_01KW5A00TXCD1YATWGMBJS719G",
+  "createdAt": "2026-06-27T19:48:06.621Z"
+}

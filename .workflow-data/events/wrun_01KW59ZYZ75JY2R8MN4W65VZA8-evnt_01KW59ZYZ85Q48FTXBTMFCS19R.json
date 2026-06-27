@@ -1,0 +1,28 @@
+{
+  "eventType": "run_created",
+  "specVersion": 5,
+  "eventData": {
+    "deploymentId": "dpl_local@bundled",
+    "workflowName": "workflow//eve//workflowEntry",
+    "input": {
+      "__type": "Uint8Array",
+      "data": "enN0ZCi1L/1gKAPFEwDm638jME31LLUso/HHjxjIR9ikxmtpU+/5zkZga2pltUyloKGgggNzAHUAegCUjNpqKaDSb/lyyudBnv42wIPskVaOO6jCnfInZR7kSeX3T69ufTsJ3oNM+Zw9SWwB2ak4b9T8cq5gPOETs8dDIHflk5Tw1/pLmT1EYrZAdoe21iuuYA8G8kv4TyoQnUJSLatbZgrkv9aUXMEaHgMDdXkM/iweRDokt0ZAVM4+nazV0zqv5M9bkcuj88ubc6kt26xTUXQjBzE12u8qSquz6DusDzipK+jOycrL2ep2wTF7JC9AgkZxtmX2QJ6+D6rHpgVWGzh1I62YAUCOUzqYOZCfUgTL6gayS/VSyywSeKRzUSBbly8DUrXurWQkXxZl4U/iz3u8laab+CKnlbgkDaUh6LX32oJhZfRKJZQ0pS2MdwfpACmNac5jXNOfRihpSVswakfpoJMEQUtjGsOIlAJiWtIchmxIac1rCcMvd5U1reYsxA4rIzP3NEB8UXEUBuAh0eI10njEIJEkMYjUNDENfuuzB0Pw1i+EV3tpNTHpbGbsk86HWxMKikK1JaUpq8XsKZAl+dOZJX8jWf/bVr9YYZyoiQ/TjaVBIscbWRZnkMZLJMRxmMaSMA34uBwyezQPcn/Hfq+YLR4VjK3/5UH273/2oVGI1RWCTH/bUT2r/5QuLSAggogGyQcQZHIitg33tRahArsGV3fto7dcMCUaxgr4ZbN9P7TgE8llCIM8y4G4Gx3GILMMoLFlEoQZ7IxVRNlqbq2DUb4A4LEU+5A/ZNlBPEbwvJN1f8iv72ULruvSDgoNzvBghnmRU7ccyAJ1k9LV2oTaAw=="
+    },
+    "executionContext": {
+      "traceCarrier": {},
+      "workflowCoreVersion": "5.0.0-beta.24",
+      "features": {
+        "encryption": false
+      }
+    },
+    "attributes": {
+      "$eve.type": "session",
+      "$eve.trigger": "http",
+      "$eve.title": "hey"
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01KW59ZYZ75JY2R8MN4W65VZA8",
+  "eventId": "evnt_01KW59ZYZ85Q48FTXBTMFCS19R",
+  "createdAt": "2026-06-27T19:48:04.712Z"
+}

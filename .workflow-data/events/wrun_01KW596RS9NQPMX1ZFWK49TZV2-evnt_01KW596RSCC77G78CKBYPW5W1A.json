@@ -1,0 +1,28 @@
+{
+  "eventType": "run_created",
+  "specVersion": 5,
+  "eventData": {
+    "deploymentId": "dpl_local@bundled",
+    "workflowName": "workflow//eve//turnWorkflow",
+    "input": {
+      "__type": "Uint8Array",
+      "data": "enN0ZCi1L/1ghwdFJQAaS4wNK/CORg8MMIkY2TVJp6exCH0JygcU4AEFiAe/nAYZDvDf/vcD9zHOwDPw1AvOAM4A0gAMi1162lrc8x82oq2MsSu2uqIevl5f5bZnmWBK23oi2sZ+2yrP4vY153FLH8tImdw+hxSNyG0//wN1PG7fot/lgNcXYGQ4m26LHrcdI/xwQnjvydc2B2SX1FrIiDvsRVvHRTnfJbX4rO8gJhR40IAmAhEih4AEAQ8QEYMGjYkBwcDjQLxOC9u6zm+V6GnXip570SqPhHT2ZBuD26+XO1z9dFvDbT9pbWMMmD2B822T3HpTSAiX8DtelqS2QW5pw4cRRvhiai8ahSciIk76BY2HcR496ca6/GIaClkKCt+2RsKQJC9yOJFHSZbHwY6F4bG0vKkRLREFTZLG1Fj66jctVFgNfVnRi502bcH3OpdJv6YnzTRN8UUZ2jESqZGmomIkf2NJOZtLPgVtAg3FFqR6ReGkobOpg2ZbRWqwkJHnDPGC2Y/lgYsRdKwQ1B7I7UvZ4LrYgdw2Nauk/aQ3TPkMHzqEIrfVV34irg7fpQNydT51BwbkNrY7V1SbHrdMT/p1fF4jj8iUjJB4vW1LK8SaFYb3tigyXo3H69wWb4q8a8Xrn5DkdlvkljZwoFjIuYBytY0BWrRKi+LSedu2S6/0RYFgRJEvSDmc1zYpckvB994WRV8jcP6zNEkcj3lidBRZHMdxLBDjkZaJm1ockINBNSLJVSbtnMgtPz/+trZN0EXb67+CoKUVmLhcbC1L9ZWbyD77HTbUpM1TKFEdRRCjJ6enZ2qGGtx4T4SBoRc5EoghkId5HobxoPD1lBDiMBATPb4n4AQEYiSG4XlMvF8+iMM4DOMx+UEKWVEQSMRIjPR48gJEYhyG4QEZAjEBFChEtGUspqyrZw5nVy+dmUtGiT3ZS2e05WPPmUJKdAWMoZjSAosdI0++GGVWUc8R9lw9o8960qw1dXnRnpRGKf+5Q9bxgh+rVSWFSRwYw4y1S0aZUa+TxcgUi1TKpnzWccIhZQ0uUam2aBalhHAJlxDAKGRsVimBMRSM18XsLWoCxswhe+enkFJmDg0sVskVu2LMejKrUoJLBIAAGKW2VRiSW6ufUmhDckuZ8imsmuQ9wZHk9mm7zWlNI0taxZHcvjZ1gIOowSA0zhhkZGZkZKSkaTEQpoxkxgMSIBdByZQqOSkou1Jj3wdHoqo3YwgpdHAJOMlZNxuYvWJlRKIhxE/RW2GxXcP+1cAscTIEKPtb1iQcFg1ESD2rJRvUs0bRnws4sBLJSd8HaOfav+Fe4rpfxgeZJoW16DwwgGKHApDld9QROSQ/bQBPbdo9QAzyW/ZbZAazz+uBla3sklH/DI1rWTNkHwSgD6wssK4qRgAYwuyZepR7Bsuz9rRNVjNAEUMAPNDepxH1MAhaDEzvlJ6XA4lDCDMvX6fQ+/zrhH3iBUblY+Y3SGNhr9aIIwDCIb7dUVb5a4M0ZQKgDyPoDTABqKp4vLEgiTFSlY/v1dEeawXGM1MlT5EOMIouTbqQO5saZNDopfXShhb8wozqkyAlBq5pK37iawtOjVHQef25JP8D"
+    },
+    "executionContext": {
+      "traceCarrier": {},
+      "workflowCoreVersion": "5.0.0-beta.24",
+      "features": {
+        "encryption": false
+      }
+    },
+    "attributes": {
+      "$eve.type": "turn",
+      "$eve.parent": "wrun_01KW596RQ3TSBYD03XD926VFZT",
+      "$eve.root": "wrun_01KW596RQ3TSBYD03XD926VFZT"
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01KW596RS9NQPMX1ZFWK49TZV2",
+  "eventId": "evnt_01KW596RSCC77G78CKBYPW5W1A",
+  "createdAt": "2026-06-27T19:34:19.180Z"
+}

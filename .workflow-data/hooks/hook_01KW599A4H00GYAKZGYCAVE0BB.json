@@ -1,0 +1,12 @@
+{
+  "runId": "wrun_01KW599A4HKX9QCX8DBD8XW1R5",
+  "hookId": "hook_01KW599A4H00GYAKZGYCAVE0BB",
+  "token": "wrun_01KW599A4HKX9QCX8DBD8XW1R5:auth",
+  "ownerId": "local-owner",
+  "projectId": "local-project",
+  "environment": "local",
+  "createdAt": "2026-06-27T19:35:42.534Z",
+  "specVersion": 5,
+  "isWebhook": false,
+  "isSystem": false
+}

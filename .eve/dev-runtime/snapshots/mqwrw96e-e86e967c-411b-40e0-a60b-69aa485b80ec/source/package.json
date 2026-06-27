@@ -1,0 +1,21 @@
+{
+  "name": "bubbles-space",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "0.11.3",
+    "ai-sdk-ollama": "^4.0.0",
+    "eve": "^0.16.2",
+    "nuxt": "^4.4.7",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.35",
+    "vue-router": "^5.1.0"
+  }
+}
