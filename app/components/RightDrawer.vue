@@ -10,7 +10,7 @@
     <!-- The actual drawer panel -->
     <aside 
       class="right-drawer" 
-      :style="{ width: drawerWidth + 'px' }" 
+      :style="{ width: currentWidth + 'px' }" 
       :class="{ 'is-resizing': isResizing }"
     >
       <!-- Resizer handle -->
@@ -36,12 +36,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useLocalStorage } from '@vueuse/core'
 
 const uiStore = useUIStore()
+
+// This handles the persistent saved value
 const drawerWidth = useLocalStorage('bubbles-drawer-width', 400)
+
+// This handles the visual width, preventing 60fps local storage writes (lag)
+const currentWidth = ref(drawerWidth.value)
+watch(drawerWidth, (newVal) => {
+  if (!isResizing.value) currentWidth.value = newVal
+})
+
 const isResizing = ref(false)
 
 function startResize(e: MouseEvent) {
@@ -53,18 +62,21 @@ function startResize(e: MouseEvent) {
 
 function doResize(e: MouseEvent) {
   if (!isResizing.value) return
-  // Width is distance from right edge to the mouse
   const newWidth = window.innerWidth - e.clientX
   
   // Clamp width to bounds (40vw min, 90vw max)
   const minW = window.innerWidth * 0.4
   const maxW = window.innerWidth * 0.9
-  drawerWidth.value = Math.max(minW, Math.min(maxW, newWidth))
+  currentWidth.value = Math.max(minW, Math.min(maxW, newWidth))
 }
 
 function endResize() {
   isResizing.value = false
   document.body.style.cursor = ''
+  
+  // Only write to localStorage ONCE at the end of the drag to prevent extreme lag
+  drawerWidth.value = currentWidth.value
+
   window.removeEventListener('mousemove', doResize)
   window.removeEventListener('mouseup', endResize)
 }
@@ -101,10 +113,10 @@ function endResize() {
   right: 0;
   height: 100%;
   
-  /* Deep glassmorphism aesthetic matching SettingsModal */
-  background: rgba(20, 20, 25, 0.85);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--border);
+  /* Highly translucent frosted glass aesthetic so canvas is clearly visible */
+  background: rgba(20, 20, 25, 0.4);
+  backdrop-filter: blur(48px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-right: none;
   border-radius: 16px 0 0 16px;
   box-shadow: -12px 0 32px rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.05);
