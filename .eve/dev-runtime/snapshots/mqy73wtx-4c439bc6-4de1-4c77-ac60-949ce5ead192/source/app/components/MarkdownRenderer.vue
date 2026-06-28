@@ -23,7 +23,6 @@ const props = defineProps({
         :is-dark="true"
         mode="chat"
         :fade="false"
-        code-renderer="shiki"
         :enable-mermaid="true"
         :enable-katex="true"
         :code-block-props="{ theme: { light: 'vitesse-light', dark: 'vitesse-dark' } }"

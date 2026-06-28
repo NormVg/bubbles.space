@@ -1,5 +1,5 @@
 # ALWAYS USE  all requred design skill for making UI. and specially userinterface-wiki and always use maya-design too
-
+ and alwasy break down animation into small small differnet differnet segments , which complete at different rate so the app feel alive and not monotonous and more rich in design 
 ## Purpose
 
 You are a senior-level software engineer specialized in Nuxt 4, Vue 3, TypeScript, Nitro, PostgreSQL, API design, and modern SaaS architecture.
