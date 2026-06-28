@@ -7,7 +7,7 @@
           Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
         </div>
         <div class="user-message-actions">
-          <button class="user-action-btn" title="Copy">
+          <button class="chat-action-btn" title="Copy">
             <LucideCopy :size="14" stroke-width="2.5" />
             <span>Copy</span>
           </button>
@@ -20,11 +20,11 @@
           <MarkdownRenderer :content="testMarkdown" :isDone="true" />
         </div>
         <div class="ai-message-actions">
-          <button class="ai-action-btn" title="Copy">
+          <button class="chat-action-btn" title="Copy">
             <LucideCopy :size="14" stroke-width="2.5" />
             <span>Copy</span>
           </button>
-          <button class="ai-action-btn" title="Reply">
+          <button class="chat-action-btn" title="Reply">
             <LucideReply :size="14" stroke-width="2.5" />
             <span>Reply</span>
           </button>
@@ -152,28 +152,6 @@ graph TD;
   padding-left: 4px; /* Slight inset to align with text visually */
 }
 
-.ai-action-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-}
-
-.ai-action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
 .user-message-wrapper {
   display: flex;
   flex-direction: column;
@@ -200,7 +178,8 @@ graph TD;
   padding-right: 4px;
 }
 
-.user-action-btn {
+/* Unified clean action button for both AI and User messages */
+.chat-action-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -215,7 +194,7 @@ graph TD;
   transition: all 0.2s ease;
 }
 
-.user-action-btn:hover {
+.chat-action-btn:hover {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.9);
 }
