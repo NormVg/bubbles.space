@@ -109,7 +109,7 @@ function endResize() {
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border: none;
-  border-radius: 16px 0 0 16px;
+  border-radius: 16px;
   /* Reduced shadow intensity as requested by user */
   box-shadow: var(--widget-shadow);
 
