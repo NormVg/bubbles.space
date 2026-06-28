@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, markRaw, onMounted } from 'vue'
+import MockMarkdownHandler from './MockMarkdownHandler.vue'
 
 const activeWorkspace = ref('main')
 const workspaces = ref([
@@ -8,14 +9,71 @@ const workspaces = ref([
   { id: 'design', label: 'Design' }
 ])
 
+const isExpanded = ref(false)
+const activeComponent = ref(markRaw(MockMarkdownHandler))
+
+const slotWrapperRef = ref<HTMLElement | null>(null)
+const slotInnerRef = ref<HTMLElement | null>(null)
+const switcherBarRef = ref<HTMLElement | null>(null)
+
 function setActive(id: string) {
   activeWorkspace.value = id
+}
+
+function toggleExpand() {
+  if (!slotWrapperRef.value || !slotInnerRef.value || !switcherBarRef.value) return
+
+  isExpanded.value = !isExpanded.value
+  const wrapper = slotWrapperRef.value
+  const inner = slotInnerRef.value
+  const switcher = switcherBarRef.value
+
+  // We measure the target dimensions of the inner content
+  const targetH = inner.scrollHeight
+  const targetW = inner.scrollWidth
+  const baseW = switcher.offsetWidth // The width of just the tab bar
+
+  // Animate the wrapper dimensions
+  if (isExpanded.value) {
+    wrapper.style.display = 'block'
+    wrapper.animate(
+      [
+        { height: '0px', width: `${baseW}px`, opacity: 0 },
+        { height: `${targetH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 }
+      ],
+      { duration: 250, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
+    )
+  } else {
+    // When collapsing, we need to animate back to 0 height and base width
+    const currentH = inner.scrollHeight
+    const animation = wrapper.animate(
+      [
+        { height: `${currentH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 },
+        { height: '0px', width: `${baseW}px`, opacity: 0 }
+      ],
+      { duration: 200, easing: 'cubic-bezier(0.55, 0.05, 0.68, 0.19)', fill: 'forwards' }
+    )
+    
+    // Hide completely after animation to prevent tab-indexing invisible content
+    animation.onfinish = () => {
+      if (!isExpanded.value) {
+        wrapper.style.display = 'none'
+      }
+    }
+  }
 }
 </script>
 
 <template>
   <div class="state-bar">
-    <div class="ws-switcher">
+    <!-- Dynamic Slot Area (Above the tabs) -->
+    <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
+      <div class="dynamic-slot-inner" ref="slotInnerRef">
+        <component :is="activeComponent" v-if="activeComponent" />
+      </div>
+    </div>
+
+    <div class="ws-switcher" ref="switcherBarRef">
       <!-- Workspace tabs -->
       <div
         v-for="workspace in workspaces"
@@ -53,19 +111,21 @@ function setActive(id: string) {
       <div class="ws-divider" />
 
       <!-- Expand -->
-      <button class="ws-btn expand-btn" title="Expand">
-        <svg
-          width="13"
-          height="13"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="18 15 12 9 6 15" />
-        </svg>
+      <button class="ws-btn expand-btn" title="Expand" @click="toggleExpand">
+        <div class="expand-icon" :class="{ 'is-expanded': isExpanded }">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </div>
       </button>
     </div>
     
@@ -84,9 +144,22 @@ function setActive(id: string) {
   border-radius: 0 16px 0 0;
   user-select: none;
   overflow: visible;
+  width: fit-content;
   /* NO box-shadow here; depth is applied via the HUD overlay's drop-shadow */
 }
 
+/* ─── Dynamic Slot ─────────────────────────────────────────────── */
+.dynamic-slot-wrapper {
+  /* Dimensions are controlled via JS animations */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dynamic-slot-inner {
+  width: fit-content;
+  height: max-content;
+}
+
+/* ─── HUD Curves ────────────────────────────────────────────────── */
 .curve-top {
   position: absolute;
   top: -16px;
@@ -136,8 +209,12 @@ function setActive(id: string) {
   font-family: var(--font-sans);
   color: rgba(205, 198, 247, 0.4);
   cursor: pointer;
-  transition: color 0.12s;
+  transition: color 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
+}
+
+.ws-btn:active {
+  transform: scale(0.96); /* Maya Design interaction rule */
 }
 
 .ws-tab:hover .ws-btn,
@@ -161,13 +238,17 @@ function setActive(id: string) {
   border-radius: 4px;
   color: rgba(205, 198, 247, 0.3);
   cursor: pointer;
-  transition: background 0.1s, color 0.1s;
+  transition: background 0.1s, color 0.1s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
 }
 
 .ws-delete:hover {
   background: rgba(255, 80, 80, 0.15);
   color: #ff6b6b;
+}
+
+.ws-delete:active {
+  transform: scale(0.9);
 }
 
 .ws-add {
@@ -181,13 +262,17 @@ function setActive(id: string) {
   border-radius: 6px;
   color: rgba(205, 198, 247, 0.35);
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.12s, color 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   margin-left: 2px;
 }
 
 .ws-add:hover {
   background: rgba(205, 198, 247, 0.1);
   color: #cdc6f7;
+}
+
+.ws-add:active {
+  transform: scale(0.96);
 }
 
 .ws-divider {
@@ -203,5 +288,16 @@ function setActive(id: string) {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.expand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1); /* Maya spring-bounce */
+}
+
+.expand-icon.is-expanded {
+  transform: rotate(180deg);
 }
 </style>
