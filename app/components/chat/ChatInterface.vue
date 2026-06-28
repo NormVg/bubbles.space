@@ -7,9 +7,10 @@
           Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
         </div>
         <div class="user-message-actions">
-          <button class="chat-action-btn" title="Copy">
-            <LucideCopy :size="14" stroke-width="2.5" />
-            <span>Copy</span>
+          <button class="chat-action-btn" :class="{ 'copied': userMessageCopied }" @click="handleCopy('Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?', true)" title="Copy">
+            <LucideCheck v-if="userMessageCopied" :size="14" stroke-width="2.5" class="icon-success" />
+            <LucideCopy v-else :size="14" stroke-width="2.5" />
+            <span>{{ userMessageCopied ? 'Copied' : 'Copy' }}</span>
           </button>
         </div>
       </div>
@@ -20,9 +21,10 @@
           <MarkdownRenderer :content="testMarkdown" :isDone="true" />
         </div>
         <div class="ai-message-actions">
-          <button class="chat-action-btn" title="Copy">
-            <LucideCopy :size="14" stroke-width="2.5" />
-            <span>Copy</span>
+          <button class="chat-action-btn" :class="{ 'copied': aiMessageCopied }" @click="handleCopy(testMarkdown, false)" title="Copy">
+            <LucideCheck v-if="aiMessageCopied" :size="14" stroke-width="2.5" class="icon-success" />
+            <LucideCopy v-else :size="14" stroke-width="2.5" />
+            <span>{{ aiMessageCopied ? 'Copied' : 'Copy' }}</span>
           </button>
           <button class="chat-action-btn" title="Reply">
             <LucideReply :size="14" stroke-width="2.5" />
@@ -42,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
@@ -65,6 +68,55 @@ graph TD;
     C-->D;
 \`\`\`
 `
+
+const userMessageCopied = ref(false)
+const aiMessageCopied = ref(false)
+
+const playCopySound = () => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    osc.type = 'sine';
+    
+    // Quick pop sound
+    osc.frequency.setValueAtTime(600, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+    
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+    
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    osc.start();
+    osc.stop(ctx.currentTime + 0.1);
+  } catch (e) {
+    console.error("Audio play failed:", e);
+  }
+}
+
+const handleCopy = async (text: string, isUser: boolean) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    playCopySound();
+    
+    if (isUser) {
+      userMessageCopied.value = true;
+      setTimeout(() => { userMessageCopied.value = false }, 2000);
+    } else {
+      aiMessageCopied.value = true;
+      setTimeout(() => { aiMessageCopied.value = false }, 2000);
+    }
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+  }
+}
 </script>
 
 <style scoped>
@@ -197,5 +249,14 @@ graph TD;
 .chat-action-btn:hover {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.9);
+}
+.chat-action-btn.copied {
+  color: #4ade80; /* Tailwind green-400 */
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.2);
+}
+
+.icon-success {
+  color: #4ade80;
 }
 </style>
