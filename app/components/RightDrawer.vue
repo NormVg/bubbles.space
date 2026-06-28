@@ -181,31 +181,38 @@ function endResize() {
   background: var(--text-muted);
 }
 
-/* ─── Drawer Content ─────────────────────────────────────── */
+/* ─── Drawer Content (Staggered Children) ───────────────────── */
 .drawer-content {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 32px 32px 16px 32px;
-  
-  will-change: transform, opacity;
+}
 
-  /* Closed State */
+/* Base Closed State for inner elements */
+:deep(.chat-messages),
+:deep(.chat-input-wrapper) {
+  will-change: transform, opacity;
   opacity: 0;
   transform: translateX(20px);
-  
-  /* Segment 1 (Closing): Content fades and slides out very quickly before the panel */
+  /* Segment 1 (Closing): Both elements fade/slide out quickly */
   transition: opacity 0.2s ease-in, 
               transform 0.2s ease-in;
 }
 
-.right-drawer-wrapper.is-open .drawer-content {
-  /* Open State */
+/* Segment 2 (Opening): Chat messages slide in first */
+.right-drawer-wrapper.is-open :deep(.chat-messages) {
   opacity: 1;
   transform: translateX(0);
-  
-  /* Segment 2 (Opening): Content slides in with a slight delay, using the same rich spring */
   transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, 
               opacity 0.55s ease-out 0.1s;
+}
+
+/* Segment 3 (Opening): Input box slides in distinctly after the messages */
+.right-drawer-wrapper.is-open :deep(.chat-input-wrapper) {
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.25s, 
+              opacity 0.55s ease-out 0.2s;
 }
 </style>
