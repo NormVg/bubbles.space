@@ -85,15 +85,15 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
   display: flex;
-  align-items: flex-end; /* Align items to bottom so buttons stay fixed at bottom when textarea grows */
-  padding: 10px 16px; /* 10px vertical to snugly fit the 36px buttons */
+  flex-direction: column; /* Stack textarea and buttons vertically */
+  padding: 12px 16px;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 2; /* Sit above watermark */
-  gap: 12px; /* Space between textarea and actions */
+  min-height: 120px; /* Make it tall by default */
 }
 
 .chat-textarea {
-  flex: 1;
+  width: 100%; /* Take full width of the box */
   background: transparent;
   border: none;
   color: var(--text-primary);
@@ -101,13 +101,13 @@ onMounted(() => {
   font-family: inherit;
   resize: none;
   outline: none;
-  padding: 7px 0; /* Center text vertically with 36px buttons (15px font * 1.5 line height = 22.5px. 36 - 22.5 = 13.5. ~7px top/bottom) */
+  padding: 0; 
   line-height: 1.5;
   box-sizing: border-box;
   
   /* Auto-resize constraints */
-  min-height: 36px; /* Exactly matches the 36px button height */
-  max-height: 140px; /* ~6 lines */
+  min-height: 24px; /* one line minimum */
+  max-height: 300px; /* Allow it to grow quite tall before scrolling */
   overflow-y: auto; /* Scroll when max-height is reached */
 }
 
@@ -127,9 +127,12 @@ onMounted(() => {
 .chat-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end; /* Push icons to the right */
+  width: 100%;
   gap: 6px;
-  /* Prevent shrinking */
-  flex-shrink: 0;
+  margin-top: auto; /* Push actions to the bottom of the tall container */
+  padding-top: 8px; /* Space between text and buttons */
+  
   /* Add safe area right padding so buttons dodge the floating Quick Access Bar */
   padding-right: 32px; 
 }
