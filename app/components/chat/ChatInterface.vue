@@ -212,14 +212,16 @@ const handleCopy = async (text: string, isUser: boolean) => {
 }
 
 .user-message {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px 24px;
   margin-bottom: 8px; /* Reduced from 24px to bring buttons closer */
   max-width: 85%;
   align-self: flex-end;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
 }
 
 .user-message-actions {
