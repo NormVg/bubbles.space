@@ -105,21 +105,28 @@ watch(() => agent.status.value, (newStatus) => {
 })
 
 const messagesContainer = ref<HTMLElement | null>(null)
+let scrollRaf: number | null = null
+let observerRaf: number | null = null
 let observer: MutationObserver | null = null
 const isUserScrolledUp = ref(false)
 
 const handleScroll = () => {
   if (!messagesContainer.value) return
-  const container = messagesContainer.value
-  // Consider user scrolled up if they are more than 150px away from the bottom
-  isUserScrolledUp.value = container.scrollHeight - container.scrollTop - container.clientHeight > 150
+  if (scrollRaf !== null) cancelAnimationFrame(scrollRaf)
+  
+  scrollRaf = requestAnimationFrame(() => {
+    const container = messagesContainer.value
+    if (container) {
+      isUserScrolledUp.value = container.scrollHeight - container.scrollTop - container.clientHeight > 150
+    }
+    scrollRaf = null
+  })
 }
 
 const scrollToBottom = (force = false) => {
   if (!messagesContainer.value) return
   
   const container = messagesContainer.value
-  
   if (force || !isUserScrolledUp.value) {
     container.scrollTop = container.scrollHeight
   }
@@ -128,7 +135,12 @@ const scrollToBottom = (force = false) => {
 onMounted(() => {
   if (messagesContainer.value) {
     observer = new MutationObserver(() => {
-      scrollToBottom(false)
+      // Debounce the observer to 60fps to prevent layout thrashing on every token
+      if (observerRaf !== null) cancelAnimationFrame(observerRaf)
+      observerRaf = requestAnimationFrame(() => {
+        scrollToBottom(false)
+        observerRaf = null
+      })
     })
     // Watch for text streaming (characterData) and new nodes (childList)
     observer.observe(messagesContainer.value, { childList: true, subtree: true, characterData: true })
