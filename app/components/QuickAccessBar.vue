@@ -51,7 +51,9 @@ const uiStore = useUIStore()
   bottom: 10px;
   right: 10px;
   width: 44px; /* Fixed width for perfect curve math */
-  background: var(--bg-soft);
+  background: rgba(25, 25, 32, 0.75);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border-radius: 22px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -67,7 +69,8 @@ const uiStore = useUIStore()
   width: 22px;
   height: 22px;
   /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
-  background: radial-gradient(circle at 0 0, transparent 22px, var(--bg-soft) 22px);
+  background: radial-gradient(circle at 0 0, transparent 22px, rgba(25, 25, 32, 0.75) 22px);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
@@ -78,7 +81,8 @@ const uiStore = useUIStore()
   left: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 0 0, transparent 16px, var(--bg-soft) 16px);
+  background: radial-gradient(circle at 0 0, transparent 16px, rgba(25, 25, 32, 0.75) 16px);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 

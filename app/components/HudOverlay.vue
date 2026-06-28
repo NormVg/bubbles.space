@@ -8,8 +8,11 @@ import RightDrawer from './RightDrawer.vue'
 
 <template>
   <div class="hud-overlay">
-    <!-- The 10px frame border all around the screen -->
-    <div class="hud-frame" />
+    <!-- The 10px frame border all around the screen (using edges for blur support) -->
+    <div class="hud-frame-edge edge-top" />
+    <div class="hud-frame-edge edge-bottom" />
+    <div class="hud-frame-edge edge-left" />
+    <div class="hud-frame-edge edge-right" />
     
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
@@ -44,16 +47,19 @@ import RightDrawer from './RightDrawer.vue'
   filter: drop-shadow(0 0 24px rgba(0, 0, 0, 0.5));
 }
 
-.hud-frame {
+.hud-frame-edge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  border-radius: 6px; /* Subtle inner border radius */
-  box-shadow: 0 0 0 20px var(--bg-soft); /* Fills the 10px gap and keeps outer corners square */
+  background: rgba(25, 25, 32, 0.75);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   pointer-events: none;
+  z-index: 10;
 }
+
+.edge-top { top: 0; left: 0; right: 0; height: 10px; }
+.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; }
+.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; }
+.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; }
 
 .hud-avatar-wrapper {
   position: absolute;

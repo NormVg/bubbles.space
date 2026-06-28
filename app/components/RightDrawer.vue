@@ -29,7 +29,7 @@
 import { ref, watch } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useLocalStorage } from '@vueuse/core'
-import ChatInterface from './ChatInterface.vue'
+import ChatInterface from './chat/ChatInterface.vue'
 
 const uiStore = useUIStore()
 

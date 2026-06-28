@@ -153,7 +153,9 @@ function toggleExpand() {
   position: absolute;
   bottom: 10px; /* Aligned with the inner edge of the 10px HUD frame */
   left: 10px;   /* Aligned with the inner edge of the 10px HUD frame */
-  background: var(--bg-soft); /* Perfectly match the frame color */
+  background: rgba(25, 25, 32, 0.75); 
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border-radius: 0 16px 0 0;
   user-select: none;
   overflow: visible;
@@ -178,7 +180,8 @@ function toggleExpand() {
   left: 0;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, var(--bg-soft) 16px);
+  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(25, 25, 32, 0.75) 16px);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
@@ -188,7 +191,8 @@ function toggleExpand() {
   right: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, var(--bg-soft) 16px);
+  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(25, 25, 32, 0.75) 16px);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
