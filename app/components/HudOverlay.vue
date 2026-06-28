@@ -58,11 +58,11 @@ import RightDrawer from './RightDrawer.vue'
   z-index: 10;
 }
 
-/* Add subtle inner highlights to the edges facing the canvas */
-.edge-top { top: 0; left: 0; right: 0; height: 10px; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1); }
-.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
-.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.1); }
-.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1); }
+/* Edges for the HUD frame without inset lines */
+.edge-top { top: 0; left: 0; right: 0; height: 10px; }
+.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; }
+.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; }
+.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; }
 
 .hud-avatar-wrapper {
   position: absolute;

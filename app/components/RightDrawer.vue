@@ -108,10 +108,9 @@ function endResize() {
   background: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: none;
+  border: none;
   border-radius: 16px 0 0 16px;
-  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.05);
+  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.3);
 
   z-index: 2;
   display: flex;

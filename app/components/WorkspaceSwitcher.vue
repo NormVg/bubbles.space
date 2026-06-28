@@ -160,8 +160,6 @@ function toggleExpand() {
   user-select: none;
   overflow: visible;
   width: fit-content;
-  /* Inner highlights where it meets the canvas */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* ─── Dynamic Slot ─────────────────────────────────────────────── */

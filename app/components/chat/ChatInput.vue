@@ -62,7 +62,7 @@ onMounted(() => {
 .chat-input-outer {
   position: relative;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: none;
   border-radius: 24px;
   padding: 10px;
   overflow: hidden;

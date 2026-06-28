@@ -12,9 +12,6 @@
       >
         <LucidePanelLeft class="icon" :size="16" :stroke-width="1.5" />
       </button>
-
-      <!-- Separator -->
-      <div class="separator" />
       
       <!-- Icon 2: Waveform -->
       <button class="qa-btn" title="Audio">
@@ -25,9 +22,6 @@
       <button class="qa-btn" title="Packages">
         <LucidePackage class="icon" :size="16" :stroke-width="1.5" />
       </button>
-
-      <!-- Separator -->
-      <div class="separator" />
 
       <!-- Icon 4: Settings -->
       <button class="qa-btn" title="Settings" @click="uiStore.toggleSettings">
@@ -59,8 +53,6 @@ const uiStore = useUIStore()
   flex-direction: column;
   align-items: center;
   z-index: 100; /* Always stay above the RightDrawer */
-  /* Inner highlights where it meets the canvas */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Inverted curve for top-left touching the right frame */
@@ -123,12 +115,5 @@ const uiStore = useUIStore()
 
 .qa-btn:active {
   transform: scale(0.92);
-}
-
-.separator {
-  width: 14px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  margin: 2px 0;
 }
 </style>
