@@ -8,10 +8,10 @@ import RightDrawer from './RightDrawer.vue'
 
 <template>
   <div class="hud-overlay">
-    <!-- Bulletproof SVG Mask for perfect cross-browser rounded inner/outer corners -->
+    <!-- Bulletproof SVG Mask using viewport units to guarantee sizing regardless of SVG wrapper dimensions -->
     <svg width="0" height="0" style="position: absolute; pointer-events: none;">
       <defs>
-        <mask id="hud-mask">
+        <mask id="hud-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100vw" height="100vh">
           <rect class="mask-outer" />
           <rect class="mask-inner" />
         </mask>
@@ -46,8 +46,8 @@ import RightDrawer from './RightDrawer.vue'
 .mask-outer {
   x: 0;
   y: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   rx: 26px;
   fill: white;
 }
@@ -55,8 +55,8 @@ import RightDrawer from './RightDrawer.vue'
 .mask-inner {
   x: 10px;
   y: 10px;
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
+  width: calc(100vw - 20px);
+  height: calc(100vh - 20px);
   rx: 16px;
   fill: black;
 }
