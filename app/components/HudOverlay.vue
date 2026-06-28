@@ -44,12 +44,14 @@ import RightDrawer from './RightDrawer.vue'
   z-index: 100;
   overflow: hidden; /* Prevent shadows from bleeding out of the window */
   
-  filter: drop-shadow(0 0 24px rgba(0, 0, 0, 0.5));
+  /* Extremely strong drop-shadows to give the entire HUD shape massive depth */
+  filter: drop-shadow(0 12px 48px rgba(0, 0, 0, 0.8)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.6));
 }
 
 .hud-frame-edge {
   position: absolute;
-  background: rgba(25, 25, 32, 0.75);
+  /* Darker, richer, and highly opaque glass to distinctly separate from the canvas */
+  background: rgba(22, 22, 28, 0.95);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   pointer-events: none;
