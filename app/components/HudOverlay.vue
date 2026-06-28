@@ -47,7 +47,7 @@ import RightDrawer from './RightDrawer.vue'
   overflow: hidden; /* Prevent shadows from bleeding out of the window */
   
   /* Massive drop shadow to separate HUD from Canvas */
-  filter: drop-shadow(var(--hud-shadow));
+  filter: var(--hud-shadow);
 }
 
 .hud-frame-edge {

@@ -86,7 +86,7 @@ html.light {
   --widget-bg: rgba(255, 255, 255, 0.85);
   --widget-border: rgba(0, 0, 0, 0.08);
   --widget-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06);
-  --hud-shadow: 0 0 32px rgba(0, 0, 0, 0.08);
+  --hud-shadow: drop-shadow(0 0 1px rgba(0, 0, 0, 0.15)) drop-shadow(0 4px 24px rgba(0, 0, 0, 0.1));
 
   /* Semantic UI Variables */
   --glass-bg: rgba(255, 255, 255, 0.85);
@@ -131,7 +131,7 @@ html.dark {
   --widget-bg: rgba(30, 30, 34, 0.45);
   --widget-border: rgba(255, 255, 255, 0.08);
   --widget-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(0, 0, 0, 0.2);
-  --hud-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+  --hud-shadow: drop-shadow(0 0 1px rgba(255, 255, 255, 0.05)) drop-shadow(0 0 32px rgba(0, 0, 0, 0.8));
 
   /* Semantic UI Variables */
   --glass-bg: rgba(32, 32, 40, 0.85);
