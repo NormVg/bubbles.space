@@ -8,11 +8,8 @@ import RightDrawer from './RightDrawer.vue'
 
 <template>
   <div class="hud-overlay">
-    <!-- The 10px frame border all around the screen (using edges for blur support) -->
-    <div class="hud-frame-edge edge-top" />
-    <div class="hud-frame-edge edge-bottom" />
-    <div class="hud-frame-edge edge-left" />
-    <div class="hud-frame-edge edge-right" />
+    <!-- Single 10px frame border with rounded inner/outer corners using CSS masking -->
+    <div class="hud-frame" />
     
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
@@ -50,21 +47,28 @@ import RightDrawer from './RightDrawer.vue'
   filter: var(--hud-shadow);
 }
 
-.hud-frame-edge {
+.hud-frame {
   position: absolute;
+  inset: 0;
+  border: 10px solid transparent; /* Defines the 10px thickness */
+  border-radius: 26px; /* Outer corner radius (yields 16px inner radius) */
+  
   /* Distinct, premium dark glass that contrasts with the canvas */
   background: var(--glass-bg);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   pointer-events: none;
   z-index: 10;
+  
+  /* Mask Magic: Subtracts the padding-box from the border-box to isolate the 10px border */
+  mask-image: linear-gradient(black, black), linear-gradient(black, black);
+  mask-clip: border-box, padding-box;
+  mask-composite: exclude;
+  
+  -webkit-mask-image: linear-gradient(black, black), linear-gradient(black, black);
+  -webkit-mask-clip: border-box, padding-box;
+  -webkit-mask-composite: destination-out;
 }
-
-/* Edges for the HUD frame without inset lines */
-.edge-top { top: 0; left: 0; right: 0; height: 10px; }
-.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; }
-.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; }
-.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; }
 
 .hud-avatar-wrapper {
   position: absolute;
