@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { LucideReply, LucideLayers, LucideChevronDown } from 'lucide-vue-next'
 
 const props = defineProps<{
   quotes: string[] | null

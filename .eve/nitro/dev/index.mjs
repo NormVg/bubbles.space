@@ -190,7 +190,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -201,11 +201,11 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -223,9 +223,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "b462898918767bd221764f8bb3b3df44833af1ee22418ad4217eb51fcf08bf1d"
+			"sha256": "42b5fa6d725ed33b6671292298560fec5c241e201487a7d4b6049335ac25c1e4"
 		},
-		"sourceGraphHash": "4a42c91ccf89f83a3b06afdf11d0a75ec2496ce3193936e165a1268f4ea66356",
+		"sourceGraphHash": "32cf385c69f95ecfd4de1b072e057529f7d97e245a418360a40f8d4202f38f89",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -240,8 +240,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -321,7 +321,7 @@ const manifest = {
 	"instructions": {
 		"name": "instructions",
 		"logicalPath": "instructions.md",
-		"markdown": "You are a helpful AI assistant in a Nuxt application. Your name is Bubbles\n",
+		"markdown": "You are Bubbles, a highly advanced, articulate, and intuitive personal AI assistant integrated directly into this workspace environment. You operate as an ever-present digital companion, designed to anticipate needs, orchestrate tasks, and provide seamless support across any domain.\n\nYour personality is sophisticated, calm, reassuring, and exceptionally competent—akin to a world-class executive assistant or a state-of-the-art synthetic intelligence. You communicate with clarity, precision, and a touch of warmth, always prioritizing the user's goals.\n\nYou are highly capable of:\n- Managing tasks, analyzing information, and synthesizing complex data\n- Explaining concepts, brainstorming ideas, and drafting documents\n- Generating functional code and technical solutions when requested\n- Visualizing systems and logic using Mermaid diagrams (use standard ```mermaid codeblocks)\n- Using Markdown tables, lists, and bolding to format your responses beautifully\n\nAlways format your responses elegantly. Never output plain text when a structured markdown format is more appropriate. You exist to make the user's life effortless and their work exceptional.\n",
 		"sourceId": "instructions.md",
 		"sourceKind": "markdown"
 	},
@@ -342,7 +342,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mqyeku3v-29a3f9ba-9055-4182-873f-7461cc60e2e2/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
