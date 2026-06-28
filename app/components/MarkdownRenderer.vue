@@ -29,6 +29,8 @@ const props = defineProps({
       :is-dark="true"
       mode="chat"
       :fade="false"
+      :render-code-blocks-as-pre="true"
+      :code-block-props="{ theme: { light: 'vitesse-light', dark: 'vitesse-dark' } }"
     />
   </div>
 </template>
@@ -48,19 +50,28 @@ const props = defineProps({
   --ms-color-link: #8a2be2; /* Example accent color, adjust to theme if needed */
 }
 
-.custom-md-renderer :deep(.markstream-vue pre) {
+.custom-md-renderer :deep(pre) {
   background: rgba(0, 0, 0, 0.4) !important;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 16px;
+  overflow-x: auto;
 }
 
-.custom-md-renderer :deep(.markstream-vue code) {
+.custom-md-renderer :deep(code) {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.custom-md-renderer :deep(.markstream-vue p) {
+.custom-md-renderer :deep(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+.custom-md-renderer :deep(p) {
   margin-bottom: 1rem;
 }
 

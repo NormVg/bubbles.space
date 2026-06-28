@@ -7,16 +7,7 @@
       </div>
     </div>
 
-    <!-- Empty State Center -->
-    <div class="chat-empty-state">
-      <div class="avatar-wrapper">
-        <BubblesAvatar :invert="false" :animate="false" />
-      </div>
-      <h2 class="welcome-title">Hi there! I'm Bubbles.</h2>
-      <p class="welcome-subtitle">
-        I can help you write code, plan projects, or just chat. How can I help you today?
-      </p>
-    </div>
+    <!-- Empty state removed for testing -->
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
