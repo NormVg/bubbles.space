@@ -2,6 +2,7 @@
 import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 import BubblesAvatar from './BubblesAvatar.vue'
 import QuickAccessBar from './QuickAccessBar.vue'
+import SettingsModal from './SettingsModal.vue'
 </script>
 
 <template>
@@ -17,6 +18,9 @@ import QuickAccessBar from './QuickAccessBar.vue'
 
     <!-- Bottom Right: Quick Access Bar -->
     <QuickAccessBar />
+
+    <!-- Overlays -->
+    <SettingsModal />
   </div>
 </template>
 
@@ -47,8 +51,9 @@ import QuickAccessBar from './QuickAccessBar.vue'
 
 /* Make sure child interactive elements capture pointer events */
 :deep(.state-bar),
-:deep(.bubbles-avatar-hud),
-:deep(.quick-access-hud) {
+:deep(.bubbles-avatar-container),
+:deep(.quick-access-hud),
+:deep(.settings-modal-overlay) {
   pointer-events: auto;
 }
 </style>

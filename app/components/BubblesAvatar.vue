@@ -1,9 +1,9 @@
 <template>
-  <div class="bubbles-avatar-hud">
-    <div class="curve-bottom" />
+  <div class="bubbles-avatar-container">
     <svg
-      width="48"
-      height="48"
+      class="avatar-svg"
+      width="80"
+      height="80"
       viewBox="0 0 290 290"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,6 @@
         />
       </g>
     </svg>
-    <div class="curve-right" />
   </div>
 </template>
 
@@ -733,38 +732,25 @@ const auraLogoFace = ref({
   transition: all 0.3s ease-in-out;
 }
 
-/* ─── HUD Wrapper Styling ──────────────────────────────────────── */
-.bubbles-avatar-hud {
+/* ─── Transparent Floating Container ──────────────────────────────── */
+.bubbles-avatar-container {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--bg-soft);
-  border-radius: 0 0 16px 0;
+  top: 20px;
+  left: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  pointer-events: auto;
 }
 
-/* Inverted curve for bottom-left touching the left frame */
-.curve-bottom {
-  position: absolute;
-  bottom: -16px;
-  left: 0;
-  width: 16px;
-  height: 16px;
-  background: radial-gradient(circle at 100% 100%, transparent 16px, var(--bg-soft) 16px);
-  pointer-events: none;
+.avatar-svg {
+  /* Scale up visually and flip horizontally (invert eyes) */
+  transform: scaleX(-1);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Inverted curve for top-right touching the top frame */
-.curve-right {
-  position: absolute;
-  top: 0;
-  right: -16px;
-  width: 16px;
-  height: 16px;
-  background: radial-gradient(circle at 100% 100%, transparent 16px, var(--bg-soft) 16px);
-  pointer-events: none;
+.avatar-svg:hover {
+  transform: scaleX(-1) scale(1.05);
 }
 </style>
