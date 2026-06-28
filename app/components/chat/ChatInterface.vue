@@ -7,8 +7,20 @@
       </div>
       
       <!-- Mock AI Message -->
-      <div class="ai-message">
-        <MarkdownRenderer :content="testMarkdown" :isDone="true" />
+      <div class="ai-message-wrapper">
+        <div class="ai-message">
+          <MarkdownRenderer :content="testMarkdown" :isDone="true" />
+        </div>
+        <div class="ai-message-actions">
+          <button class="ai-action-btn" title="Copy">
+            <LucideCopy :size="14" stroke-width="2.5" />
+            <span>Copy</span>
+          </button>
+          <button class="ai-action-btn" title="Reply">
+            <LucideReply :size="14" stroke-width="2.5" />
+            <span>Reply</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -110,12 +122,48 @@ graph TD;
   z-index: 5;
 }
 
+.ai-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 .ai-message {
   width: 100%;
   max-width: 100%;
   align-self: flex-start;
-  margin-bottom: 32px;
+  margin-bottom: 8px; /* Reduced from 32px to bring buttons closer */
   /* Removed padding, background, and border as requested for AI messages */
+}
+
+.ai-message-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 4px; /* Slight inset to align with text visually */
+}
+
+.ai-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.ai-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .user-message {
