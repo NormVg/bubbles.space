@@ -1,0 +1,37 @@
+{
+  "runId": "wrun_01KW882JYNPS7J6EAFZRN266XY",
+  "deploymentId": "dpl_local@bundled",
+  "workflowName": "workflow//eve//turnWorkflow",
+  "specVersion": 5,
+  "executionContext": {
+    "traceCarrier": {},
+    "workflowCoreVersion": "5.0.0-beta.24",
+    "features": {
+      "encryption": false
+    }
+  },
+  "input": {
+    "__type": "Uint8Array",
+    "data": "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"
+  },
+  "createdAt": "2026-06-28T23:12:16.855Z",
+  "startedAt": "2026-06-28T23:12:16.855Z",
+  "status": "completed",
+  "output": {
+    "__type": "Uint8Array",
+    "data": "ZGV2bC0x"
+  },
+  "completedAt": "2026-06-28T23:12:21.137Z",
+  "updatedAt": "2026-06-28T23:12:21.137Z",
+  "attributes": {
+    "$eve.type": "turn",
+    "$eve.parent": "wrun_01KW8826MDX1FXB5QPDGWCWQNA",
+    "$eve.root": "wrun_01KW8826MDX1FXB5QPDGWCWQNA",
+    "$eve.model": "ollama/gemma4:31b-cloud",
+    "$eve.input_tokens": "2912",
+    "$eve.output_tokens": "76",
+    "$eve.cache_read_tokens": "0",
+    "$eve.cache_write_tokens": "0",
+    "$eve.tool_count": "11"
+  }
+}

@@ -21,10 +21,14 @@
           <div class="quote-chevron"><LucideChevronDown :size="14" /></div>
         </div>
         
-        <div class="quote-content" v-show="isExpanded">
-          <div v-for="(quote, idx) in quotes" :key="idx" class="nested-quote">
-            <div class="quote-icon"><LucideReply :size="10" /></div>
-            <div class="quote-text">{{ quote }}</div>
+        <div class="quote-content-wrapper">
+          <div class="quote-content">
+            <div class="quote-content-inner">
+              <div v-for="(quote, idx) in quotes" :key="idx" class="nested-quote">
+                <div class="quote-icon"><LucideReply :size="10" /></div>
+                <div class="quote-text">{{ quote }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -65,6 +69,7 @@ const isExpanded = ref(false)
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease;
+  overflow: hidden;
 }
 
 .collapsible-quote:hover {
@@ -81,14 +86,29 @@ const isExpanded = ref(false)
 .quote-chevron {
   margin-left: auto;
   opacity: 0.6;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
 .collapsible-quote.expanded .quote-chevron {
   transform: rotate(180deg);
 }
 
+.quote-content-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+.collapsible-quote.expanded .quote-content-wrapper {
+  grid-template-rows: 1fr;
+}
+
 .quote-content {
+  overflow: hidden;
+}
+
+.quote-content-inner {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -107,11 +127,12 @@ const isExpanded = ref(false)
 .quote-icon {
   margin-top: 2px;
   opacity: 0.6;
+  flex-shrink: 0;
 }
 
 .quote-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -119,6 +140,5 @@ const isExpanded = ref(false)
 
 .quote-text.summary {
   font-weight: 500;
-  -webkit-line-clamp: 1;
 }
 </style>
