@@ -1,6 +1,6 @@
 <template>
   <div class="quick-access-hud">
-    <!-- Top inverted curve removed as per reference, bottom one stays -->
+    <div class="curve-top" />
     <div class="quick-access-bar">
       
       <!-- Icon 1: Sidebar Layout -->
@@ -50,6 +50,17 @@ const uiStore = useUIStore()
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Inverted curve for top-left touching the right frame */
+.curve-top {
+  position: absolute;
+  top: -12px;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--bg-soft) 12px);
+  pointer-events: none;
 }
 
 /* Inverted curve for bottom-left touching the bottom frame */

@@ -11,13 +11,14 @@
         
         <div class="modal-body">
           <div class="settings-sidebar">
-            <button class="nav-btn active">General</button>
-            <button class="nav-btn">Appearance</button>
-            <button class="nav-btn">Account</button>
-            <button class="nav-btn">Advanced</button>
+            <button class="nav-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">General</button>
+            <button class="nav-btn" :class="{ active: activeTab === 'appearance' }" @click="activeTab = 'appearance'">Appearance</button>
+            <button class="nav-btn" :class="{ active: activeTab === 'account' }" @click="activeTab = 'account'">Account</button>
+            <button class="nav-btn" :class="{ active: activeTab === 'advanced' }" @click="activeTab = 'advanced'">Advanced</button>
           </div>
           <div class="settings-main">
-            <div class="setting-group">
+            <!-- GENERAL TAB -->
+            <div v-if="activeTab === 'general'" class="setting-group">
               <h3>System Preferences</h3>
               <div class="setting-item">
                 <div class="setting-info">
@@ -34,6 +35,45 @@
                 <div class="toggle-switch active"></div>
               </div>
             </div>
+
+            <!-- APPEARANCE TAB -->
+            <div v-if="activeTab === 'appearance'" class="setting-group">
+              <h3>Theme</h3>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <label>Color Mode</label>
+                  <span class="desc">Choose how Bubbles looks to you</span>
+                </div>
+                
+                <div class="theme-switcher">
+                  <button 
+                    class="theme-btn" 
+                    :class="{ active: colorMode === 'light' }" 
+                    @click="colorMode = 'light'"
+                  >
+                    <LucideSun :size="16" />
+                    Light
+                  </button>
+                  <button 
+                    class="theme-btn" 
+                    :class="{ active: colorMode === 'dark' }" 
+                    @click="colorMode = 'dark'"
+                  >
+                    <LucideMoon :size="16" />
+                    Dark
+                  </button>
+                  <button 
+                    class="theme-btn" 
+                    :class="{ active: colorMode === 'auto' }" 
+                    @click="colorMode = 'auto'"
+                  >
+                    <LucideMonitor :size="16" />
+                    System
+                  </button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -42,8 +82,20 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useUIStore } from '../stores/ui'
+import { useColorMode } from '@vueuse/core'
+
 const uiStore = useUIStore()
+const activeTab = ref('appearance') // Default to appearance so they see it immediately
+
+const colorMode = useColorMode({
+  emitAuto: true,
+  modes: {
+    light: 'light',
+    dark: 'dark'
+  }
+})
 </script>
 
 <style scoped>
@@ -229,6 +281,40 @@ const uiStore = useUIStore()
 
 .toggle-switch.active::after {
   transform: translateX(20px);
+}
+
+/* ─── Theme Switcher ──────────────────────────────────────── */
+.theme-switcher {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-btn:hover {
+  color: var(--text-primary);
+}
+
+.theme-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
