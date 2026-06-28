@@ -64,7 +64,7 @@
 
 /* ─── Light Theme (Vercel / shadcn) ───────────────────────── */
 html.light {
-  --bg-base: #f0f0f3; /* Darker off-white to contrast with the pure white HUD */
+  --bg-base: #e4e4e7; /* Even darker shade of gray/white for stronger contrast */
   --bg-soft: #ffffff;
   --bg-muted: #e4e4e7;
   --bg-elevated: #ffffff;
