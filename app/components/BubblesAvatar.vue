@@ -96,9 +96,9 @@ const triggerEmotion = (emotion, duration = 3000) => {
   localEmotion.value = emotion;
   
   if (emotion === 'happy') {
-    playUISound('success', 'organic');
+    playUISound('success', 'glass');
   } else if (emotion === 'frustrate') {
-    playUISound('error', 'arcade');
+    playUISound('error', 'industrial');
   }
 
   emotionResetTimer.value = setTimeout(() => {
