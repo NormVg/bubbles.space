@@ -33,15 +33,18 @@ import ChatInput from './ChatInput.vue'
 
 /* ─── Empty State ────────────────────────────────────────────── */
 .chat-empty-state {
-  flex: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%); /* Visually centered slightly above true center */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 0 40px;
-  /* Push slightly up to balance the bottom input */
-  transform: translateY(-40px);
+  width: 100%;
+  pointer-events: none; /* Make sure it doesn't block clicks */
 }
 
 .avatar-wrapper {
@@ -68,5 +71,8 @@ import ChatInput from './ChatInput.vue'
 .chat-input-wrapper {
   padding: 0;
   width: 100%;
+  margin-top: auto; /* Push input to the bottom */
+  position: relative;
+  z-index: 10;
 }
 </style>

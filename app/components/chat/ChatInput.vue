@@ -102,6 +102,8 @@ onMounted(() => {
   resize: none;
   outline: none;
   padding: 0;
+  /* Add padding at the right to avoid overlapping the floating Quick Access Bar */
+  padding-right: 56px;
   /* Add padding at the bottom so text doesn't overlap the absolute buttons */
   padding-bottom: 48px; 
   line-height: 1.5;
