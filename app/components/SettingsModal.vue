@@ -65,10 +65,10 @@ const uiStore = useUIStore()
 }
 
 .settings-modal-content {
-  width: 720px;
-  height: 480px;
-  max-width: 90vw;
-  max-height: 85vh;
+  width: 80%;
+  height: 80%;
+  max-width: 1000px;
+  max-height: 700px;
   background: rgba(20, 20, 25, 0.85);
   backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -120,7 +120,7 @@ const uiStore = useUIStore()
 }
 
 .settings-sidebar {
-  width: 180px;
+  width: 240px;
   padding: 24px 16px;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;

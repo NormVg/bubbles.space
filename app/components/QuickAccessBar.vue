@@ -5,7 +5,7 @@
       
       <!-- Icon 1: Sidebar Layout -->
       <button class="qa-btn" title="Sidebar">
-        <LucidePanelLeft class="icon" :size="22" :stroke-width="1.5" />
+        <LucidePanelLeft class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
       <!-- Separator -->
@@ -13,12 +13,12 @@
       
       <!-- Icon 2: Waveform -->
       <button class="qa-btn" title="Audio">
-        <LucideAudioLines class="icon" :size="22" :stroke-width="1.5" />
+        <LucideAudioLines class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
       <!-- Icon 3: Package/Box -->
       <button class="qa-btn" title="Packages">
-        <LucidePackage class="icon" :size="22" :stroke-width="1.5" />
+        <LucidePackage class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
       <!-- Separator -->
@@ -26,7 +26,7 @@
 
       <!-- Icon 4: Settings -->
       <button class="qa-btn" title="Settings" @click="uiStore.toggleSettings">
-        <LucideSettings class="icon" :size="22" :stroke-width="1.5" />
+        <LucideSettings class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
     </div>
@@ -46,7 +46,7 @@ const uiStore = useUIStore()
   bottom: 10px;
   right: 10px;
   background: var(--bg-soft);
-  border-radius: 24px 0 0 0;
+  border-radius: 18px 0 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,10 +56,10 @@ const uiStore = useUIStore()
 .curve-left {
   position: absolute;
   bottom: 0;
-  left: -16px;
-  width: 16px;
-  height: 16px;
-  background: radial-gradient(circle at 0 0, transparent 16px, var(--bg-soft) 16px);
+  left: -12px;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--bg-soft) 12px);
   pointer-events: none;
 }
 
@@ -68,8 +68,8 @@ const uiStore = useUIStore()
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 24px 16px 20px 16px;
+  gap: 12px;
+  padding: 16px 12px 14px 12px;
 }
 
 .qa-btn {
@@ -82,6 +82,7 @@ const uiStore = useUIStore()
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4px;
 }
 
 .qa-btn:hover {
@@ -93,9 +94,9 @@ const uiStore = useUIStore()
 }
 
 .separator {
-  width: 24px;
+  width: 14px;
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
-  margin: 4px 0;
+  margin: 2px 0;
 }
 </style>
