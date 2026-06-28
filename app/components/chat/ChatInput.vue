@@ -84,15 +84,15 @@ onMounted(() => {
   position: relative;
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
-  display: flex;
-  flex-direction: column; /* Stack textarea and buttons vertically */
   padding: 12px 16px;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 2; /* Sit above watermark */
   min-height: 120px; /* Make it tall by default */
+  /* Remove flex-direction: column so it behaves as a normal block container with absolute children */
 }
 
 .chat-textarea {
+  display: block;
   width: 100%; /* Take full width of the box */
   background: transparent;
   border: none;
@@ -101,12 +101,14 @@ onMounted(() => {
   font-family: inherit;
   resize: none;
   outline: none;
-  padding: 0; 
+  padding: 0;
+  /* Add padding at the bottom so text doesn't overlap the absolute buttons */
+  padding-bottom: 48px; 
   line-height: 1.5;
   box-sizing: border-box;
   
   /* Auto-resize constraints */
-  min-height: 24px; /* one line minimum */
+  min-height: 96px; /* 120px container - 24px vertical padding = 96px */
   max-height: 300px; /* Allow it to grow quite tall before scrolling */
   overflow-y: auto; /* Scroll when max-height is reached */
 }
@@ -125,13 +127,12 @@ onMounted(() => {
 }
 
 .chat-actions {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* Push icons to the right */
-  width: 100%;
-  gap: 6px;
-  margin-top: auto; /* Push actions to the bottom of the tall container */
-  padding-top: 8px; /* Space between text and buttons */
+  gap: 8px;
   
   /* Add safe area right padding so buttons dodge the floating Quick Access Bar */
   padding-right: 32px; 
@@ -145,8 +146,8 @@ onMounted(() => {
   border: none;
   color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 10px;
   transition: all 0.2s ease;
 }
 
@@ -159,16 +160,16 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  margin-left: 4px;
+  margin-left: 2px;
 }
 
 .send-btn.has-text {
