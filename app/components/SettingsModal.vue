@@ -318,28 +318,55 @@ const colorMode = useColorMode({
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
+/* 1. Background Overlay */
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
-
-.modal-enter-active .settings-modal-content,
-.modal-leave-active .settings-modal-content {
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter-from .settings-modal-content {
-  transform: scale(0.95) translateY(10px);
+/* 2. Modal Container (Springy scale-up) */
+.modal-enter-active .settings-modal-content,
+.modal-leave-active .settings-modal-content {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, 
+              opacity 0.4s ease 0.05s;
+}
+.modal-enter-from .settings-modal-content,
+.modal-leave-to .settings-modal-content {
+  transform: scale(0.92) translateY(20px);
   opacity: 0;
 }
 
-.modal-leave-to .settings-modal-content {
-  transform: scale(0.95) translateY(10px);
+/* 3. Sidebar (Slides from left) */
+.modal-enter-active .settings-sidebar {
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s,
+              opacity 0.5s ease 0.15s;
+}
+.modal-enter-from .settings-sidebar {
+  transform: translateX(-15px);
   opacity: 0;
+}
+
+/* 4. Main Content (Slides up from bottom) */
+.modal-enter-active .settings-main {
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s,
+              opacity 0.5s ease 0.2s;
+}
+.modal-enter-from .settings-main {
+  transform: translateY(15px);
+  opacity: 0;
+}
+
+/* 5. Header (Fades and drops in slightly) */
+.modal-enter-active .modal-header {
+  transition: opacity 0.5s ease 0.25s, 
+              transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
+}
+.modal-enter-from .modal-header {
+  opacity: 0;
+  transform: translateY(-5px);
 }
 </style>

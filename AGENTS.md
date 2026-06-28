@@ -1,4 +1,5 @@
-# ALWAYS USE  all requred design skill for making UI. and specially userinterface-wiki
+# ALWAYS USE  all requred design skill for making UI. and specially userinterface-wiki and always use maya-design too
+ and alwasy break down animation into small small differnet differnet segments , which complete at different rate so the app feel alive and not monotonous and more rich in design
 
 ## Purpose
 

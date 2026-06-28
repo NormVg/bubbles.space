@@ -55,11 +55,11 @@ const uiStore = useUIStore()
 /* Inverted curve for top-left touching the right frame */
 .curve-top {
   position: absolute;
-  top: -12px;
+  top: -24px;
   right: 0;
-  width: 12px;
-  height: 12px;
-  background: radial-gradient(circle at 0 0, transparent 12px, var(--bg-soft) 12px);
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle at 0 0, transparent 24px, var(--bg-soft) 24px);
   pointer-events: none;
 }
 
