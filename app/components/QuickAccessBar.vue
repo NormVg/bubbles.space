@@ -45,8 +45,9 @@ const uiStore = useUIStore()
   position: absolute;
   bottom: 10px;
   right: 10px;
+  width: 44px; /* Fixed width for perfect curve math */
   background: var(--bg-soft);
-  border-radius: 18px 0 0 0;
+  border-radius: 22px 0 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,11 +56,12 @@ const uiStore = useUIStore()
 /* Inverted curve for top-left touching the right frame */
 .curve-top {
   position: absolute;
-  top: -24px;
+  top: -22px;
   right: 0;
-  width: 24px;
-  height: 24px;
-  background: radial-gradient(circle at 0 0, transparent 24px, var(--bg-soft) 24px);
+  width: 22px;
+  height: 22px;
+  /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
+  background: radial-gradient(circle at 0 0, transparent 22px, var(--bg-soft) 22px);
   pointer-events: none;
 }
 
@@ -67,10 +69,10 @@ const uiStore = useUIStore()
 .curve-left {
   position: absolute;
   bottom: 0;
-  left: -12px;
-  width: 12px;
-  height: 12px;
-  background: radial-gradient(circle at 0 0, transparent 12px, var(--bg-soft) 12px);
+  left: -16px;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 0 0, transparent 16px, var(--bg-soft) 16px);
   pointer-events: none;
 }
 
@@ -80,7 +82,8 @@ const uiStore = useUIStore()
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 16px 12px 14px 12px;
+  padding: 22px 0 16px 0; /* Horizontal padding removed, rely on fixed width & center alignment */
+  width: 100%;
 }
 
 .qa-btn {

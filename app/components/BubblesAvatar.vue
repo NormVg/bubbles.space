@@ -69,7 +69,7 @@ watch(
   () => chatStore.emotion,
   () => {
     isTransitioning.value = true;
-    setTimeout(() => (isTransitioning.value = false), 300);
+    setTimeout(() => (isTransitioning.value = false), 400);
   },
 );
 

@@ -2,15 +2,13 @@
   <Transition name="modal">
     <div v-if="uiStore.isSettingsOpen" class="settings-modal-overlay" @click.self="uiStore.closeSettings">
       <div class="settings-modal-content">
-        <div class="modal-header">
-          <h2>Settings</h2>
-          <button class="close-btn" @click="uiStore.closeSettings">
-            <LucideX :size="20" />
-          </button>
-        </div>
+        <button class="close-btn" @click="uiStore.closeSettings">
+          <LucideX :size="18" />
+        </button>
         
         <div class="modal-body">
           <div class="settings-sidebar">
+            <h2 class="sidebar-title">Settings</h2>
             <button class="nav-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">General</button>
             <button class="nav-btn" :class="{ active: activeTab === 'appearance' }" @click="activeTab = 'appearance'">Appearance</button>
             <button class="nav-btn" :class="{ active: activeTab === 'account' }" @click="activeTab = 'account'">Account</button>
@@ -51,7 +49,7 @@
                     :class="{ active: colorMode === 'light' }" 
                     @click="colorMode = 'light'"
                   >
-                    <LucideSun :size="16" />
+                    <LucideSun :size="15" />
                     Light
                   </button>
                   <button 
@@ -59,7 +57,7 @@
                     :class="{ active: colorMode === 'dark' }" 
                     @click="colorMode = 'dark'"
                   >
-                    <LucideMoon :size="16" />
+                    <LucideMoon :size="15" />
                     Dark
                   </button>
                   <button 
@@ -67,7 +65,7 @@
                     :class="{ active: colorMode === 'auto' }" 
                     @click="colorMode = 'auto'"
                   >
-                    <LucideMonitor :size="16" />
+                    <LucideMonitor :size="15" />
                     System
                   </button>
                 </div>
@@ -109,59 +107,46 @@ const colorMode = useColorMode({
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Dark translucent backdrop */
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   border-radius: 6px;
   pointer-events: auto;
 }
 
 .settings-modal-content {
-  width: 80%;
+  width: 90%;
   height: 80%;
-  max-width: 1000px;
-  max-height: 700px;
-  background: rgba(20, 20, 25, 0.85);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  max-width: 860px;
+  max-height: 600px;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 24px 48px rgba(0, 0, 0, 0.4);
   overflow: hidden;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  position: relative;
 }
 
 .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   background: transparent;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
+  padding: 6px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  z-index: 10;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
 }
 
@@ -172,22 +157,33 @@ const colorMode = useColorMode({
 }
 
 .settings-sidebar {
-  width: 240px;
-  padding: 24px 16px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  width: 220px;
+  padding: 24px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 0 12px;
+  margin-bottom: 16px;
+  font-family: var(--font-sans);
+}
+
 .nav-btn {
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   text-align: left;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
   font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -199,14 +195,14 @@ const colorMode = useColorMode({
 }
 
 .nav-btn.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .settings-main {
   flex: 1;
-  padding: 32px;
+  padding: 32px 40px;
   overflow-y: auto;
   font-family: var(--font-sans);
 }
@@ -216,9 +212,10 @@ const colorMode = useColorMode({
 }
 
 .setting-group h3 {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
   margin-bottom: 16px;
 }
@@ -228,7 +225,7 @@ const colorMode = useColorMode({
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .setting-item:last-child {
@@ -243,12 +240,12 @@ const colorMode = useColorMode({
 
 .setting-info label {
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .setting-info .desc {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
