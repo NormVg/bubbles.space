@@ -40,7 +40,10 @@
       
       <!-- Thinking Loader -->
       <div v-if="isBusy" class="ai-message-wrapper thinking-loader-wrapper">
-        <AILoader :size="18" color="var(--accent)" />
+        <div class="thinking-content">
+          <AILoader :size="16" color="var(--accent)" />
+          <span class="thinking-text">{{ agent.status.value === 'submitted' ? 'Thinking...' : 'Replying...' }}</span>
+        </div>
       </div>
     </div>
 
@@ -243,6 +246,24 @@ const handleCopy = async (text: string, isUser: boolean) => {
 .thinking-loader-wrapper {
   padding-left: 2px;
   margin-bottom: 16px;
+}
+
+.thinking-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.thinking-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 .ai-message {
