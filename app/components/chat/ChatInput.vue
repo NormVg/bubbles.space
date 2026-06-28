@@ -2,7 +2,7 @@
   <div class="chat-input-outer">
     <!-- Watermark positioned behind the action buttons, avoiding the text area -->
     <div class="watermark-container">
-      <BubblesAvatar class="watermark-avatar" />
+      <BubblesAvatar class="watermark-avatar" :invert="false" :animate="false" />
     </div>
 
     <div class="chat-input-inner">

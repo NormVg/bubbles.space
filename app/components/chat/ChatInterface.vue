@@ -3,7 +3,7 @@
     <!-- Empty State Center -->
     <div class="chat-empty-state">
       <div class="avatar-wrapper">
-        <BubblesAvatar />
+        <BubblesAvatar :invert="false" :animate="false" />
       </div>
       <h2 class="welcome-title">Hi there! I'm Bubbles.</h2>
       <p class="welcome-subtitle">

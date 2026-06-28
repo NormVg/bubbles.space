@@ -2,6 +2,7 @@
   <div class="bubbles-avatar-container">
     <svg
       class="avatar-svg"
+      :class="{ 'is-inverted': invert }"
       width="80"
       height="80"
       viewBox="0 0 290 290"
@@ -11,7 +12,7 @@
       <g
         id="aura-logo-border"
         class="rotating-border"
-        :class="{ transitioning: isTransitioning }"
+        :class="{ transitioning: isTransitioning, 'is-animating': animate }"
       >
         <path
           v-for="(border, index) in activeFace.faceBorder"
@@ -54,6 +55,17 @@
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import emotionsData from "../assets/emotions.json";
 import { useChatStore } from "../stores/chat";
+
+const props = defineProps({
+  invert: {
+    type: Boolean,
+    default: true
+  },
+  animate: {
+    type: Boolean,
+    default: true
+  }
+});
 
 const chatStore = useChatStore();
 
@@ -711,8 +723,11 @@ const auraLogoFace = ref({
 
 .rotating-border {
   transform-origin: 145px 145px;
-  animation: rotate 10s linear infinite;
   transition: transform 0.3s ease-in-out;
+}
+
+.rotating-border.is-animating {
+  animation: rotate 10s linear infinite;
 }
 
 .rotating-border.transitioning {
@@ -741,13 +756,20 @@ const auraLogoFace = ref({
 }
 
 .avatar-svg {
-  /* Scale up visually and flip horizontally (invert eyes) */
-  transform: scaleX(-1);
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.avatar-svg.is-inverted {
+  /* Scale up visually and flip horizontally (invert eyes) */
+  transform: scaleX(-1);
+}
+
 .avatar-svg:hover {
+  transform: scale(1.05);
+}
+
+.avatar-svg.is-inverted:hover {
   transform: scaleX(-1) scale(1.05);
 }
 </style>
