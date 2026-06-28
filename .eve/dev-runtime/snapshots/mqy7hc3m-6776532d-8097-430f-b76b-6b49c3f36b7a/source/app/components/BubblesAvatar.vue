@@ -63,6 +63,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import emotionsData from "../assets/emotions.json";
 import { useChatStore } from "../stores/chat";
+import { playUISound } from "@thenormvg/web-have-sounds";
 
 const props = defineProps({
   invert: {
@@ -93,6 +94,13 @@ const activeFace = computed(
 const triggerEmotion = (emotion, duration = 3000) => {
   if (emotionResetTimer.value) clearTimeout(emotionResetTimer.value);
   localEmotion.value = emotion;
+  
+  if (emotion === 'happy') {
+    playUISound('success', 'glass');
+  } else if (emotion === 'frustrate') {
+    playUISound('error', 'industrial');
+  }
+
   emotionResetTimer.value = setTimeout(() => {
     localEmotion.value = null;
   }, duration);

@@ -23,7 +23,9 @@ import RightDrawer from './RightDrawer.vue'
     <WorkspaceSwitcher />
 
     <!-- Right Drawer Overlay (behind QuickAccessBar via z-index) -->
-    <RightDrawer />
+    <ClientOnly>
+      <RightDrawer />
+    </ClientOnly>
 
     <!-- Bottom Right: Quick Access Bar -->
     <QuickAccessBar />

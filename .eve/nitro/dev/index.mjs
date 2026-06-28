@@ -190,7 +190,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -201,11 +201,11 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -240,8 +240,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -342,7 +342,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mqy7do0n-a2d08d29-46ec-4dea-b0fb-3a19f57666c2/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mqy7hc3m-6776532d-8097-430f-b76b-6b49c3f36b7a/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;

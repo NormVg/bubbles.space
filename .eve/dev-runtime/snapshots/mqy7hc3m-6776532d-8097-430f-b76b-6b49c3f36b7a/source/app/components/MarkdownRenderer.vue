@@ -49,14 +49,6 @@ const props = defineProps({
   contain: none !important;
 }
 
-/* Force overflow visible on any wrapper that might clip the dropdown menu */
-.custom-md-renderer :deep([class*="code-block"]),
-.custom-md-renderer :deep([class*="code-header"]),
-.custom-md-renderer :deep(.code-block-container),
-.custom-md-renderer :deep(.markstream-code-block) {
-  overflow: visible !important;
-}
-
 .custom-md-renderer :deep(.markstream-vue) {
   --ms-bg-code: rgba(0, 0, 0, 0.4);
   --ms-border-radius: 12px;

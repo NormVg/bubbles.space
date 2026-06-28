@@ -81,7 +81,7 @@ function endResize() {
   right: 10px;
   bottom: 10px;
   width: 0;
-  z-index: 50;
+  z-index: 40;
   pointer-events: none;
 }
 
