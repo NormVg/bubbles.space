@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
+import BubblesAvatar from './BubblesAvatar.vue'
+import QuickAccessBar from './QuickAccessBar.vue'
 </script>
 
 <template>
@@ -7,8 +9,14 @@ import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
     <!-- The 10px frame border all around the screen -->
     <div class="hud-frame" />
     
-    <!-- The workspace switcher integrated into the HUD -->
+    <!-- Top Left: Avatar -->
+    <BubblesAvatar />
+
+    <!-- Bottom Left: Workspace Switcher -->
     <WorkspaceSwitcher />
+
+    <!-- Bottom Right: Quick Access Bar -->
+    <QuickAccessBar />
   </div>
 </template>
 
@@ -38,7 +46,9 @@ import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 }
 
 /* Make sure child interactive elements capture pointer events */
-:deep(.state-bar) {
+:deep(.state-bar),
+:deep(.bubbles-avatar-hud),
+:deep(.quick-access-hud) {
   pointer-events: auto;
 }
 </style>
