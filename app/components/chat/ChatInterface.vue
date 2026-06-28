@@ -336,6 +336,8 @@ const handleCopy = async (text: string, isUser: boolean) => {
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 16px;
   padding: 6px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
@@ -495,13 +497,15 @@ const handleCopy = async (text: string, isUser: boolean) => {
 }
 
 .user-message {
-  background: rgba(20, 20, 22, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
   padding: 10px 14px;
   margin-bottom: 4px; /* Reduced to bring buttons closer */
   max-width: 80%;
   align-self: flex-end;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
   font-size: 14px;
   line-height: 1.5;

@@ -46,8 +46,8 @@ const uiStore = useUIStore()
   right: 10px;
   width: 44px; /* Fixed width for perfect curve math */
   background: var(--glass-bg);
-  /* Solid background fallback to replace blur */
-  background: rgba(15, 15, 18, 0.95);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border-radius: 22px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,8 @@ const uiStore = useUIStore()
    so it seamlessly merges into the drawer's background without seams or overlapping blurs */
 .quick-access-hud.drawer-open {
   background: transparent;
-  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   box-shadow: none;
 }
 
@@ -73,7 +74,7 @@ const uiStore = useUIStore()
   height: 22px;
   /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
   background: var(--gradient-cutout);
-  background: rgba(15, 15, 18, 0.95);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
@@ -85,7 +86,7 @@ const uiStore = useUIStore()
   width: 16px;
   height: 16px;
   background: var(--gradient-cutout-small);
-  background: rgba(15, 15, 18, 0.95);
+  backdrop-filter: blur(48px);
   pointer-events: none;
   transition: opacity 0.2s ease;
 }

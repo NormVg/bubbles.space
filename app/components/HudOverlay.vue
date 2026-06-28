@@ -80,7 +80,8 @@ import RightDrawer from './RightDrawer.vue'
   
   /* Distinct, premium dark glass that contrasts with the canvas */
   background: var(--glass-bg);
-  background: rgba(12, 12, 14, 0.85);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   pointer-events: none;
   z-index: 10;
   

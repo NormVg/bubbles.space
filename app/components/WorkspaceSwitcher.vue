@@ -154,7 +154,8 @@ function toggleExpand() {
   bottom: 10px; /* Aligned with the inner edge of the 10px HUD frame */
   left: 10px;   /* Aligned with the inner edge of the 10px HUD frame */
   background: var(--glass-bg); 
-  background: rgba(18, 18, 22, 0.95);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border-radius: 0 16px 0 0;
   user-select: none;
   overflow: visible;
@@ -179,7 +180,7 @@ function toggleExpand() {
   width: 16px;
   height: 16px;
   background: var(--gradient-cutout-right);
-  background: rgba(18, 18, 22, 0.95);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
@@ -190,7 +191,7 @@ function toggleExpand() {
   width: 16px;
   height: 16px;
   background: var(--gradient-cutout-right);
-  background: rgba(18, 18, 22, 0.95);
+  backdrop-filter: blur(48px);
   pointer-events: none;
 }
 
