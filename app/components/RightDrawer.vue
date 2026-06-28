@@ -114,8 +114,8 @@ function endResize() {
 
   /* Deep glassmorphism gradient aesthetic */
   background: var(--gradient-drawer);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: none;
   border-radius: 16px;
   box-shadow: var(--widget-shadow);
