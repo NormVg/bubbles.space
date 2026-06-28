@@ -8,7 +8,17 @@ import RightDrawer from './RightDrawer.vue'
 
 <template>
   <div class="hud-overlay">
-    <!-- Single 10px frame border with rounded inner/outer corners using CSS masking -->
+    <!-- Bulletproof SVG Mask for perfect cross-browser rounded inner/outer corners -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <mask id="hud-mask">
+          <rect class="mask-outer" />
+          <rect class="mask-inner" />
+        </mask>
+      </defs>
+    </svg>
+
+    <!-- Single 10px frame border with rounded inner/outer corners -->
     <div class="hud-frame" />
     
     <!-- Top Left: Avatar -->
@@ -33,6 +43,24 @@ import RightDrawer from './RightDrawer.vue'
 </template>
 
 <style scoped>
+.mask-outer {
+  x: 0;
+  y: 0;
+  width: 100%;
+  height: 100%;
+  rx: 26px;
+  fill: white;
+}
+
+.mask-inner {
+  x: 10px;
+  y: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  rx: 16px;
+  fill: black;
+}
+
 .hud-overlay {
   position: absolute;
   top: 0;
@@ -50,8 +78,6 @@ import RightDrawer from './RightDrawer.vue'
 .hud-frame {
   position: absolute;
   inset: 0;
-  border: 10px solid transparent; /* Defines the 10px thickness */
-  border-radius: 26px; /* Outer corner radius (yields 16px inner radius) */
   
   /* Distinct, premium dark glass that contrasts with the canvas */
   background: var(--glass-bg);
@@ -60,14 +86,9 @@ import RightDrawer from './RightDrawer.vue'
   pointer-events: none;
   z-index: 10;
   
-  /* Mask Magic: Subtracts the padding-box from the border-box to isolate the 10px border */
-  mask-image: linear-gradient(black, black), linear-gradient(black, black);
-  mask-clip: border-box, padding-box;
-  mask-composite: exclude;
-  
-  -webkit-mask-image: linear-gradient(black, black), linear-gradient(black, black);
-  -webkit-mask-clip: border-box, padding-box;
-  -webkit-mask-composite: destination-out;
+  /* SVG Mask provides perfect cross-browser support */
+  mask: url(#hud-mask);
+  -webkit-mask: url(#hud-mask);
 }
 
 .hud-avatar-wrapper {
