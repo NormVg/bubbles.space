@@ -11,8 +11,6 @@
         v-model="text"
         class="chat-textarea" 
         placeholder="Ask Bubbles or drag files..."
-        rows="1"
-        @input="autoResize"
       ></textarea>
       
       <div class="chat-actions">
@@ -41,8 +39,8 @@ const autoResize = () => {
   const el = textareaRef.value
   if (!el) return
   
-  // Reset height to auto to correctly measure scrollHeight down when deleting text
-  el.style.height = 'auto'
+  // Set to 0 to perfectly measure scrollHeight without being constrained by previous height
+  el.style.height = '0px'
   
   // Set the new height based on content
   const newHeight = el.scrollHeight

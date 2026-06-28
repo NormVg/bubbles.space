@@ -66,8 +66,7 @@ import ChatInput from './ChatInput.vue'
 
 /* ─── Chat Input Area ────────────────────────────────────────── */
 .chat-input-wrapper {
-  padding: 0 0 24px 0;
-  /* Add extra right padding if QuickAccessBar overlaps */
-  padding-right: 80px; 
+  padding: 0;
+  width: 100%;
 }
 </style>
