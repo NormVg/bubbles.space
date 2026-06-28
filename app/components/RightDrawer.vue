@@ -8,9 +8,17 @@
     ></div>
 
     <!-- The actual drawer panel -->
-    <aside class="right-drawer">
+    <aside 
+      class="right-drawer" 
+      :style="{ width: drawerWidth + 'px' }" 
+      :class="{ 'is-resizing': isResizing }"
+    >
+      <!-- Resizer handle -->
+      <div class="resizer" @mousedown.prevent="startResize">
+        <div class="resizer-line"></div>
+      </div>
+
       <div class="drawer-content">
-        
         <div class="drawer-header">
           <h2 class="drawer-title">Sidebar Panel</h2>
           <p class="drawer-subtitle">Dynamic Content Area</p>
@@ -22,15 +30,44 @@
             <p>Select a component to view</p>
           </div>
         </div>
-        
       </div>
     </aside>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useUIStore } from '../stores/ui'
+import { useLocalStorage } from '@vueuse/core'
+
 const uiStore = useUIStore()
+const drawerWidth = useLocalStorage('bubbles-drawer-width', 400)
+const isResizing = ref(false)
+
+function startResize(e: MouseEvent) {
+  isResizing.value = true
+  document.body.style.cursor = 'ew-resize'
+  window.addEventListener('mousemove', doResize)
+  window.addEventListener('mouseup', endResize)
+}
+
+function doResize(e: MouseEvent) {
+  if (!isResizing.value) return
+  // Width is distance from right edge to the mouse
+  const newWidth = window.innerWidth - e.clientX
+  
+  // Clamp width to bounds (40vw min, 90vw max)
+  const minW = window.innerWidth * 0.4
+  const maxW = window.innerWidth * 0.9
+  drawerWidth.value = Math.max(minW, Math.min(maxW, newWidth))
+}
+
+function endResize() {
+  isResizing.value = false
+  document.body.style.cursor = ''
+  window.removeEventListener('mousemove', doResize)
+  window.removeEventListener('mouseup', endResize)
+}
 </script>
 
 <style scoped>
@@ -40,9 +77,8 @@ const uiStore = useUIStore()
   top: 10px;
   right: 10px;
   bottom: 10px;
-  /* Width must not block the screen when closed */
   width: 0;
-  z-index: 50; /* Lower than QuickAccessBar (which should be 100) */
+  z-index: 50; 
   pointer-events: none;
 }
 
@@ -53,13 +89,9 @@ const uiStore = useUIStore()
 
 .drawer-backdrop {
   position: fixed;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
+  inset: 10px;
   z-index: 1;
-  /* Very subtle backdrop if needed, or completely transparent */
-  background: rgba(0, 0, 0, 0.1);
+  background: transparent;
 }
 
 /* ─── Drawer Panel ──────────────────────────────────────── */
@@ -68,11 +100,6 @@ const uiStore = useUIStore()
   top: 0;
   right: 0;
   height: 100%;
-  
-  /* Constraints based on user requirements */
-  width: 400px; /* Default width */
-  min-width: 35vw;
-  max-width: 90vw;
   
   /* Deep glassmorphism aesthetic matching SettingsModal */
   background: rgba(20, 20, 25, 0.85);
@@ -83,15 +110,13 @@ const uiStore = useUIStore()
   box-shadow: -12px 0 32px rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.05);
   
   z-index: 2;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 
-  /* Base state for animation (closed) */
+  /* Smooth slide out from border, no bounce */
   transform: translateX(100%);
   opacity: 0;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              opacity 0.4s ease;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
 }
 
 /* Open State */
@@ -100,31 +125,63 @@ const uiStore = useUIStore()
   opacity: 1;
 }
 
+/* Disable transition during drag for 1:1 mouse tracking */
+.right-drawer.is-resizing {
+  transition: none !important;
+}
+
+/* ─── Resizer ────────────────────────────────────────────── */
+.resizer {
+  position: absolute;
+  top: 0;
+  left: -2px; /* Slight overflow to make grabbing easier */
+  width: 12px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resizer-line {
+  width: 2px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+.resizer:hover .resizer-line,
+.right-drawer.is-resizing .resizer-line {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 /* ─── Drawer Content (Staggered Animations) ────────────────────── */
 .drawer-content {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 32px;
-  /* Base state for child animations */
+  /* Use padding-left so it doesn't overlap the resizer */
+  padding-left: 40px;
   opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateX(10px);
+  transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+  overflow: hidden;
 }
 
 .right-drawer-wrapper.is-open .drawer-content {
-  /* Delays to create a staggered, alive feel */
   opacity: 1;
   transform: translateX(0);
-  transition-delay: 0.1s; /* Content follows the panel slide */
+  transition-delay: 0.1s; 
 }
 
 .drawer-header {
   margin-bottom: 32px;
-  /* Another stagger step for header specifically */
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.4s ease 0.15s, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+  transform: translateY(-5px);
+  transition: opacity 0.3s ease-out 0.15s, transform 0.4s ease-out 0.15s;
 }
 
 .right-drawer-wrapper.is-open .drawer-header {
@@ -147,10 +204,9 @@ const uiStore = useUIStore()
 .drawer-body {
   flex: 1;
   overflow-y: auto;
-  /* Final stagger step for body content */
   opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.5s ease 0.2s, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease-out 0.2s, transform 0.5s ease-out 0.2s;
 }
 
 .right-drawer-wrapper.is-open .drawer-body {
