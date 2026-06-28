@@ -153,18 +153,15 @@ function toggleExpand() {
   position: absolute;
   bottom: 10px; /* Aligned with the inner edge of the 10px HUD frame */
   left: 10px;   /* Aligned with the inner edge of the 10px HUD frame */
-  background: rgba(22, 22, 28, 0.95); 
+  background: rgba(32, 32, 40, 0.85); 
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border-radius: 0 16px 0 0;
-  
-  /* Inner highlights for depth */
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  
   user-select: none;
   overflow: visible;
   width: fit-content;
+  /* Inner highlights where it meets the canvas */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* ─── Dynamic Slot ─────────────────────────────────────────────── */
@@ -184,7 +181,7 @@ function toggleExpand() {
   left: 0;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(22, 22, 28, 0.95) 16px);
+  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -195,7 +192,7 @@ function toggleExpand() {
   right: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(22, 22, 28, 0.95) 16px);
+  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }

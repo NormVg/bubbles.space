@@ -44,24 +44,25 @@ import RightDrawer from './RightDrawer.vue'
   z-index: 100;
   overflow: hidden; /* Prevent shadows from bleeding out of the window */
   
-  /* Extremely strong drop-shadows to give the entire HUD shape massive depth */
-  filter: drop-shadow(0 12px 48px rgba(0, 0, 0, 0.8)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.6));
+  /* Massive drop shadow to separate HUD from Canvas */
+  filter: drop-shadow(0 0 32px rgba(0, 0, 0, 0.8));
 }
 
 .hud-frame-edge {
   position: absolute;
-  /* Darker, richer, and highly opaque glass to distinctly separate from the canvas */
-  background: rgba(22, 22, 28, 0.95);
+  /* Distinct, premium dark glass that contrasts with the canvas */
+  background: rgba(32, 32, 40, 0.85);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   pointer-events: none;
   z-index: 10;
 }
 
-.edge-top { top: 0; left: 0; right: 0; height: 10px; }
-.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; }
-.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; }
-.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; }
+/* Add subtle inner highlights to the edges facing the canvas */
+.edge-top { top: 0; left: 0; right: 0; height: 10px; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1); }
+.edge-bottom { bottom: 0; left: 0; right: 0; height: 10px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+.edge-left { top: 10px; bottom: 10px; left: 0; width: 10px; box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.1); }
+.edge-right { top: 10px; bottom: 10px; right: 0; width: 10px; box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1); }
 
 .hud-avatar-wrapper {
   position: absolute;

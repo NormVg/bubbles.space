@@ -51,19 +51,16 @@ const uiStore = useUIStore()
   bottom: 10px;
   right: 10px;
   width: 44px; /* Fixed width for perfect curve math */
-  background: rgba(22, 22, 28, 0.95);
+  background: rgba(32, 32, 40, 0.85);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border-radius: 22px 0 0 0;
-  
-  /* Inner highlights for depth */
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 100; /* Always stay above the RightDrawer */
+  /* Inner highlights where it meets the canvas */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Inverted curve for top-left touching the right frame */
@@ -74,7 +71,7 @@ const uiStore = useUIStore()
   width: 22px;
   height: 22px;
   /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
-  background: radial-gradient(circle at 0 0, transparent 22px, rgba(22, 22, 28, 0.95) 22px);
+  background: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -86,7 +83,7 @@ const uiStore = useUIStore()
   left: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 0 0, transparent 16px, rgba(22, 22, 28, 0.95) 16px);
+  background: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
