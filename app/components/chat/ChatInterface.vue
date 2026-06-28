@@ -1,6 +1,6 @@
 <template>
   <div class="chat-interface">
-    <div class="chat-messages" ref="messagesContainer">
+    <div class="chat-messages" ref="messagesContainer" @scroll="handleScroll">
       <div v-for="message in agent.data.value.messages" :key="message.id">
         <!-- User Message -->
         <div v-if="message.role === 'user'" class="user-message-wrapper">
@@ -67,15 +67,21 @@ const isBusy = computed(() => agent.status.value === 'submitted' || agent.status
 
 const messagesContainer = ref<HTMLElement | null>(null)
 let observer: MutationObserver | null = null
+const isUserScrolledUp = ref(false)
+
+const handleScroll = () => {
+  if (!messagesContainer.value) return
+  const container = messagesContainer.value
+  // Consider user scrolled up if they are more than 150px away from the bottom
+  isUserScrolledUp.value = container.scrollHeight - container.scrollTop - container.clientHeight > 150
+}
 
 const scrollToBottom = (force = false) => {
   if (!messagesContainer.value) return
   
   const container = messagesContainer.value
-  // Auto-scroll if within 150px of the bottom
-  const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150
   
-  if (force || isNearBottom) {
+  if (force || !isUserScrolledUp.value) {
     container.scrollTop = container.scrollHeight
   }
 }
@@ -230,10 +236,9 @@ const handleCopy = async (text: string, isUser: boolean) => {
 
 .ai-message {
   width: 100%;
-  max-width: calc(100% - 130px); /* Leave space on right for dropdown menus to prevent clipping */
+  max-width: calc(100% - 24px); /* Increased width for better reading while leaving a small safe zone */
   align-self: flex-start;
-  margin-bottom: 8px; /* Reduced from 32px to bring buttons closer */
-  /* Removed padding, background, and border as requested for AI messages */
+  margin-bottom: 8px;
 }
 
 .ai-message-actions {
