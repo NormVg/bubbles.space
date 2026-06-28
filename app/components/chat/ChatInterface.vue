@@ -6,7 +6,13 @@
         <div v-if="message.role === 'user'" class="user-message-wrapper">
           <div class="user-message">
             <template v-for="(part, i) in message.parts" :key="i">
-              <span v-if="part.type === 'text'">{{ part.text }}</span>
+              <div v-if="part.type === 'text'" class="user-message-content">
+                <div v-if="parseUserMessage(part.text).quotes" class="user-message-quote">
+                  <div class="quote-icon"><LucideReply :size="12" /></div>
+                  <div class="quote-text">{{ parseUserMessage(part.text).quotes }}</div>
+                </div>
+                <div class="user-message-text">{{ parseUserMessage(part.text).text }}</div>
+              </div>
             </template>
           </div>
           <div class="user-message-actions">
@@ -173,6 +179,29 @@ const getTextContent = (message: any) => {
     .join('')
 }
 
+const parseUserMessage = (text: string) => {
+  const lines = text.split('\n')
+  const quotes: string[] = []
+  const message: string[] = []
+  
+  let inQuotes = true
+  for (const line of lines) {
+    if (inQuotes && line.startsWith('> ')) {
+      quotes.push(line.substring(2))
+    } else if (inQuotes && line.trim() === '') {
+      // skip empty lines between quotes and message
+    } else {
+      inQuotes = false
+      message.push(line)
+    }
+  }
+  
+  return {
+    quotes: quotes.length > 0 ? quotes.join(' ').trim() : null,
+    text: message.join('\n').trim()
+  }
+}
+
 const userMessageCopied = ref(false)
 const aiMessageCopied = ref(false)
 
@@ -284,16 +313,17 @@ const handleCopy = async (text: string, isUser: boolean) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  padding: 8px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 10, 12, 0.3); /* Add depth with slightly darker bg */
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 6px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
   box-sizing: border-box;
   animation: slideUpFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-x: auto;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Hide scrollbar for context bar but allow horizontal scroll if many tabs */
@@ -308,14 +338,15 @@ const handleCopy = async (text: string, isUser: boolean) => {
 .context-pill {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 6px 12px;
+  gap: 8px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 6px 10px;
   box-sizing: border-box;
   max-width: 250px; /* Prevent single context from taking up the whole bar */
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes slideUpFade {
@@ -427,14 +458,48 @@ const handleCopy = async (text: string, isUser: boolean) => {
 .user-message {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 16px 24px;
-  margin-bottom: 8px; /* Reduced from 24px to bring buttons closer */
-  max-width: 85%;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 4px; /* Reduced to bring buttons closer */
+  max-width: 80%;
   align-self: flex-end;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.user-message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-message-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.quote-icon {
+  margin-top: 2px;
+  opacity: 0.6;
+}
+
+.quote-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-message-actions {
