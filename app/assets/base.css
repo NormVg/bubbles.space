@@ -42,40 +42,68 @@
   --widget-bg: rgba(30, 30, 34, 0.45);
   --widget-border: rgba(255, 255, 255, 0.08);
   --widget-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(0, 0, 0, 0.2);
+  --hud-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+
+  /* Semantic UI Variables (Default Dark) */
+  --glass-bg: rgba(32, 32, 40, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(0, 0, 0, 0.35);
+
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+
   --danger: #e06c75;
   --success: #98c379;
   --warning: #e5c07b;
   color-scheme: dark;
 }
 
-/* ─── Light Theme (Vercel / shadcn) ───────────────────────── */
+/* ─── Light Theme (Warm Beige) ───────────────────────── */
 html.light {
-  --bg-base: #fafafa;
-  --bg-soft: #ffffff;
-  --bg-muted: #f4f4f5;
+  /* Warm Beige Palette */
+  --bg-base: #FDFBF7; /* Soft paper white */
+  --bg-soft: #F5F2EB; /* Light beige for panels */
+  --bg-muted: #EBE7DD; /* Deeper beige for hover states */
   --bg-elevated: #ffffff;
 
-  --border: #e4e4e7;
-  --border-subtle: #f0f0f2;
+  --border: #E2DECB;
+  --border-subtle: #EBE7DD;
 
-  --text-primary: #09090b;
-  --text-secondary: #71717a;
-  --text-muted: #a1a1aa;
+  --text-primary: #4A443B; /* Warm dark gray/brown for high readability */
+  --text-secondary: #7C7566; /* Taupe */
+  --text-muted: #A69F8F;
 
-  --accent: #18181b;
-  --accent-hover: #27272a;
-  --accent-foreground: #fafafa;
-  --accent-glow: rgba(0, 0, 0, 0.04);
+  --accent: #B39A82; /* Warm camel */
+  --accent-hover: #9E856E;
+  --accent-foreground: #ffffff;
+  --accent-glow: rgba(179, 154, 130, 0.15);
 
-  --dot-color: rgba(0, 0, 0, 0.07);
+  --dot-color: rgba(74, 68, 59, 0.2); /* Darker dot matrix as requested */
 
-  --widget-bg: rgba(255, 255, 255, 0.85);
-  --widget-border: rgba(0, 0, 0, 0.08);
-  --widget-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --widget-bg: rgba(253, 251, 247, 0.7);
+  --widget-border: rgba(226, 222, 203, 0.5);
+  --widget-shadow: 0 4px 12px rgba(74, 68, 59, 0.05), 0 12px 24px rgba(74, 68, 59, 0.08);
+  --hud-shadow: 0 0 32px rgba(74, 68, 59, 0.15);
 
-  --danger: #dc2626;
-  --success: #16a34a;
-  --warning: #ca8a04;
+  /* Semantic UI Variables */
+  --glass-bg: rgba(253, 251, 247, 0.75);
+  --glass-border: rgba(226, 222, 203, 0.4);
+  --hover-bg: rgba(74, 68, 59, 0.04);
+  --input-bg: rgba(245, 242, 235, 0.5);
+  
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(245, 242, 235, 0.8), rgba(253, 251, 247, 0.95));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(253, 251, 247, 0.85) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(253, 251, 247, 0.85) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(253, 251, 247, 0.85) 16px);
+
+  --danger: #d97a7a;
+  --success: #8ab38c;
+  --warning: #d9b37a;
 
   color-scheme: light;
 }
@@ -104,6 +132,19 @@ html.dark {
   --widget-bg: rgba(30, 30, 34, 0.45);
   --widget-border: rgba(255, 255, 255, 0.08);
   --widget-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(0, 0, 0, 0.2);
+  --hud-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+
+  /* Semantic UI Variables */
+  --glass-bg: rgba(32, 32, 40, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(0, 0, 0, 0.35);
+
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
 
   --danger: #e06c75;
   --success: #98c379;

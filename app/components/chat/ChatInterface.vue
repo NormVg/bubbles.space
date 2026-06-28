@@ -212,14 +212,15 @@ const handleCopy = async (text: string, isUser: boolean) => {
 }
 
 .user-message {
-  background: rgba(32, 32, 40, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px 24px;
   margin-bottom: 8px; /* Reduced from 24px to bring buttons closer */
   max-width: 85%;
   align-self: flex-end;
   backdrop-filter: blur(12px);
+  color: var(--text-primary);
 }
 
 .user-message-actions {
@@ -237,7 +238,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
   gap: 6px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-secondary);
   padding: 4px 8px;
   border-radius: 8px;
   font-size: 11px;
@@ -247,16 +248,16 @@ const handleCopy = async (text: string, isUser: boolean) => {
 }
 
 .chat-action-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--hover-bg);
+  color: var(--text-primary);
 }
 .chat-action-btn.copied {
-  color: #4ade80; /* Tailwind green-400 */
-  background: rgba(74, 222, 128, 0.1);
-  border-color: rgba(74, 222, 128, 0.2);
+  color: var(--success);
+  background: rgba(138, 179, 140, 0.15); /* Soft green tint based on success variable */
+  border-color: rgba(138, 179, 140, 0.3);
 }
 
 .icon-success {
-  color: #4ade80;
+  color: var(--success);
 }
 </style>

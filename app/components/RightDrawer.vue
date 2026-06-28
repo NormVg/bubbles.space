@@ -105,13 +105,13 @@ function endResize() {
   height: 100%;
 
   /* Deep glassmorphism gradient aesthetic */
-  background: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
+  background: var(--gradient-drawer);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border: none;
   border-radius: 16px 0 0 16px;
   /* Reduced shadow intensity as requested by user */
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--widget-shadow);
 
   z-index: 2;
   display: flex;
@@ -151,14 +151,14 @@ function endResize() {
 .resizer-line {
   width: 2px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--glass-border);
   border-radius: 2px;
   transition: background 0.2s ease;
 }
 
 .resizer:hover .resizer-line,
 .right-drawer.is-resizing .resizer-line {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--text-muted);
 }
 
 /* ─── Drawer Content ─────────────────────────────────────── */

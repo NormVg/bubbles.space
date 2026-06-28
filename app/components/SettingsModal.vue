@@ -107,7 +107,7 @@ const colorMode = useColorMode({
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(4px);
   border-radius: 6px;
   pointer-events: auto;
@@ -123,7 +123,7 @@ const colorMode = useColorMode({
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 24px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--widget-shadow);
   overflow: hidden;
   position: relative;
 }
@@ -146,7 +146,7 @@ const colorMode = useColorMode({
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--hover-bg);
   color: var(--text-primary);
 }
 
@@ -159,8 +159,8 @@ const colorMode = useColorMode({
 .settings-sidebar {
   width: 220px;
   padding: 24px 12px;
-  background: rgba(0, 0, 0, 0.15);
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  background: var(--bg-soft);
+  border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -190,12 +190,12 @@ const colorMode = useColorMode({
 }
 
 .nav-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--hover-bg);
   color: var(--text-primary);
 }
 
 .nav-btn.active {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-border);
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -225,7 +225,7 @@ const colorMode = useColorMode({
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .setting-item:last-child {
@@ -252,7 +252,7 @@ const colorMode = useColorMode({
 .toggle-switch {
   width: 44px;
   height: 24px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border);
   border-radius: 12px;
   position: relative;
   cursor: pointer;
@@ -273,7 +273,7 @@ const colorMode = useColorMode({
 }
 
 .toggle-switch.active {
-  background: #cdc6f7;
+  background: var(--accent);
 }
 
 .toggle-switch.active::after {
@@ -283,7 +283,7 @@ const colorMode = useColorMode({
 /* ─── Theme Switcher ──────────────────────────────────────── */
 .theme-switcher {
   display: flex;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--hover-bg);
   border-radius: 10px;
   padding: 4px;
   gap: 4px;
@@ -309,9 +309,10 @@ const colorMode = useColorMode({
 }
 
 .theme-btn.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-subtle);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */

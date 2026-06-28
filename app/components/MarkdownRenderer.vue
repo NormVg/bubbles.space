@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useDark } from '@vueuse/core'
 
 const props = defineProps({
   content: {
@@ -11,6 +12,8 @@ const props = defineProps({
     default: true
   }
 })
+
+const isDark = useDark()
 </script>
 
 <template>
@@ -20,7 +23,7 @@ const props = defineProps({
         class="custom-md-renderer"
         :content="content"
         :final="isDone"
-        :is-dark="true"
+        :is-dark="isDark"
         mode="chat"
         :fade="false"
         code-renderer="shiki"
@@ -70,9 +73,9 @@ const props = defineProps({
 }
 
 .custom-md-renderer :deep(.markstream-vue) {
-  --ms-bg-code: rgba(0, 0, 0, 0.4);
+  --ms-bg-code: var(--input-bg);
   --ms-border-radius: 12px;
-  --ms-color-link: #8a2be2;
+  --ms-color-link: var(--accent);
 }
 
 .custom-md-renderer :deep(p) {

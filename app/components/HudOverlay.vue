@@ -47,13 +47,13 @@ import RightDrawer from './RightDrawer.vue'
   overflow: hidden; /* Prevent shadows from bleeding out of the window */
   
   /* Massive drop shadow to separate HUD from Canvas */
-  filter: drop-shadow(0 0 32px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(var(--hud-shadow));
 }
 
 .hud-frame-edge {
   position: absolute;
   /* Distinct, premium dark glass that contrasts with the canvas */
-  background: rgba(32, 32, 40, 0.85);
+  background: var(--glass-bg);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   pointer-events: none;

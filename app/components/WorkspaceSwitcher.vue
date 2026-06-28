@@ -153,7 +153,7 @@ function toggleExpand() {
   position: absolute;
   bottom: 10px; /* Aligned with the inner edge of the 10px HUD frame */
   left: 10px;   /* Aligned with the inner edge of the 10px HUD frame */
-  background: rgba(32, 32, 40, 0.85); 
+  background: var(--glass-bg); 
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border-radius: 0 16px 0 0;
@@ -179,7 +179,7 @@ function toggleExpand() {
   left: 0;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  background: var(--gradient-cutout-right);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -190,7 +190,7 @@ function toggleExpand() {
   right: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  background: var(--gradient-cutout-right);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -212,7 +212,7 @@ function toggleExpand() {
 }
 
 .ws-tab.active {
-  background: rgba(205, 198, 247, 0.1);
+  background: var(--hover-bg);
 }
 
 .ws-btn {
@@ -223,7 +223,7 @@ function toggleExpand() {
   border-radius: 7px;
   font-size: 12px;
   font-family: var(--font-sans);
-  color: rgba(205, 198, 247, 0.4);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
@@ -235,11 +235,11 @@ function toggleExpand() {
 
 .ws-tab:hover .ws-btn,
 .ws-tab.active .ws-btn {
-  color: #cdc6f7;
+  color: var(--text-primary);
 }
 
 .ws-tab:not(.active):hover {
-  background: rgba(205, 198, 247, 0.07);
+  background: var(--hover-bg);
 }
 
 .ws-delete {
@@ -252,7 +252,7 @@ function toggleExpand() {
   background: none;
   border: none;
   border-radius: 4px;
-  color: rgba(205, 198, 247, 0.3);
+  color: var(--text-muted);
   cursor: pointer;
   transition: background 0.1s, color 0.1s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
@@ -260,7 +260,7 @@ function toggleExpand() {
 
 .ws-delete:hover {
   background: rgba(255, 80, 80, 0.15);
-  color: #ff6b6b;
+  color: var(--danger);
 }
 
 .ws-delete:active {
@@ -276,15 +276,15 @@ function toggleExpand() {
   background: none;
   border: none;
   border-radius: 6px;
-  color: rgba(205, 198, 247, 0.35);
+  color: var(--text-muted);
   cursor: pointer;
   transition: background 0.12s, color 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   margin-left: 2px;
 }
 
 .ws-add:hover {
-  background: rgba(205, 198, 247, 0.1);
-  color: #cdc6f7;
+  background: var(--hover-bg);
+  color: var(--text-primary);
 }
 
 .ws-add:active {
@@ -294,7 +294,7 @@ function toggleExpand() {
 .ws-divider {
   width: 1px;
   height: 16px;
-  background: rgba(205, 198, 247, 0.12);
+  background: var(--glass-border);
   margin: 0 4px;
 }
 

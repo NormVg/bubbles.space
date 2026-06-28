@@ -45,7 +45,7 @@ const uiStore = useUIStore()
   bottom: 10px;
   right: 10px;
   width: 44px; /* Fixed width for perfect curve math */
-  background: rgba(32, 32, 40, 0.85);
+  background: var(--glass-bg);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
   border-radius: 22px 0 0 0;
@@ -63,7 +63,7 @@ const uiStore = useUIStore()
   width: 22px;
   height: 22px;
   /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
-  background: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
+  background: var(--gradient-cutout);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -75,7 +75,7 @@ const uiStore = useUIStore()
   left: -16px;
   width: 16px;
   height: 16px;
-  background: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  background: var(--gradient-cutout-small);
   backdrop-filter: blur(48px);
   pointer-events: none;
 }
@@ -94,7 +94,7 @@ const uiStore = useUIStore()
   background: transparent;
   border: none;
   border-radius: 8px;
-  color: #7b7b8f; /* Specific muted purple-gray from reference */
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -105,12 +105,12 @@ const uiStore = useUIStore()
 
 .qa-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--hover-bg);
 }
 
 .qa-btn.active {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-border);
 }
 
 .qa-btn:active {

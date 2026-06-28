@@ -59,12 +59,12 @@ onMounted(() => {
 <style scoped>
 .chat-input-outer {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass-border); /* Slightly visible outer rim */
   border: none;
   border-radius: 24px;
   padding: 10px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--widget-shadow);
   width: 100%;
 }
 
@@ -79,14 +79,18 @@ onMounted(() => {
   filter: grayscale(100%) brightness(200%);
   z-index: 1; /* Behind the inner content */
 }
+html.light .watermark-container {
+  filter: grayscale(100%) brightness(0%);
+  opacity: 0.02;
+}
 
 .chat-input-inner {
   position: relative;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--input-bg);
   border-radius: 16px;
   /* 12px top, 16px sides, 60px bottom to reserve space for absolute buttons without inflating text scrollHeight */
   padding: 12px 16px 60px 16px; 
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   z-index: 2; /* Sit above watermark */
   min-height: 120px; /* Make it tall by default */
   box-sizing: border-box;
@@ -118,12 +122,12 @@ onMounted(() => {
   width: 4px;
 }
 .chat-textarea::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-border);
   border-radius: 4px;
 }
 
 .chat-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-muted);
 }
 
 .chat-actions {
@@ -141,7 +145,7 @@ onMounted(() => {
   justify-content: center;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 8px;
   border-radius: 10px;
@@ -149,8 +153,8 @@ onMounted(() => {
 }
 
 .action-btn:hover {
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background: var(--hover-bg);
 }
 
 .send-btn {
@@ -159,24 +163,24 @@ onMounted(() => {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.4);
+  background: var(--hover-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-left: 2px;
 }
 
 .send-btn.has-text {
-  background: rgba(255, 255, 255, 0.25);
-  color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
 }
 
 .send-btn:hover.has-text {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--accent-hover);
   transform: translateY(-1px);
 }
 </style>
