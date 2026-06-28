@@ -7,9 +7,11 @@
           <div class="user-message">
             <template v-for="(part, i) in message.parts" :key="i">
               <div v-if="part.type === 'text'" class="user-message-content">
-                <div v-if="parseUserMessage(part.text).quotes" class="user-message-quote">
-                  <div class="quote-icon"><LucideReply :size="12" /></div>
-                  <div class="quote-text">{{ parseUserMessage(part.text).quotes }}</div>
+                <div v-if="parseUserMessage(part.text).quotes" class="user-message-quotes">
+                  <div v-for="(quote, qIdx) in parseUserMessage(part.text).quotes" :key="qIdx" class="user-message-quote">
+                    <div class="quote-icon"><LucideReply :size="12" /></div>
+                    <div class="quote-text">{{ quote }}</div>
+                  </div>
                 </div>
                 <div class="user-message-text">{{ parseUserMessage(part.text).text }}</div>
               </div>
@@ -181,23 +183,40 @@ const getTextContent = (message: any) => {
 
 const parseUserMessage = (text: string) => {
   const lines = text.split('\n')
-  const quotes: string[] = []
+  const parsedQuotes: string[] = []
   const message: string[] = []
   
+  let currentQuote: string[] = []
   let inQuotes = true
+
   for (const line of lines) {
-    if (inQuotes && line.startsWith('> ')) {
-      quotes.push(line.substring(2))
-    } else if (inQuotes && line.trim() === '') {
-      // skip empty lines between quotes and message
+    if (inQuotes) {
+      if (line.startsWith('> ')) {
+        currentQuote.push(line.substring(2))
+      } else if (line.trim() === '') {
+        if (currentQuote.length > 0) {
+          parsedQuotes.push(currentQuote.join('\n').trim())
+          currentQuote = []
+        }
+      } else {
+        inQuotes = false
+        if (currentQuote.length > 0) {
+          parsedQuotes.push(currentQuote.join('\n').trim())
+          currentQuote = []
+        }
+        message.push(line)
+      }
     } else {
-      inQuotes = false
       message.push(line)
     }
   }
   
+  if (inQuotes && currentQuote.length > 0) {
+    parsedQuotes.push(currentQuote.join('\n').trim())
+  }
+  
   return {
-    quotes: quotes.length > 0 ? quotes.join(' ').trim() : null,
+    quotes: parsedQuotes.length > 0 ? parsedQuotes : null,
     text: message.join('\n').trim()
   }
 }
@@ -492,6 +511,12 @@ const handleCopy = async (text: string, isUser: boolean) => {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.user-message-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .user-message-quote {
