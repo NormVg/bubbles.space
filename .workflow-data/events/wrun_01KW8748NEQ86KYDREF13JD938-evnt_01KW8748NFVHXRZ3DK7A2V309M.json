@@ -1,0 +1,28 @@
+{
+  "eventType": "run_created",
+  "specVersion": 5,
+  "eventData": {
+    "deploymentId": "dpl_local@bundled",
+    "workflowName": "workflow//eve//turnWorkflow",
+    "input": {
+      "__type": "Uint8Array",
+      "data": "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"
+    },
+    "executionContext": {
+      "traceCarrier": {},
+      "workflowCoreVersion": "5.0.0-beta.24",
+      "features": {
+        "encryption": false
+      }
+    },
+    "attributes": {
+      "$eve.type": "turn",
+      "$eve.parent": "wrun_01KW873ZJ19VYDBY6G3VV1B669",
+      "$eve.root": "wrun_01KW873ZJ19VYDBY6G3VV1B669"
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01KW8748NEQ86KYDREF13JD938",
+  "eventId": "evnt_01KW8748NFVHXRZ3DK7A2V309M",
+  "createdAt": "2026-06-28T22:55:43.279Z"
+}
