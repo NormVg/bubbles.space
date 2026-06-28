@@ -81,7 +81,7 @@ html.light {
   --accent-foreground: #fafafa;
   --accent-glow: rgba(0, 0, 0, 0.04);
 
-  --dot-color: rgba(0, 0, 0, 0.08); /* Softer dots so they don't overpower the canvas */
+  --dot-color: rgba(0, 0, 0, 0.25); /* Stronger dots to remain visible against the darker canvas */
 
   --widget-bg: rgba(255, 255, 255, 0.98);
   --widget-border: rgba(0, 0, 0, 0.1);
