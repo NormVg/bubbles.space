@@ -48,7 +48,6 @@ import RightDrawer from './RightDrawer.vue'
   y: 0;
   width: 100vw;
   height: 100vh;
-  rx: 26px;
   fill: white;
 }
 
