@@ -70,9 +70,22 @@ import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
 import AILoader from '../AILoader.vue'
+import { useChatStore } from '../../stores/chat'
+import { watch } from 'vue'
 
 const agent = useEveAgent()
+const chatStore = useChatStore()
 const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
+
+watch(() => agent.status.value, (newStatus) => {
+  if (newStatus === 'submitted') {
+    chatStore.setEmotion('think')
+  } else if (newStatus === 'streaming') {
+    chatStore.setEmotion('speaking')
+  } else {
+    chatStore.setEmotion('normal')
+  }
+})
 
 const messagesContainer = ref<HTMLElement | null>(null)
 let observer: MutationObserver | null = null
