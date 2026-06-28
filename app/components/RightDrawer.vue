@@ -51,14 +51,24 @@ function startResize(e: MouseEvent) {
   window.addEventListener('mouseup', endResize)
 }
 
+let resizeRaf: number | null = null
+
 function doResize(e: MouseEvent) {
   if (!isResizing.value) return
-  const newWidth = window.innerWidth - e.clientX
+  
+  if (resizeRaf !== null) {
+    cancelAnimationFrame(resizeRaf)
+  }
+  
+  resizeRaf = requestAnimationFrame(() => {
+    const newWidth = window.innerWidth - e.clientX
 
-  // Clamp width to bounds (40vw min, 90vw max)
-  const minW = window.innerWidth * 0.45
-  const maxW = window.innerWidth * 0.65
-  currentWidth.value = Math.max(minW, Math.min(maxW, newWidth))
+    // Clamp width to bounds (40vw min, 90vw max)
+    const minW = window.innerWidth * 0.45
+    const maxW = window.innerWidth * 0.65
+    currentWidth.value = Math.max(minW, Math.min(maxW, newWidth))
+    resizeRaf = null
+  })
 }
 
 function endResize() {
@@ -104,8 +114,8 @@ function endResize() {
 
   /* Deep glassmorphism gradient aesthetic */
   background: var(--gradient-drawer);
-  backdrop-filter: blur(48px);
-  -webkit-backdrop-filter: blur(48px);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
   border: none;
   border-radius: 16px;
   box-shadow: var(--widget-shadow);
@@ -116,9 +126,10 @@ function endResize() {
 
   /* Hardware acceleration for buttery smooth animation */
   will-change: transform, opacity;
+  transform: translateZ(0); /* Force layer creation */
 
   /* Closed State (Closing Animation Segment) */
-  transform: translateX(100%);
+  transform: translate3d(100%, 0, 0);
   opacity: 0;
   pointer-events: none; /* Crucial to prevent interaction when closed */
   
@@ -129,7 +140,7 @@ function endResize() {
 
 /* Open State (Opening Animation Segment) */
 .right-drawer-wrapper.is-open .right-drawer {
-  transform: translateX(0);
+  transform: translate3d(0, 0, 0);
   opacity: 1;
   pointer-events: auto; /* Enable interaction */
 
@@ -141,6 +152,7 @@ function endResize() {
 /* Disable transition during drag for 1:1 mouse tracking */
 .right-drawer.is-resizing {
   transition: none !important;
+  will-change: width, transform; /* optimize while dragging */
 }
 
 /* ─── Resizer ────────────────────────────────────────────── */
