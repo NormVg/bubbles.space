@@ -166,7 +166,7 @@ function endResize() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 32px;
+  padding: 32px 32px 16px 32px; /* Reduced bottom padding to lower the input box */
   opacity: 0;
   transform: translateX(20px);
   transition: opacity 0.2s ease-out, transform 0.3s ease-out;
