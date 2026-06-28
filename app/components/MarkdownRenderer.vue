@@ -1,14 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import MarkdownRender, { enableMermaid, enableKatex } from 'markstream-vue'
-import 'markstream-vue/index.css'
-import 'katex/dist/katex.min.css'
-
-// Enable optional heavy integrations only on client side to prevent SSR issues
-if (import.meta.client) {
-  enableMermaid()
-  enableKatex()
-}
 
 const props = defineProps({
   content: {
@@ -52,7 +43,7 @@ const props = defineProps({
 .custom-md-renderer :deep(.markstream-vue) {
   --ms-bg-code: rgba(0, 0, 0, 0.4);
   --ms-border-radius: 12px;
-  --ms-color-link: #8a2be2; /* Example accent color, adjust to theme if needed */
+  --ms-color-link: #8a2be2;
 }
 
 .custom-md-renderer :deep(p) {
