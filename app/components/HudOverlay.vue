@@ -16,7 +16,7 @@ import RightDrawer from './RightDrawer.vue'
     
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
-      <BubblesAvatar />
+      <BubblesAvatar :interactive="true" />
     </div>
 
     <!-- Bottom Left: Workspace Switcher -->

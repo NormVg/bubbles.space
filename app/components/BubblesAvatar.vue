@@ -1,5 +1,13 @@
 <template>
-  <div class="bubbles-avatar-container">
+  <div 
+    class="bubbles-avatar-container"
+    :class="{ 'is-interactive': interactive }"
+    @mousedown="handleMouseDown"
+    @mouseup="handleMouseUp"
+    @mousemove="handleMouseMove"
+    @mouseleave="handleMouseLeave"
+    @click="handleClick"
+  >
     <svg
       class="avatar-svg"
       :class="{ 'is-inverted': invert }"
@@ -64,26 +72,110 @@ const props = defineProps({
   animate: {
     type: Boolean,
     default: true
+  },
+  interactive: {
+    type: Boolean,
+    default: false
   }
 });
 
 const chatStore = useChatStore();
 
 const auraLogoBorder = ref(null);
-// const currentFace = ref('normal') // Replaced by store
 const isTransitioning = ref(false);
+const localEmotion = ref(null);
+const emotionResetTimer = ref(null);
 
 const activeFace = computed(
-  () => auraLogoFace.value[chatStore.emotion] || auraLogoFace.value["normal"],
+  () => auraLogoFace.value[localEmotion.value || chatStore.emotion] || auraLogoFace.value["normal"],
 );
+
+const triggerEmotion = (emotion, duration = 3000) => {
+  if (emotionResetTimer.value) clearTimeout(emotionResetTimer.value);
+  localEmotion.value = emotion;
+  emotionResetTimer.value = setTimeout(() => {
+    localEmotion.value = null;
+  }, duration);
+};
 
 watch(
   () => chatStore.emotion,
   () => {
-    isTransitioning.value = true;
-    setTimeout(() => (isTransitioning.value = false), 400);
+    // Only trigger transition if we aren't overriding
+    if (!localEmotion.value) {
+      isTransitioning.value = true;
+      setTimeout(() => (isTransitioning.value = false), 400);
+    }
   },
 );
+
+watch(localEmotion, () => {
+  isTransitioning.value = true;
+  setTimeout(() => (isTransitioning.value = false), 400);
+});
+
+// Easter Egg Interaction Logic
+const clickTimestamps = ref([]);
+const isDragging = ref(false);
+const lastMouseX = ref(0);
+const scratchCount = ref(0);
+const lastDirection = ref(0); // 1 for right, -1 for left
+
+const handleMouseDown = (e) => {
+  if (!props.interactive) return;
+  isDragging.value = true;
+  lastMouseX.value = e.clientX;
+  scratchCount.value = 0;
+  lastDirection.value = 0;
+};
+
+const handleMouseUp = () => {
+  if (!props.interactive) return;
+  isDragging.value = false;
+};
+
+const handleMouseMove = (e) => {
+  if (!props.interactive || !isDragging.value) return;
+  
+  const currentX = e.clientX;
+  const deltaX = currentX - lastMouseX.value;
+  
+  if (Math.abs(deltaX) > 5) {
+    const direction = Math.sign(deltaX);
+    if (direction !== lastDirection.value) {
+      scratchCount.value++;
+      lastDirection.value = direction;
+      lastMouseX.value = currentX;
+      
+      // If scratched back and forth 4 times, trigger happy
+      if (scratchCount.value >= 4) {
+        triggerEmotion('happy', 4000);
+        scratchCount.value = 0; // reset
+      }
+    }
+  }
+};
+
+const handleMouseLeave = () => {
+  if (!props.interactive) return;
+  isDragging.value = false;
+};
+
+const handleClick = () => {
+  if (!props.interactive) return;
+  
+  const now = Date.now();
+  clickTimestamps.value.push(now);
+  
+  // Clean up old clicks (older than 1000ms)
+  clickTimestamps.value = clickTimestamps.value.filter(t => now - t < 1000);
+  
+  // If 4 clicks in 1 second -> angry
+  if (clickTimestamps.value.length >= 4) {
+    triggerEmotion('frustrate', 4000);
+    clickTimestamps.value = [];
+  }
+};
 
 // Removed cycleInterval logic
 
@@ -753,6 +845,10 @@ const auraLogoFace = ref({
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+}
+
+.bubbles-avatar-container.is-interactive {
+  cursor: pointer;
 }
 
 .avatar-svg {
