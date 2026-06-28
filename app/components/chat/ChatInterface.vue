@@ -39,11 +39,18 @@
       </div>
     </div>
 
-    <!-- Empty state removed for testing -->
+    <!-- Empty State -->
+    <div v-if="agent.data.value.messages.length === 0" class="chat-empty-state">
+      <div class="avatar-wrapper">
+        <BubblesAvatar :size="64" />
+      </div>
+      <h2 class="welcome-title">Hi, I'm Bubbles.</h2>
+      <p class="welcome-subtitle">Ask me anything, I can write code, generate diagrams, and help you build.</p>
+    </div>
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
-      <ChatInput :isBusy="isBusy" @submit="handleSubmit" />
+      <ChatInput :isBusy="isBusy" @submit="handleSubmit" @stop="agent.stop" />
     </div>
   </div>
 </template>
@@ -234,6 +241,12 @@ const handleCopy = async (text: string, isUser: boolean) => {
   align-items: center;
   gap: 8px;
   padding-left: 4px; /* Slight inset to align with text visually */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ai-message-wrapper:hover .ai-message-actions {
+  opacity: 1;
 }
 
 .user-message-wrapper {
@@ -262,6 +275,12 @@ const handleCopy = async (text: string, isUser: boolean) => {
   justify-content: flex-end; /* Align right to match user message */
   gap: 8px;
   padding-right: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.user-message-wrapper:hover .user-message-actions {
+  opacity: 1;
 }
 
 /* Unified clean action button for both AI and User messages */

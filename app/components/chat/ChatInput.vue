@@ -22,8 +22,11 @@
         <button class="action-btn">
           <LucideMic :size="18" />
         </button>
-        <button class="send-btn" :class="{ 'has-text': text.length > 0 }" :disabled="isBusy" @click="handleSubmit">
-          <LucideArrowRight :size="18" stroke-width="2.5" />
+        <button v-if="!isBusy" class="send-btn" :class="{ 'has-text': text.length > 0 }" @click="handleSubmit">
+          <LucideArrowRight :size="16" stroke-width="2.5" />
+        </button>
+        <button v-else class="send-btn stop-btn" @click="$emit('stop')">
+          <LucideSquare :size="14" fill="currentColor" stroke="none" />
         </button>
       </div>
     </div>
@@ -40,6 +43,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'submit', text: string): void
+  (e: 'stop'): void
 }>()
 
 const text = ref('')
@@ -107,11 +111,11 @@ html.light .watermark-container {
   position: relative;
   background: var(--input-bg);
   border-radius: 16px;
-  /* 12px top, 16px sides, 60px bottom to reserve space for absolute buttons without inflating text scrollHeight */
-  padding: 12px 16px 60px 16px; 
+  /* 8px top, 12px sides, 48px bottom to reserve space for absolute buttons */
+  padding: 8px 12px 48px 12px; 
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
   z-index: 2; /* Sit above watermark */
-  min-height: 120px; /* Make it tall by default */
+  min-height: 100px; /* Make it tall by default */
   box-sizing: border-box;
 }
 
@@ -151,11 +155,11 @@ html.light .watermark-container {
 
 .chat-actions {
   position: absolute;
-  bottom: 12px;
-  right: 16px;
+  bottom: 8px;
+  right: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .action-btn {
@@ -166,8 +170,8 @@ html.light .watermark-container {
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 8px;
-  border-radius: 10px;
+  padding: 6px;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
@@ -180,12 +184,12 @@ html.light .watermark-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background: var(--hover-bg);
   border: 1px solid var(--glass-border);
   color: var(--text-secondary);
-  border-radius: 14px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -201,5 +205,16 @@ html.light .watermark-container {
 .send-btn:hover.has-text {
   background: var(--accent-hover);
   transform: translateY(-1px);
+}
+
+.send-btn.stop-btn {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  border-color: var(--glass-border);
+}
+
+.send-btn.stop-btn:hover {
+  background: var(--hover-bg);
+  transform: scale(0.95);
 }
 </style>
