@@ -58,8 +58,12 @@ const props = defineProps({
 }
 
 /* Hide Mermaid expand/action buttons to prevent the full-screen modal */
-.custom-md-renderer :deep(.mermaid-header-actions),
-.custom-md-renderer :deep(.mermaid-action-btn),
+/* We want to keep copy/download buttons but hide the fullscreen/expand button */
+.custom-md-renderer :deep(.mermaid-action-btn[title*="Expand" i]),
+.custom-md-renderer :deep(.mermaid-action-btn[title*="Fullscreen" i]),
+.custom-md-renderer :deep(.mermaid-action-btn[aria-label*="Expand" i]),
+.custom-md-renderer :deep(.mermaid-action-btn[aria-label*="Fullscreen" i]),
+.custom-md-renderer :deep(.mermaid-header-actions button:last-child),
 .custom-md-renderer :deep(.code-header-actions button[title*="Expand" i]),
 .custom-md-renderer :deep(.code-header-actions button[title*="Fullscreen" i]) {
   display: none !important;
