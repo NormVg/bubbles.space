@@ -168,14 +168,14 @@ function endResize() {
   height: 100%;
   padding: 32px;
   opacity: 0;
-  transform: translateX(10px);
-  transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+  transform: translateX(20px);
+  transition: opacity 0.2s ease-out, transform 0.3s ease-out;
   overflow: hidden;
 }
 
 .right-drawer-wrapper.is-open .drawer-content {
   opacity: 1;
   transform: translateX(0);
-  transition-delay: 0.1s;
+  transition-delay: 0.15s;
 }
 </style>
