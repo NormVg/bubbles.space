@@ -41,14 +41,6 @@ const props = defineProps({
 }
 
 /* Custom overrides to match our UI design */
-.custom-md-renderer :deep(.markdown-renderer),
-.custom-md-renderer :deep(.markdown-renderer *) {
-  /* Disable content-visibility and contain because they create a paint containment context 
-     that clips absolutely positioned dropdown menus (like the code block header menu) */
-  content-visibility: visible !important;
-  contain: none !important;
-}
-
 .custom-md-renderer :deep(.markstream-vue) {
   --ms-bg-code: rgba(0, 0, 0, 0.4);
   --ms-border-radius: 12px;
