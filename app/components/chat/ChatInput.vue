@@ -84,16 +84,18 @@ onMounted(() => {
   position: relative;
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
-  padding: 12px 16px;
+  /* 12px top, 16px sides, 60px bottom to reserve space for absolute buttons without inflating text scrollHeight */
+  padding: 12px 16px 60px 16px; 
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 2; /* Sit above watermark */
   min-height: 120px; /* Make it tall by default */
-  /* Remove flex-direction: column so it behaves as a normal block container with absolute children */
+  box-sizing: border-box;
 }
 
 .chat-textarea {
   display: block;
   width: 100%; /* Take full width of the box */
+  height: 100%;
   background: transparent;
   border: none;
   color: var(--text-primary);
@@ -102,15 +104,11 @@ onMounted(() => {
   resize: none;
   outline: none;
   padding: 0;
-  /* Add padding at the right to avoid overlapping the floating Quick Access Bar */
-  padding-right: 56px;
-  /* Add padding at the bottom so text doesn't overlap the absolute buttons */
-  padding-bottom: 48px; 
   line-height: 1.5;
   box-sizing: border-box;
   
   /* Auto-resize constraints */
-  min-height: 96px; /* 120px container - 24px vertical padding = 96px */
+  min-height: 24px; /* Just 1 line minimum. The container handles the 120px minimum height. */
   max-height: 300px; /* Allow it to grow quite tall before scrolling */
   overflow-y: auto; /* Scroll when max-height is reached */
 }
@@ -135,9 +133,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  
-  /* Add safe area right padding so buttons dodge the floating Quick Access Bar */
-  padding-right: 32px; 
 }
 
 .action-btn {

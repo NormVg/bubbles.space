@@ -69,8 +69,9 @@ import ChatInput from './ChatInput.vue'
 
 /* ─── Chat Input Area ────────────────────────────────────────── */
 .chat-input-wrapper {
-  padding: 0;
+  padding: 0 32px 0 0; /* Add 32px right padding to ensure the box physically clears the Quick Access Bar */
   width: 100%;
+  box-sizing: border-box;
   margin-top: auto; /* Push input to the bottom */
   position: relative;
   z-index: 10;

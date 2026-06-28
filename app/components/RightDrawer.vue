@@ -110,7 +110,8 @@ function endResize() {
   -webkit-backdrop-filter: blur(48px);
   border: none;
   border-radius: 16px 0 0 16px;
-  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.3);
+  /* Reduced shadow intensity as requested by user */
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
 
   z-index: 2;
   display: flex;
