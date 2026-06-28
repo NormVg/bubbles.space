@@ -114,8 +114,9 @@ function endResize() {
   height: 100%;
   
   /* Highly translucent frosted glass aesthetic so canvas is clearly visible */
-  background: rgba(20, 20, 25, 0.4);
+  background: rgba(20, 20, 25, 0.75);
   backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-right: none;
   border-radius: 16px 0 0 16px;
