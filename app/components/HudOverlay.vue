@@ -12,7 +12,9 @@ import RightDrawer from './RightDrawer.vue'
     <div class="hud-frame" />
     
     <!-- Top Left: Avatar -->
-    <BubblesAvatar />
+    <div class="hud-avatar-wrapper">
+      <BubblesAvatar />
+    </div>
 
     <!-- Bottom Left: Workspace Switcher -->
     <WorkspaceSwitcher />
@@ -53,9 +55,16 @@ import RightDrawer from './RightDrawer.vue'
   pointer-events: none;
 }
 
+.hud-avatar-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  pointer-events: auto;
+}
+
 /* Make sure child interactive elements capture pointer events */
 :deep(.state-bar),
-:deep(.bubbles-avatar-container),
+:deep(.hud-avatar-wrapper),
 :deep(.quick-access-hud),
 :deep(.settings-modal-overlay),
 :deep(.right-drawer-wrapper) {
