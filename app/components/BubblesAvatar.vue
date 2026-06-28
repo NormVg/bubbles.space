@@ -34,7 +34,7 @@
       <g id="aura-logo-face">
         <path
           d="M140.287 71.2822C143.381 69.4959 147.193 69.496 150.287 71.2822L206.573 103.7793C209.667 105.5656 211.573 108.8668 211.573 112.4395V177.434C211.573 181.006 209.667 184.307 206.573 186.094L150.287 218.59C147.193 220.376 143.381 220.376 140.287 218.59L84.001 186.094C80.9071 184.307 79.0011 181.006 79.001 177.434V112.4395C79.001 108.8668 80.907 105.5656 84.001 103.7793L140.287 71.2822ZM144.521 94.4199C117.044 94.4201 94.7695 116.695 94.7695 144.172C94.7698 171.649 117.044 193.923 144.521 193.923C171.997 193.923 194.272 171.649 194.272 144.172C194.272 116.695 171.998 94.4199 144.521 94.4199Z"
-          fill="var(--accent)"
+          fill="var(--avatar-base)"
         />
         <rect
           :x="activeFace.leftEye.x"
@@ -42,7 +42,7 @@
           :width="activeFace.leftEye.width"
           :height="activeFace.leftEye.height"
           :rx="activeFace.leftEye.rx || 3"
-          fill="var(--accent)"
+          fill="var(--avatar-base)"
           class="eye"
         />
         <rect
@@ -51,7 +51,7 @@
           :width="activeFace.rightEye.width"
           :height="activeFace.rightEye.height"
           :rx="activeFace.rightEye.rx || 3"
-          fill="var(--accent)"
+          fill="var(--avatar-base)"
           class="eye"
         />
       </g>
@@ -602,7 +602,7 @@ const auraLogoFace = ref({
     ],
   },
   normal: {
-    borderColor: "var(--accent)",
+    borderColor: "var(--avatar-base)",
     leftEye: {
       width: 14.7571,
       height: 14.76,
