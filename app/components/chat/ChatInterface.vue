@@ -1,6 +1,6 @@
 <template>
   <div class="chat-interface">
-    <div class="chat-messages">
+    <div class="chat-messages" ref="messagesContainer">
       <div v-for="message in agent.data.value.messages" :key="message.id">
         <!-- User Message -->
         <div v-if="message.role === 'user'" class="user-message-wrapper">
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
@@ -58,7 +58,39 @@ import MarkdownRenderer from '../MarkdownRenderer.vue'
 const agent = useEveAgent()
 const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
 
+const messagesContainer = ref<HTMLElement | null>(null)
+let observer: MutationObserver | null = null
+
+const scrollToBottom = (force = false) => {
+  if (!messagesContainer.value) return
+  
+  const container = messagesContainer.value
+  // Auto-scroll if within 150px of the bottom
+  const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150
+  
+  if (force || isNearBottom) {
+    container.scrollTop = container.scrollHeight
+  }
+}
+
+onMounted(() => {
+  if (messagesContainer.value) {
+    observer = new MutationObserver(() => {
+      scrollToBottom(false)
+    })
+    // Watch for text streaming (characterData) and new nodes (childList)
+    observer.observe(messagesContainer.value, { childList: true, subtree: true, characterData: true })
+  }
+  // Initial scroll
+  setTimeout(() => scrollToBottom(true), 100)
+})
+
+onBeforeUnmount(() => {
+  if (observer) observer.disconnect()
+})
+
 const handleSubmit = async (text: string) => {
+  setTimeout(() => scrollToBottom(true), 50)
   await agent.send({ message: text })
 }
 

@@ -1,0 +1,37 @@
+{
+  "runId": "wrun_01KW864PF4H5AQ459KB9KGV6T2",
+  "deploymentId": "dpl_local@bundled",
+  "workflowName": "workflow//eve//turnWorkflow",
+  "specVersion": 5,
+  "executionContext": {
+    "traceCarrier": {},
+    "workflowCoreVersion": "5.0.0-beta.24",
+    "features": {
+      "encryption": false
+    }
+  },
+  "input": {
+    "__type": "Uint8Array",
+    "data": "enN0ZCi1L/1ghQctJQA6S4wNKvBuVg8IhBUltH3Fxi+yCJsUEg8UVUBBrrciu/9hi/ymYU2xjHEGnoGnXs4AzwDQANsWFjvk2lrc8x8sRFtJV2x1RT34en2V25wiwZS25SDaxn7bJk6R9rXGSUsfyyhpSPscTjAeafv5H9AGJ+1X9Lsc8BoDjAxn022Pk7bjxA+nhPeefG1rgOyS2go5+cNmaNtIUc53SSk+60sOzqExYIIzwDDgFHiiRtOgwQBiNEg44JqH13lhW9f5bfI87UrRczO0iZOQzo5si6T9evnD1U+3MaTtJ61tiwGzI3C+bZC03hMSgkv4HS9LUtscaWnDhxFOfDG1GVoFBwERI/0CzsJwS+PoSDPW5dfC0MdOUPi2MRxNjAfyUA1oYigTI5oUSPNAStRoGpTnPAtGFDEU66GqSEJhMfRlRS92yrQF3+tUIv2YjvTCNMUXXWjHaaoTQ1Etkp+xpJzMJX+CNgGGYutRvaIwwtDZNAKzbQI5VMjpOTvMYPZjieDiBB2r4zTnSPtSOrgubhxpm5pV0n7SHaZ8hg8dOo+01Vd2D1eH77LBkep86g8LR9rY7lxRreGkXTrSr+PzOjkiUzI+4vW2La0Pa06i97YkMl4M53UGjX6Nx7tSvP7pQNJue6SlDh4kFXIyoFxti6BFq7QkLp23bbv0SV8SCIsn8gUph/PaBj3SUvC9tz3P1wnOf26InIWDRBGjIae4fg0FgkAgJYoWEKWZctqxkyaRlppHWn5+/G1tazgZ2l7/leMstbBE5WJLUaqvzET22e+QoSZlnkKI6udxFt1ouuEazQ6DGc9NETvvaSAOPx5ucW5ZOCh8PSV8NIuzPI5vCSjxcBZoiZwj4v3yPZqlWRaOyQ9OyIp6PJ4FWiDHkxge0NIskQPyIxUqQLRdLKasq2cOZ1cvnZlLJok92UtntOVjz5lCSfQFbJmY8gKLHSNPvhhlVlHPE3uuntFnHWnWmrq8aE9Ko5T/vK9+DlnHC36sVpUSBnlgCzPWLhllRr1OFiNTbKqUTfmso4RDyhw8olJd0SxKCcEjPEIAo5CxWSUFtlAwXhezr6gKGDOH7J2fQkqZPTiwWCFX7Iox68msSgoeEQACYJTaNllA0lr9VEIZkLSSKZ/CqkHeEvxA0rq225rWNDKkTRpI2tcCgIKowSA0zhhkZGZkZKSkaTEQpgxkVgcSIBdByZQqOSkou1Jj3wdHoqI3YwgpdHAJOMlZNxzYvWJpJd5SzVu9sVz3/p3ALbFsCID9bW8STo1GBcghqyUb2LPG0Z8T8GA1kpu+z9HM0b3NfcS638YHmB5Va9k8MIBahwKQ5W/UkTgkPW3gTm3aLUAE5KcMtwgMZsjrhZWv6BqjfhgQ16Jmbh8MYI9YSYCuKsb/GMDkDH3KPQPKs37aIKshQClDADxu76GR9jDILQameUrz3XjiGKIsy9Mp5D77NHFfmAJjuVj5Eemr79UbcQdUGAS3N8opeG2MlmQApGEEvQEmAE0Jj7YWojE2sur1vTyZ41xB6bxUyaezAUZRpkkUMs8mBhkbvaResKENvzSjchKgBME1bcdPeG35qTEKOq8/l+R/"
+  },
+  "createdAt": "2026-06-28T22:38:28.848Z",
+  "startedAt": "2026-06-28T22:38:28.849Z",
+  "status": "completed",
+  "output": {
+    "__type": "Uint8Array",
+    "data": "ZGV2bC0x"
+  },
+  "completedAt": "2026-06-28T22:38:31.131Z",
+  "updatedAt": "2026-06-28T22:38:31.131Z",
+  "attributes": {
+    "$eve.type": "turn",
+    "$eve.parent": "wrun_01KW864P9Q0973E2F6F1XC9A1A",
+    "$eve.root": "wrun_01KW864P9Q0973E2F6F1XC9A1A",
+    "$eve.model": "ollama/gemma4:31b-cloud",
+    "$eve.input_tokens": "2532",
+    "$eve.output_tokens": "22",
+    "$eve.cache_read_tokens": "0",
+    "$eve.cache_write_tokens": "0",
+    "$eve.tool_count": "11"
+  }
+}
