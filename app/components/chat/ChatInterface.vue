@@ -1,8 +1,13 @@
 <template>
   <div class="chat-interface">
-    <!-- Test Markdown Message Area -->
     <div class="chat-messages">
-      <div class="test-message">
+      <!-- Mock User Message -->
+      <div class="user-message">
+        Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
+      </div>
+      
+      <!-- Mock AI Message -->
+      <div class="ai-message">
         <MarkdownRenderer :content="testMarkdown" :isDone="true" />
       </div>
     </div>
@@ -105,14 +110,22 @@ graph TD;
   z-index: 5;
 }
 
-.test-message {
+.ai-message {
+  width: 100%;
+  max-width: 100%;
+  align-self: flex-start;
+  margin-bottom: 32px;
+  /* Removed padding, background, and border as requested for AI messages */
+}
+
+.user-message {
   background: rgba(32, 32, 40, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px 24px;
   margin-bottom: 24px;
   max-width: 85%;
-  align-self: flex-start;
+  align-self: flex-end;
   backdrop-filter: blur(12px);
 }
 </style>
