@@ -23,32 +23,45 @@ function setActive(id: string) {
 function toggleExpand() {
   if (!slotWrapperRef.value || !slotInnerRef.value || !switcherBarRef.value) return
 
-  isExpanded.value = !isExpanded.value
   const wrapper = slotWrapperRef.value
   const inner = slotInnerRef.value
   const switcher = switcherBarRef.value
 
-  // We measure the target dimensions of the inner content
-  const targetH = inner.scrollHeight
-  const targetW = inner.scrollWidth
   const baseW = switcher.offsetWidth // The width of just the tab bar
+
+  // Capture current state before cancelling animations to ensure smooth interruption
+  const computed = window.getComputedStyle(wrapper)
+  const isHidden = wrapper.style.display === 'none'
+  const currentH = isHidden ? 0 : parseFloat(computed.height) || 0
+  const currentW = isHidden ? baseW : parseFloat(computed.width) || baseW
+  const currentOpacity = isHidden ? 0 : parseFloat(computed.opacity) || 0
+
+  // Cancel any existing animations to prevent WAAPI from stacking conflicts
+  wrapper.getAnimations().forEach(a => a.cancel())
+
+  isExpanded.value = !isExpanded.value
 
   // Animate the wrapper dimensions
   if (isExpanded.value) {
+    // Make visible FIRST so the browser assigns it a layout box
     wrapper.style.display = 'block'
+    
+    // NOW we can accurately measure the inner content size
+    const targetH = inner.scrollHeight
+    const targetW = inner.scrollWidth
+
     wrapper.animate(
       [
-        { height: '0px', width: `${baseW}px`, opacity: 0 },
+        { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
         { height: `${targetH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 }
       ],
       { duration: 250, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
     )
   } else {
     // When collapsing, we need to animate back to 0 height and base width
-    const currentH = inner.scrollHeight
     const animation = wrapper.animate(
       [
-        { height: `${currentH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 },
+        { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
         { height: '0px', width: `${baseW}px`, opacity: 0 }
       ],
       { duration: 200, easing: 'cubic-bezier(0.55, 0.05, 0.68, 0.19)', fill: 'forwards' }
@@ -151,7 +164,6 @@ function toggleExpand() {
 /* ─── Dynamic Slot ─────────────────────────────────────────────── */
 .dynamic-slot-wrapper {
   /* Dimensions are controlled via JS animations */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .dynamic-slot-inner {
@@ -186,6 +198,7 @@ function toggleExpand() {
   align-items: center;
   gap: 2px;
   padding: 6px 10px;
+  width: max-content; /* Ensure the tab row never stretches, so its offsetWidth is a reliable baseline */
 }
 
 .ws-tab {

@@ -2,9 +2,6 @@
   <div class="mock-markdown-handler">
     <div class="header">
       <div class="title">README.md</div>
-      <div class="actions">
-        <button class="action-btn">Edit</button>
-      </div>
     </div>
     <div class="content">
       <h2>Project Overview</h2>
@@ -20,7 +17,7 @@
 
 <style scoped>
 .mock-markdown-handler {
-  padding: 12px 16px;
+  padding: 12px 20px; /* Aligned exactly with the tab text (10px switcher padding + 10px tab padding) */
   color: var(--text-primary, #e2e1e8);
   font-family: var(--font-sans);
   min-width: 300px;
@@ -39,25 +36,6 @@
   font-size: 13px;
   font-weight: 500;
   color: rgba(205, 198, 247, 0.8);
-}
-
-.action-btn {
-  background: rgba(205, 198, 247, 0.1);
-  border: none;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: #cdc6f7;
-  cursor: pointer;
-  transition: background 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.action-btn:hover {
-  background: rgba(205, 198, 247, 0.2);
-}
-
-.action-btn:active {
-  transform: scale(0.96);
 }
 
 .content h2 {
