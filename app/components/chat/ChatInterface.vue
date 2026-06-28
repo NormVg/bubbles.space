@@ -64,15 +64,15 @@
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
-      <div v-if="activeContexts.length > 0" class="context-bar">
-        <div v-for="(ctx, index) in activeContexts" :key="index" class="context-pill">
+      <TransitionGroup name="context-pill" tag="div" v-if="activeContexts.length > 0" class="context-bar">
+        <div v-for="(ctx, index) in activeContexts" :key="ctx.id" class="context-pill">
           <span class="context-label">{{ ctx.type }}</span>
           <span class="context-text">{{ ctx.text }}</span>
           <button class="context-clear" @click="removeContext(index)" title="Remove context">
             <LucideX :size="12" stroke-width="2" />
           </button>
         </div>
-      </div>
+      </TransitionGroup>
       <ChatInput :isBusy="isBusy" @submit="handleSubmit" @stop="agent.stop" />
     </div>
   </div>
@@ -347,6 +347,23 @@ const handleCopy = async (text: string, isUser: boolean) => {
   max-width: 250px; /* Prevent single context from taking up the whole bar */
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* TransitionGroup Animations for Pills */
+.context-pill-enter-active,
+.context-pill-leave-active,
+.context-pill-move {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.context-pill-enter-from,
+.context-pill-leave-to {
+  opacity: 0;
+  transform: scale(0.9) translateY(4px);
+}
+
+.context-pill-leave-active {
+  position: absolute;
 }
 
 @keyframes slideUpFade {
