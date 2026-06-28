@@ -1,35 +1,40 @@
 <template>
   <div class="chat-interface">
     <div class="chat-messages">
-      <!-- Mock User Message -->
-      <div class="user-message-wrapper">
-        <div class="user-message">
-          Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
+      <div v-for="message in agent.data.value.messages" :key="message.id">
+        <!-- User Message -->
+        <div v-if="message.role === 'user'" class="user-message-wrapper">
+          <div class="user-message">
+            <template v-for="(part, i) in message.parts" :key="i">
+              <span v-if="part.type === 'text'">{{ part.text }}</span>
+            </template>
+          </div>
+          <div class="user-message-actions">
+            <!-- Simplified copy action for user message -->
+            <button class="chat-action-btn" title="Copy" @click="handleCopy(getTextContent(message), true)">
+              <LucideCopy :size="14" stroke-width="2.5" />
+              <span>Copy</span>
+            </button>
+          </div>
         </div>
-        <div class="user-message-actions">
-          <button class="chat-action-btn" :class="{ 'copied': userMessageCopied }" @click="handleCopy('Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?', true)" title="Copy">
-            <LucideCheck v-if="userMessageCopied" :size="14" stroke-width="2.5" class="icon-success" />
-            <LucideCopy v-else :size="14" stroke-width="2.5" />
-            <span>{{ userMessageCopied ? 'Copied' : 'Copy' }}</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Mock AI Message -->
-      <div class="ai-message-wrapper">
-        <div class="ai-message">
-          <MarkdownRenderer :content="testMarkdown" :isDone="true" />
-        </div>
-        <div class="ai-message-actions">
-          <button class="chat-action-btn" :class="{ 'copied': aiMessageCopied }" @click="handleCopy(testMarkdown, false)" title="Copy">
-            <LucideCheck v-if="aiMessageCopied" :size="14" stroke-width="2.5" class="icon-success" />
-            <LucideCopy v-else :size="14" stroke-width="2.5" />
-            <span>{{ aiMessageCopied ? 'Copied' : 'Copy' }}</span>
-          </button>
-          <button class="chat-action-btn" title="Reply">
-            <LucideReply :size="14" stroke-width="2.5" />
-            <span>Reply</span>
-          </button>
+        
+        <!-- AI Message -->
+        <div v-else class="ai-message-wrapper">
+          <div class="ai-message">
+            <template v-for="(part, i) in message.parts" :key="i">
+              <MarkdownRenderer v-if="part.type === 'text'" :content="part.text" :isDone="agent.status.value !== 'streaming'" />
+            </template>
+          </div>
+          <div class="ai-message-actions">
+            <button class="chat-action-btn" title="Copy" @click="handleCopy(getTextContent(message), false)">
+              <LucideCopy :size="14" stroke-width="2.5" />
+              <span>Copy</span>
+            </button>
+            <button class="chat-action-btn" title="Reply">
+              <LucideReply :size="14" stroke-width="2.5" />
+              <span>Reply</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -38,36 +43,31 @@
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
-      <ChatInput />
+      <ChatInput :isBusy="isBusy" @submit="handleSubmit" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
 
-const testMarkdown = `
-# Markdown Test
-This is a test of the **MarkdownRenderer**.
+const agent = useEveAgent()
+const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
 
-\`\`\`javascript
-function helloWorld() {
-  console.log("Hello, Bubbles!");
+const handleSubmit = async (text: string) => {
+  await agent.send({ message: text })
 }
-\`\`\`
 
-Here is a mermaid diagram:
-\`\`\`mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-\`\`\`
-`
+const getTextContent = (message: any) => {
+  return message.parts
+    .filter((p: any) => p.type === 'text')
+    .map((p: any) => p.text)
+    .join('')
+}
 
 const userMessageCopied = ref(false)
 const aiMessageCopied = ref(false)

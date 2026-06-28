@@ -11,6 +11,8 @@
         v-model="text"
         class="chat-textarea" 
         placeholder="Ask Bubbles or drag files..."
+        :disabled="isBusy"
+        @keydown.enter.exact.prevent="handleSubmit"
       ></textarea>
       
       <div class="chat-actions">
@@ -20,7 +22,7 @@
         <button class="action-btn">
           <LucideMic :size="18" />
         </button>
-        <button class="send-btn" :class="{ 'has-text': text.length > 0 }">
+        <button class="send-btn" :class="{ 'has-text': text.length > 0 }" :disabled="isBusy" @click="handleSubmit">
           <LucideArrowRight :size="18" stroke-width="2.5" />
         </button>
       </div>
@@ -32,8 +34,25 @@
 import { ref, onMounted, nextTick, watch } from 'vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 
+const props = defineProps<{
+  isBusy: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'submit', text: string): void
+}>()
+
 const text = ref('')
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
+
+const handleSubmit = () => {
+  if (props.isBusy) return
+  const trimmed = text.value.trim()
+  if (!trimmed) return
+  
+  emit('submit', trimmed)
+  text.value = ''
+}
 
 const autoResize = () => {
   const el = textareaRef.value
