@@ -170,7 +170,6 @@ function endResize() {
   opacity: 0;
   transform: translateX(20px);
   transition: opacity 0.2s ease-out, transform 0.3s ease-out;
-  overflow: hidden;
 }
 
 .right-drawer-wrapper.is-open .drawer-content {
