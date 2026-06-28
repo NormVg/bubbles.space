@@ -57,6 +57,14 @@ const props = defineProps({
   overflow: visible !important;
 }
 
+/* Hide Mermaid expand/action buttons to prevent the full-screen modal */
+.custom-md-renderer :deep(.mermaid-header-actions),
+.custom-md-renderer :deep(.mermaid-action-btn),
+.custom-md-renderer :deep(.code-header-actions button[title*="Expand" i]),
+.custom-md-renderer :deep(.code-header-actions button[title*="Fullscreen" i]) {
+  display: none !important;
+}
+
 .custom-md-renderer :deep(.markstream-vue) {
   --ms-bg-code: rgba(0, 0, 0, 0.4);
   --ms-border-radius: 12px;
