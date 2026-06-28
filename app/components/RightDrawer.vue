@@ -80,21 +80,19 @@ function endResize() {
   top: 10px;
   right: 10px;
   bottom: 10px;
-  width: 0;
   z-index: 40;
-  pointer-events: none;
+  pointer-events: none; /* Clicks pass through to canvas when closed */
 }
 
-.right-drawer-wrapper.is-open {
-  width: auto;
-  pointer-events: auto;
-}
+/* The wrapper no longer toggles pointer-events or width. 
+   The inner panel handles its own pointer-events to prevent layout recalculation jitter. */
 
 .drawer-backdrop {
   position: fixed;
   inset: 10px;
   z-index: 1;
   background: transparent;
+  pointer-events: auto;
 }
 
 /* ─── Drawer Panel ──────────────────────────────────────── */
@@ -110,23 +108,34 @@ function endResize() {
   -webkit-backdrop-filter: blur(48px);
   border: none;
   border-radius: 16px;
-  /* Reduced shadow intensity as requested by user */
   box-shadow: var(--widget-shadow);
 
   z-index: 2;
   display: flex;
   flex-direction: column;
 
-  /* Smooth slide out from border, no bounce */
+  /* Hardware acceleration for buttery smooth animation */
+  will-change: transform, opacity;
+
+  /* Closed State (Closing Animation Segment) */
   transform: translateX(100%);
   opacity: 0;
-  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+  pointer-events: none; /* Crucial to prevent interaction when closed */
+  
+  /* Closing is fast and accelerates out of the screen */
+  transition: transform 0.35s cubic-bezier(0.4, 0, 1, 1), 
+              opacity 0.25s cubic-bezier(0.4, 0, 1, 1);
 }
 
-/* Open State */
+/* Open State (Opening Animation Segment) */
 .right-drawer-wrapper.is-open .right-drawer {
   transform: translateX(0);
   opacity: 1;
+  pointer-events: auto; /* Enable interaction */
+
+  /* Opening is a rich, highly-damped spring that decelerates beautifully */
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.5s ease-out;
 }
 
 /* Disable transition during drag for 1:1 mouse tracking */
@@ -138,7 +147,7 @@ function endResize() {
 .resizer {
   position: absolute;
   top: 0;
-  left: -2px; /* Slight overflow to make grabbing easier */
+  left: -2px;
   width: 12px;
   height: 100%;
   cursor: ew-resize;
@@ -146,6 +155,17 @@ function endResize() {
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  /* Closed state */
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.right-drawer-wrapper.is-open .resizer {
+  /* Open state */
+  opacity: 1;
+  /* Segment 3: Fades in very late to add micro-interaction richness */
+  transition: opacity 0.4s ease-out 0.4s;
 }
 
 .resizer-line {
@@ -166,15 +186,26 @@ function endResize() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 32px 32px 16px 32px; /* Reduced bottom padding to lower the input box */
+  padding: 32px 32px 16px 32px;
+  
+  will-change: transform, opacity;
+
+  /* Closed State */
   opacity: 0;
   transform: translateX(20px);
-  transition: opacity 0.2s ease-out, transform 0.3s ease-out;
+  
+  /* Segment 1 (Closing): Content fades and slides out very quickly before the panel */
+  transition: opacity 0.2s ease-in, 
+              transform 0.2s ease-in;
 }
 
 .right-drawer-wrapper.is-open .drawer-content {
+  /* Open State */
   opacity: 1;
   transform: translateX(0);
-  transition-delay: 0.15s;
+  
+  /* Segment 2 (Opening): Content slides in with a slight delay, using the same rich spring */
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, 
+              opacity 0.55s ease-out 0.1s;
 }
 </style>
