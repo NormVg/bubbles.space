@@ -1,0 +1,11 @@
+{
+  "eventType": "hook_disposed",
+  "specVersion": 5,
+  "correlationId": "hook_01KW88JJA1Q5K1S8Q51SWNCGN0",
+  "eventData": {
+    "token": "wrun_01KW88JB5YQ2BNCMP7D4B426B0:turn-control:1:inbox"
+  },
+  "runId": "wrun_01KW88JJA1TA4XMGGRG8BDJQX9",
+  "eventId": "evnt_01KW88JKSHHDMA3H488APBCHG9",
+  "createdAt": "2026-06-28T23:21:02.001Z"
+}

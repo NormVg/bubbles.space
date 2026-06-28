@@ -348,8 +348,8 @@ const handleCopy = async (text: string, isUser: boolean) => {
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 16px;
   padding: 6px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
@@ -516,8 +516,8 @@ const handleCopy = async (text: string, isUser: boolean) => {
   margin-bottom: 4px; /* Reduced to bring buttons closer */
   max-width: 80%;
   align-self: flex-end;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   color: var(--text-primary);
   font-size: 14px;
   line-height: 1.5;
