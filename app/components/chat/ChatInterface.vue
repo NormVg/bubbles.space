@@ -58,12 +58,14 @@
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
-      <div v-if="replyContext" class="context-bar">
-        <span class="context-label">context</span>
-        <span class="context-text">{{ replyContext.text }}</span>
-        <button class="context-clear" @click="replyContext = null" title="Remove context">
-          <LucideX :size="14" stroke-width="2" />
-        </button>
+      <div v-if="activeContexts.length > 0" class="context-bar">
+        <div v-for="(ctx, index) in activeContexts" :key="index" class="context-pill">
+          <span class="context-label">{{ ctx.type }}</span>
+          <span class="context-text">{{ ctx.text }}</span>
+          <button class="context-clear" @click="removeContext(index)" title="Remove context">
+            <LucideX :size="12" stroke-width="2" />
+          </button>
+        </div>
       </div>
       <ChatInput :isBusy="isBusy" @submit="handleSubmit" @stop="agent.stop" />
     </div>
@@ -131,22 +133,33 @@ onBeforeUnmount(() => {
   if (observer) observer.disconnect()
 })
 
-const replyContext = ref<{ type: string; text: string; id: string } | null>(null)
+const activeContexts = ref<Array<{ type: string; text: string; id: string }>>([])
 
 const handleReply = (message: any) => {
-  replyContext.value = {
-    type: 'reply',
+  // Prevent duplicate contexts
+  if (activeContexts.value.some(c => c.id === message.id)) return
+  
+  activeContexts.value.push({
+    type: 'context',
     text: getTextContent(message),
     id: message.id
-  }
+  })
+}
+
+const removeContext = (index: number) => {
+  activeContexts.value.splice(index, 1)
 }
 
 const handleSubmit = async (text: string) => {
   let finalMessage = text
-  if (replyContext.value) {
-    // Format the context as a markdown quote so the AI knows what we are referencing
-    finalMessage = `> ${replyContext.value.text.split('\n').join('\n> ')}\n\n${text}`
-    replyContext.value = null
+  if (activeContexts.value.length > 0) {
+    // Format all contexts
+    const contextPrefix = activeContexts.value.map(ctx => {
+      return `> ${ctx.text.split('\n').join('\n> ')}`
+    }).join('\n\n')
+    
+    finalMessage = `${contextPrefix}\n\n${text}`
+    activeContexts.value = [] // clear after sending
   }
   
   setTimeout(() => scrollToBottom(true), 50)
@@ -270,16 +283,39 @@ const handleCopy = async (text: string, isUser: boolean) => {
 .context-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  padding: 10px 16px;
+  border-radius: 18px;
+  padding: 8px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   width: 100%;
   box-sizing: border-box;
   animation: slideUpFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-x: auto;
+}
+
+/* Hide scrollbar for context bar but allow horizontal scroll if many tabs */
+.context-bar::-webkit-scrollbar {
+  display: none;
+}
+.context-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.context-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  max-width: 250px; /* Prevent single context from taking up the whole bar */
+  flex-shrink: 0;
 }
 
 @keyframes slideUpFade {
@@ -289,14 +325,14 @@ const handleCopy = async (text: string, isUser: boolean) => {
 
 .context-label {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   user-select: none;
 }
 
 .context-text {
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -314,7 +350,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
   justify-content: center;
   border-radius: 50%;
   transition: all 0.2s ease;
-  margin-left: auto;
+  margin-left: 4px;
 }
 
 .context-clear:hover {
