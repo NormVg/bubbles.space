@@ -2,8 +2,16 @@
   <div class="chat-interface">
     <div class="chat-messages">
       <!-- Mock User Message -->
-      <div class="user-message">
-        Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
+      <div class="user-message-wrapper">
+        <div class="user-message">
+          Hey Bubbles, can you show me the markdown renderer with a code block and a mermaid diagram?
+        </div>
+        <div class="user-message-actions">
+          <button class="user-action-btn" title="Copy">
+            <LucideCopy :size="14" stroke-width="2.5" />
+            <span>Copy</span>
+          </button>
+        </div>
       </div>
       
       <!-- Mock AI Message -->
@@ -131,7 +139,7 @@ graph TD;
 
 .ai-message {
   width: 100%;
-  max-width: 100%;
+  max-width: calc(100% - 130px); /* Leave space on right for dropdown menus to prevent clipping */
   align-self: flex-start;
   margin-bottom: 8px; /* Reduced from 32px to bring buttons closer */
   /* Removed padding, background, and border as requested for AI messages */
@@ -166,14 +174,49 @@ graph TD;
   border-color: rgba(255, 255, 255, 0.15);
 }
 
+.user-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 .user-message {
   background: rgba(32, 32, 40, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   padding: 16px 24px;
-  margin-bottom: 24px;
+  margin-bottom: 8px; /* Reduced from 24px to bring buttons closer */
   max-width: 85%;
   align-self: flex-end;
   backdrop-filter: blur(12px);
+}
+
+.user-message-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Align right to match user message */
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.user-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
 }
 </style>
