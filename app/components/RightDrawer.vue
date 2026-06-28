@@ -165,8 +165,7 @@ function endResize() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* 24px top/bottom, 64px left/right to perfectly center content and avoid overlapping the QuickAccessBar on the right */
-  padding: 24px 64px;
+  padding: 32px;
   opacity: 0;
   transform: translateX(10px);
   transition: opacity 0.3s ease-out, transform 0.4s ease-out;

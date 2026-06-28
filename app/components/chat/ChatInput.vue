@@ -39,8 +39,8 @@ const autoResize = () => {
   const el = textareaRef.value
   if (!el) return
   
-  // Set to 0 to perfectly measure scrollHeight without being constrained by previous height
-  el.style.height = '0px'
+  // Set to 1px to force it to shrink if text was deleted, so scrollHeight is accurate.
+  el.style.height = '1px'
   
   // Set the new height based on content
   const newHeight = el.scrollHeight
@@ -84,13 +84,12 @@ onMounted(() => {
   position: relative;
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
-  min-height: 56px; 
   display: flex;
   align-items: flex-end; /* Align items to bottom so buttons stay fixed at bottom when textarea grows */
-  padding: 14px 16px;
+  padding: 10px 16px; /* 10px vertical to snugly fit the 36px buttons */
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 2; /* Sit above watermark */
-  gap: 16px; /* Space between textarea and actions */
+  gap: 12px; /* Space between textarea and actions */
 }
 
 .chat-textarea {
@@ -102,15 +101,14 @@ onMounted(() => {
   font-family: inherit;
   resize: none;
   outline: none;
-  padding: 0;
+  padding: 7px 0; /* Center text vertically with 36px buttons (15px font * 1.5 line height = 22.5px. 36 - 22.5 = 13.5. ~7px top/bottom) */
   line-height: 1.5;
+  box-sizing: border-box;
   
   /* Auto-resize constraints */
-  min-height: 24px; /* one line */
-  max-height: 120px; /* ~5 lines */
+  min-height: 36px; /* Exactly matches the 36px button height */
+  max-height: 140px; /* ~6 lines */
   overflow-y: auto; /* Scroll when max-height is reached */
-  
-  /* Remove transition to prevent jitter during active typing resize */
 }
 
 /* Custom scrollbar for textarea */
@@ -132,8 +130,8 @@ onMounted(() => {
   gap: 6px;
   /* Prevent shrinking */
   flex-shrink: 0;
-  /* Push slightly up to vertically center with a single line of text */
-  margin-bottom: -4px; 
+  /* Add safe area right padding so buttons dodge the floating Quick Access Bar */
+  padding-right: 32px; 
 }
 
 .action-btn {
