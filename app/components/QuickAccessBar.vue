@@ -1,5 +1,5 @@
 <template>
-  <div class="quick-access-hud">
+  <div class="quick-access-hud" :class="{ 'drawer-open': uiStore.isRightDrawerOpen }">
     <div class="curve-top" />
     <div class="quick-access-bar">
       
@@ -53,6 +53,16 @@ const uiStore = useUIStore()
   flex-direction: column;
   align-items: center;
   z-index: 100; /* Always stay above the RightDrawer */
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* When the sidebar drawer is open, we make the Quick Access HUD transparent 
+   so it seamlessly merges into the drawer's background without seams or overlapping blurs */
+.quick-access-hud.drawer-open {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 /* Inverted curve for top-left touching the right frame */
@@ -78,6 +88,13 @@ const uiStore = useUIStore()
   background: var(--gradient-cutout-small);
   backdrop-filter: blur(48px);
   pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Hide the inverted cutouts when the drawer is open because the drawer is perfectly curved */
+.quick-access-hud.drawer-open .curve-top,
+.quick-access-hud.drawer-open .curve-left {
+  opacity: 0;
 }
 
 /* ─── Bar Content Styling ──────────────────────────────────────── */
