@@ -39,7 +39,7 @@
       </div>
       
       <!-- Thinking Loader -->
-      <div v-if="agent.status.value === 'submitted'" class="ai-message-wrapper thinking-loader-wrapper">
+      <div v-if="isBusy" class="ai-message-wrapper thinking-loader-wrapper">
         <AILoader :size="18" color="var(--accent)" />
       </div>
     </div>
