@@ -1,0 +1,37 @@
+{
+  "runId": "wrun_01KW87W6X0JHH25RZGEW1DX2EB",
+  "deploymentId": "dpl_local@bundled",
+  "workflowName": "workflow//eve//turnWorkflow",
+  "specVersion": 5,
+  "executionContext": {
+    "traceCarrier": {},
+    "workflowCoreVersion": "5.0.0-beta.24",
+    "features": {
+      "encryption": false
+    }
+  },
+  "input": {
+    "__type": "Uint8Array",
+    "data": "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"
+  },
+  "createdAt": "2026-06-28T23:08:47.905Z",
+  "startedAt": "2026-06-28T23:08:47.905Z",
+  "status": "completed",
+  "output": {
+    "__type": "Uint8Array",
+    "data": "ZGV2bC0x"
+  },
+  "completedAt": "2026-06-28T23:08:49.236Z",
+  "updatedAt": "2026-06-28T23:08:49.236Z",
+  "attributes": {
+    "$eve.type": "turn",
+    "$eve.parent": "wrun_01KW87V17H23AS8S0HEK5VEXA2",
+    "$eve.root": "wrun_01KW87V17H23AS8S0HEK5VEXA2",
+    "$eve.model": "ollama/gemma4:31b-cloud",
+    "$eve.input_tokens": "3089",
+    "$eve.output_tokens": "22",
+    "$eve.cache_read_tokens": "0",
+    "$eve.cache_write_tokens": "0",
+    "$eve.tool_count": "11"
+  }
+}

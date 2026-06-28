@@ -7,12 +7,7 @@
           <div class="user-message">
             <template v-for="(part, i) in message.parts" :key="i">
               <div v-if="part.type === 'text'" class="user-message-content">
-                <div v-if="parseUserMessage(part.text).quotes" class="user-message-quotes">
-                  <div v-for="(quote, qIdx) in parseUserMessage(part.text).quotes" :key="qIdx" class="user-message-quote">
-                    <div class="quote-icon"><LucideReply :size="12" /></div>
-                    <div class="quote-text">{{ quote }}</div>
-                  </div>
-                </div>
+                <UserMessageQuotes :quotes="parseUserMessage(part.text).quotes" />
                 <div class="user-message-text">{{ parseUserMessage(part.text).text }}</div>
               </div>
             </template>
@@ -66,15 +61,19 @@
 
     <!-- Bottom Input Area -->
     <div class="chat-input-wrapper">
-      <TransitionGroup name="context-pill" tag="div" v-if="activeContexts.length > 0" class="context-bar">
-        <div v-for="(ctx, index) in activeContexts" :key="ctx.id" class="context-pill">
-          <span class="context-label">{{ ctx.type }}</span>
-          <span class="context-text">{{ ctx.text }}</span>
-          <button class="context-clear" @click="removeContext(index)" title="Remove context">
-            <LucideX :size="12" stroke-width="2" />
-          </button>
+      <Transition name="fade-slide">
+        <div v-if="activeContexts.length > 0" class="context-bar">
+          <TransitionGroup name="context-pill">
+            <div v-for="(ctx, index) in activeContexts" :key="ctx.id" class="context-pill">
+              <span class="context-label">{{ ctx.type }}</span>
+              <span class="context-text">{{ ctx.text }}</span>
+              <button class="context-clear" @click="removeContext(index)" title="Remove context">
+                <LucideX :size="12" stroke-width="2" />
+              </button>
+            </div>
+          </TransitionGroup>
         </div>
-      </TransitionGroup>
+      </Transition>
       <ChatInput :isBusy="isBusy" @submit="handleSubmit" @stop="agent.stop" />
     </div>
   </div>
@@ -86,6 +85,7 @@ import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
+import UserMessageQuotes from './UserMessageQuotes.vue'
 import AILoader from '../AILoader.vue'
 import { useChatStore } from '../../stores/chat'
 import { watch } from 'vue'
@@ -340,9 +340,19 @@ const handleCopy = async (text: string, isUser: boolean) => {
   -webkit-backdrop-filter: blur(20px);
   width: 100%;
   box-sizing: border-box;
-  animation: slideUpFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-x: auto;
   box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Outer Context Bar Transition */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 /* Hide scrollbar for context bar but allow horizontal scroll if many tabs */
@@ -383,11 +393,6 @@ const handleCopy = async (text: string, isUser: boolean) => {
 
 .context-pill-leave-active {
   position: absolute;
-}
-
-@keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .context-label {
@@ -511,37 +516,6 @@ const handleCopy = async (text: string, isUser: boolean) => {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-.user-message-quotes {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.user-message-quote {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.quote-icon {
-  margin-top: 2px;
-  opacity: 0.6;
-}
-
-.quote-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .user-message-actions {
