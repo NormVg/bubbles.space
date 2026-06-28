@@ -37,6 +37,11 @@
           </div>
         </div>
       </div>
+      
+      <!-- Thinking Loader -->
+      <div v-if="agent.status.value === 'submitted'" class="ai-message-wrapper thinking-loader-wrapper">
+        <AILoader :size="18" color="var(--accent)" />
+      </div>
     </div>
 
     <!-- Empty State -->
@@ -61,6 +66,7 @@ import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
+import AILoader from '../AILoader.vue'
 
 const agent = useEveAgent()
 const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
@@ -232,6 +238,11 @@ const handleCopy = async (text: string, isUser: boolean) => {
   flex-direction: column;
   width: 100%;
   margin-bottom: 32px;
+}
+
+.thinking-loader-wrapper {
+  padding-left: 2px;
+  margin-bottom: 16px;
 }
 
 .ai-message {

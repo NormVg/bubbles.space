@@ -1,0 +1,16 @@
+{
+  "eventType": "step_completed",
+  "specVersion": 5,
+  "correlationId": "step_01KW86R31HTJVH3EW7YBG8EP8X",
+  "eventData": {
+    "stepName": "step//eve@0.16.2//dispatchTurnStep",
+    "workflowName": "workflow//eve//workflowEntry",
+    "result": {
+      "__type": "Uint8Array",
+      "data": "ZGV2bFt7InJ1bklkIjoxfSwid3J1bl8wMUtXODZSMzJUSE5GMTA1UDJKRk5FNEI5QiJd"
+    }
+  },
+  "runId": "wrun_01KW86R31HM5CSNNGV7VDV4S7F",
+  "eventId": "evnt_01KW86R333WJK4JJKX3ARHPFN3",
+  "createdAt": "2026-06-28T22:49:04.355Z"
+}
