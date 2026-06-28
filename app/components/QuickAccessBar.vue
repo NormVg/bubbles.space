@@ -4,7 +4,12 @@
     <div class="quick-access-bar">
       
       <!-- Icon 1: Sidebar Layout -->
-      <button class="qa-btn" title="Sidebar">
+      <button 
+        class="qa-btn" 
+        :class="{ active: uiStore.isRightDrawerOpen }"
+        title="Sidebar" 
+        @click="uiStore.toggleRightDrawer()"
+      >
         <LucidePanelLeft class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
@@ -51,6 +56,7 @@ const uiStore = useUIStore()
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 100; /* Always stay above the RightDrawer */
 }
 
 /* Inverted curve for top-left touching the right frame */
@@ -96,11 +102,17 @@ const uiStore = useUIStore()
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 6px;
 }
 
 .qa-btn:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.qa-btn.active {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .qa-btn:active {

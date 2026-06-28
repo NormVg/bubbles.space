@@ -3,6 +3,7 @@ import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 import BubblesAvatar from './BubblesAvatar.vue'
 import QuickAccessBar from './QuickAccessBar.vue'
 import SettingsModal from './SettingsModal.vue'
+import RightDrawer from './RightDrawer.vue'
 </script>
 
 <template>
@@ -15,6 +16,9 @@ import SettingsModal from './SettingsModal.vue'
 
     <!-- Bottom Left: Workspace Switcher -->
     <WorkspaceSwitcher />
+
+    <!-- Right Drawer Overlay (behind QuickAccessBar via z-index) -->
+    <RightDrawer />
 
     <!-- Bottom Right: Quick Access Bar -->
     <QuickAccessBar />
@@ -53,7 +57,8 @@ import SettingsModal from './SettingsModal.vue'
 :deep(.state-bar),
 :deep(.bubbles-avatar-container),
 :deep(.quick-access-hud),
-:deep(.settings-modal-overlay) {
+:deep(.settings-modal-overlay),
+:deep(.right-drawer-wrapper) {
   pointer-events: auto;
 }
 </style>
