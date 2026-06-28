@@ -1,0 +1,210 @@
+/* ─── Bubbles.space Design Tokens ───────────────────────────── */
+/* Dark: Aura palette. Light: Vercel/shadcn-inspired neutrals. */
+
+:root {
+  /* Grid */
+  --grid-size: 18px;
+
+  /* Radius scale — consistent shape language */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Canvas bounds */
+  --canvas-width: 4000px;
+  --canvas-height: 3000px;
+
+  /* Font stack */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Default to dark theme (Aura) so page works before JS hydrates */
+  --bg-base: #18171c;
+  --bg-soft: #1e1e22;
+  --bg-muted: #252529;
+  --bg-elevated: #2a2a30;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --text-primary: rgba(255, 255, 255, 0.88);
+  --text-secondary: rgba(255, 255, 255, 0.45);
+  --text-muted: rgba(255, 255, 255, 0.2);
+  --accent: #7c6aff;
+  --accent-hover: #8b7bff;
+  --accent-foreground: #ffffff;
+  --accent-glow: rgba(124, 106, 255, 0.12);
+  --dot-color: rgba(255, 255, 255, 0.06);
+  --avatar-base: #CDC6F7;
+  --widget-bg: rgba(30, 30, 34, 0.45);
+  --widget-border: rgba(255, 255, 255, 0.08);
+  --widget-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(0, 0, 0, 0.2);
+  --hud-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+
+  /* Semantic UI Variables (Default Dark) */
+  --glass-bg: rgba(32, 32, 40, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(0, 0, 0, 0.35);
+
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+
+  --danger: #e06c75;
+  --success: #98c379;
+  --warning: #e5c07b;
+  color-scheme: dark;
+}
+
+/* ─── Light Theme (Vercel / shadcn) ───────────────────────── */
+html.light {
+  --bg-base: #e4e4e7; /* Even darker shade of gray/white for stronger contrast */
+  --bg-soft: #ffffff;
+  --bg-muted: #e4e4e7;
+  --bg-elevated: #ffffff;
+
+  --border: #d4d4d8;
+  --border-subtle: #e4e4e7;
+
+  --text-primary: #09090b;
+  --text-secondary: #71717a;
+  --text-muted: #a1a1aa;
+
+  --accent: #18181b;
+  --accent-hover: #27272a;
+  --accent-foreground: #fafafa;
+  --accent-glow: rgba(0, 0, 0, 0.04);
+
+  --dot-color: rgba(0, 0, 0, 0.25); /* Stronger dots to remain visible against the darker canvas */
+  --avatar-base: var(--accent); /* Black avatar face in light mode */
+
+  --widget-bg: rgba(255, 255, 255, 0.98);
+  --widget-border: rgba(0, 0, 0, 0.1);
+  --widget-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.05);
+  
+  /* Stronger shadow for the HUD */
+  --hud-shadow: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2)) drop-shadow(0 12px 48px rgba(0, 0, 0, 0.15));
+
+  /* Semantic UI Variables */
+  --glass-bg: rgba(255, 255, 255, 0.98); /* Almost solid white for the HUD */
+  --glass-border: rgba(0, 0, 0, 0.12); /* Stronger inner borders */
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --input-bg: #ffffff;
+  
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.98));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(255, 255, 255, 0.98) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(255, 255, 255, 0.98) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(255, 255, 255, 0.98) 16px);
+
+  --danger: #dc2626;
+  --success: #16a34a;
+  --warning: #ca8a04;
+
+  color-scheme: light;
+}
+
+/* ─── Dark Theme (Aura) ───────────────────────────────────── */
+html.dark {
+  --bg-base: #18171c;
+  --bg-soft: #1e1e22;
+  --bg-muted: #252529;
+  --bg-elevated: #2a2a30;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+
+  --text-primary: rgba(255, 255, 255, 0.88);
+  --text-secondary: rgba(255, 255, 255, 0.45);
+  --text-muted: rgba(255, 255, 255, 0.2);
+
+  --accent: #7c6aff;
+  --accent-hover: #8b7bff;
+  --accent-foreground: #ffffff;
+  --accent-glow: rgba(124, 106, 255, 0.12);
+
+  --dot-color: rgba(255, 255, 255, 0.06);
+  --avatar-base: #CDC6F7; /* Original purple avatar face in dark mode */
+
+  --widget-bg: rgba(30, 30, 34, 0.45);
+  --widget-border: rgba(255, 255, 255, 0.08);
+  --widget-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(0, 0, 0, 0.2);
+  --hud-shadow: drop-shadow(0 0 1px rgba(255, 255, 255, 0.05)) drop-shadow(0 0 32px rgba(0, 0, 0, 0.8));
+
+  /* Semantic UI Variables */
+  --glass-bg: rgba(32, 32, 40, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(0, 0, 0, 0.35);
+
+  /* Gradients */
+  --gradient-drawer: radial-gradient(circle at 30% 0%, rgba(35, 35, 45, 0.8), rgba(15, 15, 20, 0.9));
+  --gradient-cutout: radial-gradient(circle at 0 0, transparent 22px, rgba(32, 32, 40, 0.85) 22px);
+  --gradient-cutout-small: radial-gradient(circle at 0 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+  --gradient-cutout-right: radial-gradient(circle at 100% 0, transparent 16px, rgba(32, 32, 40, 0.85) 16px);
+
+  --danger: #e06c75;
+  --success: #98c379;
+  --warning: #e5c07b;
+
+  color-scheme: dark;
+}
+
+/* ─── Reset ───────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* ─── Focus ring ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

@@ -82,12 +82,14 @@ onMounted(() => {
 <style scoped>
 .chat-input-outer {
   position: relative;
-  background: var(--glass-border); /* Slightly visible outer rim */
-  border: none;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
-  padding: 10px;
+  padding: 6px;
   overflow: hidden;
-  box-shadow: var(--widget-shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   width: 100%;
 }
 
@@ -110,7 +112,7 @@ html.light .watermark-container {
 .chat-input-inner {
   position: relative;
   background: var(--input-bg);
-  border-radius: 16px;
+  border-radius: 18px;
   /* 8px top, 12px sides, 48px bottom to reserve space for absolute buttons */
   padding: 8px 12px 48px 12px; 
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
