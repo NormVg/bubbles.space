@@ -52,10 +52,6 @@
 
     <!-- Empty State -->
     <div v-if="agent.data.value.messages.length === 0" class="chat-empty-state">
-      <!-- AI Thinking State -->
-      <div v-if="agent.isProcessing.value && agent.status.value === 'thinking'" class="ai-typing-indicator">
-        <AILoader :size="20" color="var(--accent)" />
-      </div>
       <div class="avatar-wrapper">
         <BubblesAvatar :size="64" />
       </div>
