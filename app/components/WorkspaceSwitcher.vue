@@ -2,6 +2,7 @@
 import { ref, markRaw, onMounted, watch, computed } from 'vue'
 import MockMarkdownHandler from './MockMarkdownHandler.vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
+import AILoader from './AILoader.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useEveAgent } from 'eve/vue'
 
@@ -67,25 +68,40 @@ function toggleExpand() {
 
   // Cancel any existing animations to prevent WAAPI from stacking conflicts
   wrapper.getAnimations().forEach(a => a.cancel())
+  
+  // Set inline styles to current to prepare for animation
+  wrapper.style.height = `${currentH}px`
+  wrapper.style.width = `${currentW}px`
 
   isExpanded.value = !isExpanded.value
 
   // Animate the wrapper dimensions
   if (isExpanded.value) {
-    // Make visible FIRST so the browser assigns it a layout box
+    // Make visible FIRST and set to auto to measure natural size
     wrapper.style.display = 'block'
+    wrapper.style.height = 'auto'
+    wrapper.style.width = 'max-content'
+    wrapper.style.minWidth = `${baseW}px`
     
     // NOW we can accurately measure the inner content size
     const targetH = inner.scrollHeight
     const targetW = inner.scrollWidth
 
-    wrapper.animate(
+    const animation = wrapper.animate(
       [
         { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
         { height: `${targetH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 }
       ],
-      { duration: 250, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
+      { duration: 250, easing: 'cubic-bezier(0.19, 1, 0.22, 1)' }
     )
+    
+    animation.onfinish = () => {
+      if (isExpanded.value) {
+        wrapper.style.height = 'auto'
+        wrapper.style.width = 'max-content'
+        wrapper.style.opacity = '1'
+      }
+    }
   } else {
     // When collapsing, we need to animate back to 0 height and base width
     const animation = wrapper.animate(
@@ -93,13 +109,15 @@ function toggleExpand() {
         { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
         { height: '0px', width: `${baseW}px`, opacity: 0 }
       ],
-      { duration: 200, easing: 'cubic-bezier(0.55, 0.05, 0.68, 0.19)', fill: 'forwards' }
+      { duration: 200, easing: 'cubic-bezier(0.55, 0.05, 0.68, 0.19)' }
     )
     
     // Hide completely after animation to prevent tab-indexing invisible content
     animation.onfinish = () => {
       if (!isExpanded.value) {
         wrapper.style.display = 'none'
+        wrapper.style.height = '0'
+        wrapper.style.opacity = '0'
       }
     }
   }
@@ -113,7 +131,7 @@ function toggleExpand() {
       <div class="dynamic-slot-inner" ref="slotInnerRef">
         <div v-if="voiceAgent.voiceSessionActive.value" class="voice-transcription-view">
           <div class="voice-transcription-header">
-            <LucideAudioLines class="icon-pulse" :size="14" color="var(--accent)" />
+            <AILoader :size="14" color="var(--accent)" />
             <span>Bubbles is speaking...</span>
           </div>
           <div class="voice-transcription-content">
@@ -212,8 +230,9 @@ function toggleExpand() {
 
 .voice-transcription-view {
   padding: 16px;
-  width: 400px;
-  max-width: 90vw;
+  width: max-content;
+  min-width: 250px;
+  max-width: 450px;
   box-sizing: border-box;
 }
 

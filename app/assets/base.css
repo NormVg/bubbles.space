@@ -34,10 +34,10 @@
   --text-primary: rgba(255, 255, 255, 0.88);
   --text-secondary: rgba(255, 255, 255, 0.45);
   --text-muted: rgba(255, 255, 255, 0.2);
-  --accent: #7c6aff;
-  --accent-hover: #8b7bff;
-  --accent-foreground: #ffffff;
-  --accent-glow: rgba(124, 106, 255, 0.12);
+  --accent: #CDC6F7;
+  --accent-hover: #E3DFF9;
+  --accent-foreground: #18181b;
+  --accent-glow: rgba(205, 198, 247, 0.12);
   --dot-color: rgba(255, 255, 255, 0.06);
   --avatar-base: #CDC6F7;
   --widget-bg: rgba(30, 30, 34, 0.45);
@@ -125,10 +125,10 @@ html.dark {
   --text-secondary: rgba(255, 255, 255, 0.45);
   --text-muted: rgba(255, 255, 255, 0.2);
 
-  --accent: #7c6aff;
-  --accent-hover: #8b7bff;
-  --accent-foreground: #ffffff;
-  --accent-glow: rgba(124, 106, 255, 0.12);
+  --accent: #CDC6F7;
+  --accent-hover: #E3DFF9;
+  --accent-foreground: #18181b;
+  --accent-glow: rgba(205, 198, 247, 0.12);
 
   --dot-color: rgba(255, 255, 255, 0.06);
   --avatar-base: #CDC6F7; /* Original purple avatar face in dark mode */
