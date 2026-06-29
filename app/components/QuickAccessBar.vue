@@ -14,8 +14,13 @@
       </button>
       
       <!-- Icon 2: Waveform -->
-      <button class="qa-btn" title="Audio">
-        <LucideAudioLines class="icon" :size="16" :stroke-width="1.5" />
+      <button 
+        class="qa-btn" 
+        :class="{ active: voiceAgent.isListening.value }"
+        title="Voice Mode"
+        @click="toggleVoice"
+      >
+        <LucideAudioLines class="icon" :size="16" :stroke-width="1.5" :color="voiceAgent.isListening.value ? 'var(--accent)' : 'currentColor'" />
       </button>
 
       <!-- Icon 3: Package/Box -->
@@ -35,7 +40,18 @@
 
 <script setup lang="ts">
 import { useUIStore } from '../stores/ui'
+import { useVoiceAgent } from '../composables/useVoiceAgent'
+
 const uiStore = useUIStore()
+const voiceAgent = useVoiceAgent()
+
+const toggleVoice = async () => {
+  if (voiceAgent.isListening.value) {
+    voiceAgent.stop()
+  } else {
+    await voiceAgent.start()
+  }
+}
 </script>
 
 <style scoped>

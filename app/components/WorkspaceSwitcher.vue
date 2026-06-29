@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref, markRaw, onMounted } from 'vue'
+import { ref, markRaw, onMounted, watch, computed } from 'vue'
 import MockMarkdownHandler from './MockMarkdownHandler.vue'
+import MarkdownRenderer from './MarkdownRenderer.vue'
+import { useVoiceAgent } from '../composables/useVoiceAgent'
+import { useEveAgent } from 'eve/vue'
 
 const activeWorkspace = ref('main')
 const workspaces = ref([
@@ -11,6 +14,32 @@ const workspaces = ref([
 
 const isExpanded = ref(false)
 const activeComponent = ref(markRaw(MockMarkdownHandler))
+
+const voiceAgent = useVoiceAgent()
+const eveAgent = useEveAgent()
+
+const latestAiMessageText = computed(() => {
+  const messages = eveAgent.data.value.messages
+  if (!messages || messages.length === 0) return ''
+  // Find the last assistant message
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === 'assistant') {
+      return messages[i].parts
+        .filter((p: any) => p.type === 'text')
+        .map((p: any) => p.text)
+        .join('')
+    }
+  }
+  return ''
+})
+
+watch(() => voiceAgent.isSpeaking.value, (speaking) => {
+  if (speaking && !isExpanded.value) {
+    toggleExpand()
+  } else if (!speaking && isExpanded.value) {
+    toggleExpand()
+  }
+})
 
 const slotWrapperRef = ref<HTMLElement | null>(null)
 const slotInnerRef = ref<HTMLElement | null>(null)
@@ -82,7 +111,16 @@ function toggleExpand() {
     <!-- Dynamic Slot Area (Above the tabs) -->
     <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
       <div class="dynamic-slot-inner" ref="slotInnerRef">
-        <component :is="activeComponent" v-if="activeComponent" />
+        <div v-if="voiceAgent.isSpeaking.value" class="voice-transcription-view">
+          <div class="voice-transcription-header">
+            <LucideAudioLines class="icon-pulse" :size="14" color="var(--accent)" />
+            <span>Bubbles is speaking...</span>
+          </div>
+          <div class="voice-transcription-content">
+            <MarkdownRenderer :content="latestAiMessageText" :isDone="false" />
+          </div>
+        </div>
+        <component :is="activeComponent" v-else-if="activeComponent" />
       </div>
     </div>
 
@@ -170,6 +208,52 @@ function toggleExpand() {
 .dynamic-slot-inner {
   width: fit-content;
   height: max-content;
+}
+
+.voice-transcription-view {
+  padding: 16px;
+  width: 400px;
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+.voice-transcription-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.icon-pulse {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.voice-transcription-content {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  max-height: 300px;
+  overflow-y: auto;
+  /* Scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+.voice-transcription-content::-webkit-scrollbar {
+  width: 4px;
+}
+.voice-transcription-content::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 4px;
 }
 
 /* ─── HUD Curves ────────────────────────────────────────────────── */
