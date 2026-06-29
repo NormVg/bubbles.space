@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue'
-import { useEveAgent } from 'eve/vue'
+import { useAppAgent } from './useAppAgent'
 
 const isListening = ref(false)
 const isSpeaking = ref(false)
@@ -19,7 +19,7 @@ let workletNode: AudioWorkletNode | null = null
 let nextPlayTime = 0
 
 export function useVoiceAgent() {
-  const eveAgent = useEveAgent()
+  const eveAgent = useAppAgent()
 
   let fullSessionText = ''
   let currentUtterance = ''

@@ -4,8 +4,7 @@ import MockMarkdownHandler from './MockMarkdownHandler.vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
 import AILoader from './AILoader.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
-import { useEveAgent } from 'eve/vue'
-
+import { useAppAgent } from '../composables/useAppAgent'
 const activeWorkspace = ref('main')
 const workspaces = ref([
   { id: 'main', label: 'Main' },
@@ -17,7 +16,7 @@ const isExpanded = ref(false)
 const activeComponent = ref(markRaw(MockMarkdownHandler))
 
 const voiceAgent = useVoiceAgent()
-const eveAgent = useEveAgent()
+const eveAgent = useAppAgent()
 
 const latestAiMessageText = computed(() => {
   if (eveAgent.status.value === 'submitted' || eveAgent.status.value === 'thinking') {

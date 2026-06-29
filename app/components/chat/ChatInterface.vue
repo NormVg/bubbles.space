@@ -81,7 +81,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
@@ -90,8 +89,9 @@ import UserMessageQuotes from './UserMessageQuotes.vue'
 import { useChatStore } from '../../stores/chat'
 import { watch } from 'vue'
 import { useVoiceAgent } from '../../composables/useVoiceAgent'
+import { useAppAgent } from '../../composables/useAppAgent'
 
-const agent = useEveAgent()
+const agent = useAppAgent()
 const chatStore = useChatStore()
 const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
 
