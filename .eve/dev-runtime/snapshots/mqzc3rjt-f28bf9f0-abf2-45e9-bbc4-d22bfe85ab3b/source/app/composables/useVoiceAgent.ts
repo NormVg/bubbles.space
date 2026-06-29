@@ -8,9 +8,8 @@ const agentResponse = ref('')
 const isAutoSendMode = ref(false)
 const voiceSessionActive = ref(false)
 
-let ttsSocket: WebSocket | null = null
 let sttSocket: WebSocket | null = null
-let ttsPingInterval: any = null
+let ttsSocket: WebSocket | null = null
 
 let audioCtx: AudioContext | null = null
 let mediaStream: MediaStream | null = null
@@ -66,12 +65,8 @@ export function useVoiceAgent() {
           }
         } else if (msg.type === 'events') {
           if (msg.data?.signal_type === 'START_SPEECH') {
-            // Barge-in: User started speaking, stop the TTS playback and drop the connection!
+            // Barge-in: User started speaking, stop the TTS playback!
             stopPlayback()
-            if (ttsSocket) {
-              ttsSocket.close()
-              ttsSocket = null
-            }
           } else if (msg.data?.signal_type === 'END_SPEECH') {
             if (currentUtterance) {
               fullSessionText = (fullSessionText ? fullSessionText + ' ' : '') + currentUtterance
@@ -85,8 +80,34 @@ export function useVoiceAgent() {
       }
     }
     
-    // Connect to TTS proxy using our new reconnectable function
-    await connectTTS()
+    // Connect to TTS proxy
+    const ttsUrl = new URL('/ws/tts', window.location.origin)
+    ttsUrl.protocol = ttsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+    ttsSocket = new WebSocket(ttsUrl.toString())
+    
+    ttsSocket.onopen = () => {
+      // Configure TTS for raw PCM so we can queue it instantly in Web Audio API
+      ttsSocket?.send(JSON.stringify({
+        type: 'config',
+        data: {
+          speaker: 'shubh',
+          target_language_code: 'en-IN',
+          output_audio_codec: 'pcm',
+          speech_sample_rate: 22050
+        }
+      }))
+    }
+    
+    ttsSocket.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data)
+        if (msg.type === 'audio' && msg.data?.audio) {
+          queuePcmPlayback(msg.data.audio, 22050)
+        }
+      } catch (e) {
+        console.error('TTS parse error', e)
+      }
+    }
 
     // Set up microphone capture via AudioWorklet to send raw PCM to STT
     mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -192,69 +213,9 @@ export function useVoiceAgent() {
     }
   }
 
-  let ttsSocketPromise: Promise<WebSocket> | null = null
-  async function connectTTS(): Promise<WebSocket> {
-    if (ttsSocket && ttsSocket.readyState === WebSocket.OPEN) {
-      return ttsSocket
-    }
-    if (ttsSocketPromise) {
-      return ttsSocketPromise
-    }
-    ttsSocketPromise = new Promise((resolve) => {
-      const ttsUrl = new URL('/ws/tts', window.location.origin)
-      ttsUrl.protocol = ttsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
-      const ws = new WebSocket(ttsUrl.toString())
-      
-      ws.onopen = () => {
-        ws.send(JSON.stringify({
-          type: 'config',
-          data: {
-            speaker: 'shubh',
-            target_language_code: 'en-IN',
-            output_audio_codec: 'pcm',
-            speech_sample_rate: 22050
-          }
-        }))
-        
-        if (ttsPingInterval) clearInterval(ttsPingInterval)
-        ttsPingInterval = setInterval(() => {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'ping' }))
-          }
-        }, 30000)
-        
-        resolve(ws)
-      }
-      
-      ws.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data)
-          if (msg.type === 'audio' && msg.data?.audio) {
-            queuePcmPlayback(msg.data.audio, 22050)
-          }
-        } catch (e) {
-          console.error('TTS parse error', e)
-        }
-      }
-      
-      ws.onclose = () => {
-        if (ttsSocket === ws) {
-          ttsSocket = null
-        }
-        if (ttsPingInterval) clearInterval(ttsPingInterval)
-      }
-      
-      ttsSocket = ws
-    })
-    return ttsSocketPromise.finally(() => {
-      ttsSocketPromise = null
-    })
-  }
-
-  async function speak(text: string) {
-    const ws = await connectTTS()
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'text', text }))
+  function speak(text: string) {
+    if (ttsSocket?.readyState === WebSocket.OPEN) {
+      ttsSocket.send(JSON.stringify({ type: 'text', text }))
     }
   }
 
@@ -272,7 +233,6 @@ export function useVoiceAgent() {
     // If autoSend, keep TTS + audioCtx alive so the AI response can be spoken
     if (!isAutoSendMode.value) {
       isSpeaking.value = false
-      if (ttsPingInterval) clearInterval(ttsPingInterval)
       ttsSocket?.close()
       audioCtx?.close()
       ttsSocket = null
@@ -284,7 +244,6 @@ export function useVoiceAgent() {
     voiceSessionActive.value = false
     isAutoSendMode.value = false
     isSpeaking.value = false
-    if (ttsPingInterval) clearInterval(ttsPingInterval)
     ttsSocket?.close()
     audioCtx?.close()
     ttsSocket = null

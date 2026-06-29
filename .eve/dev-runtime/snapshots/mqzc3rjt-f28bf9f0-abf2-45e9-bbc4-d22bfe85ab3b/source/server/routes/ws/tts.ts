@@ -60,11 +60,6 @@ export default defineWebSocketHandler({
     
     try {
       const data = JSON.parse(message.text())
-      if (data.type === 'ping') {
-        if (typeof sarvamSocket.ping === 'function') sarvamSocket.ping()
-        return
-      }
-      
       if (data.type === 'config') {
         sarvamSocket.configureConnection({
           type: 'config',
@@ -78,12 +73,8 @@ export default defineWebSocketHandler({
           sarvamSocket.flush()
         }
       }
-    } catch (e: any) {
-      if (e.message && e.message.includes('Socket is not open')) {
-        // Socket closed prematurely, client will reconnect
-      } else {
-        console.error('Invalid TTS message from peer', e)
-      }
+    } catch (e) {
+      console.error('Invalid TTS message from peer', e)
     }
   },
   
