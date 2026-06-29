@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, markRaw, onMounted, watch, computed } from 'vue'
+import { ref, markRaw, onMounted, watch, computed, nextTick } from 'vue'
 import MockMarkdownHandler from './MockMarkdownHandler.vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
 import AILoader from './AILoader.vue'
@@ -34,7 +34,8 @@ const latestAiMessageText = computed(() => {
   return ''
 })
 
-watch(() => voiceAgent.voiceSessionActive.value, (active) => {
+watch(() => voiceAgent.voiceSessionActive.value, async (active) => {
+  await nextTick()
   if (active && !isExpanded.value) {
     toggleExpand()
   } else if (!active && isExpanded.value) {
@@ -231,7 +232,6 @@ function toggleExpand() {
 .voice-transcription-view {
   padding: 16px;
   width: max-content;
-  min-width: 250px;
   max-width: 450px;
   box-sizing: border-box;
 }

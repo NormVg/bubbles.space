@@ -52,6 +52,10 @@
 
     <!-- Empty State -->
     <div v-if="agent.data.value.messages.length === 0" class="chat-empty-state">
+      <!-- AI Thinking State -->
+      <div v-if="agent.isProcessing.value && agent.status.value === 'thinking'" class="ai-typing-indicator">
+        <AILoader :size="20" color="var(--accent)" />
+      </div>
       <div class="avatar-wrapper">
         <BubblesAvatar :size="64" />
       </div>
@@ -85,8 +89,8 @@ import { useEveAgent } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
-import UserMessageQuotes from './UserMessageQuotes.vue'
 import AILoader from '../AILoader.vue'
+import UserMessageQuotes from './UserMessageQuotes.vue'
 import { useChatStore } from '../../stores/chat'
 import { watch } from 'vue'
 import { useVoiceAgent } from '../../composables/useVoiceAgent'

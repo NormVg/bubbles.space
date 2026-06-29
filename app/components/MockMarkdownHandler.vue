@@ -20,7 +20,6 @@
   padding: 12px 20px; /* Aligned exactly with the tab text (10px switcher padding + 10px tab padding) */
   color: var(--text-primary);
   font-family: var(--font-sans);
-  min-width: 300px;
 }
 
 .header {
