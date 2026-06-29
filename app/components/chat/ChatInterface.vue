@@ -121,13 +121,34 @@ watch(() => agent.data.value.messages, (messages) => {
     if (text.length > lastSpokenLength) {
       const newText = text.substring(lastSpokenLength)
       lastSpokenLength = text.length
-      // Only stream TTS if voice mode is active (listening)
-      if (voiceAgent.isListening.value) {
+      // Speak if voice session is active (autoSend mode from QuickAccessBar)
+      // OR if the user is actively listening from the chat mic button
+      if (voiceAgent.voiceSessionActive.value || voiceAgent.isListening.value) {
         voiceAgent.speak(newText)
       }
     }
   }
 }, { deep: true })
+
+// When AI finishes responding during a voice session, wait for TTS to finish then clean up
+watch(() => agent.status.value, (newStatus) => {
+  if (newStatus === 'ready' && voiceAgent.voiceSessionActive.value) {
+    // The AI is done streaming. TTS will still be playing queued audio.
+    // The onended handler in useVoiceAgent sets isSpeaking to false when done.
+    // Watch for that to end the voice session.
+    const unwatch = watch(() => voiceAgent.isSpeaking.value, (speaking) => {
+      if (!speaking) {
+        voiceAgent.endVoiceSession()
+        unwatch()
+      }
+    })
+    // Safety: if TTS was never triggered (empty response), clean up immediately
+    if (!voiceAgent.isSpeaking.value) {
+      voiceAgent.endVoiceSession()
+      unwatch()
+    }
+  }
+})
 
 const messagesContainer = ref<HTMLElement | null>(null)
 let scrollRaf: number | null = null

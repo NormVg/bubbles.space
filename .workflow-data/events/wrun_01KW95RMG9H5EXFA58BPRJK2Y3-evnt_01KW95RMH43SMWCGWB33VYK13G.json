@@ -1,0 +1,12 @@
+{
+  "eventType": "hook_created",
+  "specVersion": 5,
+  "correlationId": "hook_01KW95RMG9836NNPKK2GGX957V",
+  "eventData": {
+    "token": "wrun_01KW95RMAP3NETGGK1W2KWFVSH:turn-control:0:inbox",
+    "isWebhook": false
+  },
+  "runId": "wrun_01KW95RMG9H5EXFA58BPRJK2Y3",
+  "eventId": "evnt_01KW95RMH43SMWCGWB33VYK13G",
+  "createdAt": "2026-06-29T07:51:08.068Z"
+}

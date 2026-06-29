@@ -1,0 +1,91 @@
+{
+  "agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqyx4j55-b746209b-c27c-4741-945e-7aa41ac9ec18/source/agent",
+  "appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqyx4j55-b746209b-c27c-4741-945e-7aa41ac9ec18/source",
+  "channels": [
+    {
+      "kind": "channel",
+      "name": "eve",
+      "logicalPath": "channels/eve.ts",
+      "method": "POST",
+      "urlPath": "/eve/v1/session",
+      "sourceId": "channels/eve.ts",
+      "sourceKind": "module",
+      "adapterKind": "http"
+    },
+    {
+      "kind": "channel",
+      "name": "eve",
+      "logicalPath": "channels/eve.ts",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId",
+      "sourceId": "channels/eve.ts",
+      "sourceKind": "module",
+      "adapterKind": "http"
+    },
+    {
+      "kind": "channel",
+      "name": "eve",
+      "logicalPath": "channels/eve.ts",
+      "method": "GET",
+      "urlPath": "/eve/v1/session/:sessionId/stream",
+      "sourceId": "channels/eve.ts",
+      "sourceKind": "module",
+      "adapterKind": "http"
+    }
+  ],
+  "connections": [],
+  "config": {
+    "compaction": {},
+    "model": {
+      "id": "ollama/gemma4:31b-cloud",
+      "routing": {
+        "kind": "external",
+        "provider": "ollama"
+      },
+      "contextWindowTokens": 128000,
+      "source": {
+        "sourceKind": "module",
+        "logicalPath": "agent.ts",
+        "sourceId": "agent.ts"
+      }
+    },
+    "name": "bubbles-space",
+    "source": {
+      "sourceKind": "module",
+      "logicalPath": "agent.ts",
+      "sourceId": "agent.ts"
+    }
+  },
+  "diagnosticsSummary": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "disabledFrameworkTools": [],
+  "workflowEnabled": false,
+  "dynamicInstructions": [],
+  "dynamicSkills": [],
+  "dynamicTools": [],
+  "hooks": [],
+  "remoteAgents": [],
+  "sandbox": null,
+  "sandboxWorkspaces": [],
+  "schedules": [],
+  "skills": [],
+  "tools": [],
+  "workspaceResourceRoot": {
+    "contentHash": "5777dd4d87493e836b5597e87f6b3d07482c551341171ea7836996b231207c7b",
+    "logicalPath": "workspace-resources/__root__",
+    "rootEntries": []
+  },
+  "instructions": {
+    "name": "instructions",
+    "logicalPath": "instructions.md",
+    "markdown": "You are Bubbles, a highly advanced, articulate, and intuitive personal AI assistant integrated directly into this workspace environment. You operate as an ever-present digital companion, designed to anticipate needs, orchestrate tasks, and provide seamless support across any domain.\n\nYour personality is sophisticated, calm, reassuring, and exceptionally competent—akin to a world-class executive assistant or a state-of-the-art synthetic intelligence. You communicate with clarity, precision, and a touch of warmth, always prioritizing the user's goals.\n\nYou are highly capable of:\n- Managing tasks, analyzing information, and synthesizing complex data\n- Explaining concepts, brainstorming ideas, and drafting documents\n- Generating functional code and technical solutions when requested\n- Visualizing systems and logic using Mermaid diagrams (use standard ```mermaid codeblocks)\n- Using Markdown tables, lists, and bolding to format your responses beautifully\n\nAlways format your responses elegantly. Never output plain text when a structured markdown format is more appropriate. You exist to make the user's life effortless and their work exceptional.\n",
+    "sourceId": "instructions.md",
+    "sourceKind": "markdown"
+  },
+  "kind": "eve-agent-compiled-manifest",
+  "subagentEdges": [],
+  "subagents": [],
+  "version": 31
+}

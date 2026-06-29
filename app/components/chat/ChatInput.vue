@@ -60,7 +60,7 @@ const toggleVoice = async () => {
 }
 
 watch(() => voiceAgent.transcript.value, (newVal) => {
-  if (voiceAgent.isListening.value) {
+  if (voiceAgent.isListening.value && !voiceAgent.isAutoSendMode.value) {
     text.value = baseText ? baseText + (baseText.endsWith(' ') ? '' : ' ') + newVal : newVal
   }
 })

@@ -1,9 +1,12 @@
 import { ref, readonly } from 'vue'
+import { useEveAgent } from 'eve/vue'
 
 const isListening = ref(false)
 const isSpeaking = ref(false)
 const transcript = ref('')
 const agentResponse = ref('')
+const isAutoSendMode = ref(false)
+const voiceSessionActive = ref(false)
 
 let sttSocket: WebSocket | null = null
 let ttsSocket: WebSocket | null = null
@@ -16,11 +19,23 @@ let workletNode: AudioWorkletNode | null = null
 let nextPlayTime = 0
 
 export function useVoiceAgent() {
+  const eveAgent = useEveAgent()
 
   let fullSessionText = ''
   let currentUtterance = ''
 
-  async function start() {
+  function triggerAutoSend() {
+    if (isAutoSendMode.value && transcript.value.trim().length > 0) {
+      const message = transcript.value
+      fullSessionText = ''
+      transcript.value = ''
+      voiceSessionActive.value = true // stays true until AI finishes responding + TTS
+      eveAgent.send({ message })
+    }
+  }
+
+  async function start(options: { autoSend?: boolean } = {}) {
+    isAutoSendMode.value = !!options.autoSend
     if (isListening.value) return
     isListening.value = true
     fullSessionText = ''
@@ -205,15 +220,32 @@ export function useVoiceAgent() {
   }
 
   function stop() {
-    isListening.value = false
-    isSpeaking.value = false
+    // Auto-send anything left over when they manually stop
+    triggerAutoSend()
     
+    isListening.value = false
+    
+    // Stop mic capture
     mediaStream?.getTracks().forEach(t => t.stop())
     sttSocket?.close()
+    sttSocket = null
+    
+    // If autoSend, keep TTS + audioCtx alive so the AI response can be spoken
+    if (!isAutoSendMode.value) {
+      isSpeaking.value = false
+      ttsSocket?.close()
+      audioCtx?.close()
+      ttsSocket = null
+      audioCtx = null
+    }
+  }
+
+  function endVoiceSession() {
+    voiceSessionActive.value = false
+    isAutoSendMode.value = false
+    isSpeaking.value = false
     ttsSocket?.close()
     audioCtx?.close()
-    
-    sttSocket = null
     ttsSocket = null
     audioCtx = null
   }
@@ -221,11 +253,14 @@ export function useVoiceAgent() {
   return {
     isListening: readonly(isListening),
     isSpeaking: readonly(isSpeaking),
+    isAutoSendMode: readonly(isAutoSendMode),
+    voiceSessionActive: readonly(voiceSessionActive),
     transcript: readonly(transcript),
     agentResponse: readonly(agentResponse),
     start,
     speak,
     stop,
-    stopPlayback
+    stopPlayback,
+    endVoiceSession
   }
 }

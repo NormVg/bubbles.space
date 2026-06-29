@@ -33,10 +33,10 @@ const latestAiMessageText = computed(() => {
   return ''
 })
 
-watch(() => voiceAgent.isSpeaking.value, (speaking) => {
-  if (speaking && !isExpanded.value) {
+watch(() => voiceAgent.voiceSessionActive.value, (active) => {
+  if (active && !isExpanded.value) {
     toggleExpand()
-  } else if (!speaking && isExpanded.value) {
+  } else if (!active && isExpanded.value) {
     toggleExpand()
   }
 })
@@ -111,7 +111,7 @@ function toggleExpand() {
     <!-- Dynamic Slot Area (Above the tabs) -->
     <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
       <div class="dynamic-slot-inner" ref="slotInnerRef">
-        <div v-if="voiceAgent.isSpeaking.value" class="voice-transcription-view">
+        <div v-if="voiceAgent.voiceSessionActive.value" class="voice-transcription-view">
           <div class="voice-transcription-header">
             <LucideAudioLines class="icon-pulse" :size="14" color="var(--accent)" />
             <span>Bubbles is speaking...</span>
