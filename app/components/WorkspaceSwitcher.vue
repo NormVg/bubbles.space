@@ -20,6 +20,9 @@ const voiceAgent = useVoiceAgent()
 const eveAgent = useEveAgent()
 
 const latestAiMessageText = computed(() => {
+  if (eveAgent.status.value === 'submitted' || eveAgent.status.value === 'thinking') {
+    return ''
+  }
   const messages = eveAgent.data.value.messages
   if (!messages || messages.length === 0) return ''
   // Find the last assistant message
@@ -132,11 +135,11 @@ function toggleExpand() {
       <div class="dynamic-slot-inner" ref="slotInnerRef">
         <div v-if="voiceAgent.voiceSessionActive.value" class="voice-transcription-view">
           <div class="voice-transcription-header">
-            <AILoader :size="14" color="var(--accent)" />
-            <span>Bubbles is speaking...</span>
+            <AILoader :size="12" color="var(--accent)" />
+            <span>{{ ['submitted', 'thinking'].includes(eveAgent.status.value) ? 'Bubbles is thinking...' : 'Bubbles is speaking...' }}</span>
           </div>
-          <div class="voice-transcription-content">
-            <MarkdownRenderer :content="latestAiMessageText" :isDone="false" />
+          <div v-if="latestAiMessageText" class="voice-transcription-content">
+            <MarkdownRenderer :content="latestAiMessageText" :isDone="eveAgent.status.value !== 'streaming'" />
           </div>
         </div>
         <component :is="activeComponent" v-else-if="activeComponent" />
@@ -239,13 +242,15 @@ function toggleExpand() {
 .voice-transcription-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px; /* Reduce margin when content is below */
+}
+
+.voice-transcription-header:last-child {
+  margin-bottom: 0; /* No margin when there is no text content shown */
 }
 
 .icon-pulse {
