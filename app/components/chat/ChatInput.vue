@@ -19,8 +19,8 @@
         <button class="action-btn">
           <LucidePaperclip :size="18" />
         </button>
-        <button class="action-btn">
-          <LucideMic :size="18" />
+        <button class="action-btn" :class="{ 'active': voiceAgent.isListening.value }" @click="toggleVoice">
+          <LucideMic :size="18" :color="voiceAgent.isListening.value ? 'var(--accent)' : 'currentColor'" />
         </button>
         <button v-if="!isBusy" class="send-btn" :class="{ 'has-text': text.length > 0 }" @click="handleSubmit">
           <LucideArrowRight :size="16" stroke-width="2.5" />
@@ -45,6 +45,25 @@ const emit = defineEmits<{
   (e: 'submit', text: string): void
   (e: 'stop'): void
 }>()
+
+const voiceAgent = useVoiceAgent()
+
+const toggleVoice = async () => {
+  if (voiceAgent.isListening.value) {
+    voiceAgent.stop()
+    if (voiceAgent.transcript.value) {
+      text.value = voiceAgent.transcript.value
+    }
+  } else {
+    await voiceAgent.start()
+  }
+}
+
+watch(() => voiceAgent.transcript.value, (newVal) => {
+  if (newVal) {
+    text.value = newVal
+  }
+})
 
 const text = ref('')
 const textareaRef = ref<HTMLTextAreaElement | null>(null)

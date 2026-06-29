@@ -89,6 +89,7 @@ import UserMessageQuotes from './UserMessageQuotes.vue'
 import AILoader from '../AILoader.vue'
 import { useChatStore } from '../../stores/chat'
 import { watch } from 'vue'
+import { useVoiceAgent } from '../../composables/useVoiceAgent'
 
 const agent = useEveAgent()
 const chatStore = useChatStore()
@@ -103,6 +104,30 @@ watch(() => agent.status.value, (newStatus) => {
     chatStore.setEmotion('normal')
   }
 })
+
+const voiceAgent = useVoiceAgent()
+let lastSpokenLength = 0
+let currentSpokenMessageId = ''
+
+watch(() => agent.data.value.messages, (messages) => {
+  if (!messages || messages.length === 0) return
+  const lastMsg = messages[messages.length - 1]
+  if (lastMsg.role === 'assistant') {
+    if (lastMsg.id !== currentSpokenMessageId) {
+      currentSpokenMessageId = lastMsg.id
+      lastSpokenLength = 0
+    }
+    const text = getTextContent(lastMsg)
+    if (text.length > lastSpokenLength) {
+      const newText = text.substring(lastSpokenLength)
+      lastSpokenLength = text.length
+      // Only stream TTS if voice mode is active (listening)
+      if (voiceAgent.isListening.value) {
+        voiceAgent.speak(newText)
+      }
+    }
+  }
+}, { deep: true })
 
 const messagesContainer = ref<HTMLElement | null>(null)
 let scrollRaf: number | null = null
