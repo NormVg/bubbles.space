@@ -31,6 +31,11 @@ export default defineWebSocketHandler({
       })
       
       sarvamSocket.on('message', (message: any) => {
+        if (message.type === 'audio') {
+           console.log(`[TTS] Received audio chunk from Sarvam, forwarding...`)
+        } else {
+           console.log(`[TTS] Received message from Sarvam:`, message.type)
+        }
         peer.send(JSON.stringify(message))
       })
       
@@ -71,8 +76,10 @@ export default defineWebSocketHandler({
           data: data.data // { speaker: 'shubh', target_language_code: 'hi-IN' }
         })
       } else if (data.type === 'text') {
+        console.log(`[TTS] Sending text to Sarvam:`, data.text)
         sarvamSocket.convert(data.text)
       } else if (data.type === 'flush') {
+        console.log(`[TTS] Flushing Sarvam buffer`)
         // Handle optional flush logic
         if (typeof sarvamSocket.flush === 'function') {
           sarvamSocket.flush()

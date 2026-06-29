@@ -95,13 +95,16 @@ const agent = useAppAgent()
 const chatStore = useChatStore()
 const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
 
-watch(() => agent.status.value, (newStatus) => {
+watch(() => agent.status.value, (newStatus, oldStatus) => {
   if (newStatus === 'submitted') {
     chatStore.setEmotion('think')
   } else if (newStatus === 'streaming') {
     chatStore.setEmotion('speaking')
   } else {
     chatStore.setEmotion('normal')
+    if (oldStatus === 'streaming') {
+      voiceAgent.flushTTS()
+    }
   }
 })
 

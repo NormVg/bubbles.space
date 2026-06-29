@@ -244,11 +244,17 @@ export function useVoiceAgent() {
         if (ttsPingInterval) clearInterval(ttsPingInterval)
       }
       
-      ttsSocket = ws
+    ttsSocket = ws
     })
     return ttsSocketPromise.finally(() => {
       ttsSocketPromise = null
     })
+  }
+
+  async function flushTTS() {
+    if (ttsSocket?.readyState === WebSocket.OPEN) {
+      ttsSocket.send(JSON.stringify({ type: 'flush' }))
+    }
   }
 
   async function speak(text: string) {
@@ -302,6 +308,7 @@ export function useVoiceAgent() {
     speak,
     stop,
     stopPlayback,
-    endVoiceSession
+    endVoiceSession,
+    flushTTS
   }
 }
