@@ -11,16 +11,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 const props = withDefaults(defineProps<{
   color?: string
   size?: number
   speed?: number
+  mode?: 'idle' | 'thinking' | 'tool' | 'speaking'
 }>(), {
-  color: '#ff6b8b', // Default pink glow
+  color: '#ff6b8b', 
   size: 24,
-  speed: 500 // ms per shape
+  speed: 500,
+  mode: 'thinking'
 })
 
 const cssVars = computed(() => ({
@@ -28,41 +30,78 @@ const cssVars = computed(() => ({
   '--size': `${props.size}px`,
 }))
 
-// Define iconic 3x3 shapes (1 = active, 0 = inactive)
-const shapes = [
-  [0, 1, 0,   1, 1, 1,   0, 1, 0], // Cross (+)
-  [1, 0, 1,   0, 1, 0,   1, 0, 1], // X
-  [1, 1, 0,   1, 1, 0,   0, 0, 0], // Top Left Block
-  [0, 1, 1,   0, 1, 1,   0, 0, 0], // Top Right Block
-  [0, 0, 0,   0, 1, 1,   0, 1, 1], // Bottom Right Block
-  [0, 0, 0,   1, 1, 0,   1, 1, 0], // Bottom Left Block
-  [1, 1, 1,   1, 0, 1,   1, 1, 1], // Hollow Square
-  [0, 1, 0,   0, 1, 0,   0, 1, 0], // Vertical Line
-]
+const shapeLibrary = {
+  idle: [
+    [0, 0, 0,   0, 1, 0,   0, 0, 0], // Center dot
+    [0, 0, 0,   0, 0, 0,   0, 0, 0], // Empty (breathing)
+  ],
+  thinking: [
+    [0, 1, 0,   1, 1, 1,   0, 1, 0], // Cross (+)
+    [1, 0, 1,   0, 1, 0,   1, 0, 1], // X
+    [1, 1, 0,   1, 1, 0,   0, 0, 0], // Top Left Block
+    [0, 1, 1,   0, 1, 1,   0, 0, 0], // Top Right Block
+    [0, 0, 0,   0, 1, 1,   0, 1, 1], // Bottom Right Block
+    [0, 0, 0,   1, 1, 0,   1, 1, 0], // Bottom Left Block
+  ],
+  tool: [
+    [1, 1, 1,   1, 0, 1,   1, 1, 1], // Hollow Square
+    [1, 0, 1,   0, 0, 0,   1, 0, 1], // Corners
+    [0, 1, 0,   1, 0, 1,   0, 1, 0], // Diamond
+  ],
+  speaking: [
+    [0, 0, 0,   0, 0, 0,   1, 1, 1], // Low
+    [0, 0, 0,   1, 1, 1,   1, 1, 1], // Mid
+    [1, 1, 1,   1, 1, 1,   1, 1, 1], // High
+    [0, 1, 0,   1, 1, 1,   1, 1, 1], // Peak
+  ]
+}
+
+const currentSpeed = computed(() => {
+  if (props.speed !== 500) return props.speed // Override
+  switch (props.mode) {
+    case 'idle': return 1000
+    case 'tool': return 250
+    case 'speaking': return 150
+    case 'thinking': return 400
+    default: return 500
+  }
+})
 
 const currentShapeIndex = ref(0)
-const currentShape = computed(() => shapes[currentShapeIndex.value])
+const currentShape = computed(() => {
+  const shapes = shapeLibrary[props.mode] || shapeLibrary.thinking
+  return shapes[currentShapeIndex.value % shapes.length] || shapes[0]
+})
 
-// Random delays for organic transition (to make it feel alive)
 const delays = ref<number[]>(Array(9).fill(0))
-
 let interval: ReturnType<typeof setInterval> | null = null
 
 const nextShape = () => {
-  // Generate a new random delay for each pixel to break monotony
-  delays.value = Array(9).fill(0).map(() => Math.random() * 200)
+  const shapes = shapeLibrary[props.mode] || shapeLibrary.thinking
+  delays.value = Array(9).fill(0).map(() => Math.random() * (currentSpeed.value * 0.5))
   
-  // Pick a random next shape, avoiding repeating the exact same one immediately
   let next = currentShapeIndex.value
-  while (next === currentShapeIndex.value) {
-    next = Math.floor(Math.random() * shapes.length)
+  if (shapes.length > 1) {
+    while (next === currentShapeIndex.value) {
+      next = Math.floor(Math.random() * shapes.length)
+    }
+  } else {
+    next = 0
   }
   currentShapeIndex.value = next
 }
 
-onMounted(() => {
-  interval = setInterval(nextShape, props.speed)
+const startLoop = () => {
+  if (interval) clearInterval(interval)
+  interval = setInterval(nextShape, currentSpeed.value)
+}
+
+watch(() => props.mode, () => {
+  currentShapeIndex.value = 0
+  startLoop()
 })
+
+onMounted(() => startLoop())
 
 onUnmounted(() => {
   if (interval) clearInterval(interval)
