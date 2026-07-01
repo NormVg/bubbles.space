@@ -182,8 +182,8 @@ function toggleSessionsView() {
   showSessions.value = true
 }
 
-function createChat() {
-  conversationStore.createConversation()
+async function createChat() {
+  await conversationStore.createConversation()
   void showChatView()
 }
 

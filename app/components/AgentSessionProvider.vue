@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { onBeforeUnmount, watch } from 'vue'
+import { onBeforeUnmount, watch, computed } from 'vue'
 import { useEveAgent } from 'eve/vue'
 import { setActiveAppAgent } from '../composables/useAppAgent'
 import { useConversationStore } from '../stores/conversations'
 
 const conversationStore = useConversationStore()
-const conversation = conversationStore.ensureConversation()
-const conversationId = conversation?.id ?? ''
+const conversationId = computed(() => conversationStore.activeConversationId)
 
 const agent = useEveAgent({
-  initialEvents: conversation?.events ?? [],
-  initialSession: conversation?.session,
+  initialEvents: conversationStore.activeConversationEvents as any,
+  initialSession: conversationStore.activeDetail?.session as any,
   onSessionChange(session) {
-    if (conversationId) {
-      conversationStore.updateSession(conversationId, session)
+    if (conversationId.value) {
+      void conversationStore.updateSession(conversationId.value, session)
     }
   }
 })
@@ -23,9 +22,9 @@ const unregister = setActiveAppAgent(agent)
 watch(
   [agent.events, agent.session, () => agent.data.value.messages],
   () => {
-    if (!conversationId) return
+    if (!conversationId.value) return
 
-    conversationStore.updateFromAgentSnapshot(conversationId, {
+    void conversationStore.updateFromAgentSnapshot(conversationId.value, {
       events: agent.events.value,
       messages: agent.data.value.messages,
       session: agent.session.value

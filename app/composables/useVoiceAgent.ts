@@ -1,4 +1,5 @@
 import { readonly, ref, watch } from 'vue'
+import type { EveMessage } from 'eve/vue'
 import { useAppAgent } from './useAppAgent'
 
 interface VoiceStartOptions {
@@ -282,7 +283,7 @@ async function playSpeechChunks(chunks: string[]) {
   }
 }
 
-function getTextContent(message: { parts: Array<{ type: string, text?: string }> }) {
+function getTextContent(message: EveMessage) {
   return message.parts
     .filter(part => part.type === 'text')
     .map(part => part.text ?? '')
@@ -358,10 +359,10 @@ export function useVoiceAgent() {
       
       const updateLevel = () => {
         if (!isListening.value) return
-        analyser!.getByteFrequencyData(dataArray)
+        analyser?.getByteFrequencyData(dataArray)
         let sum = 0
         for (let i = 0; i < dataArray.length; i++) {
-          sum += dataArray[i]
+          sum += dataArray[i]!
         }
         const average = sum / dataArray.length
         // Normalize between 0 and 1 (128 is half max volume, usually enough for normal speech)
@@ -458,6 +459,7 @@ export function useVoiceAgent() {
       mediaRecorder.stop()
     }
 
+    eveAgent.stop()
     stopCaptureTracks()
     resetRecording()
     stopPlayback()

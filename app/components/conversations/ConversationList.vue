@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useConversationStore, type ConversationRecord } from '../../stores/conversations'
+import { useConversationStore } from '../../stores/conversations'
+import type { ConversationMeta } from '../../../shared/types/conversation.types'
 
 const props = withDefaults(defineProps<{
   showHeader?: boolean
@@ -11,8 +12,8 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  create: [conversation: ConversationRecord]
-  select: [conversation: ConversationRecord]
+  create: [conversation: ConversationMeta]
+  select: [conversation: ConversationMeta]
 }>()
 
 const conversationStore = useConversationStore()
@@ -32,19 +33,19 @@ function getRelativeTime(value: string) {
   return `${Math.floor(delta / day)}d ago`
 }
 
-function createChat() {
-  const conversation = conversationStore.createConversation()
+async function createChat() {
+  const conversation = await conversationStore.createConversation()
   emit('create', conversation)
   emit('select', conversation)
 }
 
-function selectChat(conversation: ConversationRecord) {
-  conversationStore.selectConversation(conversation.id)
+async function selectChat(conversation: ConversationMeta) {
+  await conversationStore.selectConversation(conversation.id)
   emit('select', conversation)
 }
 
-function deleteChat(conversation: ConversationRecord) {
-  conversationStore.deleteConversation(conversation.id)
+function deleteChat(conversation: ConversationMeta) {
+  void conversationStore.deleteConversation(conversation.id)
 }
 
 function getItemStyle(index: number) {

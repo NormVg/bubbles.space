@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 import BubblesAvatar from './BubblesAvatar.vue'
 import QuickAccessBar from './QuickAccessBar.vue'
@@ -8,12 +9,16 @@ import AgentSessionProvider from './AgentSessionProvider.vue'
 import { useConversationStore } from '../stores/conversations'
 
 const conversationStore = useConversationStore()
+
+onMounted(() => {
+  void conversationStore.init()
+})
 </script>
 
 <template>
   <div class="hud-overlay">
     <ClientOnly>
-      <AgentSessionProvider :key="conversationStore.activeConversationId" />
+      <AgentSessionProvider v-if="conversationStore.isInitialized" :key="conversationStore.activeConversationId" />
     </ClientOnly>
 
     <!-- Bulletproof SVG Mask using viewport units to guarantee sizing regardless of SVG wrapper dimensions -->

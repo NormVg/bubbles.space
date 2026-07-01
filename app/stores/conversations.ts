@@ -1,127 +1,119 @@
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import type { EveMessage } from 'eve/vue'
 import type { HandleMessageStreamEvent, SessionState } from 'eve/client'
-
-export interface ConversationRecord {
-  id: string
-  title: string
-  createdAt: string
-  updatedAt: string
-  session?: SessionState
-  events: HandleMessageStreamEvent[]
-  messageCount: number
-  lastMessagePreview: string
-}
-
-function createConversationRecord(title = 'New chat'): ConversationRecord {
-  const now = new Date().toISOString()
-
-  return {
-    id: crypto.randomUUID(),
-    title,
-    createdAt: now,
-    updatedAt: now,
-    events: [],
-    messageCount: 0,
-    lastMessagePreview: ''
-  }
-}
-
-function getMessageText(message: EveMessage) {
-  return message.parts
-    .filter(part => part.type === 'text')
-    .map(part => part.text)
-    .join('')
-    .trim()
-}
-
-function createTitleFromMessages(messages: readonly EveMessage[]) {
-  const firstUserText = messages
-    .filter(message => message.role === 'user')
-    .map(getMessageText)
-    .find(text => text.length > 0)
-
-  if (!firstUserText) return 'New chat'
-
-  return firstUserText.length > 44 ? `${firstUserText.slice(0, 44).trim()}...` : firstUserText
-}
-
-function createPreviewFromMessages(messages: readonly EveMessage[]) {
-  const lastText = [...messages]
-    .reverse()
-    .map(getMessageText)
-    .find(text => text.length > 0)
-
-  if (!lastText) return ''
-
-  return lastText.length > 72 ? `${lastText.slice(0, 72).trim()}...` : lastText
-}
+import type { ConversationMeta, ConversationDetail } from '../../shared/types/conversation.types'
+import { conversationService } from '../services/conversation.service'
 
 export const useConversationStore = defineStore('conversations', () => {
-  const conversations = useLocalStorage<ConversationRecord[]>('bubbles-conversations', [])
+  // Use useLocalStorage just to persist the active ID, as it is very small
   const activeConversationId = useLocalStorage<string>('bubbles-active-conversation-id', '')
+  
+  // State
+  const metaList = ref<ConversationMeta[]>([])
+  const activeDetail = ref<ConversationDetail | null>(null)
+  const isInitialized = ref(false)
 
-  const sortedConversations = computed(() =>
-    [...conversations.value].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  // Getters
+  const sortedConversations = computed(() => [...metaList.value])
+  const activeConversationMeta = computed(() =>
+    metaList.value.find((c: ConversationMeta) => c.id === activeConversationId.value) ?? null
   )
+  const activeConversationEvents = computed(() => activeDetail.value?.events ?? [])
 
-  const activeConversation = computed(() =>
-    conversations.value.find(conversation => conversation.id === activeConversationId.value) ?? null
-  )
+  // Initialization
+  async function init() {
+    if (isInitialized.value) return
+    if (typeof window === 'undefined') return // SSR guard
 
-  function ensureConversation() {
-    if (conversations.value.length === 0) {
-      const conversation = createConversationRecord()
-      conversations.value = [conversation]
-      activeConversationId.value = conversation.id
-      return conversation
+    const loadedMeta = await conversationService.loadMetadataList()
+    metaList.value = loadedMeta
+    isInitialized.value = true
+
+    if (loadedMeta.length === 0) {
+      await ensureConversation()
+    } else if (!activeConversationId.value || !loadedMeta.find(m => m.id === activeConversationId.value)) {
+      await selectConversation(loadedMeta[0]!.id)
+    } else {
+      // Reload active detail
+      await loadActiveDetail()
     }
+  }
 
-    const active = activeConversation.value
+  async function loadActiveDetail() {
+    if (!activeConversationId.value) return
+    const detail = await conversationService.loadDetail(activeConversationId.value)
+    if (detail) {
+      activeDetail.value = detail
+    }
+  }
+
+  // Watch for active ID changes to load details
+  watch(activeConversationId, () => {
+    if (isInitialized.value) {
+      void loadActiveDetail()
+    }
+  })
+
+  // Actions
+  async function ensureConversation() {
+    if (!isInitialized.value) await init()
+    if (metaList.value.length === 0) {
+      const { meta, detail } = await conversationService.createNewConversation()
+      metaList.value = [meta]
+      activeDetail.value = detail
+      activeConversationId.value = meta.id
+      return meta
+    }
+    const active = activeConversationMeta.value
     if (active) return active
 
-    activeConversationId.value = conversations.value[0]?.id ?? ''
-    return activeConversation.value
+    activeConversationId.value = metaList.value[0]?.id ?? ''
+    return activeConversationMeta.value
   }
 
-  function createConversation(title = 'New chat') {
-    const conversation = createConversationRecord(title)
-    conversations.value = [conversation, ...conversations.value]
-    activeConversationId.value = conversation.id
-    return conversation
+  async function createConversation(title = 'New chat') {
+    const { meta, detail } = await conversationService.createNewConversation(title)
+    metaList.value = [meta, ...metaList.value]
+    activeDetail.value = detail
+    activeConversationId.value = meta.id
+    return meta
   }
 
-  function selectConversation(id: string) {
-    if (conversations.value.some(conversation => conversation.id === id)) {
+  async function selectConversation(id: string) {
+    if (metaList.value.some((c: ConversationMeta) => c.id === id)) {
       activeConversationId.value = id
+      await loadActiveDetail()
     }
   }
 
-  function deleteConversation(id: string) {
-    const nextConversations = conversations.value.filter(conversation => conversation.id !== id)
+  async function deleteConversation(id: string) {
+    await conversationService.deleteConversation(id)
+    
+    metaList.value = metaList.value.filter((c: ConversationMeta) => c.id !== id)
 
-    if (nextConversations.length === 0) {
-      const fallback = createConversationRecord()
-      conversations.value = [fallback]
-      activeConversationId.value = fallback.id
+    if (metaList.value.length === 0) {
+      const { meta, detail } = await conversationService.createNewConversation()
+      metaList.value = [meta]
+      activeDetail.value = detail
+      activeConversationId.value = meta.id
       return
     }
 
-    conversations.value = nextConversations
     if (activeConversationId.value === id) {
-      activeConversationId.value = nextConversations[0]?.id ?? ''
+      activeConversationId.value = metaList.value[0]?.id ?? ''
     }
   }
 
-  function updateSession(id: string, session: SessionState) {
-    conversations.value = conversations.value.map(conversation =>
-      conversation.id === id ? { ...conversation, session } : conversation
-    )
+  async function updateSession(id: string, session: SessionState) {
+    await conversationService.updateSessionOnly(id, session)
+    if (activeDetail.value && activeDetail.value.id === id) {
+      activeDetail.value.session = session
+    }
   }
 
-  function updateFromAgentSnapshot(
+  async function updateFromAgentSnapshot(
     id: string,
     input: {
       events: readonly HandleMessageStreamEvent[]
@@ -129,32 +121,32 @@ export const useConversationStore = defineStore('conversations', () => {
       session: SessionState
     }
   ) {
-    const now = new Date().toISOString()
-    const messageCount = input.messages.length
+    const currentMeta = metaList.value.find((m: ConversationMeta) => m.id === id)
+    if (!currentMeta) return
 
-    conversations.value = conversations.value.map(conversation => {
-      if (conversation.id !== id) return conversation
+    const { meta: nextMeta, detail: nextDetail } = await conversationService.saveSnapshot(currentMeta, input)
+    
+    // Update local reactive state
+    const index = metaList.value.findIndex((m: ConversationMeta) => m.id === id)
+    if (index >= 0) {
+      metaList.value[index] = nextMeta
+    }
+    // Re-sort
+    metaList.value.sort((a: ConversationMeta, b: ConversationMeta) => b.updatedAt.localeCompare(a.updatedAt))
 
-      const title = conversation.title === 'New chat'
-        ? createTitleFromMessages(input.messages)
-        : conversation.title
-
-      return {
-        ...conversation,
-        title,
-        updatedAt: messageCount > conversation.messageCount ? now : conversation.updatedAt,
-        session: input.session,
-        events: [...input.events],
-        messageCount,
-        lastMessagePreview: createPreviewFromMessages(input.messages)
-      }
-    })
+    if (activeDetail.value && activeDetail.value.id === id) {
+      activeDetail.value = nextDetail
+    }
   }
 
   return {
-    activeConversation,
+    init,
+    isInitialized,
+    activeConversation: activeConversationMeta, // Kept for backwards compatibility
     activeConversationId,
-    conversations,
+    conversations: metaList, // Kept for backwards compatibility
+    activeDetail,
+    activeConversationEvents,
     sortedConversations,
     createConversation,
     deleteConversation,
