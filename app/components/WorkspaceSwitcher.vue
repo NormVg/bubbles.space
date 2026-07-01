@@ -25,6 +25,10 @@ function getMessageText(message: EveMessage) {
 }
 
 const latestAiMessageText = computed(() => {
+  if (voiceAgent.voiceSessionActive.value && voiceAgent.agentResponse.value) {
+    return voiceAgent.agentResponse.value
+  }
+
   if (eveAgent.status.value === 'submitted') {
     return ''
   }

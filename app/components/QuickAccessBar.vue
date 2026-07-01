@@ -16,24 +16,32 @@
       <!-- Icon 2: Waveform -->
       <button 
         class="qa-btn voice-btn" 
-        :class="{ active: voiceAgent.isListening.value, listening: voiceAgent.isListening.value }"
+        :class="[voiceState, { active: voiceState !== 'idle' }]"
         title="Voice Mode"
         @click="toggleVoice"
       >
         <div class="icon-container">
-          <LucideAudioLines class="icon waveform-icon" :size="16" :stroke-width="1.5" />
+          <!-- IDLE: Waveform -->
+          <LucideAudioLines class="icon state-icon waveform-icon" :size="16" :stroke-width="1.5" />
           
-          <!-- Reactive voice level halo -->
+          <!-- LISTENING: Red Stop + Halo -->
           <div 
-            v-if="voiceAgent.isListening.value"
+            v-if="voiceState === 'listening'"
             class="voice-level-halo"
             :style="{ 
               transform: `scale(${1 + voiceAgent.audioLevel.value * 1.5})`, 
               opacity: 0.1 + voiceAgent.audioLevel.value * 0.4 
             }"
           ></div>
+          <LucideSquare class="icon state-icon listening-stop-icon" :size="12" :stroke-width="2" color="var(--danger, #ff5050)" fill="var(--danger, #ff5050)" />
           
-          <LucideSquare class="icon stop-icon" :size="12" :stroke-width="2" color="var(--danger, #ff5050)" fill="var(--danger, #ff5050)" />
+          <!-- PROCESSING: Loader -->
+          <div class="state-icon processing-icon-wrapper">
+            <LucideLoader2 class="spinner" :size="16" :stroke-width="1.5" />
+          </div>
+          
+          <!-- SPEAKING: Stop AI Button (Accent colored) -->
+          <LucideSquare class="icon state-icon speaking-stop-icon" :size="12" :stroke-width="2" color="var(--accent)" fill="var(--accent)" />
         </div>
       </button>
 
@@ -53,15 +61,30 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
+import { useAppAgent } from '../composables/useAppAgent'
 
 const uiStore = useUIStore()
 const voiceAgent = useVoiceAgent()
+const eveAgent = useAppAgent()
+
+const voiceState = computed(() => {
+  if (voiceAgent.isListening.value) return 'listening'
+  if (voiceAgent.isSpeaking.value) return 'speaking'
+  if (voiceAgent.isProcessingVoice.value || eveAgent.status.value === 'submitted' || eveAgent.status.value === 'streaming') {
+    // If voice session is active, show processing
+    if (voiceAgent.voiceSessionActive.value) return 'processing'
+  }
+  return 'idle'
+})
 
 const toggleVoice = async () => {
   if (voiceAgent.isListening.value) {
     await voiceAgent.stop()
+  } else if (voiceAgent.voiceSessionActive.value) {
+    voiceAgent.endVoiceSession()
   } else {
     await voiceAgent.start({ autoSend: true })
   }
@@ -196,9 +219,11 @@ const toggleVoice = async () => {
   justify-content: center;
 }
 
-.waveform-icon, .stop-icon {
+.state-icon {
   position: absolute;
   transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
 }
 
 .waveform-icon {
@@ -206,19 +231,40 @@ const toggleVoice = async () => {
   transform: scale(1) rotate(0deg);
 }
 
-.stop-icon {
-  opacity: 0;
-  transform: scale(0.5) rotate(-90deg);
-}
-
-.voice-btn.listening .waveform-icon {
+.voice-btn:not(.idle) .waveform-icon {
   opacity: 0;
   transform: scale(0.5) rotate(90deg);
 }
 
-.voice-btn.listening .stop-icon {
+.voice-btn.listening .listening-stop-icon {
   opacity: 1;
   transform: scale(1) rotate(0deg);
+}
+
+.voice-btn.processing .processing-icon-wrapper {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.voice-btn.speaking .speaking-stop-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.processing-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.spinner {
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Reactive Voice Halo */
