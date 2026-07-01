@@ -1,40 +1,47 @@
 <template>
-  <div class="tool-call-viewer" :class="{ expanded }">
-    <button class="tool-call-header" @click="toggleExpand" type="button" aria-label="Toggle tool call details">
-      <div class="tool-icon-wrapper" :class="statusClass">
-        <LucideLoader2 v-if="isProcessing" class="spin-icon" :size="16" stroke-width="2.5" />
-        <LucideCheckCircle2 v-else-if="isSuccess" class="success-icon" :size="16" stroke-width="2.5" />
-        <LucideXCircle v-else class="error-icon" :size="16" stroke-width="2.5" />
+  <div class="minimal-tool-call">
+    <button class="tool-summary-row" @click="toggleExpand" type="button" aria-label="Toggle tool call details">
+      <div class="tool-icon">
+        <LucideLoader2 v-if="isProcessing" class="spin-icon" :size="14" stroke-width="2.5" />
+        <LucideCheckCircle2 v-else-if="isSuccess" class="success-icon" :size="14" stroke-width="2.5" />
+        <LucideXCircle v-else class="error-icon" :size="14" stroke-width="2.5" />
       </div>
       
-      <div class="tool-info">
-        <span class="tool-name">{{ displayName }}</span>
-        <span class="tool-status">{{ statusText }}</span>
-      </div>
-
-      <div class="tool-chevron" :class="{ open: expanded }">
-        <LucideChevronDown :size="16" stroke-width="2" />
-      </div>
+      <span class="tool-text">
+        Used tool <span class="tool-name">{{ displayName }}</span>
+      </span>
+      
+      <LucideChevronDown class="tool-chevron" :class="{ open: expanded }" :size="14" stroke-width="2" />
     </button>
 
-    <Transition name="expand-pane">
-      <div v-if="expanded" class="tool-details-pane">
-        <div class="code-block" v-if="hasInput">
-          <div class="code-block-header">Input Arguments</div>
+    <div v-if="expanded" class="tool-details-container">
+      <div class="tool-timeline-line"></div>
+      <div class="tool-details-content">
+        <!-- Input Block -->
+        <div v-if="hasInput" class="code-wrapper" :class="{ 'is-clamped': !showFullInput && isInputLarge }">
+          <div class="code-label">Input</div>
           <pre><code>{{ formattedInput }}</code></pre>
+          <div v-if="!showFullInput && isInputLarge" class="fade-overlay">
+            <button class="read-more-btn" @click.stop="showFullInput = true">Read more</button>
+          </div>
         </div>
         
-        <div class="code-block" v-if="hasOutput">
-          <div class="code-block-header">Tool Result</div>
+        <!-- Output Block -->
+        <div v-if="hasOutput" class="code-wrapper" :class="{ 'is-clamped': !showFullOutput && isOutputLarge }">
+          <div class="code-label">Output</div>
           <pre><code>{{ formattedOutput }}</code></pre>
+          <div v-if="!showFullOutput && isOutputLarge" class="fade-overlay">
+            <button class="read-more-btn" @click.stop="showFullOutput = true">Read more</button>
+          </div>
         </div>
 
-        <div class="code-block error-block" v-if="hasError">
-          <div class="code-block-header">Error</div>
+        <!-- Error Block -->
+        <div v-if="hasError" class="code-wrapper error-wrapper">
+          <div class="code-label">Error</div>
           <pre><code>{{ part.errorText }}</code></pre>
         </div>
       </div>
-    </Transition>
+    </div>
   </div>
 </template>
 
@@ -47,6 +54,8 @@ const props = defineProps<{
 }>()
 
 const expanded = ref(false)
+const showFullInput = ref(false)
+const showFullOutput = ref(false)
 
 const toggleExpand = () => {
   expanded.value = !expanded.value
@@ -66,25 +75,6 @@ const isSuccess = computed(() => {
 
 const isError = computed(() => {
   return props.part.state === 'output-error' || props.part.state === 'output-denied'
-})
-
-const statusClass = computed(() => {
-  if (isProcessing.value) return 'status-processing'
-  if (isSuccess.value) return 'status-success'
-  return 'status-error'
-})
-
-const statusText = computed(() => {
-  switch (props.part.state) {
-    case 'input-streaming': return 'Receiving arguments...'
-    case 'input-available': return 'Processing...'
-    case 'approval-requested': return 'Waiting for approval...'
-    case 'output-available': return 'Completed'
-    case 'output-error': return 'Failed'
-    case 'output-denied': return 'Denied'
-    case 'approval-responded': return 'Approval responded'
-    default: return 'Unknown state'
-  }
 })
 
 const hasInput = computed(() => props.part.input !== undefined)
@@ -108,63 +98,63 @@ const formattedOutput = computed(() => {
     return String(props.part.output)
   }
 })
+
+// Determine if the content is large enough to need clamping
+const isInputLarge = computed(() => {
+  return formattedInput.value.split('\n').length > 6 || formattedInput.value.length > 300
+})
+
+const isOutputLarge = computed(() => {
+  return formattedOutput.value.split('\n').length > 6 || formattedOutput.value.length > 300
+})
 </script>
 
 <style scoped>
-.tool-call-viewer {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  margin: 12px 0;
-  max-width: 90%;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.tool-call-viewer:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.tool-call-header {
+.minimal-tool-call {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  margin: 4px 0;
   width: 100%;
-  padding: 12px 16px;
+}
+
+.tool-summary-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: transparent;
   border: none;
   cursor: pointer;
-  text-align: left;
-  gap: 12px;
+  padding: 6px 0;
+  color: var(--text-muted);
+  width: fit-content;
+  transition: color 0.2s ease;
+  user-select: none;
 }
 
-.tool-icon-wrapper {
+.tool-summary-row:hover {
+  color: var(--text-secondary);
+}
+
+.tool-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-
-.status-processing {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-}
-
-.status-success {
-  background: rgba(46, 204, 113, 0.1);
-  color: #2ecc71;
-}
-
-.status-error {
-  background: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
 }
 
 .spin-icon {
   animation: spin 1.2s linear infinite;
+  color: var(--text-muted);
+}
+
+.success-icon {
+  color: var(--text-muted); /* Keep it understated instead of loud green */
+}
+
+.error-icon {
+  color: #e74c3c;
 }
 
 @keyframes spin {
@@ -172,83 +162,105 @@ const formattedOutput = computed(() => {
   to { transform: rotate(360deg); }
 }
 
-.tool-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  gap: 2px;
+.tool-text {
+  font-size: 13px;
 }
 
 .tool-name {
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tool-status {
-  color: var(--text-muted);
-  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12.5px;
+  color: var(--text-secondary);
 }
 
 .tool-chevron {
-  color: var(--text-muted);
+  opacity: 0.5;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  align-items: center;
 }
 
 .tool-chevron.open {
   transform: rotate(180deg);
 }
 
-.expand-pane-enter-active,
-.expand-pane-leave-active {
-  transition: all 0.3s ease;
-  max-height: 500px;
-  opacity: 1;
+.tool-details-container {
+  display: flex;
+  margin-top: 2px;
 }
 
-.expand-pane-enter-from,
-.expand-pane-leave-to {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin: 0;
+.tool-timeline-line {
+  width: 1px;
+  background: var(--glass-border);
+  margin-left: 7.5px; /* Centers under the 16px icon (16/2 - 0.5 = 7.5) */
+  margin-right: 16px;
+  flex-shrink: 0;
 }
 
-.tool-details-pane {
-  padding: 0 16px 16px;
+.tool-details-content {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 400px;
-  overflow-y: auto;
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 8px;
+  padding-top: 4px;
 }
 
-.code-block {
-  background: rgba(10, 10, 12, 0.4);
+.code-wrapper {
+  position: relative;
+  background: rgba(10, 10, 12, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   overflow: hidden;
 }
 
-.error-block {
-  border-color: rgba(231, 76, 60, 0.2);
-  background: rgba(231, 76, 60, 0.05);
+.code-wrapper.is-clamped pre {
+  max-height: 140px;
+  overflow: hidden;
 }
 
-.code-block-header {
+.fade-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(14, 14, 16, 0.95) 70%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  pointer-events: none; /* Let clicks pass through except on the button */
+}
+
+.read-more-btn {
+  pointer-events: auto;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.read-more-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.code-label {
   padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   font-size: 11px;
   color: var(--text-muted);
   font-weight: 500;
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 pre {
@@ -257,23 +269,30 @@ pre {
   overflow-x: auto;
   font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-all;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-::-webkit-scrollbar {
+.error-wrapper {
+  border-color: rgba(231, 76, 60, 0.2);
+  background: rgba(231, 76, 60, 0.05);
+}
+
+/* Scrollbar styling for code blocks */
+pre::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-::-webkit-scrollbar-track {
+pre::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb {
+pre::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
+pre::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 </style>
