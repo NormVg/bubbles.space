@@ -3,6 +3,7 @@
 import * as module_0 from "../../agent/agent.ts";
 import * as module_1 from "../../agent/channels/eve.ts";
 import * as module_2 from "../../agent/instructions/time.ts";
+import * as module_3 from "../../agent/tools/web_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -10,7 +11,8 @@ export const moduleMap = Object.freeze({
               "modules": Object.freeze({
                   "agent.ts": module_0,
                   "channels/eve.ts": module_1,
-                  "instructions/time.ts": module_2
+                  "instructions/time.ts": module_2,
+                  "tools/web_search.ts": module_3
                 })
             })
     })

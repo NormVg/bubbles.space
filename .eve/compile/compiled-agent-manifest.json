@@ -81,7 +81,29 @@
   "sandboxWorkspaces": [],
   "schedules": [],
   "skills": [],
-  "tools": [],
+  "tools": [
+    {
+      "description": "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The search query"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "logicalPath": "tools/web_search.ts",
+      "name": "web_search",
+      "sourceId": "tools/web_search.ts",
+      "sourceKind": "module"
+    }
+  ],
   "workspaceResourceRoot": {
     "contentHash": "5777dd4d87493e836b5597e87f6b3d07482c551341171ea7836996b231207c7b",
     "logicalPath": "workspace-resources/__root__",

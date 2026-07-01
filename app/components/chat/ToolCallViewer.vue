@@ -93,23 +93,27 @@ const hasOutput = computed(() => 'output' in props.part && props.part.output !==
 const hasError = computed(() => 'errorText' in props.part && props.part.errorText !== undefined)
 
 const inputPreview = computed(() => {
-  if (props.part.input === undefined) return ''
+  if (props.part.input === undefined || props.part.input === null) return ''
   try {
-    const str = JSON.stringify(props.part.input)
-    return str.length > 60 ? str.substring(0, 60) + '...' : str
+    if (typeof props.part.input === 'object') {
+      const vals = Object.values(props.part.input).map(val => {
+        if (typeof val === 'string') return val
+        if (typeof val === 'object') return '{...}'
+        return String(val)
+      }).filter(v => v !== '')
+      
+      const str = vals.join(', ')
+      return str.length > 60 ? str.substring(0, 60) + '...' : str
+    }
+    return String(props.part.input)
   } catch (e) {
     return ''
   }
 })
 
 const outputPreview = computed(() => {
-  if (!('output' in props.part) || props.part.output === undefined) return ''
-  try {
-    const str = JSON.stringify(props.part.output)
-    return str.length > 50 ? str.substring(0, 50) + '...' : str
-  } catch (e) {
-    return ''
-  }
+  // Output is usually massive, just showing "Output" is cleaner than ugly JSON previews
+  return ''
 })
 
 const formattedInput = computed(() => {

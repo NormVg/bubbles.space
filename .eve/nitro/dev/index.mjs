@@ -26,6 +26,9 @@ import { createOllama } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbl
 import { eveChannel } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/channels/eve.js";
 import { none } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/channels/auth.js";
 import { defineDynamic, defineInstructions } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/instructions/index.js";
+import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/tools/index.js";
+import { z } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js";
+import * as cheerio from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/cheerio@1.2.0/node_modules/cheerio/dist/esm/index.js";
 import * as ur$3 from "node:fs";
 import g, { createWriteStream, existsSync, mkdirSync, promises, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import * as lr$3 from "node:path";
@@ -191,7 +194,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -202,27 +205,81 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/agent/tools/web_search.ts
+var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
+var web_search_default = defineTool({
+	description: "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+	inputSchema: z.object({ query: z.string().min(1).describe("The search query") }),
+	async execute({ query }) {
+		try {
+			const response = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, { headers: {
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+				"Accept-Language": "en-US,en;q=0.9"
+			} });
+			if (!response.ok) return { error: `DuckDuckGo responded with status ${response.status}` };
+			const html = await response.text();
+			const $ = cheerio.load(html);
+			const results = [];
+			$(".result").each((i, element) => {
+				if (results.length >= 5) return false;
+				const titleElement = $(element).find(".result__title .result__a");
+				const title = titleElement.text().trim();
+				let url = titleElement.attr("href");
+				if (url && url.startsWith("//duckduckgo.com/l/?uddg=")) try {
+					const uddg = new URL("https:" + url).searchParams.get("uddg");
+					if (uddg) url = decodeURIComponent(uddg);
+				} catch (e) {}
+				const snippet = $(element).find(".result__snippet").text().trim();
+				if (title && url && snippet) results.push({
+					title,
+					url,
+					snippet
+				});
+			});
+			if (results.length === 0) return { message: "No results found." };
+			return { results };
+		} catch (error) {
+			return { error: error.message || "Unknown error occurred during web search." };
+		}
+	},
+	toModelOutput(output) {
+		if ("error" in output) return {
+			type: "json",
+			value: { error: output.error }
+		};
+		if ("message" in output) return {
+			type: "json",
+			value: { message: output.message }
+		};
+		return {
+			type: "json",
+			value: output.results
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
 	"channels/eve.ts": eve_exports,
-	"instructions/time.ts": time_exports
+	"instructions/time.ts": time_exports,
+	"tools/web_search.ts": web_search_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "71d8f0e92c211d409a65c0d1aee599bc0f1053708e426a5e8616787a258919d3"
+		"sha256": "c91fe2a4cfbddea91ea9db7e6fe5adb5721d72483a4f462b4fd0c9103fcb1d79"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -231,9 +288,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "415d2a7f0b77826c4ead57bdfc003416752db217906ef1122a0893857e0651eb"
+			"sha256": "48a9eab81fa08256b5da64350f296bc5791d564d3406075c48f5126feca48d4b"
 		},
-		"sourceGraphHash": "956882be9900946455d64fd5c20795cfabecb8384015d5880ec1ca45a0d740fd",
+		"sourceGraphHash": "92d1c48a8b9dc9ce7a3dc782e4976633bedc30a30810931766268e7791369eb5",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -248,8 +305,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -326,7 +383,23 @@ const manifest = {
 	"sandboxWorkspaces": [],
 	"schedules": [],
 	"skills": [],
-	"tools": [],
+	"tools": [{
+		"description": "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+		"inputSchema": {
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"type": "object",
+			"properties": { "query": {
+				"type": "string",
+				"minLength": 1,
+				"description": "The search query"
+			} },
+			"required": ["query"]
+		},
+		"logicalPath": "tools/web_search.ts",
+		"name": "web_search",
+		"sourceId": "tools/web_search.ts",
+		"sourceKind": "module"
+	}],
 	"workspaceResourceRoot": {
 		"contentHash": "5777dd4d87493e836b5597e87f6b3d07482c551341171ea7836996b231207c7b",
 		"logicalPath": "workspace-resources/__root__",
@@ -356,7 +429,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr2gwps2-a5752d69-ff22-4567-ae5e-ed8c44618e76/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr2ha4ng-ff6dd673-4f37-496b-83ee-5b14679690cf/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
@@ -1245,10 +1318,10 @@ const Qt$7 = (e) => {
 function R$15(e, t) {
 	return RegExp(`^[A-Za-z0-9+/]{${e}}${t}$`);
 }
-function z$15(e) {
+function z$16(e) {
 	return RegExp(`^[A-Za-z0-9_-]{${e}}$`);
 }
-const ln$6 = /^[0-9a-fA-F]{32}$/, un$6 = R$15(22, `==`), dn$6 = z$15(22), fn$6 = /^[0-9a-fA-F]{40}$/, pn$6 = R$15(27, `=`), mn$6 = z$15(27), hn$6 = /^[0-9a-fA-F]{64}$/, gn$7 = R$15(43, `=`), _n$7 = z$15(43), vn$7 = /^[0-9a-fA-F]{96}$/, yn$7 = R$15(64, ``), bn$7 = z$15(64), xn$6 = /^[0-9a-fA-F]{128}$/, Sn$6 = R$15(86, `==`), Cn$6 = z$15(86), B$15 = i$18(`$ZodCheck`, (e, t) => {
+const ln$6 = /^[0-9a-fA-F]{32}$/, un$6 = R$15(22, `==`), dn$6 = z$16(22), fn$6 = /^[0-9a-fA-F]{40}$/, pn$6 = R$15(27, `=`), mn$6 = z$16(27), hn$6 = /^[0-9a-fA-F]{64}$/, gn$7 = R$15(43, `=`), _n$7 = z$16(43), vn$7 = /^[0-9a-fA-F]{96}$/, yn$7 = R$15(64, ``), bn$7 = z$16(64), xn$6 = /^[0-9a-fA-F]{128}$/, Sn$6 = R$15(86, `==`), Cn$6 = z$16(86), B$15 = i$18(`$ZodCheck`, (e, t) => {
 	var n;
 	e._zod ??= {}, e._zod.def = t, (n = e._zod).onattach ?? (n.onattach = []);
 }), wn$6 = {
@@ -9806,7 +9879,7 @@ var Ki$5 = t$15({
 	ulid: () => ca$5,
 	undefined: () => Ya$4,
 	union: () => fo$3,
-	unknown: () => z$14,
+	unknown: () => z$15,
 	url: () => ta$5,
 	uuid: () => Zi$5,
 	uuidv4: () => Qi$5,
@@ -10278,7 +10351,7 @@ function $a$4() {
 const eo$4 = i$18(`ZodUnknown`, (e, t) => {
 	Mr$4.init(e, t), x$15.init(e, t), e._zod.processJSONSchema = (t, n, r) => void 0;
 });
-function z$14() {
+function z$15() {
 	return Ps$4(eo$4);
 }
 const to$4 = i$18(`ZodNever`, (e, t) => {
@@ -10341,13 +10414,13 @@ const H$12 = i$18(`ZodObject`, (e, t) => {
 		passthrough() {
 			return this.clone({
 				...this._zod.def,
-				catchall: z$14()
+				catchall: z$15()
 			});
 		},
 		loose() {
 			return this.clone({
 				...this._zod.def,
-				catchall: z$14()
+				catchall: z$15()
 			});
 		},
 		strict() {
@@ -10404,7 +10477,7 @@ function uo$3(e, t) {
 	return new H$12({
 		type: `object`,
 		shape: e,
-		catchall: z$14(),
+		catchall: z$15(),
 		...w$18(t)
 	});
 }
@@ -10764,8 +10837,8 @@ const ds$3 = i$18(`ZodFunction`, (e, t) => {
 function X$14(e) {
 	return new ds$3({
 		type: `function`,
-		input: Array.isArray(e?.input) ? bo$3(e?.input) : e?.input ?? V$13(z$14()),
-		output: e?.output ?? z$14()
+		input: Array.isArray(e?.input) ? bo$3(e?.input) : e?.input ?? V$13(z$15()),
+		output: e?.output ?? z$15()
 	});
 }
 const Z$13 = i$18(`ZodCustom`, (e, t) => {
@@ -11292,7 +11365,7 @@ var Ls$3 = t$15({
 	ulid: () => ca$5,
 	undefined: () => Ya$4,
 	union: () => fo$3,
-	unknown: () => z$14,
+	unknown: () => z$15,
 	uppercase: () => nc$3,
 	url: () => ta$5,
 	util: () => u$15,
@@ -11771,9 +11844,9 @@ function I$12(e, t) {
 }
 function R$13(e, t = {}) {
 	let n = e.issues, i;
-	return i = O$12(n) ? z$13(t)(n) : e.message, new r$19(i, { cause: e });
+	return i = O$12(n) ? z$14(t)(n) : e.message, new r$19(i, { cause: e });
 }
-function z$13(e) {
+function z$14(e) {
 	return `messageBuilder` in e ? e.messageBuilder : P$12(e);
 }
 var B$13 = (e = {}) => (n) => t$14(n) ? R$13(n, e) : n instanceof Error ? new r$19(n.message, { cause: n }) : new r$19(`Unknown error`);
@@ -12564,7 +12637,7 @@ function Me$11(e) {
 	return typeof e == `object` && !!e && `spanId` in e && typeof e.spanId == `string` && `traceId` in e && typeof e.traceId == `string` && `traceFlags` in e && typeof e.traceFlags == `number`;
 }
 const Ne$11 = new R$12();
-var z$12 = class {
+var z$13 = class {
 	constructor(e, t, n, r) {
 		this._provider = e, this.name = t, this.version = n, this.options = r;
 	}
@@ -12588,7 +12661,7 @@ const Pe$10 = new class {
 }();
 var B$12 = class {
 	getTracer(e, t, n) {
-		return this.getDelegateTracer(e, t, n) ?? new z$12(this, e, t, n);
+		return this.getDelegateTracer(e, t, n) ?? new z$13(this, e, t, n);
 	}
 	getDelegate() {
 		return this._delegate ?? Pe$10;
@@ -12713,7 +12786,7 @@ function $$10(e) {
 function Re$9(e) {
 	return typeof e == `object` && !!e && Object.entries(e).every(([e, t]) => typeof e == `string` && (t === void 0 || $$10(t)));
 }
-var e$3, t$12, n$15, r$17, i$15, ee$7, a$13, o$13, te$7, s$12, c$13, l$11, u$13, ne$7, d$13, f$13, re$8, m$12, h$12, ie$8, g$12, _$11, ae$9, v$11, y$9, oe$9, b$11, x$13, se$10, S$13, C$14, ce$10, w$15, T$13, le$10, E$13, D$12, ue$10, O$10, k$12, de$10, A$10, j$11, fe$10, M$10, N$10, pe$9, P$10, F$10, me$9, I$10, L$10, he$9, ge$9, R$11, _e$9, z$11, B$11, ve$9, V$10, H$10, ye$9, U$10, W$8, be$9, G$8, K$9, xe$9, q$9, J$9, Se$9, Y$12, X$12, Ce$9, Z$11, we$9, Te$9, Ee$9, De$9, Oe$9, Q$10, ke$9, Ae$10, je$10, Me$10, Ne$10, Pe$9, Fe$9, Ie$9;
+var e$3, t$12, n$15, r$17, i$15, ee$7, a$13, o$13, te$7, s$12, c$13, l$11, u$13, ne$7, d$13, f$13, re$8, m$12, h$12, ie$8, g$12, _$11, ae$9, v$11, y$9, oe$9, b$11, x$13, se$10, S$13, C$14, ce$10, w$15, T$13, le$10, E$13, D$12, ue$10, O$10, k$12, de$10, A$10, j$11, fe$10, M$10, N$10, pe$9, P$10, F$10, me$9, I$10, L$10, he$9, ge$9, R$11, _e$9, z$12, B$11, ve$9, V$10, H$10, ye$9, U$10, W$8, be$9, G$8, K$9, xe$9, q$9, J$9, Se$9, Y$12, X$12, Ce$9, Z$11, we$9, Te$9, Ee$9, De$9, Oe$9, Q$10, ke$9, Ae$10, je$10, Me$10, Ne$10, Pe$9, Fe$9, Ie$9;
 var init_provider = __esmMin((() => {
 	e$3 = `vercel.ai.error`, t$12 = Symbol.for(e$3), i$15 = class i extends (r$17 = Error, n$15 = t$12, r$17) {
 		constructor({ name: e, message: t, cause: r }) {
@@ -13345,7 +13418,7 @@ async function Ze$9(e, t, n, r) {
 		return !1;
 	}
 }
-const z$10 = `Invalid or unsupported JWK "alg" (Algorithm) Parameter value`;
+const z$11 = `Invalid or unsupported JWK "alg" (Algorithm) Parameter value`;
 function tt$9(e) {
 	let t, n;
 	switch (e.kty) {
@@ -13356,7 +13429,7 @@ function tt$9(e) {
 				case `ML-DSA-87`:
 					t = { name: e.alg }, n = e.priv ? [`sign`] : [`verify`];
 					break;
-				default: throw new T$12(z$10);
+				default: throw new T$12(z$11);
 			}
 			break;
 		case `RSA`:
@@ -13386,7 +13459,7 @@ function tt$9(e) {
 						hash: `SHA-${parseInt(e.alg.slice(-3), 10) || 1}`
 					}, n = e.d ? [`decrypt`, `unwrapKey`] : [`encrypt`, `wrapKey`];
 					break;
-				default: throw new T$12(z$10);
+				default: throw new T$12(z$11);
 			}
 			break;
 		case `EC`:
@@ -13412,7 +13485,7 @@ function tt$9(e) {
 						namedCurve: e.crv
 					}, n = e.d ? [`deriveBits`] : [];
 					break;
-				default: throw new T$12(z$10);
+				default: throw new T$12(z$11);
 			}
 			break;
 		case `OKP`:
@@ -13427,7 +13500,7 @@ function tt$9(e) {
 				case `ECDH-ES+A256KW`:
 					t = { name: e.crv }, n = e.d ? [`deriveBits`] : [];
 					break;
-				default: throw new T$12(z$10);
+				default: throw new T$12(z$11);
 			}
 			break;
 		default: throw new T$12(`Invalid or unsupported JWK "kty" (Key Type) Parameter value`);
@@ -16271,7 +16344,7 @@ var init_private = __esmMin((() => {
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/compiled/_chunks/workflow/src-CQuMexnO.js
 var src_CQuMexnO_exports = /* @__PURE__ */ __exportAll({ t: () => W$7 });
-var t$7, n$9, r$11, i$9, a$8, o$8, s$8, c$7, l$7, u$8, d$8, f$8, p$9, m$8, h$8, g$8, _$7, v$8, y$6, b$9, x$10, S$10, C$11, w$12, T$10, E$10, D$9, O$7, k$9, A$8, j$8, M$8, N$8, P$8, F$8, I$8, L$8, R$9, z$9, B$9, V$8, H$8, U$8, W$7;
+var t$7, n$9, r$11, i$9, a$8, o$8, s$8, c$7, l$7, u$8, d$8, f$8, p$9, m$8, h$8, g$8, _$7, v$8, y$6, b$9, x$10, S$10, C$11, w$12, T$10, E$10, D$9, O$7, k$9, A$8, j$8, M$8, N$8, P$8, F$8, I$8, L$8, R$9, z$10, B$9, V$8, H$8, U$8, W$7;
 var init_src_CQuMexnO = __esmMin((() => {
 	init_chunk_BHKSVoKr();
 	t$7 = c$12(((e) => {
@@ -17036,7 +17109,7 @@ var init_src_CQuMexnO = __esmMin((() => {
 				return [];
 			}
 		};
-	})), z$9 = c$12(((e) => {
+	})), z$10 = c$12(((e) => {
 		Object.defineProperty(e, "__esModule", { value: !0 }), e.deleteBaggage = e.setBaggage = e.getActiveBaggage = e.getBaggage = void 0;
 		let t = _$7(), n = (0, d$8().createContextKey)(`OpenTelemetry Baggage Key`);
 		function r(e) {
@@ -17057,7 +17130,7 @@ var init_src_CQuMexnO = __esmMin((() => {
 		e.deleteBaggage = o;
 	})), B$9 = c$12(((e) => {
 		Object.defineProperty(e, "__esModule", { value: !0 }), e.PropagationAPI = void 0;
-		let t = r$11(), n = R$9(), i = h$8(), a = z$9(), o = u$8(), c = s$8(), l = `propagation`, d = new n.NoopTextMapPropagator();
+		let t = r$11(), n = R$9(), i = h$8(), a = z$10(), o = u$8(), c = s$8(), l = `propagation`, d = new n.NoopTextMapPropagator();
 		e.PropagationAPI = class e {
 			constructor() {
 				this.createBaggage = o.createBaggage, this.getBaggage = a.getBaggage, this.getActiveBaggage = a.getActiveBaggage, this.setBaggage = a.setBaggage, this.deleteBaggage = a.deleteBaggage;
@@ -25196,7 +25269,7 @@ function vS(e, t = {}) {
 	}
 	return n;
 }
-var ie$6, ae$7, b$8, oe$7, he$8, Se$8, Ce$8, we$8, Te$8, Ee$8, Oe$8, Ne$8, Pe$8, Fe$8, Ie$8, Le$8, Re$8, Xe$8, ot$7, ct$7, ft$7, pt$7, mt$7, yt$7, bt$7, Ht$6, Ut$5, Wt$5, O$6, Xt$5, Zt$5, Qt$5, $t$5, en$5, tn$5, nn$5, rn$5, an$5, on$5, sn$5, cn$5, ln$5, un$5, dn$5, fn$5, pn$5, mn$5, hn$5, gn$5, _n$5, vn$5, yn$5, bn$5, xn$4, Sn$4, Cn$4, wn$4, Tn$4, En$4, Dn$4, On$4, kn$4, An$4, jn$4, Mn$4, Nn$4, Pn$4, Fn$3, In$3, Ln$3, Rn$3, zn$3, Bn$3, Hn$3, Un$3, Wn$3, Gn$3, Kn$3, qn$3, Jn$3, Yn$3, Xn$4, Zn$3, Qn$3, $n$3, rr$3, ir$3, ar$3, or$3, sr$3, cr$3, lr$4, ur$4, dr$4, fr$3, hr$3, gr$3, _r$4, vr$4, yr$3, br$3, xr$3, Sr$3, Cr$3, wr$3, Tr$3, Er$3, Dr$3, Or$3, kr$3, k$8, Ar$3, jr$3, Mr$3, Nr$3, Pr$3, Fr$4, Ir$4, Lr$4, Rr$4, zr$4, Br$4, Vr$4, Hr$4, Ur$4, Wr$4, Gr$4, Kr$4, qr$4, Jr$4, Xr$4, Zr$4, Qr$4, $r$4, ei$4, A$7, ti$4, j$7, ni$4, ri$4, ii$4, ai$4, oi$4, si$4, ci$4, li$4, ui$4, di$4, fi$4, pi$4, mi$4, hi$4, gi$4, _i$4, vi$4, yi$4, bi$4, xi$4, Ci$4, Ti$4, Ei$4, Oi$4, ki$4, Ai$4, ji$4, Mi$4, Ni$4, Pi$4, Fi$4, Ii$4, Li$4, Ri$4, zi$4, Bi$4, Vi$4, Hi$4, Wi$4, Ji$4, Yi$4, Zi$4, $i$4, ea$4, ta$4, ia$4, oa$4, sa$4, la$4, da$4, fa$4, pa$4, ma$4, ga$4, _a$4, va$4, ya$4, xa$4, Sa$4, wa$4, Ta$4, Ea$4, Da$4, ka$4, Ma$4, Pa$4, Fa$4, Ia$4, La$4, Ra$4, Ba$4, Ha$4, Ga$4, qa$4, Ya$3, Za$3, $a$3, to$3, ro$2, ao$2, so$2, lo$2, fo$2, mo$2, go$2, vo$2, bo$2, wo$2, Eo$2, Oo$2, Ao$2, Mo$2, Po$2, Io$2, zo$2, Vo$2, Uo$2, Go$2, qo$2, Yo$2, Zo$2, $o$2, ts$2, rs$2, as$2, cs$2, us$2, fs$2, ms$2, gs$2, vs$2, bs$2, Cs$2, Ts$2, Ds$2, ks$2, js$2, Ns$2, Fs$2, Is$2, Ls$2, Rs$2, zs$2, Vs$2, pc$2, Xl$2, Zl$2, Ql$2, $l$2, eu$2, tu$2, nu$2, ru$2, iu$2, au$2, ou$2, su$2, cu$2, lu$2, uu$2, du$2, fu$2, pu$2, mu$2, hu$2, gu$2, _u$2, vu$2, yu$2, bu$2, xu$2, Su$2, Cu$2, wu$2, Tu$2, Eu$2, Du$2, Ou$2, ku$2, Au$2, ju$2, Mu$2, Nu$2, Pu$2, Fu$2, Iu$2, Lu$2, Ru$2, Bu$2, Vu$2, Hu$2, Uu$2, Wu$2, Gu$2, qu$2, Yu$2, Zu$2, $u$2, ed$2, I$7, td$2, nd$2, rd$2, id$2, ad$2, od$2, sd$2, cd$2, ld$2, ud$2, dd$2, fd$2, pd$2, L$7, md$2, hd$2, z$8, gd$2, vd$2, bd$2, Td$2, Od$1, Ad$1, Md$1, Pd$1, Id$1, Rd$1, Bd$1, Hd$1, Wd$1, Kd$1, Jd$1, Xd$1, Qd$1, ef$1, nf$1, af$1, sf$1, ff$1, pf$1, yf$1, xf$1, Cf$1, Ef$1, Of$1, Af$1, Mf$1, Pf$1, If$1, Rf$1, Bf$1, Hf$1, Gf$1, Jf$1, Xf$1, Qf$1, ep$1, np$1, ip$1, sp$1, lp$1, dp$1, mp$1, hp$1, _p$1, yp$1, xp$1, Cp$1, Ep$1, Op$1, Ap$1, Mp$1, Pp$1, Ip$1, Rp$1, Bp$1, Hp$1, Wp$1, Kp$1, Jp$1, Xp$1, Qp$1, rm$2, im$1, om$1, lm$1, fm$1, W$6, pm$1, vm$1, Cm$1, wm$1, Tm$1, Em$1, Dm$1, q$7, Mm$1, Pm$1, J$7, Fm$1, Im$1, Lm$1, Rm$1, zm$1, Bm$1, Vm$1, Hm$1, Um$1, Wm$1, Gm$1, Km$1, qm$1, Jm$1, Ym$1, Xm$1, Zm$1, Qm$1, $m$1, eh$1, th$1, nh$1, rh$1, sh$1, ch$1, lh$1, uh$1, dh$1, fh$1, ph$1, hh$1, gh$1, _h$1, vh$1, yh$1, Sh$1, Ch$1, wh$1, Th$1, Eh$1, Lh$1, Rh$1, zh$1, Hh$1, Uh$1, Wh$1, Gh$1, Kh$1, qh$1, Jh$1, Yh$1, Y$10, Xh$1, Zh$1, Qh$1, $h$1, eg$1, tg$1, ng$1, rg$1, ig$1, ag$1, og$1, sg$1, cg$1, lg$1, ug$1, dg$1, fg$1, pg$1, mg$1, hg$1, gg$1, _g, vg, yg, bg, xg, Sg, Cg, wg, Tg, Eg, Dg, Og, kg, Ag, jg, Mg, Ng, Pg, Vg, Hg, Ug, Wg, Gg, Kg, qg, Yg, t_, f_, S_, C_, w_, E_, D_, O_, k_, A_, j_, M_, N_, P_, F_, I_, L_, R_, z_, B_, V_, X$10, Z$9, H_, U_, G_, Q$9, lv, uv, pv, mv, hv, Wv, Kv, qv, Jv, Yv, Xv, Zv, Qv, $v, ey, ty, ny, ry, iy, ay, oy, sy, cy, ly, uy, dy, fy, py, my, hy, gy, _y, vy, yy, by, xy, Sy, Cy, wy, Ty, Ey, Dy, Oy, ky, Ay, jy, My, Ny, Py, Fy, Iy, Ly, Ry, zy, By, Vy, Hy, Uy, Wy, Gy, Ky, qy, Jy, Yy, Xy, Zy, Qy, $y, eb, tb, nb, rb, ib, ab, ob, sb, cb, gb, _b, kb, Ab, jb, Mb, Bb, Vb, Kb, qb, Jb, Zb, rx, ox, cx, Bx, Ux, Wx, Gx, qx, Jx, Xx, uS;
+var ie$6, ae$7, b$8, oe$7, he$8, Se$8, Ce$8, we$8, Te$8, Ee$8, Oe$8, Ne$8, Pe$8, Fe$8, Ie$8, Le$8, Re$8, Xe$8, ot$7, ct$7, ft$7, pt$7, mt$7, yt$7, bt$7, Ht$6, Ut$5, Wt$5, O$6, Xt$5, Zt$5, Qt$5, $t$5, en$5, tn$5, nn$5, rn$5, an$5, on$5, sn$5, cn$5, ln$5, un$5, dn$5, fn$5, pn$5, mn$5, hn$5, gn$5, _n$5, vn$5, yn$5, bn$5, xn$4, Sn$4, Cn$4, wn$4, Tn$4, En$4, Dn$4, On$4, kn$4, An$4, jn$4, Mn$4, Nn$4, Pn$4, Fn$3, In$3, Ln$3, Rn$3, zn$3, Bn$3, Hn$3, Un$3, Wn$3, Gn$3, Kn$3, qn$3, Jn$3, Yn$3, Xn$4, Zn$3, Qn$3, $n$3, rr$3, ir$3, ar$3, or$3, sr$3, cr$3, lr$4, ur$4, dr$4, fr$3, hr$3, gr$3, _r$4, vr$4, yr$3, br$3, xr$3, Sr$3, Cr$3, wr$3, Tr$3, Er$3, Dr$3, Or$3, kr$3, k$8, Ar$3, jr$3, Mr$3, Nr$3, Pr$3, Fr$4, Ir$4, Lr$4, Rr$4, zr$4, Br$4, Vr$4, Hr$4, Ur$4, Wr$4, Gr$4, Kr$4, qr$4, Jr$4, Xr$4, Zr$4, Qr$4, $r$4, ei$4, A$7, ti$4, j$7, ni$4, ri$4, ii$4, ai$4, oi$4, si$4, ci$4, li$4, ui$4, di$4, fi$4, pi$4, mi$4, hi$4, gi$4, _i$4, vi$4, yi$4, bi$4, xi$4, Ci$4, Ti$4, Ei$4, Oi$4, ki$4, Ai$4, ji$4, Mi$4, Ni$4, Pi$4, Fi$4, Ii$4, Li$4, Ri$4, zi$4, Bi$4, Vi$4, Hi$4, Wi$4, Ji$4, Yi$4, Zi$4, $i$4, ea$4, ta$4, ia$4, oa$4, sa$4, la$4, da$4, fa$4, pa$4, ma$4, ga$4, _a$4, va$4, ya$4, xa$4, Sa$4, wa$4, Ta$4, Ea$4, Da$4, ka$4, Ma$4, Pa$4, Fa$4, Ia$4, La$4, Ra$4, Ba$4, Ha$4, Ga$4, qa$4, Ya$3, Za$3, $a$3, to$3, ro$2, ao$2, so$2, lo$2, fo$2, mo$2, go$2, vo$2, bo$2, wo$2, Eo$2, Oo$2, Ao$2, Mo$2, Po$2, Io$2, zo$2, Vo$2, Uo$2, Go$2, qo$2, Yo$2, Zo$2, $o$2, ts$2, rs$2, as$2, cs$2, us$2, fs$2, ms$2, gs$2, vs$2, bs$2, Cs$2, Ts$2, Ds$2, ks$2, js$2, Ns$2, Fs$2, Is$2, Ls$2, Rs$2, zs$2, Vs$2, pc$2, Xl$2, Zl$2, Ql$2, $l$2, eu$2, tu$2, nu$2, ru$2, iu$2, au$2, ou$2, su$2, cu$2, lu$2, uu$2, du$2, fu$2, pu$2, mu$2, hu$2, gu$2, _u$2, vu$2, yu$2, bu$2, xu$2, Su$2, Cu$2, wu$2, Tu$2, Eu$2, Du$2, Ou$2, ku$2, Au$2, ju$2, Mu$2, Nu$2, Pu$2, Fu$2, Iu$2, Lu$2, Ru$2, Bu$2, Vu$2, Hu$2, Uu$2, Wu$2, Gu$2, qu$2, Yu$2, Zu$2, $u$2, ed$2, I$7, td$2, nd$2, rd$2, id$2, ad$2, od$2, sd$2, cd$2, ld$2, ud$2, dd$2, fd$2, pd$2, L$7, md$2, hd$2, z$9, gd$2, vd$2, bd$2, Td$2, Od$1, Ad$1, Md$1, Pd$1, Id$1, Rd$1, Bd$1, Hd$1, Wd$1, Kd$1, Jd$1, Xd$1, Qd$1, ef$1, nf$1, af$1, sf$1, ff$1, pf$1, yf$1, xf$1, Cf$1, Ef$1, Of$1, Af$1, Mf$1, Pf$1, If$1, Rf$1, Bf$1, Hf$1, Gf$1, Jf$1, Xf$1, Qf$1, ep$1, np$1, ip$1, sp$1, lp$1, dp$1, mp$1, hp$1, _p$1, yp$1, xp$1, Cp$1, Ep$1, Op$1, Ap$1, Mp$1, Pp$1, Ip$1, Rp$1, Bp$1, Hp$1, Wp$1, Kp$1, Jp$1, Xp$1, Qp$1, rm$2, im$1, om$1, lm$1, fm$1, W$6, pm$1, vm$1, Cm$1, wm$1, Tm$1, Em$1, Dm$1, q$7, Mm$1, Pm$1, J$7, Fm$1, Im$1, Lm$1, Rm$1, zm$1, Bm$1, Vm$1, Hm$1, Um$1, Wm$1, Gm$1, Km$1, qm$1, Jm$1, Ym$1, Xm$1, Zm$1, Qm$1, $m$1, eh$1, th$1, nh$1, rh$1, sh$1, ch$1, lh$1, uh$1, dh$1, fh$1, ph$1, hh$1, gh$1, _h$1, vh$1, yh$1, Sh$1, Ch$1, wh$1, Th$1, Eh$1, Lh$1, Rh$1, zh$1, Hh$1, Uh$1, Wh$1, Gh$1, Kh$1, qh$1, Jh$1, Yh$1, Y$10, Xh$1, Zh$1, Qh$1, $h$1, eg$1, tg$1, ng$1, rg$1, ig$1, ag$1, og$1, sg$1, cg$1, lg$1, ug$1, dg$1, fg$1, pg$1, mg$1, hg$1, gg$1, _g, vg, yg, bg, xg, Sg, Cg, wg, Tg, Eg, Dg, Og, kg, Ag, jg, Mg, Ng, Pg, Vg, Hg, Ug, Wg, Gg, Kg, qg, Yg, t_, f_, S_, C_, w_, E_, D_, O_, k_, A_, j_, M_, N_, P_, F_, I_, L_, R_, z_, B_, V_, X$10, Z$9, H_, U_, G_, Q$9, lv, uv, pv, mv, hv, Wv, Kv, qv, Jv, Yv, Xv, Zv, Qv, $v, ey, ty, ny, ry, iy, ay, oy, sy, cy, ly, uy, dy, fy, py, my, hy, gy, _y, vy, yy, by, xy, Sy, Cy, wy, Ty, Ey, Dy, Oy, ky, Ay, jy, My, Ny, Py, Fy, Iy, Ly, Ry, zy, By, Vy, Hy, Uy, Wy, Gy, Ky, qy, Jy, Yy, Xy, Zy, Qy, $y, eb, tb, nb, rb, ib, ab, ob, sb, cb, gb, _b, kb, Ab, jb, Mb, Bb, Vb, Kb, qb, Jb, Zb, rx, ox, cx, Bx, Ux, Wx, Gx, qx, Jx, Xx, uS;
 var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 	init_chunk_BHKSVoKr();
 	init_dist_FLIfyJ4Y();
@@ -31998,16 +32071,16 @@ var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 		time: () => Xu$2
 	});
 	Gu$2 = x$9(`ZodISODateTime`, (e, t) => {
-		pi$4.init(e, t), z$8.init(e, t);
+		pi$4.init(e, t), z$9.init(e, t);
 	});
 	qu$2 = x$9(`ZodISODate`, (e, t) => {
-		mi$4.init(e, t), z$8.init(e, t);
+		mi$4.init(e, t), z$9.init(e, t);
 	});
 	Yu$2 = x$9(`ZodISOTime`, (e, t) => {
-		hi$4.init(e, t), z$8.init(e, t);
+		hi$4.init(e, t), z$9.init(e, t);
 	});
 	Zu$2 = x$9(`ZodISODuration`, (e, t) => {
-		gi$4.init(e, t), z$8.init(e, t);
+		gi$4.init(e, t), z$9.init(e, t);
 	});
 	$u$2 = (e, t) => {
 		Wt$5.init(e, t), e.name = `ZodError`, Object.defineProperties(e, {
@@ -32077,7 +32150,7 @@ var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 		ZodRecord: () => ip$1,
 		ZodSet: () => lp$1,
 		ZodString: () => hd$2,
-		ZodStringFormat: () => z$8,
+		ZodStringFormat: () => z$9,
 		ZodSuccess: () => Mp$1,
 		ZodSymbol: () => Ef$1,
 		ZodTemplateLiteral: () => Wp$1,
@@ -32216,70 +32289,70 @@ var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 	}), hd$2 = x$9(`ZodString`, (e, t) => {
 		ti$4.init(e, t), md$2.init(e, t), e.email = (t) => e.check(Ws$2(gd$2, t)), e.url = (t) => e.check(Xs$2(Td$2, t)), e.jwt = (t) => e.check(fc$2(af$1, t)), e.emoji = (t) => e.check(Zs$2(Od$1, t)), e.guid = (t) => e.check(Gs$2(vd$2, t)), e.uuid = (t) => e.check(Ks$2(bd$2, t)), e.uuidv4 = (t) => e.check(qs$2(bd$2, t)), e.uuidv6 = (t) => e.check(Js$2(bd$2, t)), e.uuidv7 = (t) => e.check(Ys$2(bd$2, t)), e.nanoid = (t) => e.check(Qs$2(Ad$1, t)), e.guid = (t) => e.check(Gs$2(vd$2, t)), e.cuid = (t) => e.check($s$2(Md$1, t)), e.cuid2 = (t) => e.check(ec$2(Pd$1, t)), e.ulid = (t) => e.check(tc$2(Id$1, t)), e.base64 = (t) => e.check(lc$2(Qd$1, t)), e.base64url = (t) => e.check(uc$2(ef$1, t)), e.xid = (t) => e.check(nc$2(Rd$1, t)), e.ksuid = (t) => e.check(rc$2(Bd$1, t)), e.ipv4 = (t) => e.check(ic$2(Hd$1, t)), e.ipv6 = (t) => e.check(ac$2(Kd$1, t)), e.cidrv4 = (t) => e.check(sc$2(Jd$1, t)), e.cidrv6 = (t) => e.check(cc$2(Xd$1, t)), e.e164 = (t) => e.check(dc$2(nf$1, t)), e.datetime = (t) => e.check(Ku$2(t)), e.date = (t) => e.check(Ju$2(t)), e.time = (t) => e.check(Xu$2(t)), e.duration = (t) => e.check(Qu$2(t));
 	});
-	z$8 = x$9(`ZodStringFormat`, (e, t) => {
+	z$9 = x$9(`ZodStringFormat`, (e, t) => {
 		j$7.init(e, t), md$2.init(e, t);
 	}), gd$2 = x$9(`ZodEmail`, (e, t) => {
-		ii$4.init(e, t), z$8.init(e, t);
+		ii$4.init(e, t), z$9.init(e, t);
 	});
 	vd$2 = x$9(`ZodGUID`, (e, t) => {
-		ni$4.init(e, t), z$8.init(e, t);
+		ni$4.init(e, t), z$9.init(e, t);
 	});
 	bd$2 = x$9(`ZodUUID`, (e, t) => {
-		ri$4.init(e, t), z$8.init(e, t);
+		ri$4.init(e, t), z$9.init(e, t);
 	});
 	Td$2 = x$9(`ZodURL`, (e, t) => {
-		ai$4.init(e, t), z$8.init(e, t);
+		ai$4.init(e, t), z$9.init(e, t);
 	});
 	Od$1 = x$9(`ZodEmoji`, (e, t) => {
-		oi$4.init(e, t), z$8.init(e, t);
+		oi$4.init(e, t), z$9.init(e, t);
 	});
 	Ad$1 = x$9(`ZodNanoID`, (e, t) => {
-		si$4.init(e, t), z$8.init(e, t);
+		si$4.init(e, t), z$9.init(e, t);
 	});
 	Md$1 = x$9(`ZodCUID`, (e, t) => {
-		ci$4.init(e, t), z$8.init(e, t);
+		ci$4.init(e, t), z$9.init(e, t);
 	});
 	Pd$1 = x$9(`ZodCUID2`, (e, t) => {
-		li$4.init(e, t), z$8.init(e, t);
+		li$4.init(e, t), z$9.init(e, t);
 	});
 	Id$1 = x$9(`ZodULID`, (e, t) => {
-		ui$4.init(e, t), z$8.init(e, t);
+		ui$4.init(e, t), z$9.init(e, t);
 	});
 	Rd$1 = x$9(`ZodXID`, (e, t) => {
-		di$4.init(e, t), z$8.init(e, t);
+		di$4.init(e, t), z$9.init(e, t);
 	});
 	Bd$1 = x$9(`ZodKSUID`, (e, t) => {
-		fi$4.init(e, t), z$8.init(e, t);
+		fi$4.init(e, t), z$9.init(e, t);
 	});
 	Hd$1 = x$9(`ZodIPv4`, (e, t) => {
-		_i$4.init(e, t), z$8.init(e, t);
+		_i$4.init(e, t), z$9.init(e, t);
 	});
 	Wd$1 = x$9(`ZodMAC`, (e, t) => {
-		yi$4.init(e, t), z$8.init(e, t);
+		yi$4.init(e, t), z$9.init(e, t);
 	});
 	Kd$1 = x$9(`ZodIPv6`, (e, t) => {
-		vi$4.init(e, t), z$8.init(e, t);
+		vi$4.init(e, t), z$9.init(e, t);
 	});
 	Jd$1 = x$9(`ZodCIDRv4`, (e, t) => {
-		bi$4.init(e, t), z$8.init(e, t);
+		bi$4.init(e, t), z$9.init(e, t);
 	});
 	Xd$1 = x$9(`ZodCIDRv6`, (e, t) => {
-		xi$4.init(e, t), z$8.init(e, t);
+		xi$4.init(e, t), z$9.init(e, t);
 	});
 	Qd$1 = x$9(`ZodBase64`, (e, t) => {
-		Ci$4.init(e, t), z$8.init(e, t);
+		Ci$4.init(e, t), z$9.init(e, t);
 	});
 	ef$1 = x$9(`ZodBase64URL`, (e, t) => {
-		Ti$4.init(e, t), z$8.init(e, t);
+		Ti$4.init(e, t), z$9.init(e, t);
 	});
 	nf$1 = x$9(`ZodE164`, (e, t) => {
-		Ei$4.init(e, t), z$8.init(e, t);
+		Ei$4.init(e, t), z$9.init(e, t);
 	});
 	af$1 = x$9(`ZodJWT`, (e, t) => {
-		Oi$4.init(e, t), z$8.init(e, t);
+		Oi$4.init(e, t), z$9.init(e, t);
 	});
 	sf$1 = x$9(`ZodCustomStringFormat`, (e, t) => {
-		ki$4.init(e, t), z$8.init(e, t);
+		ki$4.init(e, t), z$9.init(e, t);
 	});
 	ff$1 = x$9(`ZodNumber`, (e, t) => {
 		Ai$4.init(e, t), L$7.init(e, t), e._zod.processJSONSchema = (t, n, r) => eu$2(e, t, n, r), e.gt = (t, n) => e.check(Hc$2(t, n)), e.gte = (t, n) => e.check(N$7(t, n)), e.min = (t, n) => e.check(N$7(t, n)), e.lt = (t, n) => e.check(Vc$2(t, n)), e.lte = (t, n) => e.check(M$7(t, n)), e.max = (t, n) => e.check(M$7(t, n)), e.int = (t) => e.check(mf$1(t)), e.safe = (t) => e.check(mf$1(t)), e.positive = (t) => e.check(Hc$2(0, t)), e.nonnegative = (t) => e.check(N$7(0, t)), e.negative = (t) => e.check(Vc$2(0, t)), e.nonpositive = (t) => e.check(M$7(0, t)), e.multipleOf = (t, n) => e.check(qc$2(t, n)), e.step = (t, n) => e.check(qc$2(t, n)), e.finite = () => e;
@@ -32571,7 +32644,7 @@ var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 		ZodRecord: () => ip$1,
 		ZodSet: () => lp$1,
 		ZodString: () => hd$2,
-		ZodStringFormat: () => z$8,
+		ZodStringFormat: () => z$9,
 		ZodSuccess: () => Mp$1,
 		ZodSymbol: () => Ef$1,
 		ZodTemplateLiteral: () => Wp$1,
@@ -34093,7 +34166,7 @@ async function B$7(t, n, r) {
 			let t = [], a = r ?? {};
 			Array.isArray(n) ? t = n : typeof n == `object` && (a = n), e?.setAttributes({ ...Qv(t.length) });
 			let c = a?.world ?? await T_(), l = await c.getDeploymentId(), d = a.deploymentId ?? l;
-			d === `latest` && (c.resolveLatestDeploymentId ? d = await c.resolveLatestDeploymentId() : (z$7 || (z$7 = !0, Ab.warn(`deploymentId: 'latest' has no effect in this world and was ignored. It is only supported by worlds with atomic deployments, such as Vercel. The run will target the current deployment.`, { currentDeploymentId: l })), d = l));
+			d === `latest` && (c.resolveLatestDeploymentId ? d = await c.resolveLatestDeploymentId() : (z$8 || (z$8 = !0, Ab.warn(`deploymentId: 'latest' has no effect in this world and was ignored. It is only supported by worlds with atomic deployments, such as Vercel. The run will target the current deployment.`, { currentDeploymentId: l })), d = l));
 			let f, g;
 			if (d === l) f = !0, g = !0;
 			else if (typeof c.streams?.get != `function`) f = !1, g = !1;
@@ -34225,13 +34298,13 @@ async function K$7(e, t, n) {
 function X$9(e) {
 	return new Y$9(e);
 }
-var R$7, z$7, Y$9;
+var R$7, z$8, Y$9;
 var init_run_CVlF84yI = __esmMin((() => {
 	init_dist_FLIfyJ4Y();
 	init_dist_Dxrjttr2();
 	init_attribute_changes_DUxG_Gic();
 	R$7 = Ih$1();
-	z$7 = !1;
+	z$8 = !1;
 	Y$9 = class e {
 		static [E_](e) {
 			return {
@@ -69401,7 +69474,7 @@ function We$7() {
 		return t.createDocument(e);
 	}, e;
 }
-var z$6 = Ue$7() ? He$7.DOMParser : We$7();
+var z$7 = Ue$7() ? He$7.DOMParser : We$7();
 function Ge$7(e, t) {
 	var n = typeof e == `string` ? B$6().parseFromString(`<x-turndown id="turndown-root">` + e + `</x-turndown>`, `text/html`).getElementById(`turndown-root`) : e.cloneNode(!0);
 	return R$6({
@@ -69413,7 +69486,7 @@ function Ge$7(e, t) {
 }
 var Ke$7;
 function B$6() {
-	return Ke$7 ||= new z$6(), Ke$7;
+	return Ke$7 ||= new z$7(), Ke$7;
 }
 function V$5(e) {
 	return e.nodeName === `PRE` || e.nodeName === `CODE`;
@@ -74310,7 +74383,7 @@ function En$3(e, t) {
 		inst: t
 	}), e;
 }
-function z$5(e, t, n) {
+function z$6(e, t, n) {
 	return e.issues.length ? (e.aborted = !0, e) : t._zod.run({
 		value: e.value,
 		issues: e.issues,
@@ -76309,10 +76382,10 @@ var init_version_TugPKZua = __esmMin((() => {
 		P$5.init(e, t), m$3(e._zod, `values`, () => t.in._zod.values), m$3(e._zod, `optin`, () => t.in._zod.optin), m$3(e._zod, `optout`, () => t.out._zod.optout), m$3(e._zod, `propValues`, () => t.in._zod.propValues), e._zod.parse = (e, n) => {
 			if (n.direction === `backward`) {
 				let r = t.out._zod.run(e, n);
-				return r instanceof Promise ? r.then((e) => z$5(e, t.in, n)) : z$5(r, t.in, n);
+				return r instanceof Promise ? r.then((e) => z$6(e, t.in, n)) : z$6(r, t.in, n);
 			}
 			let r = t.in._zod.run(e, n);
-			return r instanceof Promise ? r.then((e) => z$5(e, t.out, n)) : z$5(r, t.out, n);
+			return r instanceof Promise ? r.then((e) => z$6(e, t.out, n)) : z$6(r, t.out, n);
 		};
 	});
 	kn$3 = n$3(`$ZodReadonly`, (e, t) => {
@@ -77115,7 +77188,7 @@ async function R$4() {
 			}
 		},
 		async processTokenResponse(e) {
-			let t = await e.json(), n = z$4.safeParse(t);
+			let t = await e.json(), n = z$5.safeParse(t);
 			return n.success ? [null, n.data] : [new H$4(`Failed to parse token response from the Vercel authorization server.`, t)];
 		},
 		async revokeToken(t) {
@@ -77381,7 +77454,7 @@ async function ae$4(e, t, n) {
 		return {};
 	}
 }
-var b$4, ee$3, x$5, S$5, C$5, w$6, T$4, E$4, te$3, ne$3, D$3, O$3, A$4, j$4, M$4, N$4, P$4, F$4, I$4, z$4, B$4, H$4, G$5, q$4, Y$6, X$6, re$3, Z$6;
+var b$4, ee$3, x$5, S$5, C$5, w$6, T$4, E$4, te$3, ne$3, D$3, O$3, A$4, j$4, M$4, N$4, P$4, F$4, I$4, z$5, B$4, H$4, G$5, q$4, Y$6, X$6, re$3, Z$6;
 var init_auth_DF_ft5ea = __esmMin((() => {
 	init_dist_BdTs18CF();
 	init_version_TugPKZua();
@@ -77565,7 +77638,7 @@ var init_auth_DF_ft5ea = __esmMin((() => {
 		client_id: Mi$2(),
 		session_id: Mi$2()
 	}).or(da$2({ active: Ca$2(!1) }));
-	z$4 = da$2({
+	z$5 = da$2({
 		access_token: Mi$2(),
 		token_type: Ca$2(`Bearer`),
 		expires_in: Qi$2(),
@@ -78765,7 +78838,7 @@ function to$1(e, t) {
 	let n = e[t];
 	if (typeof n == `string` && n) return n;
 }
-var A$3, j$3, N$3, I$3, L$3, R$3, ee$2, z$3, B$3, V$2, H$3, te$2, U$3, W$3, ne$2, G$4, K$3, re$2, ie$2, ae$3, oe$4, se$5, ce$5, le$5, q$3, J$3, ue$5, de$5, Y$5, fe$5, pe$5, X$5, me$5, he$5, ge$5, Z$5, _e$5, ve$5, ye$5, be$5, xe$5, Se$5, Ce$5, we$5, Te$5, Ee$5, De$5, Oe$5, ke$5, Ae$5, je$5, Me$5, Ne$5, Pe$5, Fe$5, Ie$5, Le$5, Re$5, ze$5, Be$5, Ve$5, He$5, Ue$5, We$5, Ge$5, Ke$5, qe$5, Je$5, Ye$5, Xe$5, Ze$5, Qe$5, $e$5, et$5, tt$5, nt$5, rt$5, it$5, at$5, ot$5, st$5, ct$5, lt$5, ut$5, dt$5, ft$5, pt$5, mt$5, ht$5, gt$5, _t$5, vt$5, yt$5, bt$5, xt$5, St$5, Ct$5, wt$5, Tt$5, Et$5, Dt$5, Ot$5, kt$5, At$5, jt$5, Mt$5, Nt$5, Pt$4, Ft$4, It$4, Lt$4, Rt$4, zt$4, Bt$3, Vt$4, Ht$4, Kt$4, qt$4, Jt$4, Yt$3, Xt$3, Zt$3, Qt$3, $t$3, en$3, tn$3, nn$3, rn$3, an$3, on$3, sn$3, cn$3, ln$3, un$3, dn$3, fn$3, pn$3, mn$3, hn$3, gn$3, _n$3, vn$3, yn$3, bn$3, xn$2, Sn$2, Cn$2, wn$2, Tn$2, En$2, Dn$2, On$2, kn$2, An$2, jn$2, Mn$2, Nn$2, Pn$2, Fn$1, In$1, Ln$1, Rn$1, zn$1, Bn$1, Vn$1, Hn$1, Un$1, Jn$1, Yn$1, Xn$2, Zn$1, Qn$1, $n$1, er$1, tr$1, nr$1, rr$1, ir$1, ar$1, or$1, sr$1, cr$1, ur$1, hr$1, gr$1, _r$1, br$1, Cr$1, Er$1, Dr$1, jr$1, Nr$1, Fr$1, Ir$1, zr$1, Vr$1, Hr$1, Ur$1, Wr$1, Gr$1, Kr$1, qr$1, Jr$1, Yr$1, Zr$1, Qr$1, ti$1, ni$1, ri$1, li$1, ui$1, di$1, fi$1, _i$1, vi$1, yi$1, bi$1, xi$1, Si$1, Ci$1, wi$1, Ti$1, Ei$1, Di$1, Oi$1, ki$1, Ai$1, Li$1, Ri$1, Wi$1, qi$1, Ji$1, Yi$1, Xi$1, Zi$1, Qi$1, $i$1, ea$1, ta$1, na$1, ra$1, sa$1, ua$1, da$1, fa$1, pa$1, _a$1, va$1, ba$1, xa$1, Oa$1, Ma$1, Na$1, Fa$1, La$1, Ba$1, Va$1, Ha$1, Ua$1, Wa$1, Ga$1;
+var A$3, j$3, N$3, I$3, L$3, R$3, ee$2, z$4, B$3, V$2, H$3, te$2, U$3, W$3, ne$2, G$4, K$3, re$2, ie$2, ae$3, oe$4, se$5, ce$5, le$5, q$3, J$3, ue$5, de$5, Y$5, fe$5, pe$5, X$5, me$5, he$5, ge$5, Z$5, _e$5, ve$5, ye$5, be$5, xe$5, Se$5, Ce$5, we$5, Te$5, Ee$5, De$5, Oe$5, ke$5, Ae$5, je$5, Me$5, Ne$5, Pe$5, Fe$5, Ie$5, Le$5, Re$5, ze$5, Be$5, Ve$5, He$5, Ue$5, We$5, Ge$5, Ke$5, qe$5, Je$5, Ye$5, Xe$5, Ze$5, Qe$5, $e$5, et$5, tt$5, nt$5, rt$5, it$5, at$5, ot$5, st$5, ct$5, lt$5, ut$5, dt$5, ft$5, pt$5, mt$5, ht$5, gt$5, _t$5, vt$5, yt$5, bt$5, xt$5, St$5, Ct$5, wt$5, Tt$5, Et$5, Dt$5, Ot$5, kt$5, At$5, jt$5, Mt$5, Nt$5, Pt$4, Ft$4, It$4, Lt$4, Rt$4, zt$4, Bt$3, Vt$4, Ht$4, Kt$4, qt$4, Jt$4, Yt$3, Xt$3, Zt$3, Qt$3, $t$3, en$3, tn$3, nn$3, rn$3, an$3, on$3, sn$3, cn$3, ln$3, un$3, dn$3, fn$3, pn$3, mn$3, hn$3, gn$3, _n$3, vn$3, yn$3, bn$3, xn$2, Sn$2, Cn$2, wn$2, Tn$2, En$2, Dn$2, On$2, kn$2, An$2, jn$2, Mn$2, Nn$2, Pn$2, Fn$1, In$1, Ln$1, Rn$1, zn$1, Bn$1, Vn$1, Hn$1, Un$1, Jn$1, Yn$1, Xn$2, Zn$1, Qn$1, $n$1, er$1, tr$1, nr$1, rr$1, ir$1, ar$1, or$1, sr$1, cr$1, ur$1, hr$1, gr$1, _r$1, br$1, Cr$1, Er$1, Dr$1, jr$1, Nr$1, Fr$1, Ir$1, zr$1, Vr$1, Hr$1, Ur$1, Wr$1, Gr$1, Kr$1, qr$1, Jr$1, Yr$1, Zr$1, Qr$1, ti$1, ni$1, ri$1, li$1, ui$1, di$1, fi$1, _i$1, vi$1, yi$1, bi$1, xi$1, Si$1, Ci$1, wi$1, Ti$1, Ei$1, Di$1, Oi$1, ki$1, Ai$1, Li$1, Ri$1, Wi$1, qi$1, Ji$1, Yi$1, Xi$1, Zi$1, Qi$1, $i$1, ea$1, ta$1, na$1, ra$1, sa$1, ua$1, da$1, fa$1, pa$1, _a$1, va$1, ba$1, xa$1, Oa$1, Ma$1, Na$1, Fa$1, La$1, Ba$1, Va$1, Ha$1, Ua$1, Wa$1, Ga$1;
 var init_sandbox = __esmMin((() => {
 	init_dist_BdTs18CF();
 	init_retry_DkR2H1Y0();
@@ -79282,7 +79355,7 @@ var init_sandbox = __esmMin((() => {
 			headerNameLowerCasedRecord: r,
 			getHeaderNameAsBuffer: a
 		};
-	})), z$3 = c$2(((e, t) => {
+	})), z$4 = c$2(((e, t) => {
 		let { wellknownHeaderNames: n, headerNameLowerCasedRecord: r } = ee$2();
 		var i = class e {
 			value = null;
@@ -79356,7 +79429,7 @@ var init_sandbox = __esmMin((() => {
 			tree: o
 		};
 	})), B$3 = c$2(((e, t) => {
-		let r = p$4(`node:assert`), { kDestroyed: i, kBodyUsed: a, kListeners: o, kBody: s } = I$3(), { IncomingMessage: c } = p$4(`node:http`), l = p$4(`node:stream`), u = p$4(`node:net`), { stringify: d } = p$4(`node:querystring`), { EventEmitter: f } = p$4(`node:events`), p = L$3(), { InvalidArgumentError: m, ConnectTimeoutError: h } = R$3(), { headerNameLowerCasedRecord: g } = ee$2(), { tree: _ } = z$3(), [v, y] = process.versions.node.split(`.`, 2).map((e) => Number(e));
+		let r = p$4(`node:assert`), { kDestroyed: i, kBodyUsed: a, kListeners: o, kBody: s } = I$3(), { IncomingMessage: c } = p$4(`node:http`), l = p$4(`node:stream`), u = p$4(`node:net`), { stringify: d } = p$4(`node:querystring`), { EventEmitter: f } = p$4(`node:events`), p = L$3(), { InvalidArgumentError: m, ConnectTimeoutError: h } = R$3(), { headerNameLowerCasedRecord: g } = ee$2(), { tree: _ } = z$4(), [v, y] = process.versions.node.split(`.`, 2).map((e) => Number(e));
 		var b = class {
 			constructor(e) {
 				this[s] = e, this[a] = !1;
@@ -97808,7 +97881,7 @@ var A$2;
 (function(e) {
 	e[e.OpenBraceToken = 1] = `OpenBraceToken`, e[e.CloseBraceToken = 2] = `CloseBraceToken`, e[e.OpenBracketToken = 3] = `OpenBracketToken`, e[e.CloseBracketToken = 4] = `CloseBracketToken`, e[e.CommaToken = 5] = `CommaToken`, e[e.ColonToken = 6] = `ColonToken`, e[e.NullKeyword = 7] = `NullKeyword`, e[e.TrueKeyword = 8] = `TrueKeyword`, e[e.FalseKeyword = 9] = `FalseKeyword`, e[e.StringLiteral = 10] = `StringLiteral`, e[e.NumericLiteral = 11] = `NumericLiteral`, e[e.LineCommentTrivia = 12] = `LineCommentTrivia`, e[e.BlockCommentTrivia = 13] = `BlockCommentTrivia`, e[e.LineBreakTrivia = 14] = `LineBreakTrivia`, e[e.Trivia = 15] = `Trivia`, e[e.Unknown = 16] = `Unknown`, e[e.EOF = 17] = `EOF`;
 })(A$2 ||= {});
-const j$2 = m$2, M$2 = h$2, N$2 = g$3, P$2 = _$2, F$2 = x$4, I$2 = v$2, L$2 = y$2, R$2 = S$4, z$2 = C$4;
+const j$2 = m$2, M$2 = h$2, N$2 = g$3, P$2 = _$2, F$2 = x$4, I$2 = v$2, L$2 = y$2, R$2 = S$4, z$3 = C$4;
 var B$2;
 (function(e) {
 	e[e.InvalidSymbol = 1] = `InvalidSymbol`, e[e.InvalidNumberFormat = 2] = `InvalidNumberFormat`, e[e.PropertyNameExpected = 3] = `PropertyNameExpected`, e[e.ValueExpected = 4] = `ValueExpected`, e[e.ColonExpected = 5] = `ColonExpected`, e[e.CommaExpected = 6] = `CommaExpected`, e[e.CloseBraceExpected = 7] = `CloseBraceExpected`, e[e.CloseBracketExpected = 8] = `CloseBracketExpected`, e[e.EndOfFileExpected = 9] = `EndOfFileExpected`, e[e.InvalidCommentToken = 10] = `InvalidCommentToken`, e[e.UnexpectedEndOfComment = 11] = `UnexpectedEndOfComment`, e[e.UnexpectedEndOfString = 12] = `UnexpectedEndOfString`, e[e.UnexpectedEndOfNumber = 13] = `UnexpectedEndOfNumber`, e[e.InvalidUnicode = 14] = `InvalidUnicode`, e[e.InvalidEscapeCharacter = 15] = `InvalidEscapeCharacter`, e[e.InvalidCharacter = 16] = `InvalidCharacter`;
@@ -103273,7 +103346,7 @@ function wd(e) {
 function Ed(e) {
 	return e?.replace(/\/$/, ``);
 }
-var u$1, d$1, p$1, ee$1, te$1, ce$4, fe$4, me$4, _e$4, be$4, Ne$4, Pe$4, Fe$4, Re$4, ze$4, Be$4, Ve$4, He$4, Ue$4, We$4, Ge$4, Ke$4, qe$4, Je$4, Ye$4, Xe$4, Ze$4, Qe$4, $e$4, et$4, tt$4, nt$4, rt$4, it$4, at$4, ot$4, st$4, lt$4, ut$4, dt$4, ft$4, pt$4, mt$4, ht$4, gt$4, _t$4, vt$4, St$4, Ct$4, wt$4, Tt$4, Et$4, Dt$4, Ot$4, x$3, kt$4, At$4, jt$4, Mt$4, Nt$4, Pt$3, Ft$3, It$3, Lt$3, Rt$3, zt$3, Bt$2, Vt$3, Ht$3, Ut$2, Wt$2, Gt$2, Kt$3, S$3, qt$3, C$3, Jt$3, Yt$2, Xt$2, Zt$2, Qt$2, $t$2, en$2, tn$2, nn$2, rn$2, an$2, on$2, sn$2, cn$2, ln$2, un$2, dn$2, fn$2, pn$2, hn$2, _n$2, vn$2, bn$2, xn$1, Sn$1, Cn$1, wn$1, Tn$1, En$1, Dn$1, kn$1, Nn$1, Pn$1, In, Ln, Rn, Vn, Gn, Kn, qn, Jn, Xn$1, Zn, Qn, $n, tr, nr, ir, ar, sr, lr, ur, fr, pr$1, hr, wi, Ti, Ei, Di, Oi, ki, Ai, ji, Mi, Ni, Pi, Fi, Ii, Li, Ri, zi, Bi, Vi, Hi, Ui, Wi, Gi, Ki, qi, Ji, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, ia, aa, oa, sa, ca, la, ua, da, fa, ma, ga, va, ba, E$3, Sa, Ca, wa, Ta, Ea, Da, Oa, ka, Aa, ja, Ma, Na, Pa, D$2, Ia, La, O$2, za, Ba, Va, Ha, Ua, Wa, Ga, Ka, qa, Ja, Ya, Xa, Za, Qa, $a, eo, no, ro, io, ao, so, lo, fo, mo, go, vo, bo, So, To, Do, ko, jo, No, Fo, Lo, zo, Vo, Uo, Go, qo, Yo, Zo, $o, ts, rs, as, ss, k$2, us, A$1, j$1, M$1, N$1, ds, fs, ms, F$1, I$1, hs, L$1, gs, _s, vs, ys, R$1, z$1, bs, V$1, xs, Ss, Cs, ws$1, Ts, Es, Ds, Os, ks, As, js, Ms, Ns, Ps, Fs, Is, Ls, Ws, Ks, qs, Js, Ys, Xs, Zs, Qs, $s, ec, H$2, tc, nc, U$2, ic, W$2, ac, sc, cc, lc, uc, dc, fc, pc, mc, gc, _c, vc, G$3, K$2, yc, bc, xc, Sc, Cc, wc, Tc, q$2, Ec, jc, Mc, Nc, Fc, Ic, Gc, Kc, qc, Jc, Yc, Qc, rl, il, al, ol, sl, J$2, ml, gl, bl, Sl, Cl, kl, Al, jl, Rl, Vl, Hl, Jl, Yl, Xl, tu, ru, su, uu, X$4, pu, xu, Cu, ku, Au, Iu, Lu, Ru, zu, Bu, Vu, Hu, Uu, od, sd, cd, ld, vd, yd, bd, xd, Td;
+var u$1, d$1, p$1, ee$1, te$1, ce$4, fe$4, me$4, _e$4, be$4, Ne$4, Pe$4, Fe$4, Re$4, ze$4, Be$4, Ve$4, He$4, Ue$4, We$4, Ge$4, Ke$4, qe$4, Je$4, Ye$4, Xe$4, Ze$4, Qe$4, $e$4, et$4, tt$4, nt$4, rt$4, it$4, at$4, ot$4, st$4, lt$4, ut$4, dt$4, ft$4, pt$4, mt$4, ht$4, gt$4, _t$4, vt$4, St$4, Ct$4, wt$4, Tt$4, Et$4, Dt$4, Ot$4, x$3, kt$4, At$4, jt$4, Mt$4, Nt$4, Pt$3, Ft$3, It$3, Lt$3, Rt$3, zt$3, Bt$2, Vt$3, Ht$3, Ut$2, Wt$2, Gt$2, Kt$3, S$3, qt$3, C$3, Jt$3, Yt$2, Xt$2, Zt$2, Qt$2, $t$2, en$2, tn$2, nn$2, rn$2, an$2, on$2, sn$2, cn$2, ln$2, un$2, dn$2, fn$2, pn$2, hn$2, _n$2, vn$2, bn$2, xn$1, Sn$1, Cn$1, wn$1, Tn$1, En$1, Dn$1, kn$1, Nn$1, Pn$1, In, Ln, Rn, Vn, Gn, Kn, qn, Jn, Xn$1, Zn, Qn, $n, tr, nr, ir, ar, sr, lr, ur, fr, pr$1, hr, wi, Ti, Ei, Di, Oi, ki, Ai, ji, Mi, Ni, Pi, Fi, Ii, Li, Ri, zi, Bi, Vi, Hi, Ui, Wi, Gi, Ki, qi, Ji, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, ia, aa, oa, sa, ca, la, ua, da, fa, ma, ga, va, ba, E$3, Sa, Ca, wa, Ta, Ea, Da, Oa, ka, Aa, ja, Ma, Na, Pa, D$2, Ia, La, O$2, za, Ba, Va, Ha, Ua, Wa, Ga, Ka, qa, Ja, Ya, Xa, Za, Qa, $a, eo, no, ro, io, ao, so, lo, fo, mo, go, vo, bo, So, To, Do, ko, jo, No, Fo, Lo, zo, Vo, Uo, Go, qo, Yo, Zo, $o, ts, rs, as, ss, k$2, us, A$1, j$1, M$1, N$1, ds, fs, ms, F$1, I$1, hs, L$1, gs, _s, vs, ys, R$1, z$2, bs, V$1, xs, Ss, Cs, ws$1, Ts, Es, Ds, Os, ks, As, js, Ms, Ns, Ps, Fs, Is, Ls, Ws, Ks, qs, Js, Ys, Xs, Zs, Qs, $s, ec, H$2, tc, nc, U$2, ic, W$2, ac, sc, cc, lc, uc, dc, fc, pc, mc, gc, _c, vc, G$3, K$2, yc, bc, xc, Sc, Cc, wc, Tc, q$2, Ec, jc, Mc, Nc, Fc, Ic, Gc, Kc, qc, Jc, Yc, Qc, rl, il, al, ol, sl, J$2, ml, gl, bl, Sl, Cl, kl, Al, jl, Rl, Vl, Hl, Jl, Yl, Xl, tu, ru, su, uu, X$4, pu, xu, Cu, ku, Au, Iu, Lu, Ru, zu, Bu, Vu, Hu, Uu, od, sd, cd, ld, vd, yd, bd, xd, Td;
 var init_dist_D7CzPkf8 = __esmMin((() => {
 	init_provider();
 	d$1 = Object.freeze({ status: `aborted` });
@@ -105561,7 +105634,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 	(function(e) {
 		e.errToObj = (e) => typeof e == `string` ? { message: e } : e || {}, e.toString = (e) => typeof e == `string` ? e : e?.message;
 	})(R$1 ||= {});
-	z$1 = class {
+	z$2 = class {
 		constructor(e, t, n, r) {
 			this._cachedPath = [], this.parent = e, this.data = t, this._path = n, this._key = r;
 		}
@@ -106747,8 +106820,8 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 				inclusive: !0,
 				exact: !1,
 				message: r.maxLength.message
-			}), n.dirty()), t.common.async) return Promise.all([...t.data].map((e, n) => r.type._parseAsync(new z$1(t, e, t.path, n)))).then((e) => F$1.mergeArray(n, e));
-			let i = [...t.data].map((e, n) => r.type._parseSync(new z$1(t, e, t.path, n)));
+			}), n.dirty()), t.common.async) return Promise.all([...t.data].map((e, n) => r.type._parseAsync(new z$2(t, e, t.path, n)))).then((e) => F$1.mergeArray(n, e));
+			let i = [...t.data].map((e, n) => r.type._parseSync(new z$2(t, e, t.path, n)));
 			return F$1.mergeArray(n, i);
 		}
 		get element() {
@@ -106824,7 +106897,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 						status: `valid`,
 						value: e
 					},
-					value: t._parse(new z$1(n, i, n.path, e)),
+					value: t._parse(new z$2(n, i, n.path, e)),
 					alwaysSet: e in n.data
 				});
 			}
@@ -106854,7 +106927,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 							status: `valid`,
 							value: t
 						},
-						value: e._parse(new z$1(n, r, n.path, t)),
+						value: e._parse(new z$2(n, r, n.path, t)),
 						alwaysSet: t in n.data
 					});
 				}
@@ -107171,7 +107244,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 			}), t.dirty());
 			let r = [...n.data].map((e, t) => {
 				let r = this._def.items[t] || this._def.rest;
-				return r ? r._parse(new z$1(n, e, n.path, t)) : null;
+				return r ? r._parse(new z$2(n, e, n.path, t)) : null;
 			}).filter((e) => !!e);
 			return n.common.async ? Promise.all(r).then((e) => F$1.mergeArray(t, e)) : F$1.mergeArray(t, r);
 		}
@@ -107210,8 +107283,8 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 			}), I$1;
 			let r = [], i = this._def.keyType, a = this._def.valueType;
 			for (let e in n.data) r.push({
-				key: i._parse(new z$1(n, e, n.path, e)),
-				value: a._parse(new z$1(n, n.data[e], n.path, e)),
+				key: i._parse(new z$2(n, e, n.path, e)),
+				value: a._parse(new z$2(n, n.data[e], n.path, e)),
 				alwaysSet: e in n.data
 			});
 			return n.common.async ? F$1.mergeObjectAsync(t, r) : F$1.mergeObjectSync(t, r);
@@ -107247,8 +107320,8 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 				received: n.parsedType
 			}), I$1;
 			let r = this._def.keyType, i = this._def.valueType, a = [...n.data.entries()].map(([e, t], a) => ({
-				key: r._parse(new z$1(n, e, n.path, [a, `key`])),
-				value: i._parse(new z$1(n, t, n.path, [a, `value`]))
+				key: r._parse(new z$2(n, e, n.path, [a, `key`])),
+				value: i._parse(new z$2(n, t, n.path, [a, `value`]))
 			}));
 			if (n.common.async) {
 				let e = /* @__PURE__ */ new Map();
@@ -107319,7 +107392,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 					value: n
 				};
 			}
-			let o = [...n.data.values()].map((e, t) => i._parse(new z$1(n, e, n.path, t)));
+			let o = [...n.data.values()].map((e, t) => i._parse(new z$2(n, e, n.path, t)));
 			return n.common.async ? Promise.all(o).then((e) => a(e)) : a(o);
 		}
 		min(t, n) {
@@ -109002,7 +109075,7 @@ var Ue$3 = typeof __PACKAGE_VERSION__ < `u` ? __PACKAGE_VERSION__ : `0.0.0-test`
 	error: Ra(),
 	error_description: Ra().optional(),
 	error_uri: Ra().optional()
-}), Xe$3 = Je$3.merge(qe$3), Ze$3 = `vercel.ai.error.AI_MCPClientOAuthError`, Qe$3 = Symbol.for(Ze$3), $e$3, et$3, z = class extends (et$3 = i$15, $e$3 = Qe$3, et$3) {
+}), Xe$3 = Je$3.merge(qe$3), Ze$3 = `vercel.ai.error.AI_MCPClientOAuthError`, Qe$3 = Symbol.for(Ze$3), $e$3, et$3, z$1 = class extends (et$3 = i$15, $e$3 = Qe$3, et$3) {
 	constructor({ name: e = `MCPClientOAuthError`, message: t, cause: n }) {
 		super({
 			name: e,
@@ -109013,13 +109086,13 @@ var Ue$3 = typeof __PACKAGE_VERSION__ < `u` ? __PACKAGE_VERSION__ : `0.0.0-test`
 	static isInstance(t) {
 		return i$15.hasMarker(t, Ze$3);
 	}
-}, B = class extends z {};
+}, B = class extends z$1 {};
 B.errorCode = `server_error`;
-var V = class extends z {};
+var V = class extends z$1 {};
 V.errorCode = `invalid_client`;
-var H$1 = class extends z {};
+var H$1 = class extends z$1 {};
 H$1.errorCode = `invalid_grant`;
-var U$1 = class extends z {};
+var U$1 = class extends z$1 {};
 U$1.errorCode = `unauthorized_client`;
 var tt$3 = {
 	[B.errorCode]: B,
@@ -109090,10 +109163,10 @@ async function lt$3({ provider: e, clientInformation: t, authorizationServerInfo
 function ut$3(e, t) {
 	if (!t) return;
 	let n = new URL(e).origin;
-	if (t.origin !== n) throw new z({ message: `OAuth protected resource metadata URL ${t.href} must have the same origin as the MCP server URL ${n}` });
+	if (t.origin !== n) throw new z$1({ message: `OAuth protected resource metadata URL ${t.href} must have the same origin as the MCP server URL ${n}` });
 }
 function dt$3({ storedAuthorizationServerInformation: e, currentAuthorizationServerInformation: t }) {
-	if (e.authorizationServerUrl !== t.authorizationServerUrl || e.tokenEndpoint !== t.tokenEndpoint) throw new z({ message: `OAuth authorization server metadata does not match the metadata that issued the stored credentials` });
+	if (e.authorizationServerUrl !== t.authorizationServerUrl || e.tokenEndpoint !== t.tokenEndpoint) throw new z$1({ message: `OAuth authorization server metadata does not match the metadata that issued the stored credentials` });
 }
 function q$1(e) {
 	let t = e.headers.get(`www-authenticate`) ?? e.headers.get(`WWW-Authenticate`);
@@ -109176,7 +109249,7 @@ function _t$3(e) {
 	}), i;
 }
 function vt$3(e, t) {
-	if (e.issuer !== t) throw new z({ message: `OAuth authorization server metadata issuer ${e.issuer} does not match expected issuer ${t}` });
+	if (e.issuer !== t) throw new z$1({ message: `OAuth authorization server metadata issuer ${e.issuer} does not match expected issuer ${t}` });
 }
 async function yt$3(e, { fetchFn: t = fetch, protocolVersion: n = C$2 } = {}) {
 	let r = { "MCP-Protocol-Version": n }, i = _t$3(e);
@@ -109359,7 +109432,7 @@ async function Z$3(e, { serverUrl: t, authorizationCode: n, callbackState: r, sc
 			provider: e,
 			clientInformation: f
 		});
-		if (!t) throw new z({ message: `Stored OAuth authorization server metadata is required when exchanging an authorization code` });
+		if (!t) throw new z$1({ message: `Stored OAuth authorization server metadata is required when exchanging an authorization code` });
 		dt$3({
 			storedAuthorizationServerInformation: t,
 			currentAuthorizationServerInformation: d
@@ -109400,7 +109473,7 @@ async function Z$3(e, { serverUrl: t, authorizationCode: n, callbackState: r, sc
 				return await e.saveTokens(at$3(t, d)), `AUTHORIZED`;
 			}
 		} catch (e) {
-			if (!(!(e instanceof z) || e instanceof B)) throw e;
+			if (!(!(e instanceof z$1) || e instanceof B)) throw e;
 		}
 	}
 	let m = e.state ? await e.state() : void 0;
@@ -109417,7 +109490,7 @@ async function Z$3(e, { serverUrl: t, authorizationCode: n, callbackState: r, sc
 		provider: e,
 		clientInformation: f,
 		authorizationServerInformation: d
-	})) throw new z({ message: `OAuth authorization server metadata must be saveable before starting authorization` });
+	})) throw new z$1({ message: `OAuth authorization server metadata must be saveable before starting authorization` });
 	return await e.saveCodeVerifier(h), await e.redirectToAuthorization(ee), `REDIRECT`;
 }
 function At$3(e) {

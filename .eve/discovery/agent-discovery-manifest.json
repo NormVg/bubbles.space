@@ -36,7 +36,13 @@
   "sandboxWorkspaces": [],
   "schedules": [],
   "skills": [],
-  "tools": [],
+  "tools": [
+    {
+      "sourceKind": "module",
+      "logicalPath": "tools/web_search.ts",
+      "sourceId": "tools/web_search.ts"
+    }
+  ],
   "version": 12,
   "subagents": [],
   "configModule": {
