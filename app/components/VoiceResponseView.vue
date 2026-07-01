@@ -66,7 +66,7 @@ const currentMode = computed(() => {
 const modeColor = computed(() => {
   switch(currentMode.value) {
     case 'speaking': return 'var(--color-success, #10b981)' // Green for talking
-    case 'tool': return 'var(--color-warning, #f59e0b)' // Amber/Orange for tool usage
+    case 'tool': return 'var(--color-purple, #A855F7)' // Purple for tool usage
     case 'thinking': return 'var(--accent, #ff6b8b)' // Pink for thinking
     default: return 'var(--text-muted, #a1a1aa)' // Muted gray for idle
   }

@@ -70,6 +70,32 @@
                   </button>
                 </div>
               </div>
+              <div class="setting-item avatar-preview-item">
+                <div class="setting-info">
+                  <label>Avatar Emotion Lab</label>
+                  <span class="desc">Type to preview different Bubbles emotions</span>
+                  <div class="emotion-input-wrapper">
+                    <input 
+                      type="text" 
+                      v-model="previewEmotion" 
+                      placeholder="e.g. happy, frustrate, think, tool, listening" 
+                      class="emotion-input"
+                    />
+                    <div class="quick-emotions">
+                      <button @click="previewEmotion = 'normal'" class="tiny-btn">Normal</button>
+                      <button @click="previewEmotion = 'think'" class="tiny-btn">Think</button>
+                      <button @click="previewEmotion = 'happy'" class="tiny-btn">Happy</button>
+                      <button @click="previewEmotion = 'frustrate'" class="tiny-btn">Frustrate</button>
+                      <button @click="previewEmotion = 'tool'" class="tiny-btn">Tool</button>
+                      <button @click="previewEmotion = 'listening'" class="tiny-btn">Listen</button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="avatar-preview-display">
+                  <BubblesAvatar :emotionOverride="previewEmotion" :animate="true" :invert="colorMode === 'dark'" />
+                </div>
+              </div>
             </div>
 
           </div>
@@ -83,9 +109,11 @@
 import { ref } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useColorMode } from '@vueuse/core'
+import BubblesAvatar from './BubblesAvatar.vue'
 
 const uiStore = useUIStore()
 const activeTab = ref('appearance') // Default to appearance so they see it immediately
+const previewEmotion = ref('normal')
 
 const colorMode = useColorMode({
   emitAuto: true,
@@ -313,6 +341,70 @@ const colorMode = useColorMode({
   color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-subtle);
+}
+
+/* ─── Avatar Preview ──────────────────────────────────────── */
+.avatar-preview-item {
+  align-items: flex-start;
+}
+
+.emotion-input-wrapper {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emotion-input {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 220px;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.emotion-input:focus {
+  border-color: var(--accent);
+}
+
+.quick-emotions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 260px;
+}
+
+.tiny-btn {
+  background: var(--glass-border);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tiny-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.avatar-preview-display {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-soft);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 12px;
+  margin-left: 20px;
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */

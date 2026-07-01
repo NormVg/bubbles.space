@@ -185,7 +185,7 @@ const currentMode = computed(() => {
 const modeColor = computed(() => {
   switch(currentMode.value) {
     case 'speaking': return 'var(--color-success, #10b981)' 
-    case 'tool': return 'var(--color-warning, #f59e0b)'
+    case 'tool': return 'var(--color-purple, #A855F7)'
     case 'thinking': return 'var(--accent, #ff6b8b)' 
     default: return 'var(--text-muted, #a1a1aa)'
   }
@@ -200,22 +200,11 @@ const statusText = computed(() => {
   }
 })
 
-watch(() => agent.status.value, (newStatus) => {
-  if (newStatus === 'submitted' || newStatus === 'streaming') {
-    chatStore.setEmotion('think')
-  } else {
-    chatStore.setEmotion(voiceAgent.isSpeaking.value ? 'speaking' : 'normal')
-  }
-})
-
-watch(() => voiceAgent.isSpeaking.value, (speaking) => {
-  if (speaking) {
-    chatStore.setEmotion(agent.status.value === 'submitted' || agent.status.value === 'streaming' ? 'think' : 'speaking')
-    return
-  }
-
-  chatStore.setEmotion(agent.status.value === 'submitted' || agent.status.value === 'streaming' ? 'think' : 'normal')
-})
+watch(() => currentMode.value, (mode) => {
+  if (mode === 'thinking') chatStore.setEmotion('think')
+  else if (mode === 'idle') chatStore.setEmotion('normal')
+  else chatStore.setEmotion(mode) // 'tool' or 'speaking'
+}, { immediate: true })
 
 async function showChatView() {
   showSessions.value = false

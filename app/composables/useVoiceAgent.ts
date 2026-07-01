@@ -229,16 +229,21 @@ async function playAudioElement(preparedAudio: PreparedAudio, generation: number
         cleanup()
         resolve()
       }
-      const handleError = () => {
+      const handleError = (e: Event) => {
         cleanup()
-        reject(new Error('TTS audio playback failed.'))
+        const mediaError = audio.error
+        reject(new Error(`TTS audio element error: ${mediaError ? mediaError.code + ' - ' + mediaError.message : 'Unknown error'}`))
       }
 
       audio.addEventListener('ended', handleEnded, { once: true })
       audio.addEventListener('error', handleError, { once: true })
       void audio.play().catch((error: unknown) => {
         cleanup()
-        reject(error instanceof Error ? error : new Error('TTS audio playback failed.'))
+        if (error instanceof Error) {
+          reject(error)
+        } else {
+          reject(new Error(`TTS play() rejected: ${String(error)}`))
+        }
       })
     })
   } finally {
@@ -273,8 +278,10 @@ async function playSpeechChunks(chunks: string[]) {
 
       await playAudioElement(preparedAudio, generation)
     }
-  } catch (error) {
-    console.error('Failed to play TTS audio', error)
+  } catch (error: any) {
+    if (error?.name !== 'AbortError' && !error?.message?.includes('interrupted')) {
+      console.error('Failed to play TTS audio', error)
+    }
   } finally {
     if (generation === playbackGeneration) {
       activeAudio = null
