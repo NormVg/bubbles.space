@@ -22,12 +22,19 @@
       >
         <div class="icon-container">
           <LucideAudioLines class="icon waveform-icon" :size="16" :stroke-width="1.5" />
+          
+          <!-- Reactive voice level halo -->
+          <div 
+            v-if="voiceAgent.isListening.value"
+            class="voice-level-halo"
+            :style="{ 
+              transform: `scale(${1 + voiceAgent.audioLevel.value * 1.5})`, 
+              opacity: 0.1 + voiceAgent.audioLevel.value * 0.4 
+            }"
+          ></div>
+          
           <LucideSquare class="icon stop-icon" :size="12" :stroke-width="2" color="var(--danger, #ff5050)" fill="var(--danger, #ff5050)" />
         </div>
-        
-        <!-- Ripple effect for detecting voice -->
-        <span class="voice-ripple"></span>
-        <span class="voice-ripple delay"></span>
       </button>
 
       <!-- Icon 3: Package/Box -->
@@ -214,37 +221,20 @@ const toggleVoice = async () => {
   transform: scale(1) rotate(0deg);
 }
 
-/* Detecting Voice Ripples */
-.voice-ripple {
+/* Reactive Voice Halo */
+.voice-level-halo {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%;
-  height: 100%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  margin-left: -7px;
   background: var(--danger, #ff5050);
-  border-radius: 8px;
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 0;
+  border-radius: 50%;
   pointer-events: none;
   z-index: -1;
-}
-
-.voice-btn.listening .voice-ripple {
-  animation: ripple 2s cubic-bezier(0.19, 1, 0.22, 1) infinite;
-}
-
-.voice-btn.listening .voice-ripple.delay {
-  animation-delay: 1s;
-}
-
-@keyframes ripple {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.35;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.8);
-    opacity: 0;
-  }
+  /* Very quick smooth transition so the volume meter reacts instantly but smoothly */
+  transition: transform 0.05s linear, opacity 0.05s linear;
 }
 </style>

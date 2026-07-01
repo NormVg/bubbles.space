@@ -1,314 +1,485 @@
-import { ref, readonly } from 'vue'
+import { readonly, ref, watch } from 'vue'
 import { useAppAgent } from './useAppAgent'
 
+interface VoiceStartOptions {
+  autoSend?: boolean
+}
+
+interface TranscribeResponse {
+  transcript: string
+  languageCode?: string
+}
+
+interface SpeakResponse {
+  audio: string
+  contentType: string
+}
+
+interface PreparedAudio {
+  audio: HTMLAudioElement
+  url: string
+}
+
+const MAX_RECORDING_MS = 29_000
+const MAX_TTS_CHUNK_CHARS = 2200
+
 const isListening = ref(false)
+const isProcessingVoice = ref(false)
 const isSpeaking = ref(false)
 const transcript = ref('')
 const agentResponse = ref('')
 const isAutoSendMode = ref(false)
 const voiceSessionActive = ref(false)
+const audioLevel = ref(0)
 
-let ttsSocket: WebSocket | null = null
-let sttSocket: WebSocket | null = null
-let ttsPingInterval: any = null
-
-let audioCtx: AudioContext | null = null
+let mediaRecorder: MediaRecorder | null = null
 let mediaStream: MediaStream | null = null
-let micNode: MediaStreamAudioSourceNode | null = null
-let workletNode: AudioWorkletNode | null = null
+let activeAudio: HTMLAudioElement | null = null
+let recordingChunks: Blob[] = []
+let pendingSpeechText = ''
+let recordingLimitTimer: ReturnType<typeof setTimeout> | null = null
+let playbackGeneration = 0
+let responseBridgeStarted = false
+let currentSpokenMessageId = ''
+let lastSpokenLength = 0
+let voiceFlushInProgress = false
 
-let nextPlayTime = 0
+// Microphone Analysis
+let audioCtxForMic: AudioContext | null = null
+let analyser: AnalyserNode | null = null
+let micStreamSource: MediaStreamAudioSourceNode | null = null
+let animationFrameId = 0
+
+function getSupportedMimeType() {
+  const candidates = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus'
+  ]
+
+  return candidates.find(type => MediaRecorder.isTypeSupported(type)) ?? ''
+}
+
+function stopPlayback() {
+  playbackGeneration += 1
+
+  if (activeAudio) {
+    activeAudio.pause()
+    activeAudio.src = ''
+    activeAudio = null
+  }
+
+  isSpeaking.value = false
+}
+
+function stopCaptureTracks() {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+    animationFrameId = 0
+  }
+  audioLevel.value = 0
+  
+  if (micStreamSource) {
+    micStreamSource.disconnect()
+    micStreamSource = null
+  }
+  if (audioCtxForMic) {
+    void audioCtxForMic.close()
+    audioCtxForMic = null
+  }
+
+  mediaStream?.getTracks().forEach(track => track.stop())
+  mediaStream = null
+}
+
+function resetRecording() {
+  if (recordingLimitTimer) {
+    clearTimeout(recordingLimitTimer)
+    recordingLimitTimer = null
+  }
+
+  recordingChunks = []
+  mediaRecorder = null
+}
+
+function resetSpokenProgress() {
+  currentSpokenMessageId = ''
+  lastSpokenLength = 0
+}
+
+async function transcribeRecording(audioBlob: Blob) {
+  const formData = new FormData()
+  const extension = audioBlob.type.includes('mp4') ? 'mp4' : audioBlob.type.includes('ogg') ? 'ogg' : 'webm'
+  formData.append('audio', audioBlob, `voice.${extension}`)
+  formData.append('languageCode', 'en-IN')
+  formData.append('mode', 'transcribe')
+
+  return await $fetch<TranscribeResponse>('/api/voice/transcribe', {
+    method: 'POST',
+    body: formData
+  })
+}
+
+function splitSpeechText(text: string) {
+  const normalizedText = text.replace(/\s+/g, ' ').trim()
+  if (!normalizedText) return []
+
+  const chunks: string[] = []
+  let currentChunk = ''
+
+  for (const word of normalizedText.split(' ')) {
+    if (!currentChunk) {
+      currentChunk = word
+      continue
+    }
+
+    const nextChunk = `${currentChunk} ${word}`
+    if (nextChunk.length <= MAX_TTS_CHUNK_CHARS) {
+      currentChunk = nextChunk
+      continue
+    }
+
+    chunks.push(currentChunk)
+    currentChunk = word
+  }
+
+  if (currentChunk) {
+    chunks.push(currentChunk)
+  }
+
+  return chunks
+}
+
+function base64ToBlob(base64Audio: string, contentType: string) {
+  const binary = atob(base64Audio)
+  const bytes = new Uint8Array(binary.length)
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index)
+  }
+
+  return new Blob([bytes], { type: contentType })
+}
+
+async function requestSpeech(text: string) {
+  return await $fetch<SpeakResponse>('/api/voice/speak', {
+    method: 'POST',
+    body: { text, languageCode: 'en-IN' }
+  })
+}
+
+async function createLoadedAudio(response: SpeakResponse): Promise<PreparedAudio> {
+  const blob = base64ToBlob(response.audio, response.contentType)
+  const url = URL.createObjectURL(blob)
+  const audio = new Audio(url)
+  audio.preload = 'auto'
+
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        cleanup()
+        resolve()
+      }, 2500)
+      const cleanup = () => {
+        clearTimeout(timeout)
+        audio.removeEventListener('canplaythrough', handleCanPlay)
+        audio.removeEventListener('canplay', handleCanPlay)
+        audio.removeEventListener('loadeddata', handleCanPlay)
+        audio.removeEventListener('error', handleError)
+      }
+      const handleCanPlay = () => {
+        cleanup()
+        resolve()
+      }
+      const handleError = () => {
+        cleanup()
+        reject(new Error('Unable to load TTS audio.'))
+      }
+
+      audio.addEventListener('canplaythrough', handleCanPlay, { once: true })
+      audio.addEventListener('canplay', handleCanPlay, { once: true })
+      audio.addEventListener('loadeddata', handleCanPlay, { once: true })
+      audio.addEventListener('error', handleError, { once: true })
+      audio.load()
+    })
+  } catch (error) {
+    URL.revokeObjectURL(url)
+    throw error
+  }
+
+  return { audio, url }
+}
+
+async function playAudioElement(preparedAudio: PreparedAudio, generation: number) {
+  if (generation !== playbackGeneration) return
+
+  const { audio, url } = preparedAudio
+  activeAudio = audio
+  isSpeaking.value = true
+
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const cleanup = () => {
+        audio.removeEventListener('ended', handleEnded)
+        audio.removeEventListener('error', handleError)
+      }
+      const handleEnded = () => {
+        cleanup()
+        resolve()
+      }
+      const handleError = () => {
+        cleanup()
+        reject(new Error('TTS audio playback failed.'))
+      }
+
+      audio.addEventListener('ended', handleEnded, { once: true })
+      audio.addEventListener('error', handleError, { once: true })
+      void audio.play().catch((error: unknown) => {
+        cleanup()
+        reject(error instanceof Error ? error : new Error('TTS audio playback failed.'))
+      })
+    })
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+
+  if (activeAudio === audio) {
+    activeAudio = null
+  }
+}
+
+async function playSpeechChunks(chunks: string[]) {
+  stopPlayback()
+
+  if (chunks.length === 0) return
+
+  const generation = playbackGeneration
+  let nextAudioPromise = requestSpeech(chunks[0] ?? '').then(createLoadedAudio)
+
+  try {
+    for (let index = 0; index < chunks.length; index += 1) {
+      const preparedAudio = await nextAudioPromise
+      if (generation !== playbackGeneration) {
+        URL.revokeObjectURL(preparedAudio.url)
+        return
+      }
+
+      const nextChunk = chunks[index + 1]
+      if (nextChunk) {
+        nextAudioPromise = requestSpeech(nextChunk).then(createLoadedAudio)
+      }
+
+      await playAudioElement(preparedAudio, generation)
+    }
+  } catch (error) {
+    console.error('Failed to play TTS audio', error)
+  } finally {
+    if (generation === playbackGeneration) {
+      activeAudio = null
+    }
+    isSpeaking.value = false
+  }
+}
+
+function getTextContent(message: { parts: Array<{ type: string, text?: string }> }) {
+  return message.parts
+    .filter(part => part.type === 'text')
+    .map(part => part.text ?? '')
+    .join('')
+}
 
 export function useVoiceAgent() {
   const eveAgent = useAppAgent()
 
-  let fullSessionText = ''
-  let currentUtterance = ''
+  function setupVoiceResponseBridge() {
+    if (responseBridgeStarted) return
+    responseBridgeStarted = true
 
-  function triggerAutoSend() {
-    if (isAutoSendMode.value && transcript.value.trim().length > 0) {
-      const message = transcript.value
-      fullSessionText = ''
-      transcript.value = ''
-      voiceSessionActive.value = true // stays true until AI finishes responding + TTS
-      eveAgent.send({ message })
-    }
+    watch(() => eveAgent.data.value.messages, (messages) => {
+      if (!voiceSessionActive.value || !messages || messages.length === 0) return
+
+      const lastMessage = messages.at(-1)
+      if (!lastMessage || lastMessage.role !== 'assistant') return
+
+      if (lastMessage.id !== currentSpokenMessageId) {
+        currentSpokenMessageId = lastMessage.id
+        lastSpokenLength = 0
+      }
+
+      const text = getTextContent(lastMessage)
+      if (text.length <= lastSpokenLength) return
+
+      const newText = text.substring(lastSpokenLength)
+      lastSpokenLength = text.length
+      speak(newText)
+    }, { deep: true })
+
+    watch(() => eveAgent.status.value, async (status) => {
+      if (status !== 'ready' || !voiceSessionActive.value || voiceFlushInProgress) return
+
+      voiceFlushInProgress = true
+      try {
+        await flushTTS()
+      } finally {
+        voiceFlushInProgress = false
+        if (voiceSessionActive.value) {
+          endVoiceSession()
+        }
+      }
+    })
   }
 
-  async function start(options: { autoSend?: boolean } = {}) {
+  setupVoiceResponseBridge()
+
+  async function start(options: VoiceStartOptions = {}) {
+    if (isListening.value || isProcessingVoice.value) return
+
+    stopPlayback()
+    resetRecording()
+
     isAutoSendMode.value = !!options.autoSend
-    if (isListening.value) return
     isListening.value = true
-    fullSessionText = ''
-    currentUtterance = ''
     transcript.value = ''
     agentResponse.value = ''
+    pendingSpeechText = ''
+    resetSpokenProgress()
 
-    audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 })
-    nextPlayTime = audioCtx.currentTime
-    
-    // Connect to STT proxy
-    const sttUrl = new URL('/ws/stt?lang=en-IN&mode=transcribe', window.location.origin)
-    sttUrl.protocol = sttUrl.protocol === 'https:' ? 'wss:' : 'ws:'
-    sttSocket = new WebSocket(sttUrl.toString())
-    
-    sttSocket.onmessage = (event) => {
-      try {
-        const msg = JSON.parse(event.data)
-        if (msg.type === 'data' && msg.data?.transcript) {
-          if (msg.data.is_final) {
-            fullSessionText = (fullSessionText ? fullSessionText + ' ' : '') + msg.data.transcript
-            currentUtterance = ''
-            transcript.value = fullSessionText
-          } else {
-            currentUtterance = msg.data.transcript
-            transcript.value = (fullSessionText ? fullSessionText + ' ' : '') + currentUtterance
-          }
-        } else if (msg.type === 'events') {
-          if (msg.data?.signal_type === 'START_SPEECH') {
-            // Barge-in: User started speaking, stop the TTS playback and drop the connection!
-            stopPlayback()
-            if (ttsSocket) {
-              ttsSocket.close()
-              ttsSocket = null
-            }
-          } else if (msg.data?.signal_type === 'END_SPEECH') {
-            if (currentUtterance) {
-              fullSessionText = (fullSessionText ? fullSessionText + ' ' : '') + currentUtterance
-              currentUtterance = ''
-              transcript.value = fullSessionText
-            }
-          }
+    try {
+      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      
+      // Setup audio level analyzer
+      audioCtxForMic = new (window.AudioContext || (window as any).webkitAudioContext)()
+      analyser = audioCtxForMic.createAnalyser()
+      analyser.fftSize = 256
+      micStreamSource = audioCtxForMic.createMediaStreamSource(mediaStream)
+      micStreamSource.connect(analyser)
+      const dataArray = new Uint8Array(analyser.frequencyBinCount)
+      
+      const updateLevel = () => {
+        if (!isListening.value) return
+        analyser!.getByteFrequencyData(dataArray)
+        let sum = 0
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i]
         }
-      } catch (e) {
-        console.error('STT parse error', e)
+        const average = sum / dataArray.length
+        // Normalize between 0 and 1 (128 is half max volume, usually enough for normal speech)
+        audioLevel.value = Math.min(1, average / 128)
+        animationFrameId = requestAnimationFrame(updateLevel)
       }
-    }
-    
-    // Connect to TTS proxy using our new reconnectable function
-    await connectTTS()
+      updateLevel()
 
-    // Set up microphone capture via AudioWorklet to send raw PCM to STT
-    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    micNode = audioCtx.createMediaStreamSource(mediaStream)
-    
-    const workletCode = `
-      class PCMProcessor extends AudioWorkletProcessor {
-        process(inputs) {
-          const input = inputs[0];
-          if (input && input.length > 0) {
-            const channelData = input[0];
-            const pcm16 = new Int16Array(channelData.length);
-            for (let i = 0; i < channelData.length; i++) {
-              let s = Math.max(-1, Math.min(1, channelData[i]));
-              pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-            }
-            this.port.postMessage(pcm16.buffer, [pcm16.buffer]);
-          }
-          return true;
+      const mimeType = getSupportedMimeType()
+      mediaRecorder = new MediaRecorder(mediaStream, mimeType ? { mimeType } : undefined)
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordingChunks.push(event.data)
         }
       }
-      registerProcessor('pcm-processor', PCMProcessor);
-    `
-    const blob = new Blob([workletCode], { type: 'application/javascript' })
-    const workletUrl = URL.createObjectURL(blob)
-    
-    await audioCtx.audioWorklet.addModule(workletUrl)
-    workletNode = new AudioWorkletNode(audioCtx, 'pcm-processor')
-    
-    workletNode.port.onmessage = (e) => {
-      if (sttSocket?.readyState === WebSocket.OPEN) {
-        // We must base64 encode the binary buffer because the proxy expects JSON { type: 'audio', audio: 'base64' }
-        const bytes = new Uint8Array(e.data)
-        let binary = ''
-        for (let i = 0; i < bytes.byteLength; i++) {
-          binary += String.fromCharCode(bytes[i])
-        }
-        const b64 = btoa(binary)
-        sttSocket.send(JSON.stringify({
-          type: 'audio',
-          audio: b64,
-          sample_rate: 16000,
-          encoding: 'audio/wav' // For PCM, sometimes 'audio/pcm' or 'pcm_s16le' is better, we'll see
-        }))
-      }
-    }
-    
-    micNode.connect(workletNode)
-    workletNode.connect(audioCtx.destination) // Required for worklet to run in some browsers, but we don't want feedback. 
-    // Wait, connecting to destination causes mic echo. We should NOT connect to destination.
-    // Instead we can use a GainNode with 0 gain.
-    const silentGain = audioCtx.createGain()
-    silentGain.gain.value = 0
-    workletNode.connect(silentGain)
-    silentGain.connect(audioCtx.destination)
-  }
 
-  function queuePcmPlayback(base64Audio: string, sampleRate: number) {
-    if (!audioCtx) return
-    isSpeaking.value = true
-    
-    const binaryStr = atob(base64Audio)
-    const len = binaryStr.length
-    // pcm is 16-bit
-    const pcm16 = new Int16Array(len / 2)
-    for (let i = 0; i < pcm16.length; i++) {
-      const l = binaryStr.charCodeAt(i * 2)
-      const h = binaryStr.charCodeAt(i * 2 + 1)
-      // little endian
-      let val = l + (h << 8)
-      if (val >= 0x8000) val -= 0x10000
-      pcm16[i] = val
-    }
-    
-    const float32 = new Float32Array(pcm16.length)
-    for (let i = 0; i < pcm16.length; i++) {
-      float32[i] = pcm16[i] / (pcm16[i] < 0 ? 0x8000 : 0x7FFF)
-    }
-    
-    const audioBuffer = audioCtx.createBuffer(1, float32.length, sampleRate)
-    audioBuffer.getChannelData(0).set(float32)
-    
-    const source = audioCtx.createBufferSource()
-    source.buffer = audioBuffer
-    source.connect(audioCtx.destination)
-    
-    const startTime = Math.max(audioCtx.currentTime, nextPlayTime)
-    source.start(startTime)
-    nextPlayTime = startTime + audioBuffer.duration
-    
-    source.onended = () => {
-      if (audioCtx && audioCtx.currentTime >= nextPlayTime - 0.1) {
-        isSpeaking.value = false
-      }
+      mediaRecorder.start()
+      recordingLimitTimer = setTimeout(() => {
+        if (isListening.value) {
+          void stop()
+        }
+      }, MAX_RECORDING_MS)
+    } catch (error) {
+      console.error('Failed to start voice recording', error)
+      isListening.value = false
+      stopCaptureTracks()
+      resetRecording()
+      throw error
     }
   }
 
-  function stopPlayback() {
-    if (audioCtx) {
-      // Suspend and resume clears scheduled buffers, or we can just recreate context
-      nextPlayTime = audioCtx.currentTime
-      isSpeaking.value = false
-    }
-  }
+  async function stop() {
+    if (!isListening.value || !mediaRecorder) return
 
-  let ttsSocketPromise: Promise<WebSocket> | null = null
-  async function connectTTS(): Promise<WebSocket> {
-    if (ttsSocket && ttsSocket.readyState === WebSocket.OPEN) {
-      return ttsSocket
-    }
-    if (ttsSocketPromise) {
-      return ttsSocketPromise
-    }
-    ttsSocketPromise = new Promise((resolve) => {
-      const ttsUrl = new URL('/ws/tts', window.location.origin)
-      ttsUrl.protocol = ttsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
-      const ws = new WebSocket(ttsUrl.toString())
-      
-      ws.onopen = () => {
-        ws.send(JSON.stringify({
-          type: 'config',
-          data: {
-            speaker: 'shubh',
-            target_language_code: 'en-IN',
-            output_audio_codec: 'pcm',
-            speech_sample_rate: 22050
-          }
-        }))
-        
-        if (ttsPingInterval) clearInterval(ttsPingInterval)
-        ttsPingInterval = setInterval(() => {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'ping' }))
-          }
-        }, 30000)
-        
-        resolve(ws)
-      }
-      
-      ws.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data)
-          if (msg.type === 'audio' && msg.data?.audio) {
-            queuePcmPlayback(msg.data.audio, 22050)
-          }
-        } catch (e) {
-          console.error('TTS parse error', e)
-        }
-      }
-      
-      ws.onclose = () => {
-        if (ttsSocket === ws) {
-          ttsSocket = null
-        }
-        if (ttsPingInterval) clearInterval(ttsPingInterval)
-      }
-      
-    ttsSocket = ws
+    const recorder = mediaRecorder
+    const mimeType = recorder.mimeType || 'audio/webm'
+
+    isListening.value = false
+    isProcessingVoice.value = true
+
+    const stopped = new Promise<void>((resolve) => {
+      recorder.onstop = () => resolve()
     })
-    return ttsSocketPromise.finally(() => {
-      ttsSocketPromise = null
-    })
+
+    recorder.stop()
+    stopCaptureTracks()
+    await stopped
+
+    try {
+      const audioBlob = new Blob(recordingChunks, { type: mimeType })
+      resetRecording()
+
+      if (audioBlob.size === 0) return
+
+      const result = await transcribeRecording(audioBlob)
+      transcript.value = result.transcript.trim()
+
+      if (isAutoSendMode.value && transcript.value) {
+        voiceSessionActive.value = true
+        await eveAgent.send({ message: transcript.value })
+      }
+    } catch (error) {
+      console.error('Failed to process voice recording', error)
+      voiceSessionActive.value = false
+      throw error
+    } finally {
+      isProcessingVoice.value = false
+    }
+  }
+
+  function speak(text: string) {
+    pendingSpeechText += text
+    agentResponse.value = pendingSpeechText
   }
 
   async function flushTTS() {
-    if (ttsSocket?.readyState === WebSocket.OPEN) {
-      ttsSocket.send(JSON.stringify({ type: 'flush' }))
-    }
-  }
+    const text = pendingSpeechText.trim()
+    pendingSpeechText = ''
+    agentResponse.value = ''
 
-  async function speak(text: string) {
-    const ws = await connectTTS()
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'text', text }))
-    }
-  }
+    if (!text) return
 
-  function stop() {
-    // Auto-send anything left over when they manually stop
-    triggerAutoSend()
-    
-    isListening.value = false
-    
-    // Stop mic capture
-    mediaStream?.getTracks().forEach(t => t.stop())
-    sttSocket?.close()
-    sttSocket = null
-    
-    // If autoSend, keep TTS + audioCtx alive so the AI response can be spoken
-    if (!isAutoSendMode.value) {
-      isSpeaking.value = false
-      if (ttsPingInterval) clearInterval(ttsPingInterval)
-      ttsSocket?.close()
-      audioCtx?.close()
-      ttsSocket = null
-      audioCtx = null
-    }
+    await playSpeechChunks(splitSpeechText(text))
   }
 
   function endVoiceSession() {
     voiceSessionActive.value = false
     isAutoSendMode.value = false
-    isSpeaking.value = false
-    if (ttsPingInterval) clearInterval(ttsPingInterval)
-    ttsSocket?.close()
-    audioCtx?.close()
-    ttsSocket = null
-    audioCtx = null
+    isListening.value = false
+    isProcessingVoice.value = false
+
+    if (mediaRecorder?.state === 'recording') {
+      mediaRecorder.stop()
+    }
+
+    stopCaptureTracks()
+    resetRecording()
+    stopPlayback()
+    pendingSpeechText = ''
+    agentResponse.value = ''
+    resetSpokenProgress()
   }
 
   return {
-    isListening: readonly(isListening),
-    isSpeaking: readonly(isSpeaking),
-    isAutoSendMode: readonly(isAutoSendMode),
-    voiceSessionActive: readonly(voiceSessionActive),
-    transcript: readonly(transcript),
     agentResponse: readonly(agentResponse),
-    start,
+    audioLevel: readonly(audioLevel),
+    endVoiceSession,
+    flushTTS,
+    isAutoSendMode: readonly(isAutoSendMode),
+    isListening: readonly(isListening),
+    isProcessingVoice: readonly(isProcessingVoice),
+    isSpeaking: readonly(isSpeaking),
     speak,
+    start,
     stop,
     stopPlayback,
-    endVoiceSession,
-    flushTTS
+    transcript: readonly(transcript),
+    voiceSessionActive: readonly(voiceSessionActive)
   }
 }
