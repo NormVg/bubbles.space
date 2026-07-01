@@ -15,6 +15,7 @@
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "^14.3.0",
     "ai-sdk-ollama": "^4.0.0",
+    "cheerio": "^1.2.0",
     "eve": "^0.16.2",
     "katex": "^0.17.0",
     "markstream-vue": "1.0.5-beta.0",
@@ -26,6 +27,7 @@
     "shiki": "^4.3.0",
     "stream-monaco": "^0.0.45",
     "vue": "^3.5.35",
-    "vue-router": "^5.1.0"
+    "vue-router": "^5.1.0",
+    "zod": "^4.4.3"
   }
 }
