@@ -84,11 +84,11 @@
               </div>
             </div>
 
-            <!-- Thinking Loader -->
-            <div v-if="isBusy" class="ai-message-wrapper thinking-loader-wrapper">
+            <!-- Status Loader -->
+            <div v-if="agent.status.value === 'submitted' || agent.status.value === 'streaming'" class="ai-message-wrapper thinking-loader-wrapper">
               <div class="thinking-content">
-                <AILoader :size="16" color="var(--accent)" />
-                <span class="thinking-text">{{ agent.status.value === 'submitted' ? 'Thinking...' : 'Replying...' }}</span>
+                <AILoader :size="16" :color="modeColor" :mode="currentMode" />
+                <span class="thinking-text" :style="{ color: modeColor }">{{ statusText }}</span>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@
             </TransitionGroup>
           </div>
         </Transition>
-        <ChatInput :isBusy="isBusy" @submit="handleSubmit" @stop="agent.stop" />
+        <ChatInput :isBusy="agent.status.value === 'submitted' || agent.status.value === 'streaming'" @submit="handleSubmit" @stop="agent.stop" />
       </div>
     </Transition>
   </div>
@@ -144,24 +144,61 @@ import { useAppAgent } from '../../composables/useAppAgent'
 const agent = useAppAgent()
 const chatStore = useChatStore()
 const conversationStore = useConversationStore()
-const isBusy = computed(() => {
-  if (agent.status.value === 'submitted') return true
-  if (agent.status.value === 'streaming') {
-    const messages = agent.data.value.messages
-    if (messages.length === 0) return true
-    
-    const lastMessage = messages[messages.length - 1]
-    if (lastMessage?.role === 'user') return true
-    
-    return !hasRenderableParts(lastMessage!)
-  }
-  return false
-})
+
 const showSessions = ref(false)
 const activeConversationTitle = computed(() => conversationStore.activeConversation?.title ?? 'New chat')
 const conversationCount = computed(() => conversationStore.sortedConversations.length)
 const sessionCountLabel = computed(() => `${conversationCount.value} ${conversationCount.value === 1 ? 'session' : 'sessions'}`)
 const voiceAgent = useVoiceAgent()
+
+const latestAiMessage = computed(() => {
+  const messages = agent.data.value.messages
+  if (!messages || messages.length === 0) return null
+
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i]
+    if (message?.role === 'assistant') {
+      return message
+    }
+  }
+  return null
+})
+
+const currentMode = computed(() => {
+  if (voiceAgent.isSpeaking.value) return 'speaking'
+  
+  if (latestAiMessage.value && agent.status.value === 'streaming') {
+    const hasProcessingTool = latestAiMessage.value.parts.some(p => 
+      p.type === 'dynamic-tool' && ['input-streaming', 'input-available', 'approval-requested'].includes(p.state)
+    )
+    if (hasProcessingTool) return 'tool'
+    
+    // If it's streaming but not processing tools, it's typing text
+    return 'speaking' // We can use the 'speaking' animation for typing too, as it looks active
+  }
+
+  if (agent.status.value === 'submitted' || agent.status.value === 'streaming') return 'thinking'
+  
+  return 'idle'
+})
+
+const modeColor = computed(() => {
+  switch(currentMode.value) {
+    case 'speaking': return 'var(--color-success, #10b981)' 
+    case 'tool': return 'var(--color-warning, #f59e0b)'
+    case 'thinking': return 'var(--accent, #ff6b8b)' 
+    default: return 'var(--text-muted, #a1a1aa)'
+  }
+})
+
+const statusText = computed(() => {
+  switch(currentMode.value) {
+    case 'speaking': return 'Typing...'
+    case 'tool': return 'Using tools...'
+    case 'thinking': return 'Thinking...'
+    default: return 'Ready'
+  }
+})
 
 watch(() => agent.status.value, (newStatus) => {
   if (newStatus === 'submitted' || newStatus === 'streaming') {

@@ -29,5 +29,8 @@
     "vue": "^3.5.35",
     "vue-router": "^5.1.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "microsandbox": "^0.6.1"
   }
 }
