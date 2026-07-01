@@ -1,3 +1,4 @@
+<template>
   <div class="tool-call-group" :class="{ 'is-single': tools.length === 1 }">
     <!-- Group Summary Row -->
     <button v-if="tools.length > 1" class="group-summary-row" @click="expanded = !expanded" type="button" aria-label="Toggle tool calls">
