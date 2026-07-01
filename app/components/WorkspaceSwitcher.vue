@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, markRaw, onMounted, watch, computed, nextTick } from 'vue'
-import MockMarkdownHandler from './MockMarkdownHandler.vue'
+import { computed, nextTick, ref, watch } from 'vue'
+import type { EveMessage } from 'eve/vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
 import AILoader from './AILoader.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
@@ -13,28 +13,42 @@ const workspaces = ref([
 ])
 
 const isExpanded = ref(false)
-const activeComponent = ref(markRaw(MockMarkdownHandler))
 
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
 
+function getMessageText(message: EveMessage) {
+  return message.parts
+    .filter(part => part.type === 'text')
+    .map(part => part.text)
+    .join('')
+}
+
 const latestAiMessageText = computed(() => {
-  if (eveAgent.status.value === 'submitted' || eveAgent.status.value === 'thinking') {
+  if (eveAgent.status.value === 'submitted') {
     return ''
   }
   const messages = eveAgent.data.value.messages
   if (!messages || messages.length === 0) return ''
+
   // Find the last assistant message
   for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].role === 'assistant') {
-      return messages[i].parts
-        .filter((p: any) => p.type === 'text')
-        .map((p: any) => p.text)
-        .join('')
+    const message = messages[i]
+    if (message?.role === 'assistant') {
+      return getMessageText(message)
     }
   }
+
   return ''
 })
+
+const voiceStatusLabel = computed(() => {
+  if (eveAgent.status.value === 'submitted' || eveAgent.status.value === 'streaming') return 'Bubbles is thinking...'
+  if (voiceAgent.isSpeaking.value) return 'Bubbles is speaking...'
+  return 'Bubbles is ready...'
+})
+
+const hasDynamicContent = computed(() => voiceAgent.voiceSessionActive.value)
 
 watch(() => voiceAgent.voiceSessionActive.value, async (active) => {
   await nextTick()
@@ -54,6 +68,7 @@ function setActive(id: string) {
 }
 
 function toggleExpand() {
+  if (!hasDynamicContent.value && !isExpanded.value) return
   if (!slotWrapperRef.value || !slotInnerRef.value || !switcherBarRef.value) return
 
   const wrapper = slotWrapperRef.value
@@ -69,8 +84,9 @@ function toggleExpand() {
   const currentW = isHidden ? baseW : parseFloat(computed.width) || baseW
   const currentOpacity = isHidden ? 0 : parseFloat(computed.opacity) || 0
 
-  // Cancel any existing animations to prevent WAAPI from stacking conflicts
+  // Cancel any existing animations
   wrapper.getAnimations().forEach(a => a.cancel())
+  inner.getAnimations().forEach(a => a.cancel())
   
   // Set inline styles to current to prepare for animation
   wrapper.style.height = `${currentH}px`
@@ -78,7 +94,6 @@ function toggleExpand() {
 
   isExpanded.value = !isExpanded.value
 
-  // Animate the wrapper dimensions
   if (isExpanded.value) {
     // Make visible FIRST and set to auto to measure natural size
     wrapper.style.display = 'block'
@@ -86,41 +101,59 @@ function toggleExpand() {
     wrapper.style.width = 'max-content'
     wrapper.style.minWidth = `${baseW}px`
     
-    // NOW we can accurately measure the inner content size
     const targetH = inner.scrollHeight
     const targetW = inner.scrollWidth
 
-    const animation = wrapper.animate(
+    // 1. Animate Wrapper (Dimensions)
+    const wrapperAnim = wrapper.animate(
       [
-        { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
-        { height: `${targetH}px`, width: `${Math.max(baseW, targetW)}px`, opacity: 1 }
+        { height: `${currentH}px`, width: `${currentW}px` },
+        { height: `${targetH}px`, width: `${Math.max(baseW, targetW)}px` }
       ],
-      { duration: 250, easing: 'cubic-bezier(0.19, 1, 0.22, 1)' }
+      { duration: 400, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
     )
     
-    animation.onfinish = () => {
+    // 2. Animate Inner Content (Fade + Slide up)
+    inner.animate(
+      [
+        { opacity: 0, transform: 'translateY(10px)' },
+        { opacity: 1, transform: 'translateY(0px)' }
+      ],
+      { duration: 350, delay: 50, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
+    )
+    
+    wrapperAnim.onfinish = () => {
       if (isExpanded.value) {
         wrapper.style.height = 'auto'
         wrapper.style.width = 'max-content'
-        wrapper.style.opacity = '1'
       }
     }
   } else {
-    // When collapsing, we need to animate back to 0 height and base width
-    const animation = wrapper.animate(
+    // When collapsing:
+    // 1. Fade out inner content quickly
+    inner.animate(
       [
-        { height: `${currentH}px`, width: `${currentW}px`, opacity: currentOpacity },
-        { height: '0px', width: `${baseW}px`, opacity: 0 }
+        { opacity: 1, transform: 'translateY(0px)' },
+        { opacity: 0, transform: 'translateY(5px)' }
       ],
-      { duration: 200, easing: 'cubic-bezier(0.55, 0.05, 0.68, 0.19)' }
+      { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' }
+    )
+
+    // 2. Shrink wrapper with a slight delay
+    const wrapperAnim = wrapper.animate(
+      [
+        { height: `${currentH}px`, width: `${currentW}px` },
+        { height: '0px', width: `${baseW}px` }
+      ],
+      { duration: 300, delay: 50, easing: 'cubic-bezier(0.19, 1, 0.22, 1)', fill: 'forwards' }
     )
     
-    // Hide completely after animation to prevent tab-indexing invisible content
-    animation.onfinish = () => {
+    wrapperAnim.onfinish = () => {
       if (!isExpanded.value) {
         wrapper.style.display = 'none'
         wrapper.style.height = '0'
-        wrapper.style.opacity = '0'
+        inner.getAnimations().forEach(a => a.cancel())
+        wrapper.getAnimations().forEach(a => a.cancel())
       }
     }
   }
@@ -135,13 +168,12 @@ function toggleExpand() {
         <div v-if="voiceAgent.voiceSessionActive.value" class="voice-transcription-view">
           <div class="voice-transcription-header">
             <AILoader :size="12" color="var(--accent)" />
-            <span>{{ ['submitted', 'thinking'].includes(eveAgent.status.value) ? 'Bubbles is thinking...' : 'Bubbles is speaking...' }}</span>
+            <span>{{ voiceStatusLabel }}</span>
           </div>
           <div v-if="latestAiMessageText" class="voice-transcription-content">
             <MarkdownRenderer :content="latestAiMessageText" :isDone="eveAgent.status.value !== 'streaming'" />
           </div>
         </div>
-        <component :is="activeComponent" v-else-if="activeComponent" />
       </div>
     </div>
 
@@ -180,10 +212,10 @@ function toggleExpand() {
         </svg>
       </button>
 
-      <div class="ws-divider" />
+      <div v-if="hasDynamicContent" class="ws-divider" />
 
       <!-- Expand -->
-      <button class="ws-btn expand-btn" title="Expand" @click="toggleExpand">
+      <button v-if="hasDynamicContent" class="ws-btn expand-btn" title="Expand" @click="toggleExpand">
         <div class="expand-icon" :class="{ 'is-expanded': isExpanded }">
           <svg
             width="13"
