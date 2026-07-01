@@ -66,9 +66,9 @@
               <!-- AI Message -->
               <div v-else-if="hasRenderableParts(message)" class="ai-message-wrapper">
                 <div class="ai-message">
-                  <template v-for="(part, i) in message.parts" :key="i">
-                    <MarkdownRenderer v-if="part.type === 'text'" :content="part.text" :isDone="agent.status.value !== 'streaming'" />
-                    <ToolCallViewer v-else-if="part.type === 'dynamic-tool'" :part="part" />
+                  <template v-for="(group, i) in getGroupedParts(message)" :key="i">
+                    <MarkdownRenderer v-if="group.type === 'text'" :content="group.text" :isDone="agent.status.value !== 'streaming'" />
+                    <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
                   </template>
                 </div>
                 <div class="ai-message-actions">
@@ -132,7 +132,7 @@ import type { EveMessage } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
-import ToolCallViewer from './ToolCallViewer.vue'
+import ToolCallGroup from './ToolCallGroup.vue'
 import AILoader from '../AILoader.vue'
 import UserMessageQuotes from './UserMessageQuotes.vue'
 import ConversationList from '../conversations/ConversationList.vue'
@@ -319,6 +319,29 @@ const getTextContent = (message: EveMessage) => {
 
 const hasRenderableParts = (message: EveMessage) => {
   return message.parts.some(p => (p.type === 'text' && p.text.length > 0) || p.type === 'dynamic-tool')
+}
+
+type GroupedPart = 
+  | { type: 'text', text: string }
+  | { type: 'tool-group', tools: import('eve/vue').EveDynamicToolPart[] }
+
+const getGroupedParts = (message: EveMessage) => {
+  const groups: GroupedPart[] = []
+  let currentToolGroup: import('eve/vue').EveDynamicToolPart[] | null = null
+
+  for (const part of message.parts) {
+    if (part.type === 'dynamic-tool') {
+      if (!currentToolGroup) {
+        currentToolGroup = []
+        groups.push({ type: 'tool-group', tools: currentToolGroup })
+      }
+      currentToolGroup.push(part as import('eve/vue').EveDynamicToolPart)
+    } else if (part.type === 'text') {
+      currentToolGroup = null
+      groups.push({ type: 'text', text: part.text })
+    }
+  }
+  return groups
 }
 
 const parseUserMessage = (text: string) => {
