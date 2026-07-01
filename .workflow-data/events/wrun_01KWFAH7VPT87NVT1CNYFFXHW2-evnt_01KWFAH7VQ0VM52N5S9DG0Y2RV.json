@@ -1,0 +1,28 @@
+{
+  "eventType": "run_created",
+  "specVersion": 5,
+  "eventData": {
+    "deploymentId": "dpl_local@bundled",
+    "workflowName": "workflow//eve//workflowEntry",
+    "input": {
+      "__type": "Uint8Array",
+      "data": "enN0ZCi1L/1gPgNtFADGLYYkIG31TN+o2fjjQwf6CJvsxZzXGAdfxnYj37fzwRQhRQJAAsABegB5AIEAdDIeZOqxXjzILqsV+aMqYHQ+rc6DTOv8fuoWZv9SgvcgV05pU1N7IHslKRadZ84TjWdTiqqbUjTkoZhNRQXEKQXEB7hFXgK5LaemhMeuxyq3l0zcGsju0Pe6xRMt4kD+CH9aA6RLzKqn9cuNgfzYRSdPtIbHwFBlLgNYZKyl3K/UvZpexa35FLNJ5lLxzJ3iU1/XXa9ixKICQbnar1i1WuWq/7guoExtSRil7syUa/0uKNwiywOIqFHSvtwYkKnvA+uya8HVBl5hslrcFpAlnQ9uEeSvFeG6GoLsk8Xq5SYJXFbaMJCvz5/VjH31BGDr9/wZ9ip/pzN50zCPMxZnPIY3AzUkX4yakc3iYFqSnnvPPY07pds6pcUxrmm8O0wHiXGOi14jo/5VSotb3NOwLeejUpMkNc5xTkNWCclxi4sasyXGQc8tDc9csS56OeVK/LhTclMeRxQX7URHOkzyOKJOFhDkJJOzYBIm9sNYHI4koroBDY7ZbxGH4K9jEG4vVi0IrbS5sdNKI35BFBim6mtOdNqL22MgT/Opc1sei9P+N080vtYzft4iLpjoNA8DSqDoxCRGDidZXkOJQ83SU/RgJHPILQI9yP0t+93i9kQmGl//FLdI8yD797/74KrkaitJqMdaqZpafzqVKSsgIIKK5sgHJmRyorYN+pqLkIFdk6u77aOzXDCFBvxlC6YfWvAJ5TKGQR5ySLrWJlYANLDMAjCDnbEaUbabW1MwSi4AeCzFXsgfW3YQHCN43sm6POTXT72FnHWpB0UHZ3SwYU7knFsOs0BvCsKN2sSEAg=="
+    },
+    "executionContext": {
+      "traceCarrier": {},
+      "workflowCoreVersion": "5.0.0-beta.24",
+      "features": {
+        "encryption": false
+      }
+    },
+    "attributes": {
+      "$eve.type": "session",
+      "$eve.trigger": "http",
+      "$eve.title": "Hey hey bhai kya haal hai"
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01KWFAH7VPT87NVT1CNYFFXHW2",
+  "eventId": "evnt_01KWFAH7VQ0VM52N5S9DG0Y2RV",
+  "createdAt": "2026-07-01T17:09:55.191Z"
+}

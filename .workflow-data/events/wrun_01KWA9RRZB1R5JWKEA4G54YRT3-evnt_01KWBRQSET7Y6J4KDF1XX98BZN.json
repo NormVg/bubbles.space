@@ -1,0 +1,15 @@
+{
+  "eventType": "hook_received",
+  "specVersion": 5,
+  "correlationId": "hook_01KWA9RRZBPVS72BDYTEAA4DEF",
+  "eventData": {
+    "token": "eve:eve:b03200d5-10d9-4f63-a3c4-d2f8a58cc7da",
+    "payload": {
+      "__type": "Uint8Array",
+      "data": "ZGV2bFt7ImF1dGgiOjEsImtpbmQiOjUsInBheWxvYWRzIjo2LCJyZXF1ZXN0SWQiOi0xfSx7ImF0dHJpYnV0ZXMiOjIsImF1dGhlbnRpY2F0b3IiOjMsInByaW5jaXBhbElkIjo0LCJwcmluY2lwYWxUeXBlIjo0fSx7fSwibm9uZSIsImFub255bW91cyIsImRlbGl2ZXIiLFs3XSx7ImlucHV0UmVzcG9uc2VzIjotMSwibWVzc2FnZSI6OCwiY29udGV4dCI6LTEsIm91dHB1dFNjaGVtYSI6LTF9LCJIZXkgYnJvLCB3aGF0J3MgdXA/Il0="
+    }
+  },
+  "runId": "wrun_01KWA9RRZB1R5JWKEA4G54YRT3",
+  "eventId": "evnt_01KWBRQSET7Y6J4KDF1XX98BZN",
+  "createdAt": "2026-06-30T08:01:12.154Z"
+}

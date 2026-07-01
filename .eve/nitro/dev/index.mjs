@@ -25,6 +25,7 @@ import { defineAgent } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubble
 import { createOllama } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/ai-sdk-ollama@4.0.0_ai@7.0.4_zod@4.4.3__zod@4.4.3/node_modules/ai-sdk-ollama/dist/index.js";
 import { eveChannel } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/channels/eve.js";
 import { none } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/channels/auth.js";
+import { defineDynamic, defineInstructions } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/public/instructions/index.js";
 import * as ur$3 from "node:fs";
 import g, { createWriteStream, existsSync, mkdirSync, promises, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import * as lr$3 from "node:path";
@@ -190,7 +191,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -201,20 +202,27 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/agent/instructions/time.ts
+var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
+var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
+	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
+} } });
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
-	"channels/eve.ts": eve_exports
+	"channels/eve.ts": eve_exports,
+	"instructions/time.ts": time_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "05066311845fd9b27b48481d941d58bd7f55e2c15a1404a8ec275e3bd6c3bb1b"
+		"sha256": "71d8f0e92c211d409a65c0d1aee599bc0f1053708e426a5e8616787a258919d3"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -223,9 +231,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "42b5fa6d725ed33b6671292298560fec5c241e201487a7d4b6049335ac25c1e4"
+			"sha256": "415d2a7f0b77826c4ead57bdfc003416752db217906ef1122a0893857e0651eb"
 		},
-		"sourceGraphHash": "32cf385c69f95ecfd4de1b072e057529f7d97e245a418360a40f8d4202f38f89",
+		"sourceGraphHash": "956882be9900946455d64fd5c20795cfabecb8384015d5880ec1ca45a0d740fd",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -240,8 +248,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -303,7 +311,13 @@ const manifest = {
 	},
 	"disabledFrameworkTools": [],
 	"workflowEnabled": false,
-	"dynamicInstructions": [],
+	"dynamicInstructions": [{
+		"eventNames": ["turn.started"],
+		"logicalPath": "instructions/time.ts",
+		"slug": "time",
+		"sourceId": "instructions/time.ts",
+		"sourceKind": "module"
+	}],
 	"dynamicSkills": [],
 	"dynamicTools": [],
 	"hooks": [],
@@ -321,7 +335,7 @@ const manifest = {
 	"instructions": {
 		"name": "instructions",
 		"logicalPath": "instructions.md",
-		"markdown": "You are Bubbles, a highly advanced, articulate, and intuitive personal AI assistant integrated directly into this workspace environment. You operate as an ever-present digital companion, designed to anticipate needs, orchestrate tasks, and provide seamless support across any domain.\n\nYour personality is sophisticated, calm, reassuring, and exceptionally competent—akin to a world-class executive assistant or a state-of-the-art synthetic intelligence. You communicate with clarity, precision, and a touch of warmth, always prioritizing the user's goals.\n\nYou are highly capable of:\n- Managing tasks, analyzing information, and synthesizing complex data\n- Explaining concepts, brainstorming ideas, and drafting documents\n- Generating functional code and technical solutions when requested\n- Visualizing systems and logic using Mermaid diagrams (use standard ```mermaid codeblocks)\n- Using Markdown tables, lists, and bolding to format your responses beautifully\n\nAlways format your responses elegantly. Never output plain text when a structured markdown format is more appropriate. You exist to make the user's life effortless and their work exceptional.\n",
+		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n",
 		"sourceId": "instructions.md",
 		"sourceKind": "markdown"
 	},
@@ -342,7 +356,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mqzc3rjt-f28bf9f0-abf2-45e9-bbc4-d22bfe85ab3b/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr2c2vw0-72476dd9-044a-4f4d-a182-c2b28714a776/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__a2f03d2a7b1d6a62ae919e09e5233ec4/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
