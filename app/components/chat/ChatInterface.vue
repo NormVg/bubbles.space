@@ -173,8 +173,8 @@ const currentMode = computed(() => {
     )
     if (hasProcessingTool) return 'tool'
     
-    // If it's streaming but not processing tools, it's typing text
-    return 'speaking' // We can use the 'speaking' animation for typing too, as it looks active
+    // If it's streaming but not processing tools, it's thinking
+    return 'thinking'
   }
 
   if (agent.status.value === 'submitted' || agent.status.value === 'streaming') return 'thinking'
