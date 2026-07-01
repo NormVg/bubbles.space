@@ -48,7 +48,6 @@
 <script setup lang="ts">
 import { useUIStore } from '../stores/ui'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
-import { LucidePanelLeft, LucideAudioLines, LucideSquare, LucidePackage, LucideSettings } from 'lucide-vue-next'
 
 const uiStore = useUIStore()
 const voiceAgent = useVoiceAgent()
