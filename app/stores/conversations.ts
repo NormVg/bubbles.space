@@ -29,30 +29,31 @@ export const useConversationStore = defineStore('conversations', () => {
 
     const loadedMeta = await conversationService.loadMetadataList()
     metaList.value = loadedMeta
-    isInitialized.value = true
-
     if (loadedMeta.length === 0) {
       await ensureConversation()
     } else if (!activeConversationId.value || !loadedMeta.find(m => m.id === activeConversationId.value)) {
       await selectConversation(loadedMeta[0]!.id)
     } else {
       // Reload active detail
-      await loadActiveDetail()
+      await loadActiveDetail(activeConversationId.value)
     }
+
+    isInitialized.value = true
   }
 
-  async function loadActiveDetail() {
-    if (!activeConversationId.value) return
-    const detail = await conversationService.loadDetail(activeConversationId.value)
+  async function loadActiveDetail(id: string) {
+    if (!id) return
+    const detail = await conversationService.loadDetail(id)
     if (detail) {
       activeDetail.value = detail
+      activeConversationId.value = id
     }
   }
 
-  // Watch for active ID changes to load details
-  watch(activeConversationId, () => {
-    if (isInitialized.value) {
-      void loadActiveDetail()
+  // Watch for active ID changes from outside (like other tabs via LocalStorage)
+  watch(activeConversationId, (newId) => {
+    if (isInitialized.value && newId && (!activeDetail.value || activeDetail.value.id !== newId)) {
+      void loadActiveDetail(newId)
     }
   })
 
@@ -83,8 +84,7 @@ export const useConversationStore = defineStore('conversations', () => {
 
   async function selectConversation(id: string) {
     if (metaList.value.some((c: ConversationMeta) => c.id === id)) {
-      activeConversationId.value = id
-      await loadActiveDetail()
+      await loadActiveDetail(id)
     }
   }
 
@@ -102,7 +102,7 @@ export const useConversationStore = defineStore('conversations', () => {
     }
 
     if (activeConversationId.value === id) {
-      activeConversationId.value = metaList.value[0]?.id ?? ''
+      await selectConversation(metaList.value[0]?.id ?? '')
     }
   }
 
