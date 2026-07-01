@@ -7,9 +7,10 @@
         <LucideXCircle v-else class="error-icon" :size="14" stroke-width="2.5" />
       </div>
       
-      <span class="tool-text">
-        Used tool <span class="tool-name">{{ displayName }}</span>
-      </span>
+      <div class="tool-text-container">
+        <span class="tool-name">{{ displayName }}</span>
+        <span class="tool-preview" v-if="inputPreview && !expanded">{{ inputPreview }}</span>
+      </div>
       
       <LucideChevronDown class="tool-chevron" :class="{ open: expanded }" :size="14" stroke-width="2" />
     </button>
@@ -17,29 +18,39 @@
     <div v-if="expanded" class="tool-details-container">
       <div class="tool-timeline-line"></div>
       <div class="tool-details-content">
-        <!-- Input Block -->
-        <div v-if="hasInput" class="code-wrapper" :class="{ 'is-clamped': !showFullInput && isInputLarge }">
-          <div class="code-label">Input</div>
-          <pre><code>{{ formattedInput }}</code></pre>
-          <div v-if="!showFullInput && isInputLarge" class="fade-overlay">
-            <button class="read-more-btn" @click.stop="showFullInput = true">Read more</button>
+        
+        <!-- Input Section -->
+        <div v-if="hasInput" class="detail-section">
+          <div class="detail-label">Input</div>
+          <div class="code-wrapper">
+             <pre><code>{{ formattedInput }}</code></pre>
           </div>
         </div>
         
-        <!-- Output Block -->
-        <div v-if="hasOutput" class="code-wrapper" :class="{ 'is-clamped': !showFullOutput && isOutputLarge }">
-          <div class="code-label">Output</div>
-          <pre><code>{{ formattedOutput }}</code></pre>
-          <div v-if="!showFullOutput && isOutputLarge" class="fade-overlay">
-            <button class="read-more-btn" @click.stop="showFullOutput = true">Read more</button>
+        <!-- Output Section (Nested Accordion) -->
+        <div v-if="hasOutput" class="detail-section">
+          <button class="detail-accordion-btn" @click.stop="outputExpanded = !outputExpanded">
+            <LucideChevronRight class="accordion-chevron" :class="{ open: outputExpanded }" :size="12" stroke-width="2.5" />
+            <span class="detail-label">Output</span>
+            <span class="output-preview" v-if="!outputExpanded">{{ outputPreview }}</span>
+          </button>
+          
+          <div v-if="outputExpanded" class="code-wrapper" :class="{ 'is-clamped': !showFullOutput && isOutputLarge }">
+             <pre><code>{{ formattedOutput }}</code></pre>
+             <div v-if="!showFullOutput && isOutputLarge" class="fade-overlay">
+               <button class="read-more-btn" @click.stop="showFullOutput = true">Read more</button>
+             </div>
           </div>
         </div>
 
-        <!-- Error Block -->
-        <div v-if="hasError" class="code-wrapper error-wrapper">
-          <div class="code-label">Error</div>
-          <pre><code>{{ part.errorText }}</code></pre>
+        <!-- Error Section -->
+        <div v-if="hasError" class="detail-section">
+          <div class="detail-label error-label">Error</div>
+          <div class="code-wrapper error-wrapper">
+             <pre><code>{{ part.errorText }}</code></pre>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -54,7 +65,7 @@ const props = defineProps<{
 }>()
 
 const expanded = ref(false)
-const showFullInput = ref(false)
+const outputExpanded = ref(false)
 const showFullOutput = ref(false)
 
 const toggleExpand = () => {
@@ -81,6 +92,26 @@ const hasInput = computed(() => props.part.input !== undefined)
 const hasOutput = computed(() => 'output' in props.part && props.part.output !== undefined)
 const hasError = computed(() => 'errorText' in props.part && props.part.errorText !== undefined)
 
+const inputPreview = computed(() => {
+  if (props.part.input === undefined) return ''
+  try {
+    const str = JSON.stringify(props.part.input)
+    return str.length > 60 ? str.substring(0, 60) + '...' : str
+  } catch (e) {
+    return ''
+  }
+})
+
+const outputPreview = computed(() => {
+  if (!('output' in props.part) || props.part.output === undefined) return ''
+  try {
+    const str = JSON.stringify(props.part.output)
+    return str.length > 50 ? str.substring(0, 50) + '...' : str
+  } catch (e) {
+    return ''
+  }
+})
+
 const formattedInput = computed(() => {
   if (props.part.input === undefined) return ''
   try {
@@ -97,11 +128,6 @@ const formattedOutput = computed(() => {
   } catch (e) {
     return String(props.part.output)
   }
-})
-
-// Determine if the content is large enough to need clamping
-const isInputLarge = computed(() => {
-  return formattedInput.value.split('\n').length > 6 || formattedInput.value.length > 300
 })
 
 const isOutputLarge = computed(() => {
@@ -127,8 +153,10 @@ const isOutputLarge = computed(() => {
   padding: 6px 0;
   color: var(--text-muted);
   width: fit-content;
+  max-width: 100%;
   transition: color 0.2s ease;
   user-select: none;
+  text-align: left;
 }
 
 .tool-summary-row:hover {
@@ -141,6 +169,7 @@ const isOutputLarge = computed(() => {
   justify-content: center;
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
   opacity: 0.8;
 }
 
@@ -150,7 +179,7 @@ const isOutputLarge = computed(() => {
 }
 
 .success-icon {
-  color: var(--text-muted); /* Keep it understated instead of loud green */
+  color: var(--text-muted);
 }
 
 .error-icon {
@@ -162,19 +191,37 @@ const isOutputLarge = computed(() => {
   to { transform: rotate(360deg); }
 }
 
-.tool-text {
-  font-size: 13px;
+.tool-text-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .tool-name {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 12.5px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.tool-preview {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tool-chevron {
   opacity: 0.5;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
 }
 
 .tool-chevron.open {
@@ -189,7 +236,7 @@ const isOutputLarge = computed(() => {
 .tool-timeline-line {
   width: 1px;
   background: var(--glass-border);
-  margin-left: 7.5px; /* Centers under the 16px icon (16/2 - 0.5 = 7.5) */
+  margin-left: 7.5px;
   margin-right: 16px;
   flex-shrink: 0;
 }
@@ -202,6 +249,60 @@ const isOutputLarge = computed(() => {
   min-width: 0;
   padding-bottom: 8px;
   padding-top: 4px;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.error-label {
+  color: #e74c3c;
+}
+
+.detail-accordion-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--text-muted);
+  width: fit-content;
+  max-width: 100%;
+  text-align: left;
+}
+
+.detail-accordion-btn:hover {
+  color: var(--text-secondary);
+}
+
+.accordion-chevron {
+  opacity: 0.5;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.accordion-chevron.open {
+  transform: rotate(90deg);
+}
+
+.output-preview {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .code-wrapper {
@@ -228,7 +329,7 @@ const isOutputLarge = computed(() => {
   align-items: flex-end;
   justify-content: center;
   padding-bottom: 8px;
-  pointer-events: none; /* Let clicks pass through except on the button */
+  pointer-events: none;
 }
 
 .read-more-btn {
@@ -252,17 +353,6 @@ const isOutputLarge = computed(() => {
   color: var(--text-primary);
 }
 
-.code-label {
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.15);
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 pre {
   margin: 0;
   padding: 12px;
@@ -280,7 +370,6 @@ pre {
   background: rgba(231, 76, 60, 0.05);
 }
 
-/* Scrollbar styling for code blocks */
 pre::-webkit-scrollbar {
   width: 6px;
   height: 6px;
