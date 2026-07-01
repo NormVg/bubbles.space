@@ -49,8 +49,8 @@
                 <div class="user-message">
                   <template v-for="(part, i) in message.parts" :key="i">
                     <div v-if="part.type === 'text'" class="user-message-content">
-                      <UserMessageQuotes :quotes="parseUserMessage(part.text).quotes" />
-                      <div class="user-message-text">{{ parseUserMessage(part.text).text }}</div>
+                      <UserMessageQuotes :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
+                      <div class="user-message-text">{{ parseUserMessage(cleanUserText(part.text)).text }}</div>
                     </div>
                   </template>
                 </div>
@@ -138,12 +138,14 @@ import UserMessageQuotes from './UserMessageQuotes.vue'
 import ConversationList from '../conversations/ConversationList.vue'
 import { useChatStore } from '../../stores/chat'
 import { useConversationStore } from '../../stores/conversations'
+import { useAppStore } from '../../stores/app'
 import { useVoiceAgent } from '../../composables/useVoiceAgent'
 import { useAppAgent } from '../../composables/useAppAgent'
 
 const agent = useAppAgent()
 const chatStore = useChatStore()
 const conversationStore = useConversationStore()
+const appStore = useAppStore()
 
 const showSessions = ref(false)
 const activeConversationTitle = computed(() => conversationStore.activeConversation?.title ?? 'New chat')
@@ -293,6 +295,7 @@ watch(showSessions, async (isShowingSessions) => {
 })
 
 onMounted(() => {
+  appStore.fetchLocation()
   attachMessageObserver()
   // Initial scroll
   setTimeout(() => scrollToBottom(true), 100)
@@ -322,14 +325,25 @@ const removeContext = (index: number) => {
 
 const handleSubmit = async (text: string) => {
   let finalMessage = text
+  
+  // Format hidden system context
+  const timeContext = `Local Time: ${new Date().toLocaleString()}`
+  const locContext = appStore.location 
+    ? `Location: ${appStore.location.city || 'Unknown City'}, ${appStore.location.region || 'Unknown Region'} (Lat: ${appStore.location.latitude}, Lon: ${appStore.location.longitude})` 
+    : 'Location: Unknown'
+    
+  const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n</system_context>`
+  
   if (activeContexts.value.length > 0) {
     // Format all contexts
     const contextPrefix = activeContexts.value.map(ctx => {
       return `> ${ctx.text.split('\n').join('\n> ')}`
     }).join('\n\n')
     
-    finalMessage = `${contextPrefix}\n\n${text}`
+    finalMessage = `${systemBlock}\n\n${contextPrefix}\n\n${text}`
     activeContexts.value = [] // clear after sending
+  } else {
+    finalMessage = `${systemBlock}\n\n${text}`
   }
   
   setTimeout(() => scrollToBottom(true), 50)
@@ -341,6 +355,10 @@ const getTextContent = (message: EveMessage) => {
     .filter(part => part.type === 'text')
     .map(part => part.text)
     .join('')
+}
+
+const cleanUserText = (text: string) => {
+  return text.replace(/<system_context>[\s\S]*?<\/system_context>\n*/g, '').trim()
 }
 
 const hasRenderableParts = (message: EveMessage) => {
