@@ -64,10 +64,11 @@
               </div>
 
               <!-- AI Message -->
-              <div v-else class="ai-message-wrapper">
+              <div v-else-if="hasRenderableParts(message)" class="ai-message-wrapper">
                 <div class="ai-message">
                   <template v-for="(part, i) in message.parts" :key="i">
                     <MarkdownRenderer v-if="part.type === 'text'" :content="part.text" :isDone="agent.status.value !== 'streaming'" />
+                    <ToolCallViewer v-else-if="part.type === 'dynamic-tool'" :part="part" />
                   </template>
                 </div>
                 <div class="ai-message-actions">
@@ -131,6 +132,7 @@ import type { EveMessage } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
+import ToolCallViewer from './ToolCallViewer.vue'
 import AILoader from '../AILoader.vue'
 import UserMessageQuotes from './UserMessageQuotes.vue'
 import ConversationList from '../conversations/ConversationList.vue'
@@ -142,7 +144,19 @@ import { useAppAgent } from '../../composables/useAppAgent'
 const agent = useAppAgent()
 const chatStore = useChatStore()
 const conversationStore = useConversationStore()
-const isBusy = computed(() => agent.status.value === 'submitted' || agent.status.value === 'streaming')
+const isBusy = computed(() => {
+  if (agent.status.value === 'submitted') return true
+  if (agent.status.value === 'streaming') {
+    const messages = agent.data.value.messages
+    if (messages.length === 0) return true
+    
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage?.role === 'user') return true
+    
+    return !hasRenderableParts(lastMessage!)
+  }
+  return false
+})
 const showSessions = ref(false)
 const activeConversationTitle = computed(() => conversationStore.activeConversation?.title ?? 'New chat')
 const conversationCount = computed(() => conversationStore.sortedConversations.length)
@@ -301,6 +315,10 @@ const getTextContent = (message: EveMessage) => {
     .filter(part => part.type === 'text')
     .map(part => part.text)
     .join('')
+}
+
+const hasRenderableParts = (message: EveMessage) => {
+  return message.parts.some(p => (p.type === 'text' && p.text.length > 0) || p.type === 'dynamic-tool')
 }
 
 const parseUserMessage = (text: string) => {
