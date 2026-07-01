@@ -22,6 +22,7 @@
     "mermaid": "^11.16.0",
     "nuxt": "^4.4.7",
     "nuxt-lucide-icons": "^2.1.0",
+    "openmeteo": "^1.2.3",
     "pinia": "^3.0.4",
     "sarvamai": "^1.1.7",
     "shiki": "^4.3.0",

@@ -39,6 +39,11 @@
   "tools": [
     {
       "sourceKind": "module",
+      "logicalPath": "tools/get_weather.ts",
+      "sourceId": "tools/get_weather.ts"
+    },
+    {
+      "sourceKind": "module",
       "logicalPath": "tools/web_search.ts",
       "sourceId": "tools/web_search.ts"
     }
