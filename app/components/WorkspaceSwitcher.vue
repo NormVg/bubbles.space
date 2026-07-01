@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import type { EveMessage } from 'eve/vue'
-import MarkdownRenderer from './MarkdownRenderer.vue'
-import AILoader from './AILoader.vue'
+import VoiceResponseView from './VoiceResponseView.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
+
 const activeWorkspace = ref('main')
 const workspaces = ref([
   { id: 'main', label: 'Main' },
@@ -16,41 +15,6 @@ const isExpanded = ref(false)
 
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
-
-function getMessageText(message: EveMessage) {
-  return message.parts
-    .filter(part => part.type === 'text')
-    .map(part => part.text)
-    .join('')
-}
-
-const latestAiMessageText = computed(() => {
-  if (voiceAgent.voiceSessionActive.value && voiceAgent.agentResponse.value) {
-    return voiceAgent.agentResponse.value
-  }
-
-  if (eveAgent.status.value === 'submitted') {
-    return ''
-  }
-  const messages = eveAgent.data.value.messages
-  if (!messages || messages.length === 0) return ''
-
-  // Find the last assistant message
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const message = messages[i]
-    if (message?.role === 'assistant') {
-      return getMessageText(message)
-    }
-  }
-
-  return ''
-})
-
-const voiceStatusLabel = computed(() => {
-  if (eveAgent.status.value === 'submitted' || eveAgent.status.value === 'streaming') return 'Bubbles is thinking...'
-  if (voiceAgent.isSpeaking.value) return 'Bubbles is speaking...'
-  return 'Bubbles is ready...'
-})
 
 const hasDynamicContent = computed(() => voiceAgent.voiceSessionActive.value)
 
@@ -118,7 +82,7 @@ function toggleExpand() {
     )
     
     // 2. Animate Inner Content (Fade + Slide up)
-    inner.animate(
+    const innerAnim = inner.animate(
       [
         { opacity: 0, transform: 'translateY(10px)' },
         { opacity: 1, transform: 'translateY(0px)' }
@@ -128,6 +92,8 @@ function toggleExpand() {
     
     wrapperAnim.onfinish = () => {
       if (isExpanded.value) {
+        // We must cancel the animation so its 'forwards' fill doesn't override the auto height
+        wrapperAnim.cancel()
         wrapper.style.height = 'auto'
         wrapper.style.width = 'max-content'
       }
@@ -154,10 +120,10 @@ function toggleExpand() {
     
     wrapperAnim.onfinish = () => {
       if (!isExpanded.value) {
+        wrapperAnim.cancel()
+        inner.getAnimations().forEach(a => a.cancel())
         wrapper.style.display = 'none'
         wrapper.style.height = '0'
-        inner.getAnimations().forEach(a => a.cancel())
-        wrapper.getAnimations().forEach(a => a.cancel())
       }
     }
   }
@@ -169,15 +135,7 @@ function toggleExpand() {
     <!-- Dynamic Slot Area (Above the tabs) -->
     <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
       <div class="dynamic-slot-inner" ref="slotInnerRef">
-        <div v-if="voiceAgent.voiceSessionActive.value" class="voice-transcription-view">
-          <div class="voice-transcription-header">
-            <AILoader :size="12" color="var(--accent)" />
-            <span>{{ voiceStatusLabel }}</span>
-          </div>
-          <div v-if="latestAiMessageText" class="voice-transcription-content">
-            <MarkdownRenderer :content="latestAiMessageText" :isDone="eveAgent.status.value !== 'streaming'" />
-          </div>
-        </div>
+        <VoiceResponseView v-if="voiceAgent.voiceSessionActive.value" />
       </div>
     </div>
 
@@ -265,54 +223,6 @@ function toggleExpand() {
 .dynamic-slot-inner {
   width: fit-content;
   height: max-content;
-}
-
-.voice-transcription-view {
-  padding: 16px;
-  width: max-content;
-  max-width: 450px;
-  box-sizing: border-box;
-}
-
-.voice-transcription-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 8px; /* Reduce margin when content is below */
-}
-
-.voice-transcription-header:last-child {
-  margin-bottom: 0; /* No margin when there is no text content shown */
-}
-
-.icon-pulse {
-  animation: pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; transform: scale(0.95); }
-  50% { opacity: 1; transform: scale(1.05); }
-}
-
-.voice-transcription-content {
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.5;
-  max-height: 300px;
-  overflow-y: auto;
-  /* Scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: var(--glass-border) transparent;
-}
-.voice-transcription-content::-webkit-scrollbar {
-  width: 4px;
-}
-.voice-transcription-content::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
-  border-radius: 4px;
 }
 
 /* ─── HUD Curves ────────────────────────────────────────────────── */
