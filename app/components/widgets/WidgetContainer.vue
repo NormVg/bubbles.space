@@ -299,7 +299,7 @@ watch(() => widget.value, () => {
     </div>
     
     <!-- Widget Content -->
-    <div class="widget-body">
+    <div class="widget-body" v-memo="[widget.data, widget.type, isEditing, widget.width, widget.height]">
       <component :is="Component" v-if="Component" :data="widget.data" :is-editing="isEditing" @save="handleSave" />
       <div v-else class="widget-error">Unknown widget type: {{ widget.type }}</div>
     </div>
@@ -334,6 +334,7 @@ watch(() => widget.value, () => {
   user-select: none;
   min-width: min-content;
   min-height: min-content;
+  contain: layout style;
 }
 
 /* Light mode support */

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { shallowRef, watch } from 'vue'
 
 export interface Widget {
   id: string
@@ -13,7 +13,7 @@ export interface Widget {
 }
 
 export const useWidgetStore = defineStore('widgets', () => {
-  const widgets = ref<Widget[]>([])
+  const widgets = shallowRef<Widget[]>([])
 
   // Simulated DB fetch / Load from LocalStorage
   const init = async () => {
@@ -103,12 +103,12 @@ export const useWidgetStore = defineStore('widgets', () => {
       
       const { x, y } = findSafePosition(widget.x, widget.y, widget.width, widget.height)
       
-      widgets.value.push({
+      widgets.value = [...widgets.value, {
         ...widget,
         id,
         x,
         y
-      })
+      }]
     }
 
     const updateWidget = (id: string, updates: Partial<Widget>) => {
@@ -132,7 +132,9 @@ export const useWidgetStore = defineStore('widgets', () => {
            newY = safePos.y
         }
 
-      widgets.value[idx] = { ...widget, ...updates, x: newX, y: newY }
+      const newWidgets = [...widgets.value]
+      newWidgets[idx] = { ...widget, ...updates, x: newX, y: newY }
+      widgets.value = newWidgets
     }
   }
 
