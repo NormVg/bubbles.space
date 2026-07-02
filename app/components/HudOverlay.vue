@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 import BubblesAvatar from './BubblesAvatar.vue'
 import QuickAccessBar from './QuickAccessBar.vue'
+import SyncStatus from './SyncStatus.vue'
 import SettingsModal from './SettingsModal.vue'
 import RightDrawer from './RightDrawer.vue'
 import ArchivePanel from './ArchivePanel.vue'
@@ -38,6 +39,11 @@ onMounted(() => {
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
       <BubblesAvatar :interactive="true" />
+    </div>
+
+    <!-- Top Right: Sync Status -->
+    <div class="hud-sync-wrapper">
+      <SyncStatus />
     </div>
 
     <!-- Bottom Left: Workspace Switcher -->
@@ -109,6 +115,13 @@ onMounted(() => {
   position: absolute;
   top: 20px;
   left: 20px;
+  pointer-events: auto;
+}
+
+.hud-sync-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   pointer-events: auto;
 }
 

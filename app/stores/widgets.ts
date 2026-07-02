@@ -10,6 +10,7 @@ export interface Widget {
   height: number
   title?: string
   data: Record<string, any>
+  updatedAt?: number
 }
 
 export interface Workspace {
@@ -27,6 +28,12 @@ export interface Workspace {
 export const useWidgetStore = defineStore('widgets', () => {
   const workspaces = shallowRef<Workspace[]>([])
   const activeWorkspaceId = ref<string>('main')
+  
+  // 'saved': All data pushed to DB
+  // 'syncing': Currently pushing to DB
+  // 'offline': Push failed, waiting for connection
+  // 'error': Unrecoverable error
+  const syncStatus = ref<'saved' | 'syncing' | 'offline' | 'error'>('saved')
 
   // Backwards compatible computed refs
   const activeWorkspace = computed(() => workspaces.value.find(w => w.id === activeWorkspaceId.value))
@@ -181,6 +188,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 
   // Debounce state
   let syncTimeout: any = null
+  let retryInterval: any = null
 
   // Save to LocalStorage instantly, debounce save to DB
   const syncToDB = async (force = false) => {
@@ -192,14 +200,30 @@ export const useWidgetStore = defineStore('widgets', () => {
     if (syncTimeout) clearTimeout(syncTimeout)
     
     const pushToDB = async () => {
+      syncStatus.value = 'syncing'
       try {
         await $fetch('/api/sync', {
           method: 'POST',
           body: workspaces.value
         })
+        syncStatus.value = 'saved'
         console.log('Synced to DB successfully.')
+        if (retryInterval) {
+          clearInterval(retryInterval)
+          retryInterval = null
+        }
       } catch (e) {
-        console.error('Failed to push to DB:', e)
+        console.error('Failed to push to DB (offline):', e)
+        syncStatus.value = 'offline'
+        
+        // Exponential backoff or simple polling for retry
+        if (!retryInterval) {
+          retryInterval = setInterval(() => {
+            if (navigator.onLine) {
+              pushToDB()
+            }
+          }, 5000)
+        }
       }
     }
 
@@ -274,7 +298,8 @@ export const useWidgetStore = defineStore('widgets', () => {
       ...widget,
       id,
       x,
-      y
+      y,
+      updatedAt: Date.now()
     }]
   }
 
@@ -300,7 +325,7 @@ export const useWidgetStore = defineStore('widgets', () => {
       }
 
       const newWidgets = [...widgets.value]
-      newWidgets[idx] = { ...widget, ...updates, x: newX, y: newY }
+      newWidgets[idx] = { ...widget, ...updates, x: newX, y: newY, updatedAt: Date.now() }
       widgets.value = newWidgets
     }
   }
@@ -381,6 +406,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     restoreWidget,
     permanentlyDeleteArchivedWidget,
     moveWidgetToWorkspace,
-    findSafePosition
+    findSafePosition,
+    syncStatus
   }
 })
