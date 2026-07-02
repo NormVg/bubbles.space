@@ -37,7 +37,7 @@ const onMouseDown = (e: MouseEvent) => {
 }
 
 const onMouseMove = (e: MouseEvent) => {
-  if (!isDragging.value || !containerEl.value) return
+  if (!isDragging.value || !containerEl.value || !widget.value) return
   
   // Calculate current scale dynamically so dragging is 1:1 regardless of canvas zoom
   const rect = containerEl.value.getBoundingClientRect()
@@ -46,8 +46,15 @@ const onMouseMove = (e: MouseEvent) => {
   const dx = (e.clientX - dragStart.x) / scale
   const dy = (e.clientY - dragStart.y) / scale
   
-  tempX.value = dragStart.wx + dx
-  tempY.value = dragStart.wy + dy
+  let newX = dragStart.wx + dx
+  let newY = dragStart.wy + dy
+  
+  // Clamp to canvas boundaries
+  const canvasWidth = 2560
+  const canvasHeight = 1440
+  
+  tempX.value = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
+  tempY.value = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
 }
 
 const onMouseUp = () => {
