@@ -20,7 +20,7 @@ async function loginWithGoogle() {
         <h1 class="logo-text">BUBBLES</h1>
       </div>
       
-      <p class="tagline">Your AI-powered thinking canvas.</p>
+      <p class="tagline">YOUR PERSISTENT AI WORKSPACE.</p>
       
       <div class="auth-section">
         <button class="login-btn" @click="loginWithGoogle" :disabled="isLoading">
