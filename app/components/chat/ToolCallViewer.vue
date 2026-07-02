@@ -72,8 +72,33 @@ const toggleExpand = () => {
   expanded.value = !expanded.value
 }
 
+const humanReadableTitles: Record<string, string> = {
+  canvas_add_widget: 'Added Widget',
+  canvas_update_widget: 'Updated Widget',
+  canvas_remove_widget: 'Removed Widget',
+  generate_image: 'Generated Image',
+  search_web: 'Web Search',
+  read_url_content: 'Read Webpage',
+  run_command: 'Executed Command',
+  view_file: 'Viewed File',
+  read_file: 'Read File',
+  write_to_file: 'Wrote File',
+  replace_file_content: 'Edited File',
+  multi_replace_file_content: 'Edited File',
+  ask_question: 'Asked Question',
+  ask_permission: 'Requested Permission',
+}
+
 const displayName = computed(() => {
-  return props.part.toolMetadata?.eve?.name || props.part.toolName || 'Unknown Tool'
+  const metadataName = props.part.toolMetadata?.eve?.name
+  if (metadataName) return metadataName
+  
+  const rawName = props.part.toolName
+  if (rawName && humanReadableTitles[rawName]) {
+    return humanReadableTitles[rawName]
+  }
+  
+  return rawName || 'Unknown Tool'
 })
 
 const isProcessing = computed(() => {
@@ -94,9 +119,32 @@ const hasError = computed(() => 'errorText' in props.part && props.part.errorTex
 
 const inputPreview = computed(() => {
   if (props.part.input === undefined || props.part.input === null) return ''
+  
   try {
-    if (typeof props.part.input === 'object') {
-      const vals = Object.values(props.part.input).map(val => {
+    const input = props.part.input
+    const tool = props.part.toolName
+    
+    // Custom formatting for known tools
+    if (tool === 'canvas_add_widget' || tool === 'canvas_update_widget') {
+      return input.title ? `"${input.title}"` : (input.type || '')
+    }
+    if (tool === 'generate_image') {
+      return input.Prompt ? `"${input.Prompt}"` : ''
+    }
+    if (tool === 'search_web') {
+      return input.query ? `"${input.query}"` : ''
+    }
+    if (tool === 'run_command') {
+      return input.CommandLine ? `> ${input.CommandLine}` : ''
+    }
+    if (['view_file', 'read_file', 'write_to_file', 'replace_file_content', 'multi_replace_file_content'].includes(tool || '')) {
+      const path = input.AbsolutePath || input.TargetFile || ''
+      return path ? path.split('/').pop() : ''
+    }
+    
+    // Fallback default formatting
+    if (typeof input === 'object') {
+      const vals = Object.values(input).map(val => {
         if (typeof val === 'string') return val
         if (typeof val === 'object') return '{...}'
         return String(val)
@@ -105,7 +153,7 @@ const inputPreview = computed(() => {
       const str = vals.join(', ')
       return str.length > 60 ? str.substring(0, 60) + '...' : str
     }
-    return String(props.part.input)
+    return String(input)
   } catch (e) {
     return ''
   }

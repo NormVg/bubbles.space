@@ -36,14 +36,15 @@ const uiStore = useUIStore()
 function clampDrawerWidth(width: number) {
   if (typeof window === 'undefined') return width
 
-  const minimumWidth = Math.min(window.innerWidth - 32, Math.max(560, window.innerWidth * 0.45))
-  const maximumWidth = Math.min(window.innerWidth - 24, Math.max(minimumWidth, window.innerWidth * 0.72))
+  // User requested 45% to 65% range
+  const minimumWidth = window.innerWidth * 0.45
+  const maximumWidth = window.innerWidth * 0.65
 
   return Math.max(minimumWidth, Math.min(maximumWidth, width))
 }
 
 // This handles the persistent saved value
-const drawerWidth = useLocalStorage('bubbles-drawer-width', 760)
+const drawerWidth = useLocalStorage('bubbles-chat-width-v3', typeof window !== 'undefined' ? window.innerWidth * 0.5 : 760)
 
 // This handles the visual width, preventing 60fps local storage writes (lag)
 const currentWidth = ref(clampDrawerWidth(drawerWidth.value))
@@ -70,7 +71,8 @@ function doResize(e: MouseEvent) {
   }
   
   resizeRaf = requestAnimationFrame(() => {
-    const newWidth = window.innerWidth - e.clientX
+    // Reverse the calculation since dragging left increases width from the right side
+    const newWidth = window.innerWidth - e.clientX - 10 // Account for right-drawer-wrapper right: 10px offset
 
     currentWidth.value = clampDrawerWidth(newWidth)
     resizeRaf = null

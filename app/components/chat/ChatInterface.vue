@@ -1,22 +1,11 @@
 <template>
   <div class="chat-interface">
-    <header class="chat-session-header">
-      <button
-        class="session-title-control"
-        type="button"
-        :aria-expanded="showSessions"
-        aria-controls="session-browser"
-        aria-label="Browse chat sessions"
-        @click="toggleSessionsView"
-      >
-        <span class="session-title">{{ activeConversationTitle }}</span>
-        <LucideChevronDown class="session-chevron" :class="{ open: showSessions }" :size="14" stroke-width="1.8" />
-      </button>
-
-      <button class="session-icon-btn" type="button" aria-label="Create new chat" @click="createChat">
-        <LucidePlus :size="15" stroke-width="2" />
-      </button>
-    </header>
+    <ChatSessionHeader
+      :showSessions="showSessions"
+      :activeConversationTitle="activeConversationTitle"
+      @toggle-sessions="toggleSessionsView"
+      @create-chat="createChat"
+    />
 
     <div class="chat-body" :class="{ 'is-browsing-sessions': showSessions }">
       <Transition name="view-swap" mode="out-in">
@@ -42,55 +31,16 @@
 
         <section v-else key="messages" class="chat-thread" aria-label="Conversation">
           <div class="chat-messages" ref="messagesContainer" @scroll="handleScroll">
-            <div v-for="message in agent.data.value.messages" :key="message.id">
-              <!-- User Message -->
-              <div v-if="message.role === 'user'" class="user-message-wrapper">
-                <div class="user-message">
-                  <template v-for="(part, i) in message.parts" :key="i">
-                    <div v-if="part.type === 'text'" class="user-message-content">
-                      <UserMessageQuotes v-if="parseUserMessage(cleanUserText(part.text)).quotes.length > 0" :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
-                      
-                      <!-- Attached Widgets -->
-                      <div v-if="parseUserMessage(cleanUserText(part.text)).widgets.length > 0" class="user-attachments">
-                        <div v-for="(w, idx) in parseUserMessage(cleanUserText(part.text)).widgets" :key="idx" class="user-attachment-pill">
-                          <LucidePaperclip :size="12" stroke-width="2" class="attachment-icon" />
-                          <span>Widget: {{ w.label }}</span>
-                        </div>
-                      </div>
-                      
-                      <div class="user-message-text" v-if="parseUserMessage(cleanUserText(part.text)).text">{{ parseUserMessage(cleanUserText(part.text)).text }}</div>
-                    </div>
-                  </template>
-                </div>
-                <div class="user-message-actions">
-                  <button class="chat-action-btn" title="Copy" @click="handleCopy(getTextContent(message), true)">
-                    <LucideCopy :size="14" stroke-width="2.5" />
-                    <span>Copy</span>
-                  </button>
-                </div>
-              </div>
+            <div class="chat-messages-inner" ref="messagesInner">
+              <div v-for="message in agent.data.value.messages" :key="message.id">
+                <!-- User Message -->
+                <ChatMessageUser v-if="message.role === 'user'" :message="message" @copy="handleCopy(getTextContent(message), true)" />
 
-              <!-- AI Message -->
-              <div v-else-if="hasRenderableParts(message)" class="ai-message-wrapper">
-                <div class="ai-message">
-                  <template v-for="(group, i) in getGroupedParts(message)" :key="i">
-                    <MarkdownRenderer v-if="group.type === 'text'" :content="group.text" :isDone="agent.status.value !== 'streaming'" />
-                    <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
-                  </template>
-                </div>
-                <div class="ai-message-actions">
-                  <button class="chat-action-btn" title="Copy" @click="handleCopy(getTextContent(message), false)">
-                    <LucideCopy :size="14" stroke-width="2.5" />
-                    <span>Copy</span>
-                  </button>
-                  <button class="chat-action-btn" title="Reply" @click="handleReply(message)">
-                    <LucideReply :size="14" stroke-width="2.5" />
-                    <span>Reply</span>
-                  </button>
-                </div>
+                <!-- AI Message -->
+                <ChatMessageAI v-else-if="hasRenderableParts(message)" :message="message" :isDone="agent.status.value !== 'streaming'" @copy="handleCopy(getTextContent(message), false)" @reply="handleReply(message)" />
               </div>
             </div>
-
+            
             <!-- Status Loader -->
             <div v-if="agent.status.value === 'submitted' || agent.status.value === 'streaming'" class="ai-message-wrapper thinking-loader-wrapper">
               <div class="thinking-content">
@@ -115,24 +65,13 @@
     <Transition name="fade-slide">
       <div v-if="!showSessions" class="chat-input-wrapper">
         <Transition name="fade-slide">
-          <div v-if="activeContexts.length > 0 || chatStore.pendingWidgetContexts.length > 0" class="context-bar">
-            <TransitionGroup name="context-pill">
-              <div v-for="(ctx, index) in activeContexts" :key="ctx.id" class="context-pill">
-                <span class="context-label">{{ ctx.type }}</span>
-                <span class="context-text">{{ ctx.text }}</span>
-                <button class="context-clear" @click="removeContext(index)" title="Remove context">
-                  <LucideX :size="12" stroke-width="2" />
-                </button>
-              </div>
-              <div v-for="(wCtx, index) in chatStore.pendingWidgetContexts" :key="'w-'+wCtx.id" class="context-pill">
-                <span class="context-label">Widget</span>
-                <span class="context-text">{{ wCtx.label }}</span>
-                <button class="context-clear" @click="chatStore.removeWidgetContext(wCtx.id)" title="Remove widget context">
-                  <LucideX :size="12" stroke-width="2" />
-                </button>
-              </div>
-            </TransitionGroup>
-          </div>
+          <ChatContextBar
+            v-if="activeContexts.length > 0 || chatStore.pendingWidgetContexts.length > 0"
+            :activeContexts="activeContexts"
+            :pendingWidgetContexts="chatStore.pendingWidgetContexts"
+            @remove-context="removeContext"
+            @remove-widget-context="chatStore.removeWidgetContext"
+          />
         </Transition>
         <ChatInput :isBusy="agent.status.value === 'submitted' || agent.status.value === 'streaming'" @submit="handleSubmit" @stop="agent.stop" />
       </div>
@@ -146,9 +85,11 @@ import type { EveMessage } from 'eve/vue'
 import BubblesAvatar from '../BubblesAvatar.vue'
 import ChatInput from './ChatInput.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
-import ToolCallGroup from './ToolCallGroup.vue'
 import AILoader from '../AILoader.vue'
-import UserMessageQuotes from './UserMessageQuotes.vue'
+import ChatSessionHeader from './ChatSessionHeader.vue'
+import ChatContextBar from './ChatContextBar.vue'
+import ChatMessageUser from './ChatMessageUser.vue'
+import ChatMessageAI from './ChatMessageAI.vue'
 import ConversationList from '../conversations/ConversationList.vue'
 import { useChatStore } from '../../stores/chat'
 import { useConversationStore } from '../../stores/conversations'
@@ -248,7 +189,7 @@ async function createChat() {
 const messagesContainer = ref<HTMLElement | null>(null)
 let scrollRaf: number | null = null
 let observerRaf: number | null = null
-let observer: MutationObserver | null = null
+
 const isUserScrolledUp = ref(false)
 
 const handleScroll = () => {
@@ -273,29 +214,29 @@ const scrollToBottom = (force = false) => {
   }
 }
 
+const messagesInner = ref<HTMLElement | null>(null)
+let resizeObserver: ResizeObserver | null = null
+
 function disconnectMessageObserver() {
   if (observerRaf !== null) {
     cancelAnimationFrame(observerRaf)
     observerRaf = null
   }
-
-  observer?.disconnect()
-  observer = null
+  resizeObserver?.disconnect()
+  resizeObserver = null
 }
 
 function attachMessageObserver() {
   disconnectMessageObserver()
-  if (messagesContainer.value) {
-    observer = new MutationObserver(() => {
-      // Debounce the observer to 60fps to prevent layout thrashing on every token
+  if (messagesInner.value) {
+    resizeObserver = new ResizeObserver(() => {
       if (observerRaf !== null) cancelAnimationFrame(observerRaf)
       observerRaf = requestAnimationFrame(() => {
         scrollToBottom(false)
         observerRaf = null
       })
     })
-    // Watch for text streaming (characterData) and new nodes (childList)
-    observer.observe(messagesContainer.value, { childList: true, subtree: true, characterData: true })
+    resizeObserver.observe(messagesInner.value)
   }
 }
 
@@ -442,101 +383,11 @@ const getTextContent = (message: EveMessage) => {
     .join('')
 }
 
-const cleanUserText = (text: string) => {
-  return text.replace(/<system_context>[\s\S]*?<\/system_context>\n*/g, '').trim()
-}
-
 const hasRenderableParts = (message: EveMessage) => {
   return message.parts.some(p => (p.type === 'text' && p.text.length > 0) || p.type === 'dynamic-tool')
 }
 
-type GroupedPart = 
-  | { type: 'text', text: string }
-  | { type: 'tool-group', tools: import('eve/vue').EveDynamicToolPart[] }
 
-const getGroupedParts = (message: EveMessage) => {
-  const groups: GroupedPart[] = []
-  let currentToolGroup: import('eve/vue').EveDynamicToolPart[] | null = null
-
-  for (const part of message.parts) {
-    if (part.type === 'dynamic-tool') {
-      if (!currentToolGroup) {
-        currentToolGroup = []
-        groups.push({ type: 'tool-group', tools: currentToolGroup })
-      }
-      currentToolGroup.push(part as import('eve/vue').EveDynamicToolPart)
-    } else if (part.type === 'text') {
-      currentToolGroup = null
-      groups.push({ type: 'text', text: part.text })
-    }
-  }
-  return groups
-}
-
-const parseUserMessage = (text: string) => {
-  const lines = text.split('\n')
-  const parsedQuotes: string[] = []
-  const parsedWidgets: { label: string }[] = []
-  const message: string[] = []
-  
-  let currentQuote: string[] = []
-  let inQuotes = true
-  let inWidget = false
-  
-  for (const line of lines) {
-    const trimmedLine = line.trim()
-    if (inWidget) {
-      if (trimmedLine === '[/Widget]') {
-        inWidget = false
-      }
-      continue // Skip widget body lines
-    }
-
-    if (inQuotes) {
-      if (line.startsWith('> ')) {
-        currentQuote.push(line.substring(2))
-      } else if (trimmedLine === '') {
-        if (currentQuote.length > 0) {
-          parsedQuotes.push(currentQuote.join('\n').trim())
-          currentQuote = []
-        }
-      } else if (trimmedLine.startsWith('[Widget: ')) {
-        if (currentQuote.length > 0) {
-          parsedQuotes.push(currentQuote.join('\n').trim())
-          currentQuote = []
-        }
-        const label = trimmedLine.substring(9, trimmedLine.length - 1)
-        parsedWidgets.push({ label })
-        inWidget = true
-      } else {
-        inQuotes = false
-        if (currentQuote.length > 0) {
-          parsedQuotes.push(currentQuote.join('\n').trim())
-          currentQuote = []
-        }
-        message.push(line)
-      }
-    } else {
-      if (trimmedLine.startsWith('[Widget: ')) {
-        const label = trimmedLine.substring(9, trimmedLine.length - 1)
-        parsedWidgets.push({ label })
-        inWidget = true
-      } else {
-        message.push(line)
-      }
-    }
-  }
-  
-  if (inQuotes && currentQuote.length > 0) {
-    parsedQuotes.push(currentQuote.join('\n').trim())
-  }
-  
-  return {
-    text: message.join('\n').trim(),
-    quotes: parsedQuotes,
-    widgets: parsedWidgets
-  }
-}
 
 const userMessageCopied = ref(false)
 const aiMessageCopied = ref(false)
@@ -571,16 +422,10 @@ const playCopySound = () => {
 }
 
 const handleCopy = async (text: string, isUser: boolean) => {
-  let textToCopy = text
-  if (isUser) {
-    const cleaned = cleanUserText(text)
-    textToCopy = parseUserMessage(cleaned).text
-  }
-  
-  if (!textToCopy) return
+  if (!text) return
   
   try {
-    await navigator.clipboard.writeText(textToCopy);
+    await navigator.clipboard.writeText(text);
     playCopySound();
     
     if (isUser) {
@@ -594,17 +439,17 @@ const handleCopy = async (text: string, isUser: boolean) => {
     console.error('Failed to copy text: ', err);
   }
 }
+
 </script>
 
 <style scoped>
+/* ─── Layout ─────────────────────────────────────────────────── */
 .chat-interface {
   display: flex;
   flex-direction: column;
   flex: 1;
   height: 100%;
-  min-width: 0;
-  position: relative;
-  gap: 8px;
+  width: 100%;
 }
 
 /* ─── Session Header ─────────────────────────────────────────── */
@@ -791,7 +636,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
 
 /* ─── Chat Input Area ────────────────────────────────────────── */
 .chat-input-wrapper {
-  padding: 0 32px 0 0; /* Add 32px right padding to ensure the box physically clears the Quick Access Bar */
+  padding: 0 32px 0 0; /* Clear the Quick Access Bar */
   width: 100%;
   box-sizing: border-box;
   position: relative;
@@ -801,107 +646,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
   gap: 8px; /* Space between context bar and input */
 }
 
-.context-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(10, 10, 12, 0.3); /* Add depth with slightly darker bg */
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  padding: 6px;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: auto;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
-}
 
-/* Outer Context Bar Transition */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-/* Hide scrollbar for context bar but allow horizontal scroll if many tabs */
-.context-bar::-webkit-scrollbar {
-  display: none;
-}
-.context-bar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.context-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 10px;
-  padding: 6px 10px;
-  box-sizing: border-box;
-  max-width: 250px; /* Prevent single context from taking up the whole bar */
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* TransitionGroup Animations for Pills */
-.context-pill-enter-active,
-.context-pill-leave-active,
-.context-pill-move {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.context-pill-enter-from,
-.context-pill-leave-to {
-  opacity: 0;
-  transform: scale(0.9) translateY(4px);
-}
-
-.context-pill-leave-active {
-  position: absolute;
-}
-
-.context-label {
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 500;
-  user-select: none;
-}
-
-.context-text {
-  color: var(--text-primary);
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-}
-
-.context-clear {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  margin-left: 4px;
-}
-
-.context-clear:hover {
-  background: var(--hover-bg);
-  color: var(--text-primary);
-}
 
 .chat-messages {
   flex: 1;
@@ -913,179 +658,13 @@ const handleCopy = async (text: string, isUser: boolean) => {
   z-index: 5;
 }
 
-.ai-message-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 32px;
-}
 
-.thinking-loader-wrapper {
-  padding-left: 2px;
-  margin-bottom: 16px;
-}
 
-.thinking-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
-.thinking-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  animation: pulse 2s infinite ease-in-out;
-}
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
 
-.ai-message {
-  width: 100%;
-  max-width: calc(100% - 24px); /* Increased width for better reading while leaving a small safe zone */
-  align-self: flex-start;
-  margin-bottom: 8px;
-}
-
-.ai-message-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-left: 4px; /* Slight inset to align with text visually */
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.ai-message-wrapper:hover .ai-message-actions {
-  opacity: 1;
-}
-
-.user-message-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 32px;
-}
-
-.user-message {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px 18px 4px 18px;
-  padding: 12px 16px;
-  margin-bottom: 4px;
-  max-width: 85%;
-  align-self: flex-end;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: var(--text-primary);
-  font-size: 14.5px;
-  line-height: 1.6;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-html.light .user-message {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.user-attachments {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.user-attachment-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  width: fit-content;
-}
-
-html.light .user-attachment-pill {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.attachment-icon {
-  color: var(--accent, #ff6b8b);
-}
-
-.user-message-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.user-message-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end; /* Align right to match user message */
-  gap: 8px;
-  padding-right: 4px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.user-message-wrapper:hover .user-message-actions {
-  opacity: 1;
-}
-
-/* Unified clean action button for both AI and User messages */
-.chat-action-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chat-action-btn:hover {
-  background: var(--hover-bg);
-  color: var(--text-primary);
-}
-.chat-action-btn.copied {
-  color: var(--success);
-  background: rgba(138, 179, 140, 0.15); /* Soft green tint based on success variable */
-  border-color: rgba(138, 179, 140, 0.3);
-}
-
-.icon-success {
-  color: var(--success);
-}
 
 @media (max-width: 760px) {
-  .chat-session-header {
-    align-items: stretch;
-    flex-direction: column;
-    padding-right: 0;
-  }
-
-  .session-title-control {
-    max-width: none;
-  }
-
-  .session-header-actions {
-    justify-content: flex-end;
-  }
-
   .session-browser {
     padding: 16px 0 16px 0;
   }
