@@ -101,7 +101,7 @@ const voiceStatusLabel = computed(() => {
       <span class="transcript-label">You:</span> {{ voiceAgent.transcript.value }}
     </div>
 
-    <div v-if="latestAiMessage" class="voice-response-content">
+    <div v-if="latestAiMessage && voiceAgent.voiceSessionActive.value && eveAgent.status.value !== 'submitted'" class="voice-response-content">
       <template v-for="(group, i) in getGroupedParts(latestAiMessage)" :key="i">
         <MarkdownRenderer v-if="group.type === 'text'" :content="group.text" :isDone="eveAgent.status.value !== 'streaming'" />
         <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
