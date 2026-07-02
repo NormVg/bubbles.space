@@ -91,8 +91,9 @@ const barLayout = computed(() => {
 })
 
 const getX = (index: number, count: number) => {
-  if (count <= 1) return padding.left + innerWidth / 2
-  return padding.left + (index / (count - 1)) * innerWidth
+  if (count === 0) return padding.left + innerWidth / 2
+  const bandWidth = innerWidth / count
+  return padding.left + (index * bandWidth) + (bandWidth / 2)
 }
 
 const getY = (value: number) => {
