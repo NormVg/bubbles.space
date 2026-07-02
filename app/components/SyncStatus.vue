@@ -64,7 +64,7 @@ const statusText = computed(() => {
 
 /* Syncing State - Active and spinning */
 .sync-status.syncing {
-  color: var(--text-primary);
+  color: #3b82f6; /* Blue 500 */
   opacity: 1;
 }
 
