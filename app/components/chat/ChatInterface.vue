@@ -658,11 +658,26 @@ const handleCopy = async (text: string, isUser: boolean) => {
   z-index: 5;
 }
 
+/* ─── Thinking Loader ────────────────────────────────────────── */
+.thinking-loader-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  padding: 12px 16px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
 
+.thinking-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-
-
-
+.thinking-text {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
 
 @media (max-width: 760px) {
   .session-browser {
