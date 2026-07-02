@@ -49,7 +49,7 @@
                 <div class="user-message">
                   <template v-for="(part, i) in message.parts" :key="i">
                     <div v-if="part.type === 'text'" class="user-message-content">
-                      <UserMessageQuotes v-if="parseUserMessage(cleanUserText(part.text)).quotes" :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
+                      <UserMessageQuotes v-if="parseUserMessage(cleanUserText(part.text)).quotes.length > 0" :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
                       
                       <!-- Attached Widgets -->
                       <div v-if="parseUserMessage(cleanUserText(part.text)).widgets.length > 0" class="user-attachments">
