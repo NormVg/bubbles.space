@@ -64,6 +64,13 @@ onUnmounted(() => {
 const onMouseEnter = () => stopAutoPlay()
 const onMouseLeave = () => startAutoPlay()
 
+// Error handling
+const handleImageError = (event: Event, index: number) => {
+  const img = event.target as HTMLImageElement
+  // Replace with a reliable placeholder if it fails
+  img.src = `https://picsum.photos/seed/${index + 1}/800/600`
+}
+
 // Editing
 const editUrls = ref(imageList.value.join('\n'))
 
@@ -86,7 +93,15 @@ watch(() => props.isEditing, (editing) => {
     
     <div v-else class="image-container">
       <Transition name="fade-slide" mode="out-in">
-        <img :key="currentIndex" :src="imageList[currentIndex]" :class="['main-image', props.data.objectFit || 'cover']" alt="Widget Image" />
+        <img 
+          :key="currentIndex" 
+          :src="imageList[currentIndex]" 
+          :class="['main-image', props.data.objectFit || 'cover']" 
+          alt="Widget Image" 
+          referrerpolicy="no-referrer"
+          crossorigin="anonymous"
+          @error="(e) => handleImageError(e, currentIndex)"
+        />
       </Transition>
       
       <!-- Controls -->
@@ -112,7 +127,13 @@ watch(() => props.isEditing, (editing) => {
           :class="{ active: idx === currentIndex }"
           @click.stop="selectImage(idx)"
         >
-          <img :src="img" alt="thumbnail" />
+          <img 
+            :src="img" 
+            alt="thumbnail" 
+            referrerpolicy="no-referrer" 
+            crossorigin="anonymous"
+            @error="(e) => handleImageError(e, idx)"
+          />
         </div>
       </div>
     </div>
