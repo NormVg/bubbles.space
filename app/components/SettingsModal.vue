@@ -12,7 +12,17 @@
             <button class="nav-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">General</button>
             <button class="nav-btn" :class="{ active: activeTab === 'appearance' }" @click="activeTab = 'appearance'">Appearance</button>
             <button class="nav-btn" :class="{ active: activeTab === 'account' }" @click="activeTab = 'account'">Account</button>
-            <button class="nav-btn" :class="{ active: activeTab === 'advanced' }" @click="activeTab = 'advanced'">Advanced</button>
+            
+            <div class="sidebar-divider"></div>
+            <span class="sidebar-label">Personalization</span>
+            <button class="nav-btn nav-btn-file" :class="{ active: activeTab === 'soul' }" @click="activeTab = 'soul'">
+              <LucideSparkles :size="14" />
+              soul.md
+            </button>
+            <button class="nav-btn nav-btn-file" :class="{ active: activeTab === 'user' }" @click="activeTab = 'user'">
+              <LucideUser :size="14" />
+              user.md
+            </button>
           </div>
           <div class="settings-main">
             <!-- GENERAL TAB -->
@@ -115,46 +125,54 @@
                   Sign Out
                 </button>
               </div>
-
-              <div class="setting-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 24px;" v-if="session.data">
-                <div class="setting-info" style="flex-direction: row; justify-content: space-between; align-items: center;">
-                  <div>
-                    <label>About Me (User Identity)</label>
-                    <span class="desc" style="display: block;">Information Bubbles should know about you</span>
-                  </div>
-                  <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
-                    {{ isSaving ? 'SAVING...' : 'SAVE' }}
-                  </button>
-                </div>
-                <textarea 
-                  v-model="editAboutMe"
-                  class="settings-textarea" 
-                  placeholder="e.g. I am a frontend developer, I like minimal UI, I live in New York..."
-                ></textarea>
-              </div>
             </div>
 
-            <!-- ADVANCED TAB -->
-            <div v-if="activeTab === 'advanced'" class="setting-group">
-              <h3>AI Personality</h3>
-              
-              <div class="setting-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 12px;" v-if="session.data">
-                <div class="setting-info" style="flex-direction: row; justify-content: space-between; align-items: center;">
-                  <div>
-                    <label>The Soul (System Prompt)</label>
-                    <span class="desc" style="display: block;">Define exactly how Bubbles should act and talk</span>
-                  </div>
-                  <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
-                    {{ isSaving ? 'SAVING...' : 'SAVE' }}
-                  </button>
+            <!-- SOUL.MD TAB -->
+            <div v-if="activeTab === 'soul'" class="setting-group">
+              <div class="file-header">
+                <div class="file-name">
+                  <LucideSparkles :size="14" class="file-icon" />
+                  <span>soul.md</span>
                 </div>
-                <textarea 
-                  v-model="editSystemPrompt"
-                  class="settings-textarea" 
-                  style="height: 150px;"
-                  placeholder="e.g. You are a sassy, sarcastic AI that strictly uses lowercase letters..."
-                ></textarea>
+                <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
+                  {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                </button>
               </div>
+              <p class="file-desc">Define how Bubbles thinks, speaks, and behaves. This is injected as context into every conversation.</p>
+              <textarea 
+                v-model="editSystemPrompt"
+                class="settings-textarea file-textarea" 
+                placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
+              ></textarea>
+            </div>
+
+            <!-- USER.MD TAB -->
+            <div v-if="activeTab === 'user'" class="setting-group">
+              <div class="file-header">
+                <div class="file-name">
+                  <LucideUser :size="14" class="file-icon" />
+                  <span>user.md</span>
+                </div>
+                <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
+                  {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                </button>
+              </div>
+              <p class="file-desc">Tell Bubbles about yourself. This context helps it give you more relevant and personalized answers.</p>
+              <div class="user-auto-fields" v-if="session.data">
+                <div class="auto-field">
+                  <span class="auto-label">name</span>
+                  <span class="auto-value">{{ session.data.user.name }}</span>
+                </div>
+                <div class="auto-field">
+                  <span class="auto-label">email</span>
+                  <span class="auto-value">{{ session.data.user.email }}</span>
+                </div>
+              </div>
+              <textarea 
+                v-model="editAboutMe"
+                class="settings-textarea file-textarea" 
+                placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
+              ></textarea>
             </div>
 
           </div>
@@ -325,6 +343,31 @@ const colorMode = useColorMode({
   background: var(--glass-border);
   color: var(--text-primary);
   font-weight: 600;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 16px 12px 12px 12px;
+}
+
+.sidebar-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 0 12px;
+  margin-bottom: 8px;
+  font-family: var(--font-sans);
+}
+
+.nav-btn-file {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .settings-main {
@@ -588,6 +631,75 @@ const colorMode = useColorMode({
 
 .settings-textarea:focus {
   border-color: var(--accent);
+}
+
+/* ─── File Tabs (soul.md / user.md) ──────────────────────── */
+.file-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.file-icon {
+  color: var(--text-secondary);
+}
+
+.file-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.file-textarea {
+  height: 240px;
+  font-family: var(--font-mono);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.user-auto-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: var(--bg-soft);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.auto-field {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.auto-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 60px;
+}
+
+.auto-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .save-btn {
