@@ -39,7 +39,7 @@ const agent = useEveAgent({
 const unregister = setActiveAppAgent(agent)
 
 watch(
-  [agent.events, agent.session, () => agent.data.value.messages],
+  [() => agent.events.value.length, () => agent.data.value.messages.length, agent.session],
   () => {
     if (!conversationId.value) return
 
@@ -49,7 +49,7 @@ watch(
       session: agent.session.value
     })
   },
-  { deep: true, immediate: true }
+  { deep: true }
 )
 
 onBeforeUnmount(unregister)

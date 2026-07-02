@@ -374,19 +374,5 @@ html.light .canvas-bg {
   background: linear-gradient(to left, var(--text-primary), transparent);
 }
 
-/* Widget Animations */
-.widget-anim-enter-active,
-.widget-anim-leave-active {
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), translate 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
 
-.widget-anim-enter-from {
-  opacity: 0 !important;
-  translate: 0 30px !important;
-}
-
-.widget-anim-leave-to {
-  opacity: 0 !important;
-  translate: 0 -30px !important;
-}
 </style>

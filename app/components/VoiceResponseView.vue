@@ -217,7 +217,6 @@ html.light .voice-context-pill {
 }
 
 .voice-contexts:empty {
-  display: none;
   margin-bottom: 0;
 }
 

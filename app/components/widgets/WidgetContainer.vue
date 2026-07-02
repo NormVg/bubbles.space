@@ -546,4 +546,21 @@ html.light .widget-resize-handle {
 html.light .widget-resize-handle:hover {
   color: rgba(0, 0, 0, 0.6);
 }
+
+/* Widget Animations from CanvasWorkspace TransitionGroup */
+.widget.widget-anim-enter-active,
+.widget.widget-anim-leave-active {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), scale 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.widget.widget-anim-enter-from,
+.widget.widget-anim-leave-to {
+  opacity: 0;
+  scale: 0.85;
+  filter: blur(8px);
+}
+
+.widget.widget-anim-leave-active {
+  pointer-events: none;
+}
 </style>
