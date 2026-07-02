@@ -3,4 +3,5 @@ import { defineAsyncComponent } from 'vue'
 export const WidgetRegistry: Record<string, any> = {
   markdown: defineAsyncComponent(() => import('./types/MarkdownWidget.vue')),
   mermaid: defineAsyncComponent(() => import('./types/MermaidWidget.vue')),
+  timer: defineAsyncComponent(() => import('./types/TimerWidget.vue')),
 }

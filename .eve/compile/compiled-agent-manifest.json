@@ -92,7 +92,8 @@
             "type": "string",
             "enum": [
               "markdown",
-              "mermaid"
+              "mermaid",
+              "timer"
             ],
             "description": "The type of widget to create."
           },
@@ -114,7 +115,7 @@
               "type": "string"
             },
             "additionalProperties": {},
-            "description": "The content of the widget. For markdown, pass { content: '...' }. For mermaid, pass { chart: '...' }."
+            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds)."
           }
         },
         "required": [

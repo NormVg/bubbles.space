@@ -49,13 +49,21 @@
                 <div class="user-message">
                   <template v-for="(part, i) in message.parts" :key="i">
                     <div v-if="part.type === 'text'" class="user-message-content">
-                      <UserMessageQuotes :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
-                      <div class="user-message-text">{{ parseUserMessage(cleanUserText(part.text)).text }}</div>
+                      <UserMessageQuotes v-if="parseUserMessage(cleanUserText(part.text)).quotes" :quotes="parseUserMessage(cleanUserText(part.text)).quotes" />
+                      
+                      <!-- Attached Widgets -->
+                      <div v-if="parseUserMessage(cleanUserText(part.text)).widgets.length > 0" class="user-attachments">
+                        <div v-for="(w, idx) in parseUserMessage(cleanUserText(part.text)).widgets" :key="idx" class="user-attachment-pill">
+                          <LucidePaperclip :size="12" stroke-width="2" class="attachment-icon" />
+                          <span>Widget: {{ w.label }}</span>
+                        </div>
+                      </div>
+                      
+                      <div class="user-message-text" v-if="parseUserMessage(cleanUserText(part.text)).text">{{ parseUserMessage(cleanUserText(part.text)).text }}</div>
                     </div>
                   </template>
                 </div>
                 <div class="user-message-actions">
-                  <!-- Simplified copy action for user message -->
                   <button class="chat-action-btn" title="Copy" @click="handleCopy(getTextContent(message), true)">
                     <LucideCopy :size="14" stroke-width="2.5" />
                     <span>Copy</span>
@@ -469,12 +477,21 @@ const getGroupedParts = (message: EveMessage) => {
 const parseUserMessage = (text: string) => {
   const lines = text.split('\n')
   const parsedQuotes: string[] = []
+  const parsedWidgets: { label: string }[] = []
   const message: string[] = []
   
   let currentQuote: string[] = []
   let inQuotes = true
-
+  let inWidget = false
+  
   for (const line of lines) {
+    if (inWidget) {
+      if (line === '[/Widget]') {
+        inWidget = false
+      }
+      continue // Skip widget body lines
+    }
+
     if (inQuotes) {
       if (line.startsWith('> ')) {
         currentQuote.push(line.substring(2))
@@ -483,6 +500,14 @@ const parseUserMessage = (text: string) => {
           parsedQuotes.push(currentQuote.join('\n').trim())
           currentQuote = []
         }
+      } else if (line.startsWith('[Widget: ')) {
+        if (currentQuote.length > 0) {
+          parsedQuotes.push(currentQuote.join('\n').trim())
+          currentQuote = []
+        }
+        const label = line.substring(9, line.length - 1)
+        parsedWidgets.push({ label })
+        inWidget = true
       } else {
         inQuotes = false
         if (currentQuote.length > 0) {
@@ -492,7 +517,13 @@ const parseUserMessage = (text: string) => {
         message.push(line)
       }
     } else {
-      message.push(line)
+      if (line.startsWith('[Widget: ')) {
+        const label = line.substring(9, line.length - 1)
+        parsedWidgets.push({ label })
+        inWidget = true
+      } else {
+        message.push(line)
+      }
     }
   }
   
@@ -501,8 +532,9 @@ const parseUserMessage = (text: string) => {
   }
   
   return {
-    quotes: parsedQuotes.length > 0 ? parsedQuotes : null,
-    text: message.join('\n').trim()
+    text: message.join('\n').trim(),
+    quotes: parsedQuotes,
+    widgets: parsedWidgets
   }
 }
 
@@ -931,19 +963,54 @@ const handleCopy = async (text: string, isUser: boolean) => {
 }
 
 .user-message {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  padding: 10px 14px;
-  margin-bottom: 4px; /* Reduced to bring buttons closer */
-  max-width: 80%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  max-width: 85%;
   align-self: flex-end;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 14.5px;
+  line-height: 1.6;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+html.light .user-message {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.user-attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.user-attachment-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  width: fit-content;
+}
+
+html.light .user-attachment-pill {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.attachment-icon {
+  color: var(--accent, #ff6b8b);
 }
 
 .user-message-content {
