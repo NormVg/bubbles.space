@@ -204,8 +204,9 @@ export const useWidgetStore = defineStore('widgets', () => {
   const addWidget = (widget: Omit<Widget, 'id'> & { id?: string }) => {
     const id = widget.id || crypto.randomUUID()
     
-    // Idempotency guard: skip if this widget ID already exists
-    if (widgets.value.some(w => w.id === id)) return
+    // Idempotency guard: skip if this widget ID already exists in ANY workspace
+    const existsAnywhere = workspaces.value.some(ws => ws.widgets.some(w => w.id === id))
+    if (existsAnywhere) return
     
     const { x, y } = findSafePosition(widget.x, widget.y, widget.width, widget.height)
     

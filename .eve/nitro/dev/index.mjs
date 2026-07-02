@@ -194,7 +194,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -205,17 +205,17 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -224,12 +224,13 @@ var canvas_add_widget_default = defineTool({
 			"markdown",
 			"mermaid",
 			"timer",
-			"graph"
+			"graph",
+			"image"
 		]).describe("The type of widget to create."),
 		width: z.number().describe("The width of the widget in pixels (e.g. 300 to 600)."),
 		height: z.number().describe("The height of the widget in pixels (e.g. 200 to 500)."),
 		title: z.string().describe("A short title for the widget."),
-		data: z.record(z.any()).describe("The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }")
+		data: z.record(z.any()).describe("The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }. For image: { images: ['url1', 'url2'] }")
 	}),
 	async execute(input) {
 		return {
@@ -244,7 +245,7 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 var canvas_read_widget_default = defineTool({
 	description: "Read the full contents of a widget on the canvas using its ID. Use this when you need to see the exact text, markdown, or diagram source code of a specific widget.",
@@ -254,7 +255,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -267,7 +268,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -288,7 +289,7 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -330,7 +331,34 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/unsplash_search.ts
+var unsplash_search_exports = /* @__PURE__ */ __exportAll({ default: () => unsplash_search_default });
+var unsplash_search_default = defineTool({
+	description: "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
+	inputSchema: z.object({
+		query: z.string().describe("The search query (e.g. 'futuristic city', 'nature', 'office workspace')"),
+		count: z.number().optional().describe("Number of images to return (max 10, default 3)")
+	}),
+	async execute({ query, count = 3 }) {
+		const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+		if (!accessKey) throw new Error("UNSPLASH_ACCESS_KEY environment variable is missing. Please add it to your .env file.");
+		const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=${count}&client_id=${accessKey}`;
+		try {
+			const response = await fetch(url);
+			if (!response.ok) throw new Error(`Unsplash API error: ${response.status} ${response.statusText}`);
+			const data = await response.json();
+			if (!data.results || data.results.length === 0) return { images: [] };
+			return {
+				query,
+				images: data.results.map((img) => img.urls.regular)
+			};
+		} catch (error) {
+			throw new Error(`Failed to fetch images from Unsplash: ${error.message}`);
+		}
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -379,7 +407,7 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent/tools/wikipedia_search.ts
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent/tools/wikipedia_search.ts
 var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
 var wikipedia_search_default = defineTool({
 	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
@@ -420,7 +448,7 @@ var wikipedia_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -431,13 +459,14 @@ const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.fr
 	"tools/canvas_remove_widget.ts": canvas_remove_widget_exports,
 	"tools/canvas_update_widget.ts": canvas_update_widget_exports,
 	"tools/get_weather.ts": get_weather_exports,
+	"tools/unsplash_search.ts": unsplash_search_exports,
 	"tools/web_search.ts": web_search_exports,
 	"tools/wikipedia_search.ts": wikipedia_search_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "0a9f885ebe9a20f013e777083090f14fe4d87e9d3c834bf43837c3c92671e1f4"
+		"sha256": "b69fd72c8c72d267be81113842bd17e2675e8b69d87d5879d94aa21742422a71"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -446,9 +475,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "8a6be07c501181ddfb716929bd7dc01ba4e0cf3c6493f37778ee97d5985b4bfa"
+			"sha256": "0f438341ecfad76fb8cb1b7b250c34793292cc2c1b4e028fd93b94fc1953da44"
 		},
-		"sourceGraphHash": "22086e74c63471fded63743221892cb71fbc73f36870279060cb2bf9cd38413a",
+		"sourceGraphHash": "e0c819f6bcec38dca6244c64dee4f2a79f6fa9a0f60751041257be46b21a269c",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -463,8 +492,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -554,7 +583,8 @@ const manifest = {
 							"markdown",
 							"mermaid",
 							"timer",
-							"graph"
+							"graph",
+							"image"
 						],
 						"description": "The type of widget to create."
 					},
@@ -574,7 +604,7 @@ const manifest = {
 						"type": "object",
 						"propertyNames": { "type": "string" },
 						"additionalProperties": {},
-						"description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }"
+						"description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }. For image: { images: ['url1', 'url2'] }"
 					}
 				},
 				"required": [
@@ -689,6 +719,28 @@ const manifest = {
 			"sourceKind": "module"
 		},
 		{
+			"description": "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"query": {
+						"type": "string",
+						"description": "The search query (e.g. 'futuristic city', 'nature', 'office workspace')"
+					},
+					"count": {
+						"description": "Number of images to return (max 10, default 3)",
+						"type": "number"
+					}
+				},
+				"required": ["query"]
+			},
+			"logicalPath": "tools/unsplash_search.ts",
+			"name": "unsplash_search",
+			"sourceId": "tools/unsplash_search.ts",
+			"sourceKind": "module"
+		},
+		{
 			"description": "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
 			"inputSchema": {
 				"$schema": "http://json-schema.org/draft-07/schema#",
@@ -731,7 +783,7 @@ const manifest = {
 	"instructions": {
 		"name": "instructions",
 		"logicalPath": "instructions.md",
-		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location (e.g., if they ask for the \"Temperature\", fetch the weather for the latitude/longitude provided in the system context).\n- NEVER ask the user for their location or local time if it is provided in the `<system_context>`. If it says \"Unknown\", only then you may ask.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n",
+		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location (e.g., if they ask for the \"Temperature\", fetch the weather for the latitude/longitude provided in the system context).\n- NEVER ask the user for their location or local time if it is provided in the `<system_context>`. If it says \"Unknown\", only then you may ask.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n- For images: DO NOT hallucinate image URLs. Always use the `unsplash_search` tool to fetch real image URLs based on the user's prompt before creating an image widget.\n\n## Tone & Style\n",
 		"sourceId": "instructions.md",
 		"sourceKind": "markdown"
 	},
@@ -752,7 +804,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3kbe34-a3ddfecd-ccc2-4e21-bd28-e53d8d20f7d7/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3m714l-39fc11ba-46c4-4365-a9e3-f8ebf6ff3f93/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__aa0080848a99faf0650f6759fa6cfa06/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
