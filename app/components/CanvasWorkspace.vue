@@ -105,10 +105,20 @@ function startPan(e: MouseEvent) {
   }
 }
 
+let panRaf: number | null = null
+
 function doPan(e: MouseEvent) {
   if (!isPanning.value) return
-  const rawX = e.clientX - panStart.x
-  const rawY = e.clientY - panStart.y
+  
+  if (panRaf) return
+  
+  const clientX = e.clientX
+  const clientY = e.clientY
+  
+  panRaf = requestAnimationFrame(() => {
+    panRaf = null
+    const rawX = clientX - panStart.x
+    const rawY = clientY - panStart.y
   
   const clamped = clampOffset(rawX, rawY, scale.value)
   offset.x = clamped.x
@@ -121,10 +131,11 @@ function doPan(e: MouseEvent) {
   // Smoothly map overscroll to opacity for a very minimal effect
   const maxOverscroll = 120 // pixels
   const maxOpacity = 0.12 // Reduced significantly for subtlety
-  edgeGlow.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
-  edgeGlow.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
-  edgeGlow.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
-  edgeGlow.bottom = Math.max(0, Math.min(maxOpacity, (-overY / maxOverscroll) * maxOpacity))
+    edgeGlow.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
+    edgeGlow.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
+    edgeGlow.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
+    edgeGlow.bottom = Math.max(0, Math.min(maxOpacity, (-overY / maxOverscroll) * maxOpacity))
+  })
 }
 
 function endPan() {

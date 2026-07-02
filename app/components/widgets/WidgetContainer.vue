@@ -92,10 +92,20 @@ const onMouseDown = (e: MouseEvent) => {
   window.addEventListener('mouseup', onMouseUp)
 }
 
+let dragRaf: number | null = null
+
 const onMouseMove = (e: MouseEvent) => {
   if (!isDragging.value || !containerEl.value || !widget.value) return
   
-  const rect = containerEl.value.getBoundingClientRect()
+  if (dragRaf) return
+  
+  const clientX = e.clientX
+  const clientY = e.clientY
+  
+  dragRaf = requestAnimationFrame(() => {
+    dragRaf = null
+    if (!containerEl.value || !widget.value) return
+    const rect = containerEl.value.getBoundingClientRect()
   const scale = rect.width / containerEl.value.offsetWidth
   
   const dx = (e.clientX - dragStart.x) / scale
@@ -107,8 +117,9 @@ const onMouseMove = (e: MouseEvent) => {
   const canvasWidth = 2560
   const canvasHeight = 1440
   
-  tempX.value = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
-  tempY.value = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
+    tempX.value = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
+    tempY.value = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
+  })
 }
 
 const onMouseUp = () => {
@@ -142,10 +153,20 @@ const onResizeDown = (e: MouseEvent) => {
   window.addEventListener('mouseup', onResizeUp)
 }
 
+let resizeRaf: number | null = null
+
 const onResizeMove = (e: MouseEvent) => {
   if (!isResizing.value || !containerEl.value || !widget.value) return
   
-  const rect = containerEl.value.getBoundingClientRect()
+  if (resizeRaf) return
+  
+  const clientX = e.clientX
+  const clientY = e.clientY
+  
+  resizeRaf = requestAnimationFrame(() => {
+    resizeRaf = null
+    if (!containerEl.value || !widget.value) return
+    const rect = containerEl.value.getBoundingClientRect()
   const scale = rect.width / containerEl.value.offsetWidth
   
   const dx = (e.clientX - resizeStart.x) / scale
@@ -164,8 +185,9 @@ const onResizeMove = (e: MouseEvent) => {
   newW = Math.min(newW, canvasWidth - widget.value.x)
   newH = Math.min(newH, canvasHeight - widget.value.y)
   
-  tempWidth.value = newW
-  tempHeight.value = newH
+    tempWidth.value = newW
+    tempHeight.value = newH
+  })
 }
 
 const onResizeUp = () => {
