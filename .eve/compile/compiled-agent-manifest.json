@@ -93,7 +93,8 @@
             "enum": [
               "markdown",
               "mermaid",
-              "timer"
+              "timer",
+              "graph"
             ],
             "description": "The type of widget to create."
           },
@@ -115,7 +116,7 @@
               "type": "string"
             },
             "additionalProperties": {},
-            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds)."
+            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }"
           }
         },
         "required": [
