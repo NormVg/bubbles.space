@@ -9,6 +9,7 @@ import * as module_5 from "../../agent/tools/canvas_remove_widget.ts";
 import * as module_6 from "../../agent/tools/canvas_update_widget.ts";
 import * as module_7 from "../../agent/tools/get_weather.ts";
 import * as module_8 from "../../agent/tools/web_search.ts";
+import * as module_9 from "../../agent/tools/wikipedia_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -22,7 +23,8 @@ export const moduleMap = Object.freeze({
                   "tools/canvas_remove_widget.ts": module_5,
                   "tools/canvas_update_widget.ts": module_6,
                   "tools/get_weather.ts": module_7,
-                  "tools/web_search.ts": module_8
+                  "tools/web_search.ts": module_8,
+                  "tools/wikipedia_search.ts": module_9
                 })
             })
     })

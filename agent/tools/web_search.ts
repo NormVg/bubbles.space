@@ -9,7 +9,6 @@ export default defineTool({
   }),
   async execute({ query }) {
     try {
-      // 1. Try DuckDuckGo
       const response = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -17,72 +16,43 @@ export default defineTool({
         }
       })
       
-      let useFallback = false
+      if (!response.ok) {
+        return { error: `DuckDuckGo responded with status ${response.status}` }
+      }
+
+      const html = await response.text()
+      const $ = cheerio.load(html)
       const results: Array<{ title: string, url: string, snippet: string }> = []
 
-      if (response.ok) {
-        const html = await response.text()
-        const $ = cheerio.load(html)
+      $('.result').each((i, element) => {
+        // Limit to top 5 results
+        if (results.length >= 5) return false
+
+        const titleElement = $(element).find('.result__title .result__a')
+        const title = titleElement.text().trim()
         
-        // Check for DDG Captcha/Block page
-        if (html.includes('anomaly-modal') || html.includes('Unfortunately, bots use DuckDuckGo too')) {
-          useFallback = true
-        } else {
-          $('.result').each((i, element) => {
-            if (results.length >= 5) return false
-
-            const titleElement = $(element).find('.result__title .result__a')
-            const title = titleElement.text().trim()
-            
-            let url = titleElement.attr('href')
-            if (url && url.startsWith('//duckduckgo.com/l/?uddg=')) {
-              try {
-                const urlObj = new URL('https:' + url)
-                const uddg = urlObj.searchParams.get('uddg')
-                if (uddg) {
-                  url = decodeURIComponent(uddg)
-                }
-              } catch (e) {}
+        let url = titleElement.attr('href')
+        if (url && url.startsWith('//duckduckgo.com/l/?uddg=')) {
+          // Parse the actual URL from the redirect link
+          try {
+            const urlObj = new URL('https:' + url)
+            const uddg = urlObj.searchParams.get('uddg')
+            if (uddg) {
+              url = decodeURIComponent(uddg)
             }
-            
-            const snippet = $(element).find('.result__snippet').text().trim()
-
-            if (title && url && snippet) {
-              results.push({ title, url, snippet })
-            }
-          })
-        }
-      } else {
-        useFallback = true
-      }
-
-      // 2. Fallback to Wikipedia API if DDG fails or blocks
-      if (useFallback || results.length === 0) {
-        try {
-          const wikiResponse = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json`)
-          if (wikiResponse.ok) {
-            const wikiData = await wikiResponse.json()
-            if (wikiData?.query?.search) {
-              for (const item of wikiData.query.search.slice(0, 5)) {
-                // Remove HTML tags from snippet
-                const cleanSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "")
-                results.push({
-                  title: item.title,
-                  url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
-                  snippet: cleanSnippet
-                })
-              }
-            }
+          } catch (e) {
+            // keep original if parsing fails
           }
-        } catch (wikiError) {
-          console.error("Wikipedia fallback failed", wikiError)
         }
-      }
+        
+        const snippet = $(element).find('.result__snippet').text().trim()
+
+        if (title && url && snippet) {
+          results.push({ title, url, snippet })
+        }
+      })
 
       if (results.length === 0) {
-        if (!response.ok && useFallback) {
-           return { error: `Search failed. DuckDuckGo responded with status ${response.status} and Wikipedia fallback yielded no results.` }
-        }
         return { message: 'No results found.' }
       }
 

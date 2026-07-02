@@ -66,6 +66,11 @@
       "sourceKind": "module",
       "logicalPath": "tools/web_search.ts",
       "sourceId": "tools/web_search.ts"
+    },
+    {
+      "sourceKind": "module",
+      "logicalPath": "tools/wikipedia_search.ts",
+      "sourceId": "tools/wikipedia_search.ts"
     }
   ],
   "version": 12,
