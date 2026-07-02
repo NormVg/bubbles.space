@@ -272,6 +272,23 @@ export const useWidgetStore = defineStore('widgets', () => {
     archivedWidgets.value = archivedWidgets.value.filter(w => w.id !== id)
   }
 
+  const moveWidgetToWorkspace = (widgetId: string, targetWorkspaceId: string) => {
+    const sourceWs = activeWorkspace.value
+    if (!sourceWs) return
+    
+    const widgetIndex = sourceWs.widgets.findIndex(w => w.id === widgetId)
+    if (widgetIndex === -1) return
+    
+    const targetWs = workspaces.value.find(w => w.id === targetWorkspaceId)
+    if (!targetWs) return
+    
+    const widgetToMove = sourceWs.widgets[widgetIndex]
+    sourceWs.widgets.splice(widgetIndex, 1)
+    targetWs.widgets.push(widgetToMove)
+    
+    workspaces.value = [...workspaces.value]
+  }
+
   return {
     workspaces,
     activeWorkspaceId,
@@ -289,6 +306,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     archiveWidget,
     restoreWidget,
     permanentlyDeleteArchivedWidget,
+    moveWidgetToWorkspace,
     findSafePosition
   }
 })

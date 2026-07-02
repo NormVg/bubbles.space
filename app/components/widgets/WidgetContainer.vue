@@ -223,13 +223,6 @@ const onResizeUp = () => {
   })
 }
 
-onUnmounted(() => {
-  window.removeEventListener('mousemove', onMouseMove)
-  window.removeEventListener('mouseup', onMouseUp)
-  window.removeEventListener('mousemove', onResizeMove)
-  window.removeEventListener('mouseup', onResizeUp)
-})
-
 const Component = computed(() => {
   if (!widget.value) return null
   return WidgetRegistry[widget.value.type] || null
@@ -237,6 +230,25 @@ const Component = computed(() => {
 
 const remove = () => {
   store.removeWidget(props.id)
+}
+
+// Transfer Logic
+const showTransferMenu = ref(false)
+const toggleTransferMenu = () => {
+  showTransferMenu.value = !showTransferMenu.value
+}
+
+const otherWorkspaces = computed(() => {
+  return store.workspaces.filter(w => w.id !== store.activeWorkspaceId)
+})
+
+const moveToWorkspace = (targetId: string) => {
+  store.moveWidgetToWorkspace(props.id, targetId)
+  showTransferMenu.value = false
+}
+
+const closeTransferMenu = () => {
+  if (showTransferMenu.value) showTransferMenu.value = false
 }
 
 // Sync from store to DOM when not dragging/resizing
@@ -259,7 +271,16 @@ const syncDOM = () => {
 }
 
 onMounted(() => {
+  window.addEventListener('click', closeTransferMenu)
   syncDOM()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('click', closeTransferMenu)
+  window.removeEventListener('mousemove', onMouseMove)
+  window.removeEventListener('mouseup', onMouseUp)
+  window.removeEventListener('mousemove', onResizeMove)
+  window.removeEventListener('mouseup', onResizeUp)
 })
 
 watch(() => widget.value, () => {
@@ -303,6 +324,36 @@ watch(() => widget.value, () => {
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </button>
+
+      <!-- Transfer -->
+      <div class="transfer-dropdown-container">
+        <button class="widget-action-btn" :class="{ active: showTransferMenu }" @click.stop="toggleTransferMenu" aria-label="Transfer widget" title="Transfer to Workspace">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+        </button>
+        
+        <Transition name="fade-pop">
+          <div v-if="showTransferMenu" class="transfer-menu" @click.stop>
+            <div class="transfer-menu-header">Send to Workspace</div>
+            <div class="transfer-menu-list">
+              <button
+                v-for="ws in otherWorkspaces"
+                :key="ws.id"
+                class="transfer-menu-item"
+                @click.stop="moveToWorkspace(ws.id)"
+              >
+                {{ ws.label }}
+              </button>
+              <div v-if="otherWorkspaces.length === 0" class="transfer-menu-empty">
+                No other workspaces available
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </div>
 
       <!-- Archive -->
       <button class="widget-action-btn" @click.stop="store.archiveWidget(props.id)" aria-label="Archive widget" title="Archive">
@@ -535,6 +586,93 @@ html.light .widget-action-btn:hover {
 html.light .widget-action-close:hover {
   background: rgba(231, 76, 60, 0.9);
   color: #fff;
+}
+
+/* Transfer Menu */
+.transfer-dropdown-container {
+  position: relative;
+  display: flex;
+}
+
+.transfer-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 180px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+html.light .transfer-menu {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.transfer-menu-header {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 6px 8px;
+  margin-bottom: 2px;
+}
+
+.transfer-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.transfer-menu-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 8px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transfer-menu-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.transfer-menu-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 8px;
+  text-align: center;
+  font-style: italic;
+}
+
+.fade-pop-enter-active,
+.fade-pop-leave-active {
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top right;
+}
+
+.fade-pop-enter-from,
+.fade-pop-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(-4px);
 }
 
 /* Resize Handle */
