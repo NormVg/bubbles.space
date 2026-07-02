@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { authClient } from '~/utils/auth-client'
 import { ref } from 'vue'
+import BubblesAvatar from '~/components/BubblesAvatar.vue'
 
 const isLoading = ref(false)
 
@@ -16,6 +17,9 @@ async function loginWithGoogle() {
 <template>
   <div class="landing-screen">
     <div class="landing-content">
+      <div class="avatar-wrapper">
+        <BubblesAvatar :interactive="false" />
+      </div>
       <div class="logo-wrapper">
         <h1 class="logo-text">BUBBLES</h1>
       </div>
@@ -56,6 +60,11 @@ async function loginWithGoogle() {
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar-wrapper {
+  margin-bottom: -8px; /* Pull the text slightly closer to the avatar */
+  transform: scale(1.2); /* Make the avatar a bit larger for the landing page */
 }
 
 .logo-wrapper {
