@@ -4,6 +4,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', 'eve/nuxt', '@vueuse/nuxt', 'nuxt-lucide-icons'],
   css: ['~/assets/base.css'],
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+      ]
+    }
+  },
   nitro: {
     experimental: { websocket: true }
   }
