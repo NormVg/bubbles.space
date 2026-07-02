@@ -93,8 +93,8 @@ onMounted(() => {
   
   /* Distinct, premium dark glass that contrasts with the canvas */
   background: var(--glass-bg);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
   z-index: 10;
   

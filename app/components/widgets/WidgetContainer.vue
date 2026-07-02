@@ -438,7 +438,7 @@ html.light .widget-drag-handle:hover .drag-pill {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
   transition: all 0.15s ease;
 }
 

@@ -130,7 +130,7 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   background: var(--glow-color);
   opacity: 0.15;
-  filter: blur(12px);
+  filter: blur(8px);
   pointer-events: none;
   z-index: 0;
 }

@@ -99,8 +99,8 @@ const toggleVoice = async () => {
   right: 10px;
   width: 44px; /* Fixed width for perfect curve math */
   background: var(--glass-bg);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 22px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -127,7 +127,7 @@ const toggleVoice = async () => {
   height: 22px;
   /* Perfect blending: matches the remaining width exactly (44 - 22 = 22) */
   background: var(--gradient-cutout);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px);
   pointer-events: none;
 }
 
@@ -139,7 +139,7 @@ const toggleVoice = async () => {
   width: 16px;
   height: 16px;
   background: var(--gradient-cutout-small);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px);
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
