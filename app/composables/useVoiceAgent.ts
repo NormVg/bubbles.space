@@ -448,7 +448,9 @@ export function useVoiceAgent() {
           ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
           : 'Canvas Widgets: None'
           
-        const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
+        const voiceContext = `VOICE MODE ACTIVE: You are communicating via text-to-speech. Keep your response conversational, concise, and natural to read out loud. DO NOT use markdown tables, long lists, or complex formatting in your text response. If you need to present structured data, code, or tables, use the canvas_add_widget tool to display that information visually on the canvas, and simply tell the user you've added it to their canvas.`
+          
+        const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n\n${voiceContext}\n</system_context>`
         
         const consumedWidgets = chatStore.consumeWidgetContexts()
         let finalMessage = transcript.value
