@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted, watch, onMounted, nextTick } from 'vue'
 import { useWidgetStore } from '../../stores/widgets'
 import { useChatStore } from '../../stores/chat'
 import { WidgetRegistry } from './WidgetRegistry'
@@ -224,6 +224,33 @@ const Component = computed(() => {
 const remove = () => {
   store.removeWidget(props.id)
 }
+
+// Sync from store to DOM when not dragging/resizing
+const syncDOM = () => {
+  if (!widget.value || !containerEl.value) return
+  
+  if (!isDragging.value) {
+    currentX = widget.value.x
+    currentY = widget.value.y
+    containerEl.value.style.transform = `translate(${currentX}px, ${currentY}px)`
+  }
+  
+  if (!isResizing.value) {
+    currentW = widget.value.width
+    currentH = widget.value.height
+    containerEl.value.style.width = `${currentW}px`
+    containerEl.value.style.height = `${currentH}px`
+  }
+}
+
+onMounted(() => {
+  syncDOM()
+})
+
+watch(() => widget.value, () => {
+  syncDOM()
+}, { deep: true })
+
 </script>
 
 <template>
@@ -232,11 +259,6 @@ const remove = () => {
     ref="containerEl"
     class="widget group"
     :class="{ dragging: isDragging, resizing: isResizing, editing: isEditing }"
-    :style="{
-      transform: `translate(${widget.x}px, ${widget.y}px)`,
-      width: `${widget.width}px`,
-      height: `${widget.height}px`
-    }"
   >
     <!-- Drag Handle & Title -->
     <div class="widget-drag-handle" @mousedown="onMouseDown">

@@ -83,20 +83,7 @@ function applyConstraints() {
   offset.y = clamped.y
 }
 
-// ── Transforms ─────────────────────────────────────────────
-const transform = computed(() => `translate(${offset.x}px, ${offset.y}px) scale(${scale.value})`)
-
-const gridBgPos = computed(() => {
-  const size = 18 * scale.value
-  const x = ((offset.x % size) + size) % size
-  const y = ((offset.y % size) + size) % size
-  return `${x}px ${y}px`
-})
-
-const gridBgSize = computed(() => {
-  const size = 18 * scale.value
-  return `${size}px ${size}px`
-})
+// Removed reactive transform, gridBgPos, gridBgSize to avoid Vue overwriting our DOM bypass
 
 // ── Pan ────────────────────────────────────────────────────
 function startPan(e: MouseEvent) {
@@ -248,6 +235,18 @@ onMounted(() => {
     currentScale = scale.value
     currentOffsetX = offset.x
     currentOffsetY = offset.y
+    
+    // Initial paint
+    if (canvasWorldEl.value) {
+      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+    }
+    if (canvasBgEl.value) {
+      const size = 18 * currentScale
+      const bgX = ((currentOffsetX % size) + size) % size
+      const bgY = ((currentOffsetY % size) + size) % size
+      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+    }
   }
 })
 
@@ -283,18 +282,11 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     <div
       ref="canvasBgEl"
       class="canvas-bg"
-      :style="{
-        backgroundSize: gridBgSize,
-        backgroundPosition: gridBgPos
-      }"
     />
 
     <div
       ref="canvasWorldEl"
       class="canvas-world"
-      :style="{
-        transform
-      }"
     >
       <slot />
       
