@@ -1,7 +1,7 @@
 {
   "appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
   "kind": "eve-dev-runtime-artifacts-pointer",
-  "runtimeAppRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3gn8f5-90a566e3-35f9-4eb9-b71a-ba55fd00403e/source",
-  "snapshotRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3gn8f5-90a566e3-35f9-4eb9-b71a-ba55fd00403e",
+  "runtimeAppRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3h5jz7-b26a4172-3307-4742-8d78-f577731b4f9c/source",
+  "snapshotRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3h5jz7-b26a4172-3307-4742-8d78-f577731b4f9c",
   "version": 2
 }

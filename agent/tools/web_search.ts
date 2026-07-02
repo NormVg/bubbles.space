@@ -1,56 +1,45 @@
 import { defineTool } from 'eve/tools'
 import { z } from 'zod'
-import * as cheerio from 'cheerio'
 
 export default defineTool({
-  description: 'Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.',
+  description: 'Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.',
   inputSchema: z.object({
     query: z.string().min(1).describe('The search query')
   }),
   async execute({ query }) {
     try {
-      const response = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          'Accept-Language': 'en-US,en;q=0.9'
-        }
-      })
-      
-      if (!response.ok) {
-        return { error: `DuckDuckGo responded with status ${response.status}` }
+      const apiKey = process.env.OLLAMA_API_KEY
+      if (!apiKey) {
+        return { error: 'OLLAMA_API_KEY environment variable is missing. Please set it in your environment variables.' }
       }
 
-      const html = await response.text()
-      const $ = cheerio.load(html)
+      const response = await fetch('https://ollama.com/api/web_search', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query })
+      })
+
+      if (!response.ok) {
+        return { error: `Ollama Search API responded with status ${response.status}` }
+      }
+
+      const data = await response.json()
       const results: Array<{ title: string, url: string, snippet: string }> = []
 
-      $('.result').each((i, element) => {
-        // Limit to top 5 results
-        if (results.length >= 5) return false
-
-        const titleElement = $(element).find('.result__title .result__a')
-        const title = titleElement.text().trim()
-        
-        let url = titleElement.attr('href')
-        if (url && url.startsWith('//duckduckgo.com/l/?uddg=')) {
-          // Parse the actual URL from the redirect link
-          try {
-            const urlObj = new URL('https:' + url)
-            const uddg = urlObj.searchParams.get('uddg')
-            if (uddg) {
-              url = decodeURIComponent(uddg)
-            }
-          } catch (e) {
-            // keep original if parsing fails
+      if (data && data.results && Array.isArray(data.results)) {
+        for (const item of data.results) {
+          if (item.title && item.url && item.content) {
+            results.push({
+              title: item.title,
+              url: item.url,
+              snippet: item.content // map 'content' to 'snippet' for backward compatibility
+            })
           }
         }
-        
-        const snippet = $(element).find('.result__snippet').text().trim()
-
-        if (title && url && snippet) {
-          results.push({ title, url, snippet })
-        }
-      })
+      }
 
       if (results.length === 0) {
         return { message: 'No results found.' }
