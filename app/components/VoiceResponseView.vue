@@ -7,7 +7,6 @@ import ToolCallGroup from './chat/ToolCallGroup.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
 import { useChatStore } from '../stores/chat'
-import { LucidePaperclip } from 'lucide-vue-next'
 
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
