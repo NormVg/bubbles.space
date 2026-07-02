@@ -202,38 +202,50 @@ const progress = computed(() => {
 
 .progress-ring-track {
   fill: transparent;
-  stroke: rgba(255, 255, 255, 0.05);
-  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 2.5;
 }
 html.light .progress-ring-track {
-  stroke: rgba(0, 0, 0, 0.05);
+  stroke: rgba(0, 0, 0, 0.04);
 }
 
 .progress-ring-circle {
   fill: transparent;
   stroke: var(--accent, #ff6b8b);
-  stroke-width: 4;
+  stroke-width: 3.5;
   stroke-linecap: round;
-  transition: stroke-dashoffset 1s linear;
+  transition: stroke-dashoffset 1s linear, stroke 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.timer-display:hover .progress-ring-circle {
+  stroke: #ff1493; /* Bright pink */
+  filter: drop-shadow(0 0 12px rgba(255, 20, 147, 0.6));
 }
 
 .time-text {
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: clamp(2rem, 15cqw, 4rem);
-  font-weight: 300;
+  font-size: clamp(2.5rem, 15cqw, 4.5rem);
+  font-weight: 200;
   letter-spacing: -0.05em;
   z-index: 2;
-  transition: color 0.3s ease;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.4s ease;
+}
+
+.timer-display:hover .time-text {
+  color: #ff1493;
+  transform: scale(1.06);
+  text-shadow: 0 0 20px rgba(255, 20, 147, 0.4);
 }
 
 .time-ending {
-  color: #ef4444;
+  color: #ef4444 !important;
   animation: pulse 1s infinite alternate;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
 }
 
 @keyframes pulse {
-  from { opacity: 1; }
-  to { opacity: 0.5; }
+  from { opacity: 1; transform: scale(1.06); }
+  to { opacity: 0.6; transform: scale(1); }
 }
 
 .timer-controls {
