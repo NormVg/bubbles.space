@@ -22,6 +22,23 @@ defineProps<{
   align-items: center;
   justify-content: center;
 }
+
+/* Force the mermaid SVG to scale and fill the container */
+.mermaid-widget-content :deep(.markdown-renderer svg) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+}
+
+/* Remove min-width constraints that might prevent scaling down */
+.mermaid-widget-content :deep(.markdown-renderer .mermaid) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .mermaid-widget-content::-webkit-scrollbar {
   width: 6px;
   height: 6px;

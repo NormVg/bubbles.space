@@ -29,11 +29,8 @@ const onMouseDown = (e: MouseEvent) => {
   
   const target = e.target as HTMLElement
   
-  // Prevent drag if clicking on interactive elements or the resize handle
-  if (
-    target.closest('button, a, input, textarea, select, .prevent-drag, .widget-resize-handle, .widget-close') ||
-    window.getSelection()?.toString().length
-  ) {
+  // Only drag from the dedicated drag handle
+  if (!target.closest('.widget-drag-handle')) {
     return
   }
   
@@ -168,8 +165,12 @@ const remove = () => {
       width: `${isResizing ? tempWidth : widget.width}px`,
       height: `${isResizing ? tempHeight : widget.height}px`
     }"
-    @mousedown="onMouseDown"
   >
+    <!-- Drag Handle -->
+    <div class="widget-drag-handle" @mousedown="onMouseDown">
+      <div class="drag-pill"></div>
+    </div>
+    
     <!-- Floating Close Button -->
     <button class="widget-close" @click.stop="remove" aria-label="Close widget">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -212,6 +213,8 @@ const remove = () => {
   z-index: 10;
   transition: box-shadow 0.2s ease;
   user-select: none;
+  min-width: min-content;
+  min-height: min-content;
 }
 
 /* Light mode support */
@@ -234,15 +237,10 @@ html.light .widget:hover {
 .widget.dragging {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   z-index: 100;
-  cursor: grabbing;
 }
 
 .widget.resizing {
   z-index: 100;
-}
-
-.widget:not(.dragging):hover {
-  cursor: grab;
 }
 
 .widget-body {
@@ -262,6 +260,51 @@ html.light .widget:hover {
   font-size: 14px;
   text-align: center;
   margin: auto;
+}
+
+/* Drag Handle */
+.widget-drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+  cursor: grab;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.widget-drag-handle:active {
+  cursor: grabbing;
+}
+
+.widget.group:hover .widget-drag-handle, .widget.dragging .widget-drag-handle {
+  opacity: 1;
+}
+
+.drag-pill {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.2s ease;
+}
+
+html.light .drag-pill {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.widget-drag-handle:hover .drag-pill {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+html.light .widget-drag-handle:hover .drag-pill {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Floating Close Button */
