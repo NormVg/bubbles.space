@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CloudUpload, CloudOff, CloudCheck } from 'lucide-vue-next'
+import { CloudUpload, CloudOff, CloudCheck, CloudAlert } from 'lucide-vue-next'
 import { useWidgetStore } from '~/stores/widgets'
 
 const widgetStore = useWidgetStore()
@@ -9,8 +9,9 @@ const statusIcon = computed(() => {
   switch (widgetStore.syncStatus) {
     case 'syncing':
       return CloudUpload
-    case 'offline':
     case 'error':
+      return CloudAlert
+    case 'offline':
       return CloudOff
     case 'saved':
     default:
@@ -69,8 +70,14 @@ const statusText = computed(() => {
 }
 
 /* Offline State - Amber alert */
-.sync-status.offline, .sync-status.error {
+.sync-status.offline {
   color: #f59e0b; /* Amber 500 */
+  opacity: 1;
+}
+
+/* Error State - Red alert */
+.sync-status.error {
+  color: #ef4444; /* Red 500 */
   opacity: 1;
 }
 
