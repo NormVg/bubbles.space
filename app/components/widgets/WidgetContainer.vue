@@ -127,7 +127,7 @@ const onMouseMove = (e: MouseEvent) => {
     currentY = Math.max(0, Math.min(newY, canvasHeight - dragStart.h))
     
     // Direct DOM Bypass - skipping Vue Reactivity for 60fps drag
-    containerEl.value.style.transform = `translate(${currentX}px, ${currentY}px)`
+    containerEl.value.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`
   })
 }
 
@@ -207,6 +207,7 @@ const onResizeMove = (e: MouseEvent) => {
     // Direct DOM Bypass
     containerEl.value.style.width = `${currentW}px`
     containerEl.value.style.height = `${currentH}px`
+    containerEl.value.style.containIntrinsicSize = `${currentW}px ${currentH}px`
   })
 }
 
@@ -245,7 +246,7 @@ const syncDOM = () => {
   if (!isDragging.value) {
     currentX = widget.value.x
     currentY = widget.value.y
-    containerEl.value.style.transform = `translate(${currentX}px, ${currentY}px)`
+    containerEl.value.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`
   }
   
   if (!isResizing.value) {
@@ -253,6 +254,7 @@ const syncDOM = () => {
     currentH = widget.value.height
     containerEl.value.style.width = `${currentW}px`
     containerEl.value.style.height = `${currentH}px`
+    containerEl.value.style.containIntrinsicSize = `${currentW}px ${currentH}px`
   }
 }
 

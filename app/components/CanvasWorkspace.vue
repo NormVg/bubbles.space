@@ -128,7 +128,7 @@ function doPan(e: MouseEvent) {
     
     // Direct DOM Bypass
     if (canvasWorldEl.value) {
-      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+      canvasWorldEl.value.style.transform = `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
       // Prevent visual noise at microscopic scales
@@ -229,7 +229,7 @@ function onWheel(e: WheelEvent) {
     
     // Direct DOM Bypass
     if (canvasWorldEl.value) {
-      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+      canvasWorldEl.value.style.transform = `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
       if (currentScale < 0.3) {
@@ -279,7 +279,7 @@ onMounted(() => {
     
     // Initial paint
     if (canvasWorldEl.value) {
-      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+      canvasWorldEl.value.style.transform = `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
       if (currentScale < 0.3) {
