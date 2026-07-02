@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CloudUpload, CloudOff, CheckCircle2 } from 'lucide-vue-next'
+import { CloudUpload, CloudOff, CloudCheck } from 'lucide-vue-next'
 import { useWidgetStore } from '~/stores/widgets'
 
 const widgetStore = useWidgetStore()
@@ -14,7 +14,7 @@ const statusIcon = computed(() => {
       return CloudOff
     case 'saved':
     default:
-      return CheckCircle2
+      return CloudCheck
   }
 })
 
