@@ -420,7 +420,7 @@ const handleSubmit = async (text: string) => {
     
     // Format widget contexts
     const widgetContextPrefix = consumedWidgets.map(wCtx => {
-      return `[Widget: ${wCtx.label}]\n${wCtx.text}`
+      return `[Widget: ${wCtx.label}]\n${wCtx.text}\n[/Widget]`
     }).join('\n\n')
     
     const allContexts = [msgContextPrefix, widgetContextPrefix].filter(Boolean).join('\n\n')
