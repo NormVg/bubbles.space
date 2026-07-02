@@ -123,11 +123,21 @@ function doPan(e: MouseEvent) {
       canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
-      const size = 18 * currentScale
-      const bgX = ((currentOffsetX % size) + size) % size
-      const bgY = ((currentOffsetY % size) + size) % size
-      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+      // Prevent browser crashing from microscopic tiling (million+ tiles)
+      if (currentScale < 0.3) {
+        canvasBgEl.value.style.opacity = '0'
+      } else {
+        if (currentScale < 0.6) {
+          canvasBgEl.value.style.opacity = `${(currentScale - 0.3) / 0.3}`
+        } else {
+          canvasBgEl.value.style.opacity = '1'
+        }
+        const size = 18 * currentScale
+        const bgX = ((currentOffsetX % size) + size) % size
+        const bgY = ((currentOffsetY % size) + size) % size
+        canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+        canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+      }
     }
 
     // Calculate overscroll distance for edge glows
@@ -196,11 +206,20 @@ function onWheel(e: WheelEvent) {
     canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
   }
   if (canvasBgEl.value) {
-    const size = 18 * currentScale
-    const bgX = ((currentOffsetX % size) + size) % size
-    const bgY = ((currentOffsetY % size) + size) % size
-    canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-    canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+    if (currentScale < 0.3) {
+      canvasBgEl.value.style.opacity = '0'
+    } else {
+      if (currentScale < 0.6) {
+        canvasBgEl.value.style.opacity = `${(currentScale - 0.3) / 0.3}`
+      } else {
+        canvasBgEl.value.style.opacity = '1'
+      }
+      const size = 18 * currentScale
+      const bgX = ((currentOffsetX % size) + size) % size
+      const bgY = ((currentOffsetY % size) + size) % size
+      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+    }
   }
   
   clearTimeout(wheelSyncTimeout)
@@ -241,11 +260,20 @@ onMounted(() => {
       canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
-      const size = 18 * currentScale
-      const bgX = ((currentOffsetX % size) + size) % size
-      const bgY = ((currentOffsetY % size) + size) % size
-      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+      if (currentScale < 0.3) {
+        canvasBgEl.value.style.opacity = '0'
+      } else {
+        if (currentScale < 0.6) {
+          canvasBgEl.value.style.opacity = `${(currentScale - 0.3) / 0.3}`
+        } else {
+          canvasBgEl.value.style.opacity = '1'
+        }
+        const size = 18 * currentScale
+        const bgX = ((currentOffsetX % size) + size) % size
+        const bgY = ((currentOffsetY % size) + size) % size
+        canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+        canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+      }
     }
   }
 })
@@ -316,8 +344,13 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
-  will-change: background-position, background-size;
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E");
+  will-change: background-position, background-size, opacity;
+  transition: opacity 0.2s ease;
+}
+
+html.light .canvas-bg {
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23000000' fill-opacity='0.1'/%3E%3C/svg%3E");
 }
 
 .canvas-world {
