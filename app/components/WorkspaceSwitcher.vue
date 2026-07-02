@@ -4,6 +4,8 @@ import VoiceResponseView from './VoiceResponseView.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
 
+import { useChatStore } from '../stores/chat'
+
 const activeWorkspace = ref('main')
 const workspaces = ref([
   { id: 'main', label: 'Main' },
@@ -15,10 +17,11 @@ const isExpanded = ref(false)
 
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
+const chatStore = useChatStore()
 
-const hasDynamicContent = computed(() => voiceAgent.voiceSessionActive.value)
+const hasDynamicContent = computed(() => voiceAgent.voiceSessionActive.value || chatStore.pendingWidgetContexts.length > 0)
 
-watch(() => voiceAgent.voiceSessionActive.value, async (active) => {
+watch(() => hasDynamicContent.value, async (active) => {
   await nextTick()
   if (active && !isExpanded.value) {
     toggleExpand()
@@ -135,7 +138,7 @@ function toggleExpand() {
     <!-- Dynamic Slot Area (Above the tabs) -->
     <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
       <div class="dynamic-slot-inner" ref="slotInnerRef">
-        <VoiceResponseView v-if="voiceAgent.voiceSessionActive.value" />
+        <VoiceResponseView v-if="hasDynamicContent" />
       </div>
     </div>
 

@@ -430,7 +430,41 @@ export function useVoiceAgent() {
 
       if (isAutoSendMode.value && transcript.value) {
         voiceSessionActive.value = true
-        await eveAgent.send({ message: transcript.value })
+        
+        // Build context similar to ChatInterface
+        const { useAppStore } = await import('../stores/app')
+        const { useWidgetStore } = await import('../stores/widgets')
+        const { useChatStore } = await import('../stores/chat')
+        
+        const appStore = useAppStore()
+        const widgetStore = useWidgetStore()
+        const chatStore = useChatStore()
+        
+        const timeContext = `Local Time: ${new Date().toLocaleString()}`
+        const locContext = appStore.location 
+          ? `Location: ${appStore.location.city || 'Unknown City'}, ${appStore.location.region || 'Unknown Region'} (Lat: ${appStore.location.latitude}, Lon: ${appStore.location.longitude})` 
+          : 'Location: Unknown'
+        
+        const widgetsCtx = widgetStore.widgets.length > 0 
+          ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
+          : 'Canvas Widgets: None'
+          
+        const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
+        
+        const consumedWidgets = chatStore.consumeWidgetContexts()
+        let finalMessage = transcript.value
+        
+        if (consumedWidgets.length > 0) {
+          const widgetContextPrefix = consumedWidgets.map(wCtx => {
+            return `[Widget: ${wCtx.label}]\n${wCtx.text}\n[/Widget]`
+          }).join('\n\n')
+          
+          finalMessage = `${systemBlock}\n\n${widgetContextPrefix}\n\n${transcript.value}`
+        } else {
+          finalMessage = `${systemBlock}\n\n${transcript.value}`
+        }
+
+        await eveAgent.send({ message: finalMessage })
       }
     } catch (error) {
       console.error('Failed to process voice recording', error)
