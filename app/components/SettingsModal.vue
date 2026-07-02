@@ -194,7 +194,14 @@ watch(() => session.value?.data, (data) => {
     // @ts-ignore - better-auth types are extended at runtime
     editSystemPrompt.value = data.user.systemPrompt || ''
     // @ts-ignore
-    editAboutMe.value = data.user.aboutMe || ''
+    let aboutText = data.user.aboutMe || ''
+    
+    // Auto-seed name and email into the markdown file if missing
+    if (!aboutText.toLowerCase().includes('name:')) {
+      aboutText = `name: ${data.user.name || 'User'}\nemail: ${data.user.email || ''}\n\n${aboutText}`
+    }
+    
+    editAboutMe.value = aboutText
   }
 }, { immediate: true })
 
