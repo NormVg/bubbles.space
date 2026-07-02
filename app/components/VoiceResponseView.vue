@@ -90,12 +90,15 @@ const voiceStatusLabel = computed(() => {
       <AILoader :size="12" :color="modeColor" :mode="currentMode" />
       <span>{{ voiceStatusLabel }}</span>
     </div>
-    <div v-if="chatStore.pendingWidgetContexts.length > 0" class="voice-contexts">
+    <TransitionGroup name="context-pill" tag="div" class="voice-contexts">
       <div v-for="ctx in chatStore.pendingWidgetContexts" :key="ctx.id" class="voice-context-pill">
         <LucidePaperclip :size="10" stroke-width="2.5" />
         <span>{{ ctx.label }}</span>
+        <button class="voice-context-clear" @click="chatStore.removeWidgetContext(ctx.id)" aria-label="Remove context" title="Remove context">
+          <LucideX :size="10" stroke-width="2.5" />
+        </button>
       </div>
-    </div>
+    </TransitionGroup>
     
     <div v-if="voiceAgent.transcript.value" class="user-transcript">
       <span class="transcript-label">You:</span> {{ voiceAgent.transcript.value }}
@@ -188,5 +191,46 @@ html.light .voice-context-pill {
 .voice-response-content::-webkit-scrollbar-thumb {
   background: var(--glass-border);
   border-radius: 4px;
+}
+
+/* TransitionGroup Animations for Pills */
+.context-pill-enter-active,
+.context-pill-leave-active,
+.context-pill-move {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.context-pill-enter-from,
+.context-pill-leave-to {
+  opacity: 0;
+  transform: scale(0.9) translateY(4px);
+}
+
+.context-pill-leave-active {
+  position: absolute;
+}
+
+.voice-contexts:empty {
+  display: none;
+  margin-bottom: 0;
+}
+
+.voice-context-clear {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  margin-left: 2px;
+}
+
+.voice-context-clear:hover {
+  background: var(--glass-border);
+  color: var(--text-primary);
 }
 </style>
