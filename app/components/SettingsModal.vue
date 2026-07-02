@@ -158,16 +158,6 @@
                 </button>
               </div>
               <p class="file-desc">Tell Bubbles about yourself. This context helps it give you more relevant and personalized answers.</p>
-              <div class="user-auto-fields" v-if="session.data">
-                <div class="auto-field">
-                  <span class="auto-label">name</span>
-                  <input type="text" v-model="editName" class="auto-input" />
-                </div>
-                <div class="auto-field">
-                  <span class="auto-label">email</span>
-                  <span class="auto-value">{{ session.data.user.email }}</span>
-                </div>
-              </div>
               <textarea 
                 v-model="editAboutMe"
                 class="settings-textarea file-textarea" 
@@ -196,13 +186,11 @@ const session = authClient.useSession()
 
 const editSystemPrompt = ref('')
 const editAboutMe = ref('')
-const editName = ref('')
 const isSaving = ref(false)
 
 // Sync form when session loads
-watch(() => session.value.data, (data) => {
+watch(() => session.value?.data, (data) => {
   if (data?.user) {
-    editName.value = data.user.name || ''
     // @ts-ignore - better-auth types are extended at runtime
     editSystemPrompt.value = data.user.systemPrompt || ''
     // @ts-ignore
@@ -214,7 +202,6 @@ async function saveUserSettings() {
   isSaving.value = true
   try {
     await authClient.updateUser({
-      name: editName.value,
       systemPrompt: editSystemPrompt.value,
       aboutMe: editAboutMe.value
     })
@@ -673,54 +660,6 @@ const colorMode = useColorMode({
   background: var(--bg-base);
   border: 1px solid var(--border-subtle);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-}
-
-.user-auto-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  background: var(--bg-soft);
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border-subtle);
-}
-
-.auto-field {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.auto-label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-  width: 60px;
-}
-
-.auto-value {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.auto-input {
-  background: transparent;
-  border: none;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  outline: none;
-  width: 100%;
-  border-bottom: 1px dashed var(--border-subtle);
-  padding: 2px 0;
-  transition: border-color 0.2s;
-}
-
-.auto-input:focus {
-  border-color: var(--accent);
 }
 
 .save-btn {

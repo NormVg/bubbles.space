@@ -362,14 +362,12 @@ const handleSubmit = async (text: string) => {
   // @ts-ignore
   const identityCtx = sessionData?.user?.aboutMe 
     // @ts-ignore
-    ? `About The User:\n${sessionData.user.aboutMe}` 
+    ? `About The User (user.md):\n${sessionData.user.aboutMe}` 
     : ''
-  const userName = sessionData?.user?.name || 'User'
 
   const systemParts = [
     timeContext, 
     locContext, 
-    `User Name: ${userName}`,
     widgetsCtx, 
     soulCtx, 
     identityCtx
