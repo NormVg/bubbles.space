@@ -55,6 +55,9 @@ export const useAppStore = defineStore('app', () => {
       }
     }, (error) => {
       console.warn('Geolocation error:', error.message)
+    }, {
+      timeout: 5000, // Fail after 5 seconds if GPS lock is stuck
+      maximumAge: 300000 // Accept a 5-minute old cached location
     })
   }
 

@@ -123,7 +123,7 @@ function doPan(e: MouseEvent) {
       canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
     }
     if (canvasBgEl.value) {
-      // Prevent browser crashing from microscopic tiling (million+ tiles)
+      // Prevent visual noise at microscopic scales
       if (currentScale < 0.3) {
         canvasBgEl.value.style.opacity = '0'
       } else {
@@ -132,11 +132,6 @@ function doPan(e: MouseEvent) {
         } else {
           canvasBgEl.value.style.opacity = '1'
         }
-        const size = 18 * currentScale
-        const bgX = ((currentOffsetX % size) + size) % size
-        const bgY = ((currentOffsetY % size) + size) % size
-        canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-        canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
       }
     }
 
@@ -214,11 +209,6 @@ function onWheel(e: WheelEvent) {
       } else {
         canvasBgEl.value.style.opacity = '1'
       }
-      const size = 18 * currentScale
-      const bgX = ((currentOffsetX % size) + size) % size
-      const bgY = ((currentOffsetY % size) + size) % size
-      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
     }
   }
   
@@ -268,11 +258,6 @@ onMounted(() => {
         } else {
           canvasBgEl.value.style.opacity = '1'
         }
-        const size = 18 * currentScale
-        const bgX = ((currentOffsetX % size) + size) % size
-        const bgY = ((currentOffsetY % size) + size) % size
-        canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
-        canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
       }
     }
   }
@@ -305,17 +290,17 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     <div class="edge-glow left" :style="{ opacity: edgeGlow.left }"></div>
     <div class="edge-glow right" :style="{ opacity: edgeGlow.right }"></div>
 
-    <!-- Background is now applied at the viewport level so it fills everything.
-         The dots pan and scale identically to the canvas world via CSS. -->
-    <div
-      ref="canvasBgEl"
-      class="canvas-bg"
-    />
-
     <div
       ref="canvasWorldEl"
       class="canvas-world"
+      :style="{ width: `${width}px`, height: `${height}px` }"
     >
+      <!-- Background grid that natively scales and translates with the world via GPU -->
+      <div
+        ref="canvasBgEl"
+        class="canvas-bg"
+      />
+      
       <slot />
       
       <!-- Render dynamic AI widgets -->
@@ -345,8 +330,8 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   inset: 0;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E");
-  will-change: background-position, background-size, opacity;
-  transition: opacity 0.2s ease;
+  background-size: 18px 18px;
+  will-change: opacity;
 }
 
 html.light .canvas-bg {
