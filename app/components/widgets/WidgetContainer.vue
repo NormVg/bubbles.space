@@ -56,13 +56,13 @@ const addAsContext = () => {
 
 // Drag State
 const isDragging = ref(false)
-const dragStart = { x: 0, y: 0, wx: 0, wy: 0 }
+const dragStart = { x: 0, y: 0, wx: 0, wy: 0, scale: 1 }
 let currentX = 0
 let currentY = 0
 
 // Resize State
 const isResizing = ref(false)
-const resizeStart = { x: 0, y: 0, w: 0, h: 0 }
+const resizeStart = { x: 0, y: 0, w: 0, h: 0, scale: 1 }
 let currentW = 0
 let currentH = 0
 
@@ -80,10 +80,14 @@ const onMouseDown = (e: MouseEvent) => {
   e.preventDefault()
   isDragging.value = true
   
+  const rect = containerEl.value.getBoundingClientRect()
+  const scale = rect.width / containerEl.value.offsetWidth
+
   dragStart.x = e.clientX
   dragStart.y = e.clientY
   dragStart.wx = widget.value.x
   dragStart.wy = widget.value.y
+  dragStart.scale = scale || 1
   
   currentX = dragStart.wx
   currentY = dragStart.wy
@@ -105,11 +109,9 @@ const onMouseMove = (e: MouseEvent) => {
   dragRaf = requestAnimationFrame(() => {
     dragRaf = null
     if (!containerEl.value || !widget.value) return
-    const rect = containerEl.value.getBoundingClientRect()
-  const scale = rect.width / containerEl.value.offsetWidth
   
-  const dx = (e.clientX - dragStart.x) / scale
-  const dy = (e.clientY - dragStart.y) / scale
+  const dx = (clientX - dragStart.x) / dragStart.scale
+  const dy = (clientY - dragStart.y) / dragStart.scale
   
   let newX = dragStart.wx + dx
   let newY = dragStart.wy + dy
@@ -144,10 +146,15 @@ const onResizeDown = (e: MouseEvent) => {
   e.stopPropagation()
   
   isResizing.value = true
+  
+  const rect = containerEl.value.getBoundingClientRect()
+  const scale = rect.width / containerEl.value.offsetWidth
+
   resizeStart.x = e.clientX
   resizeStart.y = e.clientY
   resizeStart.w = widget.value.width
   resizeStart.h = widget.value.height
+  resizeStart.scale = scale || 1
   
   currentW = resizeStart.w
   currentH = resizeStart.h
@@ -169,11 +176,9 @@ const onResizeMove = (e: MouseEvent) => {
   resizeRaf = requestAnimationFrame(() => {
     resizeRaf = null
     if (!containerEl.value || !widget.value) return
-    const rect = containerEl.value.getBoundingClientRect()
-  const scale = rect.width / containerEl.value.offsetWidth
   
-  const dx = (e.clientX - resizeStart.x) / scale
-  const dy = (e.clientY - resizeStart.y) / scale
+  const dx = (clientX - resizeStart.x) / resizeStart.scale
+  const dy = (clientY - resizeStart.y) / resizeStart.scale
   
   const minWidth = 200
   const minHeight = 150
