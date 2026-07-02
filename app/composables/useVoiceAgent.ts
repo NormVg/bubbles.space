@@ -1,6 +1,9 @@
 import { readonly, ref, watch } from 'vue'
 import type { EveMessage } from 'eve/vue'
 import { useAppAgent } from './useAppAgent'
+import { useAppStore } from '../stores/app'
+import { useWidgetStore } from '../stores/widgets'
+import { useChatStore } from '../stores/chat'
 
 interface VoiceStartOptions {
   autoSend?: boolean
@@ -432,10 +435,6 @@ export function useVoiceAgent() {
         voiceSessionActive.value = true
         
         // Build context similar to ChatInterface
-        const { useAppStore } = await import('../stores/app')
-        const { useWidgetStore } = await import('../stores/widgets')
-        const { useChatStore } = await import('../stores/chat')
-        
         const appStore = useAppStore()
         const widgetStore = useWidgetStore()
         const chatStore = useChatStore()
