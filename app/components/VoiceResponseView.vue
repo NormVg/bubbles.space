@@ -200,16 +200,20 @@ html.light .voice-context-pill {
 .context-pill-leave-active,
 .context-pill-move {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  max-height: 40px;
 }
 
 .context-pill-enter-from,
 .context-pill-leave-to {
   opacity: 0;
   transform: scale(0.9) translateY(4px);
-}
-
-.context-pill-leave-active {
-  position: absolute;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-width: 0;
 }
 
 .voice-contexts:empty {
