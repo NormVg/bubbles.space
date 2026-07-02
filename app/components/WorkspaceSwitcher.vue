@@ -39,6 +39,31 @@ function createWorkspace() {
   widgetStore.createWorkspace(label)
 }
 
+const editingId = ref<string | null>(null)
+const editInputRef = ref<HTMLInputElement[] | null>(null)
+
+function startEditing(id: string) {
+  editingId.value = id
+  nextTick(() => {
+    if (editInputRef.value) {
+      const input = editInputRef.value.find(el => el.dataset.id === id)
+      if (input) {
+        input.focus()
+        input.select()
+      }
+    }
+  })
+}
+
+function finishEditing(id: string, event: Event) {
+  const target = event.target as HTMLInputElement
+  const newName = target.value
+  if (newName !== '') {
+    widgetStore.renameWorkspace(id, newName)
+  }
+  editingId.value = null
+}
+
 function deleteWorkspace(id: string) {
   widgetStore.deleteWorkspace(id)
 }
@@ -155,9 +180,20 @@ function toggleExpand() {
         class="ws-tab"
         :class="{ active: widgetStore.activeWorkspaceId === workspace.id }"
       >
-        <button class="ws-btn" @click="setActive(workspace.id)">
+        <button v-if="editingId !== workspace.id" class="ws-btn" @click="setActive(workspace.id)" @dblclick="startEditing(workspace.id)">
           {{ workspace.label }}
         </button>
+        <input 
+          v-else
+          ref="editInputRef"
+          :data-id="workspace.id"
+          class="ws-input"
+          type="text"
+          :value="workspace.label"
+          @blur="finishEditing(workspace.id, $event)"
+          @keydown.enter="finishEditing(workspace.id, $event)"
+          @keydown.esc="editingId = null"
+        />
         <!-- Delete cross just for visual parity with screenshot -->
         <button
           v-if="widgetStore.activeWorkspaceId === workspace.id && workspace.id !== 'main'"
@@ -289,6 +325,19 @@ function toggleExpand() {
   cursor: pointer;
   transition: color 0.12s, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
+}
+
+.ws-input {
+  height: 26px;
+  padding: 0 10px;
+  background: var(--hover-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  outline: none;
+  width: 100px;
 }
 
 .ws-btn:active {

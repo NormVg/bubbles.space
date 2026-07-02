@@ -77,6 +77,16 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
+  const renameWorkspace = (id: string, newLabel: string) => {
+    if (!newLabel.trim()) return
+    const idx = workspaces.value.findIndex(w => w.id === id)
+    if (idx !== -1) {
+      const newWorkspaces = [...workspaces.value]
+      newWorkspaces[idx] = { ...newWorkspaces[idx], label: newLabel.trim() }
+      workspaces.value = newWorkspaces
+    }
+  }
+
   const switchWorkspace = (id: string) => {
     if (workspaces.value.some(w => w.id === id)) {
       activeWorkspaceId.value = id
@@ -311,6 +321,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     init,
     createWorkspace,
     deleteWorkspace,
+    renameWorkspace,
     switchWorkspace,
     saveCanvasState,
     addWidget,
