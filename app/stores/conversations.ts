@@ -14,6 +14,7 @@ export const useConversationStore = defineStore('conversations', () => {
   const metaList = ref<ConversationMeta[]>([])
   const activeDetail = ref<ConversationDetail | null>(null)
   const isInitialized = ref(false)
+  const isInitializing = ref(false)
 
   // Getters
   const sortedConversations = computed(() => [...metaList.value])
@@ -24,7 +25,8 @@ export const useConversationStore = defineStore('conversations', () => {
 
   // Initialization
   async function init() {
-    if (isInitialized.value) return
+    if (isInitialized.value || isInitializing.value) return
+    isInitializing.value = true
     if (typeof window === 'undefined') return // SSR guard
 
     const loadedMeta = await conversationService.loadMetadataList()
@@ -39,6 +41,7 @@ export const useConversationStore = defineStore('conversations', () => {
     }
 
     isInitialized.value = true
+    isInitializing.value = false
   }
 
   async function loadActiveDetail(id: string) {
@@ -59,7 +62,7 @@ export const useConversationStore = defineStore('conversations', () => {
 
   // Actions
   async function ensureConversation() {
-    if (!isInitialized.value) await init()
+    if (!isInitialized.value && !isInitializing.value) await init()
     if (metaList.value.length === 0) {
       const { meta, detail } = await conversationService.createNewConversation()
       metaList.value = [meta]
