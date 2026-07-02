@@ -81,6 +81,15 @@ const maxDataValue = computed(() => {
   return max > 0 ? max * 1.1 : 10
 })
 
+const barLayout = computed(() => {
+  const numDatasets = graphData.value.datasets.length
+  const numLabels = graphData.value.labels.length || 1
+  const maxGroupWidth = 80 // max width of a group of bars
+  const groupWidth = Math.min(maxGroupWidth, (innerWidth / numLabels) * 0.7)
+  const barWidth = groupWidth / numDatasets
+  return { groupWidth, barWidth }
+})
+
 const getX = (index: number, count: number) => {
   if (count <= 1) return padding.left + innerWidth / 2
   return padding.left + (index / (count - 1)) * innerWidth
@@ -258,9 +267,9 @@ const pieSlices = computed(() => {
           <template v-for="(dataset, dsIndex) in graphData.datasets" :key="dsIndex">
             <rect 
               v-for="(val, i) in dataset.values" :key="i"
-              :x="getX(i, dataset.values.length) - (Math.min(40, innerWidth / graphData.labels.length * 0.6) / 2) + (dsIndex * 15)" 
+              :x="getX(i, dataset.values.length) - (barLayout.groupWidth / 2) + (dsIndex * barLayout.barWidth) + (barLayout.barWidth * 0.05)" 
               :y="isMounted ? getY(val) : padding.top + innerHeight" 
-              :width="Math.min(40, innerWidth / graphData.labels.length * 0.6)" 
+              :width="barLayout.barWidth * 0.9" 
               :height="isMounted ? padding.top + innerHeight - getY(val) : 0" 
               class="bar-rect"
               :fill="dataset.color || 'var(--accent)'"
