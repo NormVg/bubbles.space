@@ -26,6 +26,13 @@ const ZOOM_MAX = 3
 const ZOOM_SPEED = 0.002
 
 const viewportEl = ref<HTMLElement | null>(null)
+const canvasWorldEl = ref<HTMLElement | null>(null)
+const canvasBgEl = ref<HTMLElement | null>(null)
+
+// Direct DOM State (Bypassing Reactivity)
+let currentOffsetX = 0
+let currentOffsetY = 0
+let currentScale = 1
 
 // ── Computed constraints ───────────────────────────────────
 // The minimum scale is whatever makes the canvas fit perfectly in the viewport.
@@ -99,8 +106,8 @@ function startPan(e: MouseEvent) {
   if (e.button === 1 || (e.button === 0 && e.altKey) || (e.button === 0 && !isWidgetClick)) {
     e.preventDefault()
     isPanning.value = true
-    panStart.x = e.clientX - offset.x
-    panStart.y = e.clientY - offset.y
+    panStart.x = e.clientX - currentOffsetX
+    panStart.y = e.clientY - currentOffsetY
     if (!isWidgetClick) emit('canvasClick')
   }
 }
@@ -120,17 +127,29 @@ function doPan(e: MouseEvent) {
     const rawX = clientX - panStart.x
     const rawY = clientY - panStart.y
   
-  const clamped = clampOffset(rawX, rawY, scale.value)
-  offset.x = clamped.x
-  offset.y = clamped.y
+    const clamped = clampOffset(rawX, rawY, currentScale)
+    currentOffsetX = clamped.x
+    currentOffsetY = clamped.y
+    
+    // Direct DOM Bypass
+    if (canvasWorldEl.value) {
+      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+    }
+    if (canvasBgEl.value) {
+      const size = 18 * currentScale
+      const bgX = ((currentOffsetX % size) + size) % size
+      const bgY = ((currentOffsetY % size) + size) % size
+      canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+      canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+    }
 
-  // Calculate overscroll distance for edge glows
-  const overX = rawX - clamped.x
-  const overY = rawY - clamped.y
+    // Calculate overscroll distance for edge glows
+    const overX = rawX - clamped.x
+    const overY = rawY - clamped.y
 
-  // Smoothly map overscroll to opacity for a very minimal effect
-  const maxOverscroll = 120 // pixels
-  const maxOpacity = 0.12 // Reduced significantly for subtlety
+    // Smoothly map overscroll to opacity for a very minimal effect
+    const maxOverscroll = 120 // pixels
+    const maxOpacity = 0.12 // Reduced significantly for subtlety
     edgeGlow.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
     edgeGlow.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
     edgeGlow.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
@@ -138,8 +157,15 @@ function doPan(e: MouseEvent) {
   })
 }
 
+function syncReactives() {
+  offset.x = currentOffsetX
+  offset.y = currentOffsetY
+  scale.value = currentScale
+}
+
 function endPan() {
   isPanning.value = false
+  syncReactives()
   edgeGlow.top = 0
   edgeGlow.bottom = 0
   edgeGlow.left = 0
@@ -147,6 +173,8 @@ function endPan() {
 }
 
 // ── Zoom ───────────────────────────────────────────────────
+let wheelSyncTimeout: any = null
+
 function onWheel(e: WheelEvent) {
   const target = e.target as HTMLElement
   const isWidget = target.closest('.widget')
@@ -160,21 +188,36 @@ function onWheel(e: WheelEvent) {
   const mouseY = e.clientY - rect.top
 
   const delta = -e.deltaY * ZOOM_SPEED
-  const newScale = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN.value, scale.value * (1 + delta)))
+  const newScale = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN.value, currentScale * (1 + delta)))
   
-  if (newScale === scale.value) return // No change
+  if (newScale === currentScale) return // No change
 
-  const ratio = newScale / scale.value
+  const ratio = newScale / currentScale
   
   // Calculate new offset to zoom toward cursor
-  const rawX = mouseX - ratio * (mouseX - offset.x)
-  const rawY = mouseY - ratio * (mouseY - offset.y)
+  const rawX = mouseX - ratio * (mouseX - currentOffsetX)
+  const rawY = mouseY - ratio * (mouseY - currentOffsetY)
   
   const clamped = clampOffset(rawX, rawY, newScale)
   
-  scale.value = newScale
-  offset.x = clamped.x
-  offset.y = clamped.y
+  currentScale = newScale
+  currentOffsetX = clamped.x
+  currentOffsetY = clamped.y
+  
+  // Direct DOM Bypass
+  if (canvasWorldEl.value) {
+    canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+  }
+  if (canvasBgEl.value) {
+    const size = 18 * currentScale
+    const bgX = ((currentOffsetX % size) + size) % size
+    const bgY = ((currentOffsetY % size) + size) % size
+    canvasBgEl.value.style.backgroundPosition = `${bgX}px ${bgY}px`
+    canvasBgEl.value.style.backgroundSize = `${size}px ${size}px`
+  }
+  
+  clearTimeout(wheelSyncTimeout)
+  wheelSyncTimeout = setTimeout(syncReactives, 150)
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -201,6 +244,10 @@ onMounted(() => {
     const clamped = clampOffset(0, 0, scale.value)
     offset.x = clamped.x
     offset.y = clamped.y
+    
+    currentScale = scale.value
+    currentOffsetX = offset.x
+    currentOffsetY = offset.y
   }
 })
 
@@ -234,6 +281,7 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     <!-- Background is now applied at the viewport level so it fills everything.
          The dots pan and scale identically to the canvas world via CSS. -->
     <div
+      ref="canvasBgEl"
       class="canvas-bg"
       :style="{
         backgroundSize: gridBgSize,
@@ -242,6 +290,7 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     />
 
     <div
+      ref="canvasWorldEl"
       class="canvas-world"
       :style="{
         transform

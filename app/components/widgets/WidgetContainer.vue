@@ -57,14 +57,14 @@ const addAsContext = () => {
 // Drag State
 const isDragging = ref(false)
 const dragStart = { x: 0, y: 0, wx: 0, wy: 0 }
-const tempX = ref(0)
-const tempY = ref(0)
+let currentX = 0
+let currentY = 0
 
 // Resize State
 const isResizing = ref(false)
 const resizeStart = { x: 0, y: 0, w: 0, h: 0 }
-const tempWidth = ref(0)
-const tempHeight = ref(0)
+let currentW = 0
+let currentH = 0
 
 // Dragging Logic
 const onMouseDown = (e: MouseEvent) => {
@@ -85,8 +85,8 @@ const onMouseDown = (e: MouseEvent) => {
   dragStart.wx = widget.value.x
   dragStart.wy = widget.value.y
   
-  tempX.value = dragStart.wx
-  tempY.value = dragStart.wy
+  currentX = dragStart.wx
+  currentY = dragStart.wy
 
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup', onMouseUp)
@@ -117,8 +117,11 @@ const onMouseMove = (e: MouseEvent) => {
   const canvasWidth = 2560
   const canvasHeight = 1440
   
-    tempX.value = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
-    tempY.value = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
+    currentX = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
+    currentY = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
+    
+    // Direct DOM Bypass - skipping Vue Reactivity for 60fps drag
+    containerEl.value.style.transform = `translate(${currentX}px, ${currentY}px)`
   })
 }
 
@@ -129,8 +132,8 @@ const onMouseUp = () => {
   window.removeEventListener('mouseup', onMouseUp)
   
   store.updateWidget(props.id, {
-    x: tempX.value,
-    y: tempY.value
+    x: currentX,
+    y: currentY
   })
 }
 
@@ -146,8 +149,8 @@ const onResizeDown = (e: MouseEvent) => {
   resizeStart.w = widget.value.width
   resizeStart.h = widget.value.height
   
-  tempWidth.value = resizeStart.w
-  tempHeight.value = resizeStart.h
+  currentW = resizeStart.w
+  currentH = resizeStart.h
   
   window.addEventListener('mousemove', onResizeMove)
   window.addEventListener('mouseup', onResizeUp)
@@ -185,8 +188,12 @@ const onResizeMove = (e: MouseEvent) => {
   newW = Math.min(newW, canvasWidth - widget.value.x)
   newH = Math.min(newH, canvasHeight - widget.value.y)
   
-    tempWidth.value = newW
-    tempHeight.value = newH
+    currentW = newW
+    currentH = newH
+    
+    // Direct DOM Bypass
+    containerEl.value.style.width = `${currentW}px`
+    containerEl.value.style.height = `${currentH}px`
   })
 }
 
@@ -197,8 +204,8 @@ const onResizeUp = () => {
   window.removeEventListener('mouseup', onResizeUp)
   
   store.updateWidget(props.id, {
-    width: tempWidth.value,
-    height: tempHeight.value
+    width: currentW,
+    height: currentH
   })
 }
 
@@ -226,9 +233,9 @@ const remove = () => {
     class="widget group"
     :class="{ dragging: isDragging, resizing: isResizing, editing: isEditing }"
     :style="{
-      transform: `translate(${isDragging ? tempX : widget.x}px, ${isDragging ? tempY : widget.y}px)`,
-      width: `${isResizing ? tempWidth : widget.width}px`,
-      height: `${isResizing ? tempHeight : widget.height}px`
+      transform: `translate(${widget.x}px, ${widget.y}px)`,
+      width: `${widget.width}px`,
+      height: `${widget.height}px`
     }"
   >
     <!-- Drag Handle & Title -->
