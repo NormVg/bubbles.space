@@ -24,6 +24,7 @@ export class WorkspaceService {
           y: w.y,
           width: w.width,
           height: w.height,
+          title: w.title ?? undefined,
           data: w.data,
         })),
         archivedWidgets: wsArchivedWidgets.map(w => ({
@@ -33,6 +34,7 @@ export class WorkspaceService {
           y: w.y,
           width: w.width,
           height: w.height,
+          title: w.title ?? undefined,
           data: w.data,
         })),
       };
@@ -69,6 +71,7 @@ export class WorkspaceService {
             y: w.y,
             width: w.width,
             height: w.height,
+            title: w.title || null,
             data: w.data || {},
             isArchived: false,
           });
@@ -87,6 +90,7 @@ export class WorkspaceService {
             y: w.y,
             width: w.width,
             height: w.height,
+            title: w.title || null,
             data: w.data || {},
             isArchived: true,
           });

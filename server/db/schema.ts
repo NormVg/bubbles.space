@@ -63,6 +63,7 @@ export const widget = pgTable("widget", {
 	y: real("y").notNull(),
 	width: real("width").notNull(),
 	height: real("height").notNull(),
+	title: text("title"),
 	data: jsonb("data").notNull().$type<Record<string, any>>(),
 	isArchived: boolean("is_archived").default(false).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
