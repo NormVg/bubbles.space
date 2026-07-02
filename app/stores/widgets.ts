@@ -134,7 +134,6 @@ export const useWidgetStore = defineStore('widgets', () => {
         
         workspaces.value = [mainWorkspace]
         activeWorkspaceId.value = 'main'
-      }
     } catch (e) {
       console.error('Failed to load workspaces', e)
     }
