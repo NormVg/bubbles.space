@@ -56,13 +56,13 @@ const addAsContext = () => {
 
 // Drag State
 const isDragging = ref(false)
-const dragStart = { x: 0, y: 0, wx: 0, wy: 0, scale: 1 }
+const dragStart = { x: 0, y: 0, wx: 0, wy: 0, w: 0, h: 0, scale: 1 }
 let currentX = 0
 let currentY = 0
 
 // Resize State
 const isResizing = ref(false)
-const resizeStart = { x: 0, y: 0, w: 0, h: 0, scale: 1 }
+const resizeStart = { x: 0, y: 0, w: 0, h: 0, wx: 0, wy: 0, scale: 1 }
 let currentW = 0
 let currentH = 0
 
@@ -87,6 +87,8 @@ const onMouseDown = (e: MouseEvent) => {
   dragStart.y = e.clientY
   dragStart.wx = widget.value.x
   dragStart.wy = widget.value.y
+  dragStart.w = widget.value.width
+  dragStart.h = widget.value.height
   dragStart.scale = scale || 1
   
   currentX = dragStart.wx
@@ -119,8 +121,8 @@ const onMouseMove = (e: MouseEvent) => {
   const canvasWidth = 2560
   const canvasHeight = 1440
   
-    currentX = Math.max(0, Math.min(newX, canvasWidth - widget.value.width))
-    currentY = Math.max(0, Math.min(newY, canvasHeight - widget.value.height))
+    currentX = Math.max(0, Math.min(newX, canvasWidth - dragStart.w))
+    currentY = Math.max(0, Math.min(newY, canvasHeight - dragStart.h))
     
     // Direct DOM Bypass - skipping Vue Reactivity for 60fps drag
     containerEl.value.style.transform = `translate(${currentX}px, ${currentY}px)`
@@ -154,6 +156,8 @@ const onResizeDown = (e: MouseEvent) => {
   resizeStart.y = e.clientY
   resizeStart.w = widget.value.width
   resizeStart.h = widget.value.height
+  resizeStart.wx = widget.value.x
+  resizeStart.wy = widget.value.y
   resizeStart.scale = scale || 1
   
   currentW = resizeStart.w
@@ -190,8 +194,8 @@ const onResizeMove = (e: MouseEvent) => {
   let newH = Math.max(minHeight, resizeStart.h + dy)
   
   // Ensure we don't resize beyond canvas right/bottom edges
-  newW = Math.min(newW, canvasWidth - widget.value.x)
-  newH = Math.min(newH, canvasHeight - widget.value.y)
+  newW = Math.min(newW, canvasWidth - resizeStart.wx)
+  newH = Math.min(newH, canvasHeight - resizeStart.wy)
   
     currentW = newW
     currentH = newH
@@ -333,16 +337,13 @@ watch(() => widget.value, () => {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(20, 20, 22, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(20, 20, 22, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   overflow: visible; /* Need visible for floating close button if it overhangs, but content should clip */
-  will-change: transform, width, height;
   z-index: 10;
   transition: box-shadow 0.2s ease;
   user-select: none;
@@ -353,7 +354,7 @@ watch(() => widget.value, () => {
 
 /* Light mode support */
 html.light .widget {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.98);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
 }
@@ -371,10 +372,12 @@ html.light .widget:hover {
 .widget.dragging {
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25);
   z-index: 100;
+  will-change: transform;
 }
 
 .widget.resizing {
   z-index: 100;
+  will-change: width, height;
 }
 
 .widget-body {

@@ -19,8 +19,8 @@ const widgetStore = useWidgetStore()
 const scale = ref(1)
 const offset = reactive({ x: 0, y: 0 })
 const isPanning = ref(false)
-const panStart = reactive({ x: 0, y: 0 })
-const edgeGlow = reactive({ top: 0, bottom: 0, left: 0, right: 0 })
+const panStart = { x: 0, y: 0 } // No need for reactivity here
+const edgeGlowState = { top: 0, bottom: 0, left: 0, right: 0 } // Plain object
 
 const ZOOM_MAX = 3
 const ZOOM_SPEED = 0.002
@@ -28,6 +28,12 @@ const ZOOM_SPEED = 0.002
 const viewportEl = ref<HTMLElement | null>(null)
 const canvasWorldEl = ref<HTMLElement | null>(null)
 const canvasBgEl = ref<HTMLElement | null>(null)
+
+// Refs for Edge Glows to bypass reactivity
+const edgeGlowTop = ref<HTMLElement | null>(null)
+const edgeGlowBottom = ref<HTMLElement | null>(null)
+const edgeGlowLeft = ref<HTMLElement | null>(null)
+const edgeGlowRight = ref<HTMLElement | null>(null)
 
 // Direct DOM State (Bypassing Reactivity)
 let currentOffsetX = 0
@@ -142,10 +148,16 @@ function doPan(e: MouseEvent) {
     // Smoothly map overscroll to opacity for a very minimal effect
     const maxOverscroll = 120 // pixels
     const maxOpacity = 0.12 // Reduced significantly for subtlety
-    edgeGlow.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
-    edgeGlow.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
-    edgeGlow.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
-    edgeGlow.bottom = Math.max(0, Math.min(maxOpacity, (-overY / maxOverscroll) * maxOpacity))
+    edgeGlowState.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
+    edgeGlowState.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
+    edgeGlowState.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
+    edgeGlowState.bottom = Math.max(0, Math.min(maxOpacity, (-overY / maxOverscroll) * maxOpacity))
+    
+    // Direct DOM Bypass for edge glows
+    if (edgeGlowTop.value) edgeGlowTop.value.style.opacity = `${edgeGlowState.top}`
+    if (edgeGlowBottom.value) edgeGlowBottom.value.style.opacity = `${edgeGlowState.bottom}`
+    if (edgeGlowLeft.value) edgeGlowLeft.value.style.opacity = `${edgeGlowState.left}`
+    if (edgeGlowRight.value) edgeGlowRight.value.style.opacity = `${edgeGlowState.right}`
   })
 }
 
@@ -158,10 +170,14 @@ function syncReactives() {
 function endPan() {
   isPanning.value = false
   syncReactives()
-  edgeGlow.top = 0
-  edgeGlow.bottom = 0
-  edgeGlow.left = 0
-  edgeGlow.right = 0
+  edgeGlowState.top = 0
+  edgeGlowState.bottom = 0
+  edgeGlowState.left = 0
+  edgeGlowState.right = 0
+  if (edgeGlowTop.value) edgeGlowTop.value.style.opacity = '0'
+  if (edgeGlowBottom.value) edgeGlowBottom.value.style.opacity = '0'
+  if (edgeGlowLeft.value) edgeGlowLeft.value.style.opacity = '0'
+  if (edgeGlowRight.value) edgeGlowRight.value.style.opacity = '0'
 }
 
 // ── Zoom ───────────────────────────────────────────────────
@@ -285,10 +301,10 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     @mousedown="startPan"
   >
     <!-- Edge visual feedback when hitting boundaries -->
-    <div class="edge-glow top" :style="{ opacity: edgeGlow.top }"></div>
-    <div class="edge-glow bottom" :style="{ opacity: edgeGlow.bottom }"></div>
-    <div class="edge-glow left" :style="{ opacity: edgeGlow.left }"></div>
-    <div class="edge-glow right" :style="{ opacity: edgeGlow.right }"></div>
+    <div ref="edgeGlowTop" class="edge-glow top" style="opacity: 0"></div>
+    <div ref="edgeGlowBottom" class="edge-glow bottom" style="opacity: 0"></div>
+    <div ref="edgeGlowLeft" class="edge-glow left" style="opacity: 0"></div>
+    <div ref="edgeGlowRight" class="edge-glow right" style="opacity: 0"></div>
 
     <div
       ref="canvasWorldEl"
