@@ -29,7 +29,6 @@ import { defineDynamic, defineInstructions } from "file:///Users/vishnu_mac/Desk
 import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__aa0080848a99faf0650f6759fa6cfa06/node_modules/eve/dist/src/public/tools/index.js";
 import { z } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js";
 import { fetchWeatherApi } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/openmeteo@1.2.3/node_modules/openmeteo/lib/index.js";
-import * as cheerio from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/cheerio@1.2.0/node_modules/cheerio/dist/esm/index.js";
 import * as ur$3 from "node:fs";
 import g, { createWriteStream, existsSync, mkdirSync, promises, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import * as lr$3 from "node:path";
@@ -195,7 +194,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -206,17 +205,17 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -245,7 +244,7 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 var canvas_read_widget_default = defineTool({
 	description: "Read the full contents of a widget on the canvas using its ID. Use this when you need to see the exact text, markdown, or diagram source code of a specific widget.",
@@ -255,7 +254,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -268,7 +267,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -289,7 +288,7 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -331,37 +330,33 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
-	description: "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
 	inputSchema: z.object({ query: z.string().min(1).describe("The search query") }),
 	async execute({ query }) {
 		try {
-			const response = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, { headers: {
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-				"Accept-Language": "en-US,en;q=0.9"
-			} });
-			if (!response.ok) return { error: `DuckDuckGo responded with status ${response.status}` };
-			const html = await response.text();
-			const $ = cheerio.load(html);
-			const results = [];
-			$(".result").each((i, element) => {
-				if (results.length >= 5) return false;
-				const titleElement = $(element).find(".result__title .result__a");
-				const title = titleElement.text().trim();
-				let url = titleElement.attr("href");
-				if (url && url.startsWith("//duckduckgo.com/l/?uddg=")) try {
-					const uddg = new URL("https:" + url).searchParams.get("uddg");
-					if (uddg) url = decodeURIComponent(uddg);
-				} catch (e) {}
-				const snippet = $(element).find(".result__snippet").text().trim();
-				if (title && url && snippet) results.push({
-					title,
-					url,
-					snippet
-				});
+			const apiKey = process.env.OLLAMA_API_KEY;
+			if (!apiKey) return { error: "OLLAMA_API_KEY environment variable is missing. Please set it in your environment variables." };
+			const response = await fetch("https://ollama.com/api/web_search", {
+				method: "POST",
+				headers: {
+					"Authorization": `Bearer ${apiKey}`,
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ query })
 			});
+			if (!response.ok) return { error: `Ollama Search API responded with status ${response.status}` };
+			const data = await response.json();
+			const results = [];
+			if (data && data.results && Array.isArray(data.results)) {
+				for (const item of data.results) if (item.title && item.url && item.content) results.push({
+					title: item.title,
+					url: item.url,
+					snippet: item.content
+				});
+			}
 			if (results.length === 0) return { message: "No results found." };
 			return { results };
 		} catch (error) {
@@ -384,7 +379,48 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent/tools/wikipedia_search.ts
+var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
+var wikipedia_search_default = defineTool({
+	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
+	inputSchema: z.object({ query: z.string().min(1).describe("The search query") }),
+	async execute({ query }) {
+		try {
+			const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json`);
+			if (!response.ok) return { error: `Wikipedia responded with status ${response.status}` };
+			const data = await response.json();
+			const results = [];
+			if (data?.query?.search) for (const item of data.query.search.slice(0, 5)) {
+				const cleanSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+				results.push({
+					title: item.title,
+					url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, "_"))}`,
+					snippet: cleanSnippet
+				});
+			}
+			if (results.length === 0) return { message: "No results found on Wikipedia." };
+			return { results };
+		} catch (error) {
+			return { error: error.message || "Unknown error occurred during Wikipedia search." };
+		}
+	},
+	toModelOutput(output) {
+		if ("error" in output) return {
+			type: "json",
+			value: { error: output.error }
+		};
+		if ("message" in output) return {
+			type: "json",
+			value: { message: output.message }
+		};
+		return {
+			type: "json",
+			value: output.results
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -395,12 +431,13 @@ const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.fr
 	"tools/canvas_remove_widget.ts": canvas_remove_widget_exports,
 	"tools/canvas_update_widget.ts": canvas_update_widget_exports,
 	"tools/get_weather.ts": get_weather_exports,
-	"tools/web_search.ts": web_search_exports
+	"tools/web_search.ts": web_search_exports,
+	"tools/wikipedia_search.ts": wikipedia_search_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "fc02f92550e7ee379ee1d42362f08dcd3149ea39ec03133ff56b470bb43a188b"
+		"sha256": "0a9f885ebe9a20f013e777083090f14fe4d87e9d3c834bf43837c3c92671e1f4"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -409,9 +446,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "748db51c927fc0d4da8d2cdf2a3c7cc565f49fa1219628f9a9b7e809c0164636"
+			"sha256": "8a6be07c501181ddfb716929bd7dc01ba4e0cf3c6493f37778ee97d5985b4bfa"
 		},
-		"sourceGraphHash": "ea6d038465d902b9864fc916a546c7285a9ec82912c61f470aa1890d23975b03",
+		"sourceGraphHash": "22086e74c63471fded63743221892cb71fbc73f36870279060cb2bf9cd38413a",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -426,8 +463,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -652,7 +689,7 @@ const manifest = {
 			"sourceKind": "module"
 		},
 		{
-			"description": "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+			"description": "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
 			"inputSchema": {
 				"$schema": "http://json-schema.org/draft-07/schema#",
 				"type": "object",
@@ -666,6 +703,23 @@ const manifest = {
 			"logicalPath": "tools/web_search.ts",
 			"name": "web_search",
 			"sourceId": "tools/web_search.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": { "query": {
+					"type": "string",
+					"minLength": 1,
+					"description": "The search query"
+				} },
+				"required": ["query"]
+			},
+			"logicalPath": "tools/wikipedia_search.ts",
+			"name": "wikipedia_search",
+			"sourceId": "tools/wikipedia_search.ts",
 			"sourceKind": "module"
 		}
 	],
@@ -698,7 +752,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3evvvx-0dc9a671-33cf-4070-9f1e-ff93be872bcf/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3ijkgi-fc73ffea-bb21-4e96-9f98-2b430f44b730/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__aa0080848a99faf0650f6759fa6cfa06/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;

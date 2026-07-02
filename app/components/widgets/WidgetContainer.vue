@@ -99,21 +99,23 @@ const onMouseDown = (e: MouseEvent) => {
 }
 
 let dragRaf: number | null = null
+let latestDragX = 0
+let latestDragY = 0
 
 const onMouseMove = (e: MouseEvent) => {
   if (!isDragging.value || !containerEl.value || !widget.value) return
   
-  if (dragRaf) return
+  latestDragX = e.clientX
+  latestDragY = e.clientY
   
-  const clientX = e.clientX
-  const clientY = e.clientY
+  if (dragRaf) return
   
   dragRaf = requestAnimationFrame(() => {
     dragRaf = null
-    if (!containerEl.value || !widget.value) return
+    if (!containerEl.value) return
   
-  const dx = (clientX - dragStart.x) / dragStart.scale
-  const dy = (clientY - dragStart.y) / dragStart.scale
+  const dx = (latestDragX - dragStart.x) / dragStart.scale
+  const dy = (latestDragY - dragStart.y) / dragStart.scale
   
   let newX = dragStart.wx + dx
   let newY = dragStart.wy + dy
@@ -168,21 +170,23 @@ const onResizeDown = (e: MouseEvent) => {
 }
 
 let resizeRaf: number | null = null
+let latestResizeX = 0
+let latestResizeY = 0
 
 const onResizeMove = (e: MouseEvent) => {
   if (!isResizing.value || !containerEl.value || !widget.value) return
   
-  if (resizeRaf) return
+  latestResizeX = e.clientX
+  latestResizeY = e.clientY
   
-  const clientX = e.clientX
-  const clientY = e.clientY
+  if (resizeRaf) return
   
   resizeRaf = requestAnimationFrame(() => {
     resizeRaf = null
-    if (!containerEl.value || !widget.value) return
+    if (!containerEl.value) return
   
-  const dx = (clientX - resizeStart.x) / resizeStart.scale
-  const dy = (clientY - resizeStart.y) / resizeStart.scale
+  const dx = (latestResizeX - resizeStart.x) / resizeStart.scale
+  const dy = (latestResizeY - resizeStart.y) / resizeStart.scale
   
   const minWidth = 200
   const minHeight = 150

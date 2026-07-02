@@ -106,19 +106,21 @@ function startPan(e: MouseEvent) {
 }
 
 let panRaf: number | null = null
+let latestPanX = 0
+let latestPanY = 0
 
 function doPan(e: MouseEvent) {
   if (!isPanning.value) return
   
-  if (panRaf) return
+  latestPanX = e.clientX
+  latestPanY = e.clientY
   
-  const clientX = e.clientX
-  const clientY = e.clientY
+  if (panRaf) return
   
   panRaf = requestAnimationFrame(() => {
     panRaf = null
-    const rawX = clientX - panStart.x
-    const rawY = clientY - panStart.y
+    const rawX = latestPanX - panStart.x
+    const rawY = latestPanY - panStart.y
   
     const clamped = clampOffset(rawX, rawY, currentScale)
     currentOffsetX = clamped.x
@@ -183,6 +185,11 @@ function endPan() {
 // ── Zoom ───────────────────────────────────────────────────
 let wheelSyncTimeout: any = null
 
+let wheelRaf: number | null = null
+let accumulatedDeltaY = 0
+let latestWheelX = 0
+let latestWheelY = 0
+
 function onWheel(e: WheelEvent) {
   const target = e.target as HTMLElement
   const isWidget = target.closest('.widget')
@@ -192,44 +199,53 @@ function onWheel(e: WheelEvent) {
   if (!viewportEl.value) return
 
   const rect = viewportEl.value.getBoundingClientRect()
-  const mouseX = e.clientX - rect.left
-  const mouseY = e.clientY - rect.top
-
-  const delta = -e.deltaY * ZOOM_SPEED
-  const newScale = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN.value, currentScale * (1 + delta)))
+  latestWheelX = e.clientX - rect.left
+  latestWheelY = e.clientY - rect.top
+  accumulatedDeltaY += e.deltaY
   
-  if (newScale === currentScale) return // No change
-
-  const ratio = newScale / currentScale
+  if (wheelRaf) return
   
-  // Calculate new offset to zoom toward cursor
-  const rawX = mouseX - ratio * (mouseX - currentOffsetX)
-  const rawY = mouseY - ratio * (mouseY - currentOffsetY)
+  wheelRaf = requestAnimationFrame(() => {
+    wheelRaf = null
+    
+    const delta = -accumulatedDeltaY * ZOOM_SPEED
+    accumulatedDeltaY = 0
+    
+    const newScale = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN.value, currentScale * (1 + delta)))
+    
+    if (newScale === currentScale) return // No change
   
-  const clamped = clampOffset(rawX, rawY, newScale)
-  
-  currentScale = newScale
-  currentOffsetX = clamped.x
-  currentOffsetY = clamped.y
-  
-  // Direct DOM Bypass
-  if (canvasWorldEl.value) {
-    canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
-  }
-  if (canvasBgEl.value) {
-    if (currentScale < 0.3) {
-      canvasBgEl.value.style.opacity = '0'
-    } else {
-      if (currentScale < 0.6) {
-        canvasBgEl.value.style.opacity = `${(currentScale - 0.3) / 0.3}`
+    const ratio = newScale / currentScale
+    
+    // Calculate new offset to zoom toward cursor
+    const rawX = latestWheelX - ratio * (latestWheelX - currentOffsetX)
+    const rawY = latestWheelY - ratio * (latestWheelY - currentOffsetY)
+    
+    const clamped = clampOffset(rawX, rawY, newScale)
+    
+    currentScale = newScale
+    currentOffsetX = clamped.x
+    currentOffsetY = clamped.y
+    
+    // Direct DOM Bypass
+    if (canvasWorldEl.value) {
+      canvasWorldEl.value.style.transform = `translate(${currentOffsetX}px, ${currentOffsetY}px) scale(${currentScale})`
+    }
+    if (canvasBgEl.value) {
+      if (currentScale < 0.3) {
+        canvasBgEl.value.style.opacity = '0'
       } else {
-        canvasBgEl.value.style.opacity = '1'
+        if (currentScale < 0.6) {
+          canvasBgEl.value.style.opacity = `${(currentScale - 0.3) / 0.3}`
+        } else {
+          canvasBgEl.value.style.opacity = '1'
+        }
       }
     }
-  }
-  
-  clearTimeout(wheelSyncTimeout)
-  wheelSyncTimeout = setTimeout(syncReactives, 150)
+    
+    clearTimeout(wheelSyncTimeout)
+    wheelSyncTimeout = setTimeout(syncReactives, 150)
+  })
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -368,8 +384,6 @@ html.light .canvas-bg {
   z-index: 100;
   /* Fast follow when pulling, slow fade when released */
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Added a very subtle mix-blend-mode for character */
-  mix-blend-mode: plus-lighter;
 }
 
 /* Reduced size and switched to a more neutral text-primary color for minimalism */
