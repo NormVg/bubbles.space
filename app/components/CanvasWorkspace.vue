@@ -291,11 +291,13 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
       <slot />
       
       <!-- Render dynamic AI widgets -->
-      <WidgetContainer
-        v-for="widget in widgetStore.widgets"
-        :key="widget.id"
-        :id="widget.id"
-      />
+      <TransitionGroup name="widget-anim">
+        <WidgetContainer
+          v-for="widget in widgetStore.widgets"
+          :key="widget.id"
+          :id="widget.id"
+        />
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -352,5 +354,21 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
 .edge-glow.right {
   top: 0; bottom: 0; right: 0; width: 48px;
   background: linear-gradient(to left, var(--text-primary), transparent);
+}
+
+/* Widget Animations */
+.widget-anim-enter-active,
+.widget-anim-leave-active {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), translate 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.widget-anim-enter-from {
+  opacity: 0 !important;
+  translate: 0 30px !important;
+}
+
+.widget-anim-leave-to {
+  opacity: 0 !important;
+  translate: 0 -30px !important;
 }
 </style>
