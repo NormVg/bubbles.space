@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { shallowRef, watch } from 'vue'
+import { shallowRef, computed, watch, ref } from 'vue'
 
 export interface Widget {
   id: string
@@ -12,132 +12,222 @@ export interface Widget {
   data: Record<string, any>
 }
 
+export interface Workspace {
+  id: string
+  label: string
+  widgets: Widget[]
+  archivedWidgets: Widget[]
+  canvasState: {
+    x: number
+    y: number
+    scale: number
+  }
+}
+
 export const useWidgetStore = defineStore('widgets', () => {
-  const widgets = shallowRef<Widget[]>([])
-  const archivedWidgets = shallowRef<Widget[]>([])
+  const workspaces = shallowRef<Workspace[]>([])
+  const activeWorkspaceId = ref<string>('main')
+
+  // Backwards compatible computed refs
+  const activeWorkspace = computed(() => workspaces.value.find(w => w.id === activeWorkspaceId.value))
+
+  const widgets = computed({
+    get: () => activeWorkspace.value?.widgets || [],
+    set: (newWidgets) => {
+      const current = activeWorkspace.value
+      if (current) {
+        current.widgets = newWidgets
+        workspaces.value = [...workspaces.value]
+      }
+    }
+  })
+
+  const archivedWidgets = computed({
+    get: () => activeWorkspace.value?.archivedWidgets || [],
+    set: (newArchived) => {
+      const current = activeWorkspace.value
+      if (current) {
+        current.archivedWidgets = newArchived
+        workspaces.value = [...workspaces.value]
+      }
+    }
+  })
+
+  const createWorkspace = (label: string) => {
+    const id = crypto.randomUUID()
+    workspaces.value = [...workspaces.value, {
+      id,
+      label,
+      widgets: [],
+      archivedWidgets: [],
+      canvasState: { x: 0, y: 0, scale: 1 }
+    }]
+    activeWorkspaceId.value = id
+    return id
+  }
+
+  const deleteWorkspace = (id: string) => {
+    if (workspaces.value.length <= 1) return // Prevent deleting last workspace
+    workspaces.value = workspaces.value.filter(w => w.id !== id)
+    if (activeWorkspaceId.value === id) {
+      activeWorkspaceId.value = workspaces.value[0].id
+    }
+  }
+
+  const switchWorkspace = (id: string) => {
+    if (workspaces.value.some(w => w.id === id)) {
+      activeWorkspaceId.value = id
+    }
+  }
+
+  const saveCanvasState = (x: number, y: number, scale: number, id?: string) => {
+    const current = id ? workspaces.value.find(w => w.id === id) : activeWorkspace.value
+    if (current) {
+      current.canvasState = { x, y, scale }
+      workspaces.value = [...workspaces.value]
+    }
+  }
 
   // Simulated DB fetch / Load from LocalStorage
   const init = async () => {
     try {
-      const saved = localStorage.getItem('bubbles_canvas_widgets')
-      if (saved) {
-        widgets.value = JSON.parse(saved)
-      } else {
-        // Initial example widget if canvas is empty
-        addWidget({
-          type: 'markdown',
-          x: 1000,
-          y: 720,
-          width: 320,
-          height: 240,
-          title: 'Welcome to Canvas',
-          data: { content: '### Hello!\nThis is a spatial workspace. You can drag widgets around, and Bubbles can create new ones for you!' }
-        })
-      }
+      const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
+      const savedActiveId = localStorage.getItem('bubbles_active_workspace')
       
-      const archived = localStorage.getItem('bubbles_archived_widgets')
-      if (archived) {
-        archivedWidgets.value = JSON.parse(archived)
+      if (savedWorkspaces) {
+        workspaces.value = JSON.parse(savedWorkspaces)
+        if (savedActiveId && workspaces.value.some(w => w.id === savedActiveId)) {
+          activeWorkspaceId.value = savedActiveId
+        } else {
+          activeWorkspaceId.value = workspaces.value[0].id
+        }
+      } else {
+        // Migration from old single-workspace structure
+        const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
+        const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
+        
+        const mainWorkspace: Workspace = {
+          id: 'main',
+          label: 'Main',
+          widgets: legacyWidgets ? JSON.parse(legacyWidgets) : [],
+          archivedWidgets: legacyArchived ? JSON.parse(legacyArchived) : [],
+          canvasState: { x: 0, y: 0, scale: 1 }
+        }
+        
+        if (!legacyWidgets) {
+          mainWorkspace.widgets.push({
+            id: crypto.randomUUID(),
+            type: 'markdown',
+            x: 1000,
+            y: 720,
+            width: 320,
+            height: 240,
+            title: 'Welcome to Canvas',
+            data: { content: '### Hello!\nThis is a spatial workspace. You can drag widgets around, and Bubbles can create new ones for you!' }
+          })
+        }
+        
+        workspaces.value = [mainWorkspace]
+        activeWorkspaceId.value = 'main'
       }
     } catch (e) {
-      console.error('Failed to load widgets', e)
+      console.error('Failed to load workspaces', e)
     }
   }
 
   // Simulated DB sync / Save to LocalStorage
   const syncToDB = async () => {
-    localStorage.setItem('bubbles_canvas_widgets', JSON.stringify(widgets.value))
-    localStorage.setItem('bubbles_archived_widgets', JSON.stringify(archivedWidgets.value))
-    // Future: await fetch('/api/widgets/sync', { method: 'POST', body: JSON.stringify(widgets.value) })
+    localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
+    localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
   }
 
   // Watch for changes to auto-sync
-  watch([widgets, archivedWidgets], () => {
+  watch([workspaces, activeWorkspaceId], () => {
     syncToDB()
   }, { deep: true })
 
   // Auto-layout / Collision detection
   const findSafePosition = (startX: number, startY: number, width: number, height: number, ignoreId?: string) => {
     const padding = 24
-      const canvasWidth = 2560
-      const canvasHeight = 1440
-      
-      // Initial clamping to boundaries
-      let currentX = Math.max(0, Math.min(startX, canvasWidth - width))
-      let currentY = Math.max(0, Math.min(startY, canvasHeight - height))
-      
-      let hasCollision = true
-      let attempts = 0
+    const canvasWidth = 2560
+    const canvasHeight = 1440
+    
+    // Initial clamping to boundaries
+    let currentX = Math.max(0, Math.min(startX, canvasWidth - width))
+    let currentY = Math.max(0, Math.min(startY, canvasHeight - height))
+    
+    let hasCollision = true
+    let attempts = 0
 
-      while (hasCollision && attempts < 50) {
-        hasCollision = false
-        for (const w of widgets.value) {
-          if (w.id === ignoreId) continue
-          
-          const overlapX = currentX < w.x + w.width + padding && currentX + width + padding > w.x
-          const overlapY = currentY < w.y + w.height + padding && currentY + height + padding > w.y
-          
-          if (overlapX && overlapY) {
-            hasCollision = true
-            // Push down to avoid overlap
-            currentY = w.y + w.height + padding
-            break
-          }
-        }
+    while (hasCollision && attempts < 50) {
+      hasCollision = false
+      for (const w of widgets.value) {
+        if (w.id === ignoreId) continue
         
-        // If pushing down pushed it off canvas, try wrapping to next column
-        if (currentY + height > canvasHeight) {
-          currentY = 0
-          currentX += width + padding
-        }
-        // If pushing right pushed it off canvas, just clamp it back (it will overlap but stay in bounds)
-        if (currentX + width > canvasWidth) {
-           currentX = canvasWidth - width
-           currentY = Math.max(0, Math.min(currentY, canvasHeight - height))
-           break
-        }
+        const overlapX = currentX < w.x + w.width + padding && currentX + width + padding > w.x
+        const overlapY = currentY < w.y + w.height + padding && currentY + height + padding > w.y
         
-        attempts++
+        if (overlapX && overlapY) {
+          hasCollision = true
+          // Push down to avoid overlap
+          currentY = w.y + w.height + padding
+          break
+        }
       }
-      return { x: currentX, y: currentY }
+      
+      // If pushing down pushed it off canvas, try wrapping to next column
+      if (currentY + height > canvasHeight) {
+        currentY = 0
+        currentX += width + padding
+      }
+      // If pushing right pushed it off canvas, just clamp it back (it will overlap but stay in bounds)
+      if (currentX + width > canvasWidth) {
+         currentX = canvasWidth - width
+         currentY = Math.max(0, Math.min(currentY, canvasHeight - height))
+         break
+      }
+      
+      attempts++
     }
+    return { x: currentX, y: currentY }
+  }
 
-    const addWidget = (widget: Omit<Widget, 'id'> & { id?: string }) => {
-      const id = widget.id || crypto.randomUUID()
-      
-      // Idempotency guard: skip if this widget ID already exists
-      if (widgets.value.some(w => w.id === id)) return
-      
-      const { x, y } = findSafePosition(widget.x, widget.y, widget.width, widget.height)
-      
-      widgets.value = [...widgets.value, {
-        ...widget,
-        id,
-        x,
-        y
-      }]
-    }
+  const addWidget = (widget: Omit<Widget, 'id'> & { id?: string }) => {
+    const id = widget.id || crypto.randomUUID()
+    
+    // Idempotency guard: skip if this widget ID already exists
+    if (widgets.value.some(w => w.id === id)) return
+    
+    const { x, y } = findSafePosition(widget.x, widget.y, widget.width, widget.height)
+    
+    widgets.value = [...widgets.value, {
+      ...widget,
+      id,
+      x,
+      y
+    }]
+  }
 
-    const updateWidget = (id: string, updates: Partial<Widget>) => {
-      const idx = widgets.value.findIndex(w => w.id === id)
-      if (idx !== -1) {
-        const widget = widgets.value[idx]
-        
-        let newX = updates.x ?? widget.x
-        let newY = updates.y ?? widget.y
-        
-        // Clamp basic movement coordinates immediately
-        const w = updates.width || widget.width
-        const h = updates.height || widget.height
-        newX = Math.max(0, Math.min(newX, 2560 - w))
-        newY = Math.max(0, Math.min(newY, 1440 - h))
-        
-        // If position or size changed, ensure it's placed safely (on drop)
-        if (updates.x !== undefined || updates.y !== undefined || updates.width !== undefined || updates.height !== undefined) {
-           const safePos = findSafePosition(newX, newY, w, h, id)
-           newX = safePos.x
-           newY = safePos.y
-        }
+  const updateWidget = (id: string, updates: Partial<Widget>) => {
+    const idx = widgets.value.findIndex(w => w.id === id)
+    if (idx !== -1) {
+      const widget = widgets.value[idx]
+      
+      let newX = updates.x ?? widget.x
+      let newY = updates.y ?? widget.y
+      
+      // Clamp basic movement coordinates immediately
+      const w = updates.width || widget.width
+      const h = updates.height || widget.height
+      newX = Math.max(0, Math.min(newX, 2560 - w))
+      newY = Math.max(0, Math.min(newY, 1440 - h))
+      
+      // If position or size changed, ensure it's placed safely (on drop)
+      if (updates.x !== undefined || updates.y !== undefined || updates.width !== undefined || updates.height !== undefined) {
+         const safePos = findSafePosition(newX, newY, w, h, id)
+         newX = safePos.x
+         newY = safePos.y
+      }
 
       const newWidgets = [...widgets.value]
       newWidgets[idx] = { ...widget, ...updates, x: newX, y: newY }
@@ -178,9 +268,16 @@ export const useWidgetStore = defineStore('widgets', () => {
   }
 
   return {
+    workspaces,
+    activeWorkspaceId,
+    activeWorkspace,
     widgets,
     archivedWidgets,
     init,
+    createWorkspace,
+    deleteWorkspace,
+    switchWorkspace,
+    saveCanvasState,
     addWidget,
     updateWidget,
     removeWidget,

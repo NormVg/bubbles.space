@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, computed, watch } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import WidgetContainer from './widgets/WidgetContainer.vue'
 import { useWidgetStore } from '../stores/widgets'
 
@@ -39,6 +39,51 @@ const edgeGlowRight = ref<HTMLElement | null>(null)
 let currentOffsetX = 0
 let currentOffsetY = 0
 let currentScale = 1
+let isTransitioning = false
+
+// Workspace Switch Transition
+watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
+  if (oldId) {
+    widgetStore.saveCanvasState(currentOffsetX, currentOffsetY, currentScale, oldId)
+  }
+  
+  if (!canvasWorldEl.value) return
+  isTransitioning = true
+  
+  // 1. Zoom out and fade out (WAAPI)
+  const animOut = canvasWorldEl.value.animate([
+    { transform: `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`, opacity: 1 },
+    { transform: `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale * 0.96})`, opacity: 0 }
+  ], { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' })
+  
+  await animOut.finished
+  await nextTick() // Wait for Vue to render new widgets
+  
+  // 2. Load new coordinates
+  const newWs = widgetStore.workspaces.find(w => w.id === newId)
+  if (newWs && newWs.canvasState) {
+    currentOffsetX = newWs.canvasState.x
+    currentOffsetY = newWs.canvasState.y
+    currentScale = newWs.canvasState.scale
+    syncReactives()
+  }
+  
+  // 3. Zoom in and fade in
+  const animIn = canvasWorldEl.value.animate([
+    { transform: `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale * 1.04})`, opacity: 0 },
+    { transform: `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`, opacity: 1 }
+  ], { duration: 350, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' })
+  
+  animIn.onfinish = () => {
+    // Reset WAAPI overrides so normal panning works again
+    animIn.cancel()
+    if (canvasWorldEl.value) {
+      canvasWorldEl.value.style.transform = `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`
+      canvasWorldEl.value.style.opacity = '1'
+    }
+    isTransitioning = false
+  }
+})
 
 // ── Computed constraints ───────────────────────────────────
 // The minimum scale is whatever makes the canvas fit perfectly in the viewport.
@@ -110,7 +155,7 @@ let latestPanX = 0
 let latestPanY = 0
 
 function doPan(e: MouseEvent) {
-  if (!isPanning.value) return
+  if (!isPanning.value || isTransitioning) return
   
   latestPanX = e.clientX
   latestPanY = e.clientY
@@ -196,7 +241,7 @@ function onWheel(e: WheelEvent) {
   if (isWidget && !e.ctrlKey && !e.metaKey) return
 
   e.preventDefault()
-  if (!viewportEl.value) return
+  if (!viewportEl.value || isTransitioning) return
 
   const rect = viewportEl.value.getBoundingClientRect()
   latestWheelX = e.clientX - rect.left
@@ -267,11 +312,18 @@ onMounted(() => {
   if (viewportEl.value) {
     viewportEl.value.addEventListener('wheel', onWheel, { passive: false })
     
-    // Initial center fit
-    scale.value = ZOOM_MIN.value
-    const clamped = clampOffset(0, 0, scale.value)
-    offset.x = clamped.x
-    offset.y = clamped.y
+    // Initial center fit OR load from workspace state
+    const currentWs = widgetStore.activeWorkspace
+    if (currentWs && (currentWs.canvasState.x !== 0 || currentWs.canvasState.scale !== 1)) {
+      scale.value = currentWs.canvasState.scale
+      offset.x = currentWs.canvasState.x
+      offset.y = currentWs.canvasState.y
+    } else {
+      scale.value = ZOOM_MIN.value
+      const clamped = clampOffset(0, 0, scale.value)
+      offset.x = clamped.x
+      offset.y = clamped.y
+    }
     
     currentScale = scale.value
     currentOffsetX = offset.x
@@ -296,6 +348,9 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // Save final state before unmount
+  widgetStore.saveCanvasState(currentOffsetX, currentOffsetY, currentScale, widgetStore.activeWorkspaceId)
+  
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('mouseup', endPan)
   window.removeEventListener('mousemove', doPan)

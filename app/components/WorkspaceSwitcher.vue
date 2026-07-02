@@ -3,15 +3,11 @@ import { computed, nextTick, ref, watch } from 'vue'
 import VoiceResponseView from './VoiceResponseView.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
-
 import { useChatStore } from '../stores/chat'
 
-const activeWorkspace = ref('main')
-const workspaces = ref([
-  { id: 'main', label: 'Main' },
-  { id: 'dev', label: 'Dev' },
-  { id: 'design', label: 'Design' }
-])
+import { useWidgetStore } from '../stores/widgets'
+
+const widgetStore = useWidgetStore()
 
 const isExpanded = ref(false)
 
@@ -35,7 +31,16 @@ const slotInnerRef = ref<HTMLElement | null>(null)
 const switcherBarRef = ref<HTMLElement | null>(null)
 
 function setActive(id: string) {
-  activeWorkspace.value = id
+  widgetStore.switchWorkspace(id)
+}
+
+function createWorkspace() {
+  const label = `Workspace ${widgetStore.workspaces.length + 1}`
+  widgetStore.createWorkspace(label)
+}
+
+function deleteWorkspace(id: string) {
+  widgetStore.deleteWorkspace(id)
 }
 
 function toggleExpand() {
@@ -145,19 +150,20 @@ function toggleExpand() {
     <div class="ws-switcher" ref="switcherBarRef">
       <!-- Workspace tabs -->
       <div
-        v-for="workspace in workspaces"
+        v-for="workspace in widgetStore.workspaces"
         :key="workspace.id"
         class="ws-tab"
-        :class="{ active: activeWorkspace === workspace.id }"
+        :class="{ active: widgetStore.activeWorkspaceId === workspace.id }"
       >
         <button class="ws-btn" @click="setActive(workspace.id)">
           {{ workspace.label }}
         </button>
         <!-- Delete cross just for visual parity with screenshot -->
         <button
-          v-if="activeWorkspace === workspace.id"
+          v-if="widgetStore.activeWorkspaceId === workspace.id && widgetStore.workspaces.length > 1"
           class="ws-delete"
           title="Delete workspace"
+          @click.stop="deleteWorkspace(workspace.id)"
         >
           <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
             <path
@@ -171,7 +177,7 @@ function toggleExpand() {
       </div>
 
       <!-- Add workspace -->
-      <button class="ws-add" title="New workspace">
+      <button class="ws-add" title="New workspace" @click="createWorkspace">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
           <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
         </svg>
