@@ -528,8 +528,8 @@ html.light .widget-drag-handle:hover .drag-pill {
 /* Floating Action Buttons */
 .widget-actions {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 6px;
   display: flex;
   gap: 6px;
   z-index: 20;
