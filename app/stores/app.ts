@@ -14,12 +14,24 @@ export const useAppStore = defineStore('app', () => {
     colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
   }
 
-  async function fetchLocation() {
+  async function fetchLocation(forcePrompt = false) {
     if (location.value) return
     
     if (!navigator.geolocation) {
       console.warn('Geolocation is not supported by your browser')
       return
+    }
+
+    // Prevent hanging the page load state with an unexpected permission prompt
+    try {
+      if (navigator.permissions && !forcePrompt) {
+        const permission = await navigator.permissions.query({ name: 'geolocation' })
+        if (permission.state === 'prompt' || permission.state === 'denied') {
+          return // Abort if we would need to prompt the user
+        }
+      }
+    } catch (e) {
+      // Permissions API not supported or threw, proceed with caution
     }
 
     navigator.geolocation.getCurrentPosition(async (position) => {
