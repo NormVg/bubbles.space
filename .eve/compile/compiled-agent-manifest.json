@@ -222,6 +222,18 @@
       "sourceKind": "module"
     },
     {
+      "description": "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "logicalPath": "tools/get_app_stats.ts",
+      "name": "get_app_stats",
+      "sourceId": "tools/get_app_stats.ts",
+      "sourceKind": "module"
+    },
+    {
       "description": "Get the current weather and daily forecast for a given latitude and longitude.",
       "inputSchema": {
         "$schema": "http://json-schema.org/draft-07/schema#",

@@ -7,10 +7,11 @@ import * as module_3 from "../../agent/tools/canvas_add_widget.ts";
 import * as module_4 from "../../agent/tools/canvas_read_widget.ts";
 import * as module_5 from "../../agent/tools/canvas_remove_widget.ts";
 import * as module_6 from "../../agent/tools/canvas_update_widget.ts";
-import * as module_7 from "../../agent/tools/get_weather.ts";
-import * as module_8 from "../../agent/tools/unsplash_search.ts";
-import * as module_9 from "../../agent/tools/web_search.ts";
-import * as module_10 from "../../agent/tools/wikipedia_search.ts";
+import * as module_7 from "../../agent/tools/get_app_stats.ts";
+import * as module_8 from "../../agent/tools/get_weather.ts";
+import * as module_9 from "../../agent/tools/unsplash_search.ts";
+import * as module_10 from "../../agent/tools/web_search.ts";
+import * as module_11 from "../../agent/tools/wikipedia_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -23,10 +24,11 @@ export const moduleMap = Object.freeze({
                   "tools/canvas_read_widget.ts": module_4,
                   "tools/canvas_remove_widget.ts": module_5,
                   "tools/canvas_update_widget.ts": module_6,
-                  "tools/get_weather.ts": module_7,
-                  "tools/unsplash_search.ts": module_8,
-                  "tools/web_search.ts": module_9,
-                  "tools/wikipedia_search.ts": module_10
+                  "tools/get_app_stats.ts": module_7,
+                  "tools/get_weather.ts": module_8,
+                  "tools/unsplash_search.ts": module_9,
+                  "tools/web_search.ts": module_10,
+                  "tools/wikipedia_search.ts": module_11
                 })
             })
     })

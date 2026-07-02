@@ -59,6 +59,11 @@
     },
     {
       "sourceKind": "module",
+      "logicalPath": "tools/get_app_stats.ts",
+      "sourceId": "tools/get_app_stats.ts"
+    },
+    {
+      "sourceKind": "module",
       "logicalPath": "tools/get_weather.ts",
       "sourceId": "tools/get_weather.ts"
     },
