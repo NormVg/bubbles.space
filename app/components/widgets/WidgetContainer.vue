@@ -11,15 +11,31 @@ const store = useWidgetStore()
 const widget = computed(() => store.widgets.find(w => w.id === props.id))
 const containerEl = ref<HTMLElement | null>(null)
 
+// Drag State
 const isDragging = ref(false)
 const dragStart = { x: 0, y: 0, wx: 0, wy: 0 }
 const tempX = ref(0)
 const tempY = ref(0)
 
+// Resize State
+const isResizing = ref(false)
+const resizeStart = { x: 0, y: 0, w: 0, h: 0 }
+const tempWidth = ref(0)
+const tempHeight = ref(0)
+
+// Dragging Logic
 const onMouseDown = (e: MouseEvent) => {
   if (!widget.value || !containerEl.value) return
-  // Only drag from the header
-  if (!(e.target as HTMLElement).closest('.widget-header')) return
+  
+  const target = e.target as HTMLElement
+  
+  // Prevent drag if clicking on interactive elements or the resize handle
+  if (
+    target.closest('button, a, input, textarea, select, .prevent-drag, .widget-resize-handle, .widget-close') ||
+    window.getSelection()?.toString().length
+  ) {
+    return
+  }
   
   e.preventDefault()
   isDragging.value = true
@@ -39,7 +55,6 @@ const onMouseDown = (e: MouseEvent) => {
 const onMouseMove = (e: MouseEvent) => {
   if (!isDragging.value || !containerEl.value || !widget.value) return
   
-  // Calculate current scale dynamically so dragging is 1:1 regardless of canvas zoom
   const rect = containerEl.value.getBoundingClientRect()
   const scale = rect.width / containerEl.value.offsetWidth
   
@@ -49,7 +64,6 @@ const onMouseMove = (e: MouseEvent) => {
   let newX = dragStart.wx + dx
   let newY = dragStart.wy + dy
   
-  // Clamp to canvas boundaries
   const canvasWidth = 2560
   const canvasHeight = 1440
   
@@ -69,9 +83,68 @@ const onMouseUp = () => {
   })
 }
 
+// Resizing Logic
+const onResizeDown = (e: MouseEvent) => {
+  if (!widget.value || !containerEl.value) return
+  e.preventDefault()
+  e.stopPropagation()
+  
+  isResizing.value = true
+  resizeStart.x = e.clientX
+  resizeStart.y = e.clientY
+  resizeStart.w = widget.value.width
+  resizeStart.h = widget.value.height
+  
+  tempWidth.value = resizeStart.w
+  tempHeight.value = resizeStart.h
+  
+  window.addEventListener('mousemove', onResizeMove)
+  window.addEventListener('mouseup', onResizeUp)
+}
+
+const onResizeMove = (e: MouseEvent) => {
+  if (!isResizing.value || !containerEl.value || !widget.value) return
+  
+  const rect = containerEl.value.getBoundingClientRect()
+  const scale = rect.width / containerEl.value.offsetWidth
+  
+  const dx = (e.clientX - resizeStart.x) / scale
+  const dy = (e.clientY - resizeStart.y) / scale
+  
+  const minWidth = 200
+  const minHeight = 150
+  
+  const canvasWidth = 2560
+  const canvasHeight = 1440
+  
+  let newW = Math.max(minWidth, resizeStart.w + dx)
+  let newH = Math.max(minHeight, resizeStart.h + dy)
+  
+  // Ensure we don't resize beyond canvas right/bottom edges
+  newW = Math.min(newW, canvasWidth - widget.value.x)
+  newH = Math.min(newH, canvasHeight - widget.value.y)
+  
+  tempWidth.value = newW
+  tempHeight.value = newH
+}
+
+const onResizeUp = () => {
+  if (!isResizing.value) return
+  isResizing.value = false
+  window.removeEventListener('mousemove', onResizeMove)
+  window.removeEventListener('mouseup', onResizeUp)
+  
+  store.updateWidget(props.id, {
+    width: tempWidth.value,
+    height: tempHeight.value
+  })
+}
+
 onUnmounted(() => {
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('mouseup', onMouseUp)
+  window.removeEventListener('mousemove', onResizeMove)
+  window.removeEventListener('mouseup', onResizeUp)
 })
 
 const Component = computed(() => {
@@ -88,27 +161,35 @@ const remove = () => {
   <div
     v-if="widget"
     ref="containerEl"
-    class="widget"
-    :class="{ dragging: isDragging }"
+    class="widget group"
+    :class="{ dragging: isDragging, resizing: isResizing }"
     :style="{
       transform: `translate(${isDragging ? tempX : widget.x}px, ${isDragging ? tempY : widget.y}px)`,
-      width: `${widget.width}px`,
-      height: `${widget.height}px`
+      width: `${isResizing ? tempWidth : widget.width}px`,
+      height: `${isResizing ? tempHeight : widget.height}px`
     }"
+    @mousedown="onMouseDown"
   >
-    <div class="widget-header" @mousedown="onMouseDown">
-      <div class="widget-title">{{ widget.title || widget.type }}</div>
-      <button class="widget-close" @click="remove" aria-label="Close">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
+    <!-- Floating Close Button -->
+    <button class="widget-close" @click.stop="remove" aria-label="Close widget">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
     
+    <!-- Widget Content -->
     <div class="widget-body">
       <component :is="Component" v-if="Component" :data="widget.data" />
       <div v-else class="widget-error">Unknown widget type: {{ widget.type }}</div>
+    </div>
+    
+    <!-- Resize Handle -->
+    <div class="widget-resize-handle" @mousedown="onResizeDown">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="21" y1="21" x2="12" y2="21"></line>
+        <line x1="21" y1="12" x2="21" y2="21"></line>
+      </svg>
     </div>
   </div>
 </template>
@@ -118,83 +199,61 @@ const remove = () => {
   position: absolute;
   top: 0;
   left: 0;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--widget-shadow);
+  background: rgba(20, 20, 22, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  backdrop-filter: blur(24px);
-  will-change: transform;
-  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+  overflow: visible; /* Need visible for floating close button if it overhangs, but content should clip */
+  will-change: transform, width, height;
   z-index: 10;
+  transition: box-shadow 0.2s ease;
+  user-select: none;
+}
+
+/* Light mode support */
+html.light .widget {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.widget:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+html.light .widget:hover {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
 .widget.dragging {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  opacity: 0.95;
   z-index: 100;
-}
-
-/* Light mode specific adjustment for glassmorphism */
-html.light .widget {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-html.light .widget-header {
-  background: rgba(0, 0, 0, 0.03);
-}
-
-.widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid var(--border-subtle);
-  cursor: grab;
-  user-select: none;
-}
-
-.widget-header:active {
   cursor: grabbing;
 }
 
-.widget-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-  opacity: 0.8;
-  text-transform: capitalize;
-  pointer-events: none;
+.widget.resizing {
+  z-index: 100;
 }
 
-.widget-close {
-  opacity: 0.4;
-  transition: all 0.2s ease;
-  padding: 4px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.widget-close:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--danger);
-}
-
-html.light .widget-close:hover {
-  background: rgba(0, 0, 0, 0.05);
+.widget:not(.dragging):hover {
+  cursor: grab;
 }
 
 .widget-body {
   flex: 1;
-  overflow: hidden;
   position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px; /* slightly smaller than outer to fit inside border cleanly */
+  overflow: hidden; /* Clips the inner content */
+  display: flex;
+  flex-direction: column;
 }
 
 .widget-error {
@@ -202,5 +261,84 @@ html.light .widget-close:hover {
   color: var(--danger);
   font-size: 14px;
   text-align: center;
+  margin: auto;
+}
+
+/* Floating Close Button */
+.widget-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 20;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+html.light .widget-close {
+  background: rgba(255, 255, 255, 0.7);
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.widget.group:hover .widget-close, .widget.resizing .widget-close {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.widget-close:hover {
+  background: rgba(231, 76, 60, 0.8);
+  border-color: transparent;
+  transform: scale(1.1) !important;
+}
+
+html.light .widget-close:hover {
+  background: rgba(231, 76, 60, 0.9);
+  color: #fff;
+}
+
+/* Resize Handle */
+.widget-resize-handle {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  cursor: se-resize;
+  z-index: 20;
+  padding: 2px;
+}
+
+html.light .widget-resize-handle {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.widget.group:hover .widget-resize-handle, .widget.resizing .widget-resize-handle {
+  opacity: 1;
+}
+
+.widget-resize-handle:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+html.light .widget-resize-handle:hover {
+  color: rgba(0, 0, 0, 0.6);
 }
 </style>
