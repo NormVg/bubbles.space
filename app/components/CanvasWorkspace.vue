@@ -41,13 +41,27 @@ let currentOffsetY = 0
 let currentScale = 1
 let isTransitioning = false
 
+const isSwitchingWorkspaces = ref(false)
+const displayedWidgets = shallowRef(widgetStore.widgets)
+
+watch(() => widgetStore.widgets, (newWidgets) => {
+  if (!isSwitchingWorkspaces.value) {
+    displayedWidgets.value = newWidgets
+  }
+})
+
 // Workspace Switch Transition
 watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
+  isSwitchingWorkspaces.value = true
+  
   if (oldId) {
     widgetStore.saveCanvasState(currentOffsetX, currentOffsetY, currentScale, oldId)
   }
   
-  if (!canvasWorldEl.value) return
+  if (!canvasWorldEl.value) {
+    isSwitchingWorkspaces.value = false
+    return
+  }
   isTransitioning = true
   
   // 1. Zoom out and fade out (WAAPI)
@@ -57,6 +71,8 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
   ], { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' })
   
   await animOut.finished
+  
+  displayedWidgets.value = widgetStore.widgets
   await nextTick() // Wait for Vue to render new widgets
   
   // 2. Load new coordinates
@@ -82,6 +98,7 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
       canvasWorldEl.value.style.opacity = '1'
     }
     isTransitioning = false
+    isSwitchingWorkspaces.value = false
   }
 })
 
@@ -393,7 +410,7 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
       <!-- Render dynamic AI widgets -->
       <TransitionGroup name="widget-anim">
         <WidgetContainer
-          v-for="widget in widgetStore.widgets"
+          v-for="widget in displayedWidgets"
           :key="widget.id"
           :id="widget.id"
         />
