@@ -22,7 +22,7 @@ const statusMessage = computed(() => {
   <div class="landing-screen">
     <div class="landing-content">
       <div class="avatar-wrapper">
-        <BubblesAvatar :interactive="false" />
+        <BubblesAvatar :interactive="false" emotionOverride="frustrate" />
       </div>
       <div class="logo-wrapper">
         <h1 class="logo-text">{{ statusCode }}</h1>
