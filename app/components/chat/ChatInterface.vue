@@ -97,12 +97,14 @@ import { useAppStore } from '../../stores/app'
 import { useVoiceAgent } from '../../composables/useVoiceAgent'
 import { useAppAgent } from '../../composables/useAppAgent'
 import { useWidgetStore } from '../../stores/widgets'
+import { authClient } from '~/utils/auth-client'
 
 const agent = useAppAgent()
 const chatStore = useChatStore()
 const conversationStore = useConversationStore()
 const appStore = useAppStore()
 const widgetStore = useWidgetStore()
+const session = authClient.useSession()
 
 const showSessions = ref(false)
 const activeConversationTitle = computed(() => conversationStore.activeConversation?.title ?? 'New chat')
@@ -348,8 +350,31 @@ const handleSubmit = async (text: string) => {
   const widgetsCtx = widgetStore.widgets.length > 0 
     ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
     : 'Canvas Widgets: None'
+
+  // Inject user's Soul and Identity
+  // @ts-ignore - better-auth extended fields
+  const soulCtx = session.value.data?.user?.systemPrompt 
+    // @ts-ignore
+    ? `User's Custom Instructions (The Soul):\n${session.value.data.user.systemPrompt}` 
+    : ''
+  // @ts-ignore
+  const identityCtx = session.value.data?.user?.aboutMe 
+    // @ts-ignore
+    ? `About The User:\n${session.value.data.user.aboutMe}` 
+    : ''
+  // @ts-ignore
+  const userName = session.value.data?.user?.name || 'User'
+
+  const systemParts = [
+    timeContext, 
+    locContext, 
+    `User Name: ${userName}`,
+    widgetsCtx, 
+    soulCtx, 
+    identityCtx
+  ].filter(Boolean)
     
-  const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
+  const systemBlock = `<system_context>\n${systemParts.join('\n')}\n</system_context>`
   
   const consumedWidgets = chatStore.consumeWidgetContexts()
   

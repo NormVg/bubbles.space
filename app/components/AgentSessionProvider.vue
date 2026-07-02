@@ -4,6 +4,7 @@ import { useEveAgent } from 'eve/vue'
 import { setActiveAppAgent } from '../composables/useAppAgent'
 import { useConversationStore } from '../stores/conversations'
 import { useWidgetStore } from '../stores/widgets'
+import { authClient } from '~/utils/auth-client'
 
 const conversationStore = useConversationStore()
 const conversationId = computed(() => conversationStore.activeConversationId)
@@ -27,6 +28,28 @@ const agent = useEveAgent({
       }
       
       return `Content of ${widget.title || widget.type} (ID: ${id}):\n\n${textContent}`
+    },
+    update_user_settings: async ({ systemPrompt, aboutMe }: { systemPrompt?: string; aboutMe?: string }) => {
+      try {
+        const payload: Record<string, string> = {}
+        if (systemPrompt !== undefined) payload.systemPrompt = systemPrompt
+        if (aboutMe !== undefined) payload.aboutMe = aboutMe
+        
+        await $fetch('/api/user/settings', {
+          method: 'POST',
+          body: payload
+        })
+        
+        // Refresh the session so the UI picks up new values
+        await authClient.getSession({ fetchOptions: { query: { disableCookieCache: true } } })
+        
+        const updated: string[] = []
+        if (systemPrompt !== undefined) updated.push('Soul (System Prompt)')
+        if (aboutMe !== undefined) updated.push('About Me')
+        return `Successfully updated: ${updated.join(', ')}. The changes are saved and will take effect immediately.`
+      } catch (error) {
+        return `Failed to update user settings. Please try again.`
+      }
     }
   },
   onSessionChange(session) {
