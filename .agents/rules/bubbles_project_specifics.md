@@ -17,3 +17,8 @@ This rule file is a living document based on the `AGENTS.md` reference and track
 - **Animations (Reference from AGENTS.md):** 
   - Break down animations into small, different segments that complete at different rates so the app feels alive, rich, and not monotonous.
   - Always use `<TransitionGroup>` for lists and dynamic elements (like context pills) so they animate smoothly when entering or leaving the DOM.
+
+## 4. Tool Architecture (Static vs. Dynamic)
+- **Strict Boundary:** Maintain a rigid separation between Core System Tools and future Dynamic User Tools.
+- **Core System Tools (Current State):** Tools essential to the platform's functionality (like canvas manipulation, weather, core integrations) MUST remain statically defined in the codebase. This guarantees they are 100% reliable, type-safe, and under our absolute control.
+- **Dynamic User Tools (Future State):** When designing future architectures (like database schemas or agent initializers), always leave room for BYOT (Bring Your Own Tool). Dynamic tools will be injected into the agent at runtime from a database or API (like MCP), but they must NEVER mix with or override the core system tools.

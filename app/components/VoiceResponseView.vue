@@ -16,12 +16,14 @@ const latestAiMessage = computed(() => {
   const messages = eveAgent.data.value.messages
   if (!messages || messages.length === 0) return null
 
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const message = messages[i]
-    if (message?.role === 'assistant') {
-      return message
-    }
+  const lastMessage = messages[messages.length - 1]
+  
+  // Only show the AI message if it is currently responding or has just responded to the latest prompt.
+  // If the last message in history is a user message, the AI hasn't responded yet, so show nothing (hide old AI messages).
+  if (lastMessage && lastMessage.role === 'assistant') {
+    return lastMessage
   }
+  
   return null
 })
 
@@ -104,7 +106,7 @@ const voiceStatusLabel = computed(() => {
       <span class="transcript-label">You:</span> {{ voiceAgent.transcript.value }}
     </div>
 
-    <div v-if="latestAiMessage && voiceAgent.voiceSessionActive.value && eveAgent.status.value !== 'submitted'" class="voice-response-content">
+    <div v-if="latestAiMessage && voiceAgent.voiceSessionActive.value && eveAgent.status.value !== 'submitted' && !voiceAgent.isListening.value && !voiceAgent.isProcessingVoice.value" class="voice-response-content">
       <template v-for="(group, i) in getGroupedParts(latestAiMessage)" :key="i">
         <MarkdownRenderer v-if="group.type === 'text'" :content="group.text" :isDone="eveAgent.status.value !== 'streaming'" />
         <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
