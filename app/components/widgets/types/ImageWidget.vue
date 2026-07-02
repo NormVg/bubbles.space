@@ -65,10 +65,14 @@ const onMouseEnter = () => stopAutoPlay()
 const onMouseLeave = () => startAutoPlay()
 
 // Error handling
+const imageFailures = ref<Record<number, boolean>>({})
 const handleImageError = (event: Event, index: number) => {
   const img = event.target as HTMLImageElement
-  // Replace with a reliable placeholder if it fails
-  img.src = `https://picsum.photos/seed/${index + 1}/800/600`
+  if (!imageFailures.value[index]) {
+    imageFailures.value[index] = true
+    // Replace with a reliable placeholder if it fails
+    img.src = `https://picsum.photos/seed/${index + 1}/800/600`
+  }
 }
 
 // Editing
@@ -93,15 +97,24 @@ watch(() => props.isEditing, (editing) => {
     
     <div v-else class="image-container">
       <Transition name="fade-slide" mode="out-in">
-        <img 
-          :key="currentIndex" 
-          :src="imageList[currentIndex]" 
-          :class="['main-image', props.data.objectFit || 'cover']" 
-          alt="Widget Image" 
-          referrerpolicy="no-referrer"
-          crossorigin="anonymous"
-          @error="(e) => handleImageError(e, currentIndex)"
-        />
+        <div :key="currentIndex" class="main-image-wrapper">
+          <img 
+            :src="imageList[currentIndex]" 
+            :class="['main-image', props.data.objectFit || 'cover']" 
+            alt="Widget Image" 
+            referrerpolicy="no-referrer"
+            crossorigin="anonymous"
+            @error="(e) => handleImageError(e, currentIndex)"
+          />
+          <div v-if="imageFailures[currentIndex]" class="fallback-warning">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Fallback Image
+          </div>
+        </div>
       </Transition>
       
       <!-- Controls -->
@@ -186,6 +199,31 @@ html.light .edit-mode textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.main-image-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.fallback-warning {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
 }
 
 .main-image {
