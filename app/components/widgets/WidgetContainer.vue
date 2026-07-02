@@ -25,6 +25,8 @@ const handleSave = (newData: Record<string, any>) => {
   isEditing.value = false
 }
 
+const isContextAdded = ref(false)
+
 const addAsContext = () => {
   if (!widget.value) return
   
@@ -44,6 +46,12 @@ const addAsContext = () => {
     label: w.title || w.type,
     text: textContent
   })
+  
+  // Visual feedback
+  isContextAdded.value = true
+  setTimeout(() => {
+    isContextAdded.value = false
+  }, 2000)
 }
 
 // Drag State
@@ -209,9 +217,12 @@ const remove = () => {
     <!-- Floating Action Buttons -->
     <div class="widget-actions">
       <!-- Add as Context -->
-      <button class="widget-action-btn" @click.stop="addAsContext" aria-label="Add to chat context" title="Add to chat">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button class="widget-action-btn" :class="{ success: isContextAdded }" @click.stop="addAsContext" aria-label="Add to chat context" title="Add to chat">
+        <svg v-if="!isContextAdded" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </button>
       
@@ -418,6 +429,13 @@ html.light .widget-action-btn:hover {
   background: var(--accent, #ff6b8b);
   color: #fff;
   border-color: transparent;
+}
+
+.widget-action-btn.success {
+  background: rgba(46, 204, 113, 0.9);
+  color: #fff;
+  border-color: transparent;
+  transform: scale(1.08);
 }
 
 .widget-action-close:hover {
