@@ -47,11 +47,11 @@ export class WorkspaceService {
    * extremely high-frequency syncs before flushing to Postgres.
    */
   static async syncData(userId: string, frontendWorkspaces: any[]) {
-    const workspacesToUpsert: NewWorkspaceRecord[] = [];
-    const widgetsToUpsert: NewWidgetRecord[] = [];
+    const workspacesMap = new Map<string, NewWorkspaceRecord>();
+    const widgetsMap = new Map<string, NewWidgetRecord>();
 
     for (const ws of frontendWorkspaces) {
-      workspacesToUpsert.push({
+      workspacesMap.set(ws.id, {
         id: ws.id,
         userId,
         label: ws.label,
@@ -61,7 +61,7 @@ export class WorkspaceService {
       // Flatten active widgets
       if (ws.widgets && Array.isArray(ws.widgets)) {
         for (const w of ws.widgets) {
-          widgetsToUpsert.push({
+          widgetsMap.set(w.id, {
             id: w.id,
             workspaceId: ws.id,
             type: w.type,
@@ -78,7 +78,8 @@ export class WorkspaceService {
       // Flatten archived widgets
       if (ws.archivedWidgets && Array.isArray(ws.archivedWidgets)) {
         for (const w of ws.archivedWidgets) {
-          widgetsToUpsert.push({
+          // Archived overrides active if it exists in both (failsafe)
+          widgetsMap.set(w.id, {
             id: w.id,
             workspaceId: ws.id,
             type: w.type,
@@ -92,6 +93,9 @@ export class WorkspaceService {
         }
       }
     }
+
+    const workspacesToUpsert = Array.from(workspacesMap.values());
+    const widgetsToUpsert = Array.from(widgetsMap.values());
 
     await WorkspaceRepository.sync(userId, workspacesToUpsert, widgetsToUpsert);
     
