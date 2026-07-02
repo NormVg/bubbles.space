@@ -295,7 +295,7 @@ const remove = () => {
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   overflow: visible; /* Need visible for floating close button if it overhangs, but content should clip */
@@ -311,21 +311,21 @@ const remove = () => {
 html.light .widget {
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
 .widget:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 html.light .widget:hover {
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 .widget.dragging {
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25);
   z-index: 100;
 }
 
