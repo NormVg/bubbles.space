@@ -550,14 +550,13 @@ html.light .widget-resize-handle:hover {
 /* Widget Animations from CanvasWorkspace TransitionGroup */
 .widget.widget-anim-enter-active,
 .widget.widget-anim-leave-active {
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), scale 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  transition: opacity 0.25s cubic-bezier(0.2, 0, 0, 1), scale 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease;
 }
 
 .widget.widget-anim-enter-from,
 .widget.widget-anim-leave-to {
   opacity: 0;
-  scale: 0.85;
-  filter: blur(8px);
+  scale: 0.96;
 }
 
 .widget.widget-anim-leave-active {
