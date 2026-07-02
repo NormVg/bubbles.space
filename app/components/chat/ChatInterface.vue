@@ -141,11 +141,13 @@ import { useConversationStore } from '../../stores/conversations'
 import { useAppStore } from '../../stores/app'
 import { useVoiceAgent } from '../../composables/useVoiceAgent'
 import { useAppAgent } from '../../composables/useAppAgent'
+import { useWidgetStore } from '../../stores/widgets'
 
 const agent = useAppAgent()
 const chatStore = useChatStore()
 const conversationStore = useConversationStore()
 const appStore = useAppStore()
+const widgetStore = useWidgetStore()
 
 const showSessions = ref(false)
 const activeConversationTitle = computed(() => conversationStore.activeConversation?.title ?? 'New chat')
@@ -294,12 +296,52 @@ watch(showSessions, async (isShowingSessions) => {
   scrollToBottom(true)
 })
 
+const processedToolCalls = new Set<string>()
+
 onMounted(() => {
   appStore.fetchLocation()
   attachMessageObserver()
   // Initial scroll
   setTimeout(() => scrollToBottom(true), 100)
+
+  // Pre-fill processed tool calls so we don't re-trigger actions on refresh
+  const messages = agent.data.value.messages || []
+  for (const msg of messages) {
+    if (msg.role !== 'assistant') continue
+    for (const part of msg.parts) {
+      if (part.type === 'dynamic-tool' && part.toolCallId) {
+        processedToolCalls.add(part.toolCallId)
+      }
+    }
+  }
 })
+
+// Watch for new tool executions
+watch(() => agent.data.value.messages, (messages) => {
+  if (!messages) return
+  for (const msg of messages) {
+    if (msg.role !== 'assistant') continue
+    for (const part of msg.parts) {
+      if (part.type === 'dynamic-tool' && part.state === 'done' && part.toolCallId && part.result) {
+        if (!processedToolCalls.has(part.toolCallId)) {
+          processedToolCalls.add(part.toolCallId)
+          try {
+            const res = JSON.parse(part.result)
+            if (res.action === 'add_widget') {
+              widgetStore.addWidget(res.payload)
+            } else if (res.action === 'update_widget') {
+              widgetStore.updateWidget(res.payload.id, res.payload)
+            } else if (res.action === 'remove_widget') {
+              widgetStore.removeWidget(res.payload.id)
+            }
+          } catch(e) {
+            console.error('Failed to parse widget tool result', e)
+          }
+        }
+      }
+    }
+  }
+}, { deep: true })
 
 onBeforeUnmount(() => {
   disconnectMessageObserver()
@@ -331,8 +373,12 @@ const handleSubmit = async (text: string) => {
   const locContext = appStore.location 
     ? `Location: ${appStore.location.city || 'Unknown City'}, ${appStore.location.region || 'Unknown Region'} (Lat: ${appStore.location.latitude}, Lon: ${appStore.location.longitude})` 
     : 'Location: Unknown'
+  
+  const widgetsCtx = widgetStore.widgets.length > 0 
+    ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title, data: w.data })))}` 
+    : 'Canvas Widgets: None'
     
-  const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n</system_context>`
+  const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
   
   if (activeContexts.value.length > 0) {
     // Format all contexts

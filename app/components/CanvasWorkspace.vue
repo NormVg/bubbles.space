@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted, computed, watch } from 'vue'
+import WidgetContainer from './widgets/WidgetContainer.vue'
+import { useWidgetStore } from '../stores/widgets'
 
 // 16:9 fixed ratio
 const props = defineProps({
@@ -10,6 +12,8 @@ const props = defineProps({
 const emit = defineEmits<{
   canvasClick: []
 }>()
+
+const widgetStore = useWidgetStore()
 
 // ── State ──────────────────────────────────────────────────
 const scale = ref(1)
@@ -172,6 +176,7 @@ function handleResize() {
 }
 
 onMounted(() => {
+  widgetStore.init()
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('mouseup', endPan)
   window.addEventListener('mousemove', doPan)
@@ -232,6 +237,13 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
       }"
     >
       <slot />
+      
+      <!-- Render dynamic AI widgets -->
+      <WidgetContainer
+        v-for="widget in widgetStore.widgets"
+        :key="widget.id"
+        :id="widget.id"
+      />
     </div>
   </div>
 </template>

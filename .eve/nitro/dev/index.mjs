@@ -195,7 +195,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -206,17 +206,75 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/tools/canvas_add_widget.ts
+var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
+var canvas_add_widget_default = defineTool({
+	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
+	inputSchema: z.object({
+		type: z.enum(["markdown", "mermaid"]).describe("The type of widget to create."),
+		width: z.number().describe("The width of the widget in pixels (e.g. 300 to 600)."),
+		height: z.number().describe("The height of the widget in pixels (e.g. 200 to 500)."),
+		title: z.string().describe("A short title for the widget."),
+		data: z.record(z.any()).describe("The content of the widget. For markdown, pass { content: '...' }. For mermaid, pass { chart: '...' }.")
+	}),
+	async execute(input) {
+		return {
+			action: "add_widget",
+			payload: {
+				id: crypto.randomUUID(),
+				...input,
+				x: 1e3,
+				y: 700
+			}
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/tools/canvas_remove_widget.ts
+var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
+var canvas_remove_widget_default = defineTool({
+	description: "Remove/delete an existing widget from the user's canvas.",
+	inputSchema: z.object({ id: z.string().describe("The ID of the widget to remove.") }),
+	async execute(input) {
+		return {
+			action: "remove_widget",
+			payload: input
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/tools/canvas_update_widget.ts
+var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
+var canvas_update_widget_default = defineTool({
+	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
+	inputSchema: z.object({
+		id: z.string().describe("The ID of the widget to update."),
+		width: z.number().optional().describe("The new width in pixels (optional)."),
+		height: z.number().optional().describe("The new height in pixels (optional)."),
+		x: z.number().optional().describe("The new X coordinate (optional)."),
+		y: z.number().optional().describe("The new Y coordinate (optional)."),
+		title: z.string().optional().describe("A new title (optional)."),
+		data: z.record(z.any()).optional().describe("The new data content (optional).")
+	}),
+	async execute(input) {
+		return {
+			action: "update_widget",
+			payload: input
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -258,7 +316,7 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -311,19 +369,22 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
 	"channels/eve.ts": eve_exports,
 	"instructions/time.ts": time_exports,
+	"tools/canvas_add_widget.ts": canvas_add_widget_exports,
+	"tools/canvas_remove_widget.ts": canvas_remove_widget_exports,
+	"tools/canvas_update_widget.ts": canvas_update_widget_exports,
 	"tools/get_weather.ts": get_weather_exports,
 	"tools/web_search.ts": web_search_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "07895d9800f9c948a2020725ff4bb47a42fe3c6fefc386869ee7a85967c2a515"
+		"sha256": "e44ec58d283441b491e9e09875141555a42381cb9e449d588f9d49b3f2d3f72f"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -332,9 +393,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "261a9f9bd84ff52e572e798935141c11375e2be1e87d69da763db6391bb19a00"
+			"sha256": "2b4acc134f1e3776c1b74cb3c3213267170a3eecf3180f92b7d644681d7057ce"
 		},
-		"sourceGraphHash": "f9d4b29cb4094cd83c39fdb3a0b240144a763d2e42cc642e04c4509a103e1e37",
+		"sourceGraphHash": "f99a9a5a2d1ad9d2161f0bc7e6eef1afb1465b6bc121756e377140570ef03060",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -349,8 +410,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -427,44 +488,150 @@ const manifest = {
 	"sandboxWorkspaces": [],
 	"schedules": [],
 	"skills": [],
-	"tools": [{
-		"description": "Get the current weather and daily forecast for a given latitude and longitude.",
-		"inputSchema": {
-			"$schema": "http://json-schema.org/draft-07/schema#",
-			"type": "object",
-			"properties": {
-				"latitude": {
-					"type": "number",
-					"description": "The latitude of the location"
+	"tools": [
+		{
+			"description": "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": ["markdown", "mermaid"],
+						"description": "The type of widget to create."
+					},
+					"width": {
+						"type": "number",
+						"description": "The width of the widget in pixels (e.g. 300 to 600)."
+					},
+					"height": {
+						"type": "number",
+						"description": "The height of the widget in pixels (e.g. 200 to 500)."
+					},
+					"title": {
+						"type": "string",
+						"description": "A short title for the widget."
+					},
+					"data": {
+						"type": "object",
+						"propertyNames": { "type": "string" },
+						"additionalProperties": {},
+						"description": "The content of the widget. For markdown, pass { content: '...' }. For mermaid, pass { chart: '...' }."
+					}
 				},
-				"longitude": {
-					"type": "number",
-					"description": "The longitude of the location"
-				}
+				"required": [
+					"type",
+					"width",
+					"height",
+					"title",
+					"data"
+				]
 			},
-			"required": ["latitude", "longitude"]
+			"logicalPath": "tools/canvas_add_widget.ts",
+			"name": "canvas_add_widget",
+			"sourceId": "tools/canvas_add_widget.ts",
+			"sourceKind": "module"
 		},
-		"logicalPath": "tools/get_weather.ts",
-		"name": "get_weather",
-		"sourceId": "tools/get_weather.ts",
-		"sourceKind": "module"
-	}, {
-		"description": "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
-		"inputSchema": {
-			"$schema": "http://json-schema.org/draft-07/schema#",
-			"type": "object",
-			"properties": { "query": {
-				"type": "string",
-				"minLength": 1,
-				"description": "The search query"
-			} },
-			"required": ["query"]
+		{
+			"description": "Remove/delete an existing widget from the user's canvas.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": { "id": {
+					"type": "string",
+					"description": "The ID of the widget to remove."
+				} },
+				"required": ["id"]
+			},
+			"logicalPath": "tools/canvas_remove_widget.ts",
+			"name": "canvas_remove_widget",
+			"sourceId": "tools/canvas_remove_widget.ts",
+			"sourceKind": "module"
 		},
-		"logicalPath": "tools/web_search.ts",
-		"name": "web_search",
-		"sourceId": "tools/web_search.ts",
-		"sourceKind": "module"
-	}],
+		{
+			"description": "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The ID of the widget to update."
+					},
+					"width": {
+						"description": "The new width in pixels (optional).",
+						"type": "number"
+					},
+					"height": {
+						"description": "The new height in pixels (optional).",
+						"type": "number"
+					},
+					"x": {
+						"description": "The new X coordinate (optional).",
+						"type": "number"
+					},
+					"y": {
+						"description": "The new Y coordinate (optional).",
+						"type": "number"
+					},
+					"title": {
+						"description": "A new title (optional).",
+						"type": "string"
+					},
+					"data": {
+						"description": "The new data content (optional).",
+						"type": "object",
+						"propertyNames": { "type": "string" },
+						"additionalProperties": {}
+					}
+				},
+				"required": ["id"]
+			},
+			"logicalPath": "tools/canvas_update_widget.ts",
+			"name": "canvas_update_widget",
+			"sourceId": "tools/canvas_update_widget.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Get the current weather and daily forecast for a given latitude and longitude.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"latitude": {
+						"type": "number",
+						"description": "The latitude of the location"
+					},
+					"longitude": {
+						"type": "number",
+						"description": "The longitude of the location"
+					}
+				},
+				"required": ["latitude", "longitude"]
+			},
+			"logicalPath": "tools/get_weather.ts",
+			"name": "get_weather",
+			"sourceId": "tools/get_weather.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Search the web using DuckDuckGo to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": { "query": {
+					"type": "string",
+					"minLength": 1,
+					"description": "The search query"
+				} },
+				"required": ["query"]
+			},
+			"logicalPath": "tools/web_search.ts",
+			"name": "web_search",
+			"sourceId": "tools/web_search.ts",
+			"sourceKind": "module"
+		}
+	],
 	"workspaceResourceRoot": {
 		"contentHash": "5777dd4d87493e836b5597e87f6b3d07482c551341171ea7836996b231207c7b",
 		"logicalPath": "workspace-resources/__root__",
@@ -494,7 +661,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr2jrkkz-8ace1225-9943-425b-985d-f315885d40a3/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr33ar0q-4215cd7b-dd3f-4129-afd1-005e725dfc74/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_giget@3.2.0_ioredis@5.11.1__aa0080848a99faf0650f6759fa6cfa06/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;

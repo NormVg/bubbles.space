@@ -83,6 +83,122 @@
   "skills": [],
   "tools": [
     {
+      "description": "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "mermaid"
+            ],
+            "description": "The type of widget to create."
+          },
+          "width": {
+            "type": "number",
+            "description": "The width of the widget in pixels (e.g. 300 to 600)."
+          },
+          "height": {
+            "type": "number",
+            "description": "The height of the widget in pixels (e.g. 200 to 500)."
+          },
+          "title": {
+            "type": "string",
+            "description": "A short title for the widget."
+          },
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {},
+            "description": "The content of the widget. For markdown, pass { content: '...' }. For mermaid, pass { chart: '...' }."
+          }
+        },
+        "required": [
+          "type",
+          "width",
+          "height",
+          "title",
+          "data"
+        ]
+      },
+      "logicalPath": "tools/canvas_add_widget.ts",
+      "name": "canvas_add_widget",
+      "sourceId": "tools/canvas_add_widget.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Remove/delete an existing widget from the user's canvas.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the widget to remove."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "logicalPath": "tools/canvas_remove_widget.ts",
+      "name": "canvas_remove_widget",
+      "sourceId": "tools/canvas_remove_widget.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the widget to update."
+          },
+          "width": {
+            "description": "The new width in pixels (optional).",
+            "type": "number"
+          },
+          "height": {
+            "description": "The new height in pixels (optional).",
+            "type": "number"
+          },
+          "x": {
+            "description": "The new X coordinate (optional).",
+            "type": "number"
+          },
+          "y": {
+            "description": "The new Y coordinate (optional).",
+            "type": "number"
+          },
+          "title": {
+            "description": "A new title (optional).",
+            "type": "string"
+          },
+          "data": {
+            "description": "The new data content (optional).",
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "logicalPath": "tools/canvas_update_widget.ts",
+      "name": "canvas_update_widget",
+      "sourceId": "tools/canvas_update_widget.ts",
+      "sourceKind": "module"
+    },
+    {
       "description": "Get the current weather and daily forecast for a given latitude and longitude.",
       "inputSchema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -137,7 +253,7 @@
   "instructions": {
     "name": "instructions",
     "logicalPath": "instructions.md",
-    "markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location (e.g., if they ask for the \"Temperature\", fetch the weather for the latitude/longitude provided in the system context).\n- NEVER ask the user for their location or local time if it is provided in the `<system_context>`. If it says \"Unknown\", only then you may ask.\n",
+    "markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location (e.g., if they ask for the \"Temperature\", fetch the weather for the latitude/longitude provided in the system context).\n- NEVER ask the user for their location or local time if it is provided in the `<system_context>`. If it says \"Unknown\", only then you may ask.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n",
     "sourceId": "instructions.md",
     "sourceKind": "markdown"
   },
