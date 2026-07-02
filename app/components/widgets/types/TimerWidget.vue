@@ -187,9 +187,10 @@ html.light .progress-ring-track {
 }
 
 .timer-controls {
+  position: absolute;
+  bottom: 24px;
   display: flex;
   gap: 12px;
-  margin-top: 16px;
   z-index: 2;
   opacity: 0;
   transform: translateY(10px);
