@@ -10,6 +10,7 @@ export interface Widget {
   height: number
   title?: string
   data: Record<string, any>
+  zIndex?: number
   updatedAt?: number
 }
 
@@ -23,6 +24,7 @@ export interface Workspace {
     y: number
     scale: number
   }
+  sortOrder?: number
 }
 
 export const useWidgetStore = defineStore('widgets', () => {
@@ -69,7 +71,8 @@ export const useWidgetStore = defineStore('widgets', () => {
       label,
       widgets: [],
       archivedWidgets: [],
-      canvasState: { x: 0, y: 0, scale: 1 }
+      canvasState: { x: 0, y: 0, scale: 1 },
+      sortOrder: workspaces.value.length
     }]
     activeWorkspaceId.value = id
     return id
@@ -141,7 +144,8 @@ export const useWidgetStore = defineStore('widgets', () => {
           label: 'Main',
           widgets: legacyWidgets ? JSON.parse(legacyWidgets) : [],
           archivedWidgets: legacyArchived ? JSON.parse(legacyArchived) : [],
-          canvasState: { x: 0, y: 0, scale: 1 }
+          canvasState: { x: 0, y: 0, scale: 1 },
+          sortOrder: 0
         }
         
         if (!legacyWidgets) {
@@ -152,6 +156,7 @@ export const useWidgetStore = defineStore('widgets', () => {
             y: 720,
             width: 320,
             height: 240,
+            zIndex: 0,
             title: 'Welcome to Canvas',
             data: { content: '### Hello!\nThis is a spatial workspace. You can drag widgets around, and Bubbles can create new ones for you!' }
           })
@@ -299,6 +304,7 @@ export const useWidgetStore = defineStore('widgets', () => {
       id,
       x,
       y,
+      zIndex: getTopZIndex() + 1,
       updatedAt: Date.now()
     }]
   }
@@ -387,6 +393,29 @@ export const useWidgetStore = defineStore('widgets', () => {
     workspaces.value = newWorkspaces
   }
 
+  const reorderWorkspaces = (oldIndex: number, newIndex: number) => {
+    if (oldIndex === newIndex) return
+    const newWorkspaces = [...workspaces.value]
+    const [movedItem] = newWorkspaces.splice(oldIndex, 1)
+    newWorkspaces.splice(newIndex, 0, movedItem)
+    
+    // Update sortOrder for all to ensure sequence is maintained
+    newWorkspaces.forEach((ws, idx) => {
+      ws.sortOrder = idx
+    })
+    
+    workspaces.value = newWorkspaces
+  }
+
+  const getTopZIndex = () => {
+    return widgets.value.reduce((max, w) => Math.max(max, w.zIndex || 0), 0)
+  }
+
+  const bringToFront = (id: string) => {
+    const topZ = getTopZIndex()
+    updateWidget(id, { zIndex: topZ + 1 })
+  }
+
   return {
     workspaces,
     activeWorkspaceId,
@@ -407,6 +436,8 @@ export const useWidgetStore = defineStore('widgets', () => {
     permanentlyDeleteArchivedWidget,
     moveWidgetToWorkspace,
     findSafePosition,
-    syncStatus
+    syncStatus,
+    reorderWorkspaces,
+    bringToFront
   }
 })

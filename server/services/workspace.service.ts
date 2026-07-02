@@ -24,6 +24,7 @@ export class WorkspaceService {
           y: w.y,
           width: w.width,
           height: w.height,
+          zIndex: w.zIndex,
           title: w.title ?? undefined,
           data: w.data,
         })),
@@ -34,6 +35,7 @@ export class WorkspaceService {
           y: w.y,
           width: w.width,
           height: w.height,
+          zIndex: w.zIndex,
           title: w.title ?? undefined,
           data: w.data,
         })),
@@ -58,6 +60,7 @@ export class WorkspaceService {
         userId,
         label: ws.label,
         canvasState: ws.canvasState || { x: 0, y: 0, scale: 1 },
+        sortOrder: ws.sortOrder ?? 0,
       });
 
       // Flatten active widgets
@@ -71,6 +74,7 @@ export class WorkspaceService {
             y: w.y,
             width: w.width,
             height: w.height,
+            zIndex: w.zIndex ?? 0,
             title: w.title || null,
             data: w.data || {},
             isArchived: false,
@@ -90,6 +94,7 @@ export class WorkspaceService {
             y: w.y,
             width: w.width,
             height: w.height,
+            zIndex: w.zIndex ?? 0,
             title: w.title || null,
             data: w.data || {},
             isArchived: true,

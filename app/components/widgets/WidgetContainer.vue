@@ -70,6 +70,9 @@ let currentH = 0
 const onMouseDown = (e: MouseEvent) => {
   if (!widget.value || !containerEl.value) return
   
+  // Always bring to front when interacting with the widget
+  store.bringToFront(props.id)
+  
   const target = e.target as HTMLElement
   
   // Only drag from the dedicated drag handle
@@ -261,6 +264,11 @@ const syncDOM = () => {
     containerEl.value.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`
   }
   
+  // Sync z-index dynamically
+  if (widget.value.zIndex !== undefined) {
+    containerEl.value.style.zIndex = isDragging.value || isResizing.value ? '100' : `${10 + widget.value.zIndex}`
+  }
+  
   if (!isResizing.value) {
     currentW = widget.value.width
     currentH = widget.value.height
@@ -295,6 +303,7 @@ watch(() => widget.value, () => {
     ref="containerEl"
     class="widget group"
     :class="{ dragging: isDragging, resizing: isResizing, editing: isEditing }"
+    @mousedown="store.bringToFront(props.id)"
   >
     <!-- Drag Handle & Title -->
     <div class="widget-drag-handle" @mousedown="onMouseDown">

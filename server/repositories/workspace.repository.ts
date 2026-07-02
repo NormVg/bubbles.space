@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, asc } from 'drizzle-orm';
 import { db } from '../db';
 import { workspace, widget } from '../db/schema';
 
@@ -14,6 +14,7 @@ export class WorkspaceRepository {
   static async getByUserId(userId: string) {
     const workspaces = await db.query.workspace.findMany({
       where: eq(workspace.userId, userId),
+      orderBy: [asc(workspace.sortOrder), asc(workspace.createdAt)],
     });
 
     const workspaceIds = workspaces.map((w) => w.id);
@@ -41,6 +42,7 @@ export class WorkspaceRepository {
         set: {
           label: sql`excluded.label`,
           canvasState: sql`excluded.canvas_state`,
+          sortOrder: sql`excluded.sort_order`,
           updatedAt: new Date(),
         },
       });
@@ -63,6 +65,8 @@ export class WorkspaceRepository {
           y: sql`excluded.y`,
           width: sql`excluded.width`,
           height: sql`excluded.height`,
+          zIndex: sql`excluded.z_index`,
+          title: sql`excluded.title`,
           data: sql`excluded.data`,
           isArchived: sql`excluded.is_archived`,
           updatedAt: new Date(),

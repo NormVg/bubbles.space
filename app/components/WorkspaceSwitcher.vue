@@ -68,6 +68,28 @@ function deleteWorkspace(id: string) {
   widgetStore.deleteWorkspace(id)
 }
 
+const draggedIndex = ref<number | null>(null)
+
+function onDragStart(event: DragEvent, index: number) {
+  draggedIndex.value = index
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.dropEffect = 'move'
+  }
+}
+
+function onDragOver(event: DragEvent, index: number) {
+  if (draggedIndex.value === null || draggedIndex.value === index) return
+  if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+}
+
+function onDrop(event: DragEvent, index: number) {
+  if (draggedIndex.value !== null && draggedIndex.value !== index) {
+    widgetStore.reorderWorkspaces(draggedIndex.value, index)
+  }
+  draggedIndex.value = null
+}
+
 function toggleExpand() {
   if (!hasDynamicContent.value && !isExpanded.value) return
   if (!slotWrapperRef.value || !slotInnerRef.value || !switcherBarRef.value) return
@@ -175,10 +197,19 @@ function toggleExpand() {
     <div class="ws-switcher" ref="switcherBarRef">
       <!-- Workspace tabs -->
       <div
-        v-for="workspace in widgetStore.workspaces"
+        v-for="(workspace, index) in widgetStore.workspaces"
         :key="workspace.id"
         class="ws-tab"
-        :class="{ active: widgetStore.activeWorkspaceId === workspace.id }"
+        :class="{ 
+          active: widgetStore.activeWorkspaceId === workspace.id,
+          'drag-over': draggedIndex !== null && draggedIndex !== index 
+        }"
+        draggable="true"
+        @dragstart="onDragStart($event, index)"
+        @dragover.prevent="onDragOver($event, index)"
+        @drop="onDrop($event, index)"
+        @dragenter.prevent
+        @dragend="draggedIndex = null"
       >
         <button v-if="editingId !== workspace.id" class="ws-btn" @click="setActive(workspace.id)" @dblclick="startEditing(workspace.id)">
           {{ workspace.label }}
