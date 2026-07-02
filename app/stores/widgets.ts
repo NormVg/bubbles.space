@@ -34,10 +34,11 @@ export const useWidgetStore = defineStore('widgets', () => {
   const widgets = computed({
     get: () => activeWorkspace.value?.widgets || [],
     set: (newWidgets) => {
-      const current = activeWorkspace.value
-      if (current) {
-        current.widgets = newWidgets
-        workspaces.value = [...workspaces.value]
+      const idx = workspaces.value.findIndex(w => w.id === activeWorkspaceId.value)
+      if (idx !== -1) {
+        const newWorkspaces = [...workspaces.value]
+        newWorkspaces[idx] = { ...newWorkspaces[idx], widgets: newWidgets }
+        workspaces.value = newWorkspaces
       }
     }
   })
@@ -45,10 +46,11 @@ export const useWidgetStore = defineStore('widgets', () => {
   const archivedWidgets = computed({
     get: () => activeWorkspace.value?.archivedWidgets || [],
     set: (newArchived) => {
-      const current = activeWorkspace.value
-      if (current) {
-        current.archivedWidgets = newArchived
-        workspaces.value = [...workspaces.value]
+      const idx = workspaces.value.findIndex(w => w.id === activeWorkspaceId.value)
+      if (idx !== -1) {
+        const newWorkspaces = [...workspaces.value]
+        newWorkspaces[idx] = { ...newWorkspaces[idx], archivedWidgets: newArchived }
+        workspaces.value = newWorkspaces
       }
     }
   })
@@ -82,10 +84,12 @@ export const useWidgetStore = defineStore('widgets', () => {
   }
 
   const saveCanvasState = (x: number, y: number, scale: number, id?: string) => {
-    const current = id ? workspaces.value.find(w => w.id === id) : activeWorkspace.value
-    if (current) {
-      current.canvasState = { x, y, scale }
-      workspaces.value = [...workspaces.value]
+    const targetId = id || activeWorkspaceId.value
+    const idx = workspaces.value.findIndex(w => w.id === targetId)
+    if (idx !== -1) {
+      const newWorkspaces = [...workspaces.value]
+      newWorkspaces[idx] = { ...newWorkspaces[idx], canvasState: { x, y, scale } }
+      workspaces.value = newWorkspaces
     }
   }
 
@@ -279,14 +283,22 @@ export const useWidgetStore = defineStore('widgets', () => {
     const widgetIndex = sourceWs.widgets.findIndex(w => w.id === widgetId)
     if (widgetIndex === -1) return
     
-    const targetWs = workspaces.value.find(w => w.id === targetWorkspaceId)
-    if (!targetWs) return
+    const newWorkspaces = [...workspaces.value]
     
-    const widgetToMove = sourceWs.widgets[widgetIndex]
-    sourceWs.widgets.splice(widgetIndex, 1)
-    targetWs.widgets.push(widgetToMove)
+    const sourceIdx = newWorkspaces.findIndex(w => w.id === sourceWs.id)
+    const targetIdx = newWorkspaces.findIndex(w => w.id === targetWorkspaceId)
+    if (sourceIdx === -1 || targetIdx === -1) return
     
-    workspaces.value = [...workspaces.value]
+    const widgetToMove = newWorkspaces[sourceIdx].widgets[widgetIndex]
+    
+    const newSourceWidgets = [...newWorkspaces[sourceIdx].widgets]
+    newSourceWidgets.splice(widgetIndex, 1)
+    newWorkspaces[sourceIdx] = { ...newWorkspaces[sourceIdx], widgets: newSourceWidgets }
+    
+    const newTargetWidgets = [...newWorkspaces[targetIdx].widgets, widgetToMove]
+    newWorkspaces[targetIdx] = { ...newWorkspaces[targetIdx], widgets: newTargetWidgets }
+    
+    workspaces.value = newWorkspaces
   }
 
   return {
