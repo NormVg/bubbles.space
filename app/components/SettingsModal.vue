@@ -115,6 +115,46 @@
                   Sign Out
                 </button>
               </div>
+
+              <div class="setting-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 24px;" v-if="session.data">
+                <div class="setting-info" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                  <div>
+                    <label>About Me (User Identity)</label>
+                    <span class="desc" style="display: block;">Information Bubbles should know about you</span>
+                  </div>
+                  <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
+                    {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                  </button>
+                </div>
+                <textarea 
+                  v-model="editAboutMe"
+                  class="settings-textarea" 
+                  placeholder="e.g. I am a frontend developer, I like minimal UI, I live in New York..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- ADVANCED TAB -->
+            <div v-if="activeTab === 'advanced'" class="setting-group">
+              <h3>AI Personality</h3>
+              
+              <div class="setting-item" style="display: flex; flex-direction: column; align-items: stretch; gap: 12px;" v-if="session.data">
+                <div class="setting-info" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                  <div>
+                    <label>The Soul (System Prompt)</label>
+                    <span class="desc" style="display: block;">Define exactly how Bubbles should act and talk</span>
+                  </div>
+                  <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
+                    {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                  </button>
+                </div>
+                <textarea 
+                  v-model="editSystemPrompt"
+                  class="settings-textarea" 
+                  style="height: 150px;"
+                  placeholder="e.g. You are a sassy, sarcastic AI that strictly uses lowercase letters..."
+                ></textarea>
+              </div>
             </div>
 
           </div>
@@ -125,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useColorMode } from '@vueuse/core'
 import BubblesAvatar from './BubblesAvatar.vue'
@@ -135,6 +175,34 @@ const uiStore = useUIStore()
 const activeTab = ref('account') // Default to account tab to test
 const previewEmotion = ref('normal')
 const session = authClient.useSession()
+
+const editSystemPrompt = ref('')
+const editAboutMe = ref('')
+const isSaving = ref(false)
+
+// Sync form when session loads
+watch(() => session.value.data, (data) => {
+  if (data?.user) {
+    // @ts-ignore - better-auth types are extended at runtime
+    editSystemPrompt.value = data.user.systemPrompt || ''
+    // @ts-ignore
+    editAboutMe.value = data.user.aboutMe || ''
+  }
+}, { immediate: true })
+
+async function saveUserSettings() {
+  isSaving.value = true
+  try {
+    await authClient.updateUser({
+      systemPrompt: editSystemPrompt.value,
+      aboutMe: editAboutMe.value
+    })
+  } catch (error) {
+    console.error('Failed to save settings:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
 
 async function logout() {
   await authClient.signOut({
@@ -501,6 +569,47 @@ const colorMode = useColorMode({
 .logout-btn:hover {
   background: rgba(255, 60, 60, 0.15);
   border-color: rgba(255, 60, 60, 0.3);
+}
+
+.settings-textarea {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.settings-textarea:focus {
+  border-color: var(--accent);
+}
+
+.save-btn {
+  background: var(--text-primary);
+  color: var(--bg-base);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-btn:hover:not(:disabled) {
+  opacity: 0.8;
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
