@@ -5,11 +5,17 @@ import { useDark } from '@vueuse/core'
 
 const props = defineProps<{
   data: Record<string, any>
+  isEditing: boolean
+}>()
+
+const emit = defineEmits<{
+  save: [data: Record<string, any>]
 }>()
 
 const isDark = useDark()
 const svgContent = ref('')
 const isRendering = ref(false)
+const editChart = ref(props.data.chart || '')
 
 const renderChart = async () => {
   if (isRendering.value) return
@@ -47,10 +53,27 @@ onMounted(() => {
 
 watch(() => isDark.value, renderChart)
 watch(() => props.data.chart, renderChart)
+
+watch(() => props.isEditing, (editing) => {
+  if (editing) {
+    editChart.value = props.data.chart || ''
+  } else if (editChart.value !== props.data.chart) {
+    emit('save', { chart: editChart.value })
+  }
+})
 </script>
 
 <template>
-  <div class="mermaid-widget-content" v-html="svgContent"></div>
+  <div class="mermaid-widget-content">
+    <textarea
+      v-if="isEditing"
+      v-model="editChart"
+      class="widget-editor"
+      placeholder="Write mermaid syntax here..."
+      spellcheck="false"
+    ></textarea>
+    <div v-else class="mermaid-svg-container" v-html="svgContent"></div>
+  </div>
 </template>
 
 <style scoped>
@@ -64,12 +87,38 @@ watch(() => props.data.chart, renderChart)
   justify-content: center;
 }
 
+.mermaid-svg-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Force the natively rendered mermaid SVG to scale perfectly */
-.mermaid-widget-content :deep(svg) {
+.mermaid-svg-container :deep(svg) {
   width: 100% !important;
   height: 100% !important;
   max-width: 100% !important;
   max-height: 100% !important;
   object-fit: contain;
+}
+
+.widget-editor {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--text-primary);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 0;
+}
+
+.widget-editor::placeholder {
+  color: var(--text-muted, rgba(255, 255, 255, 0.3));
 }
 </style>

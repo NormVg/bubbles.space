@@ -108,12 +108,19 @@
     <Transition name="fade-slide">
       <div v-if="!showSessions" class="chat-input-wrapper">
         <Transition name="fade-slide">
-          <div v-if="activeContexts.length > 0" class="context-bar">
+          <div v-if="activeContexts.length > 0 || chatStore.pendingWidgetContexts.length > 0" class="context-bar">
             <TransitionGroup name="context-pill">
               <div v-for="(ctx, index) in activeContexts" :key="ctx.id" class="context-pill">
                 <span class="context-label">{{ ctx.type }}</span>
                 <span class="context-text">{{ ctx.text }}</span>
                 <button class="context-clear" @click="removeContext(index)" title="Remove context">
+                  <LucideX :size="12" stroke-width="2" />
+                </button>
+              </div>
+              <div v-for="(wCtx, index) in chatStore.pendingWidgetContexts" :key="'w-'+wCtx.id" class="context-pill">
+                <span class="context-label">Widget</span>
+                <span class="context-text">{{ wCtx.label }}</span>
+                <button class="context-clear" @click="chatStore.removeWidgetContext(wCtx.id)" title="Remove widget context">
                   <LucideX :size="12" stroke-width="2" />
                 </button>
               </div>
@@ -396,13 +403,22 @@ const handleSubmit = async (text: string) => {
     
   const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
   
-  if (activeContexts.value.length > 0) {
-    // Format all contexts
-    const contextPrefix = activeContexts.value.map(ctx => {
+  const consumedWidgets = chatStore.consumeWidgetContexts()
+  
+  if (activeContexts.value.length > 0 || consumedWidgets.length > 0) {
+    // Format message contexts
+    const msgContextPrefix = activeContexts.value.map(ctx => {
       return `> ${ctx.text.split('\n').join('\n> ')}`
     }).join('\n\n')
     
-    finalMessage = `${systemBlock}\n\n${contextPrefix}\n\n${text}`
+    // Format widget contexts
+    const widgetContextPrefix = consumedWidgets.map(wCtx => {
+      return `[Widget: ${wCtx.label}]\n${wCtx.text}`
+    }).join('\n\n')
+    
+    const allContexts = [msgContextPrefix, widgetContextPrefix].filter(Boolean).join('\n\n')
+    
+    finalMessage = `${systemBlock}\n\n${allContexts}\n\n${text}`
     activeContexts.value = [] // clear after sending
   } else {
     finalMessage = `${systemBlock}\n\n${text}`

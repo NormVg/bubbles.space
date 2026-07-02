@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
 import { useWidgetStore } from '../../stores/widgets'
+import { useChatStore } from '../../stores/chat'
 import { WidgetRegistry } from './WidgetRegistry'
 
 const props = defineProps<{
@@ -8,8 +9,42 @@ const props = defineProps<{
 }>()
 
 const store = useWidgetStore()
+const chatStore = useChatStore()
 const widget = computed(() => store.widgets.find(w => w.id === props.id))
 const containerEl = ref<HTMLElement | null>(null)
+
+// Edit State
+const isEditing = ref(false)
+
+const toggleEdit = () => {
+  isEditing.value = !isEditing.value
+}
+
+const handleSave = (newData: Record<string, any>) => {
+  store.updateWidget(props.id, { data: { ...widget.value?.data, ...newData } })
+  isEditing.value = false
+}
+
+const addAsContext = () => {
+  if (!widget.value) return
+  
+  const w = widget.value
+  let textContent = ''
+  
+  if (w.type === 'markdown') {
+    textContent = w.data.content || ''
+  } else if (w.type === 'mermaid') {
+    textContent = `\`\`\`mermaid\n${w.data.chart || ''}\n\`\`\``
+  } else {
+    textContent = JSON.stringify(w.data)
+  }
+  
+  chatStore.addWidgetContext({
+    id: w.id,
+    label: w.title || w.type,
+    text: textContent
+  })
+}
 
 // Drag State
 const isDragging = ref(false)
@@ -159,7 +194,7 @@ const remove = () => {
     v-if="widget"
     ref="containerEl"
     class="widget group"
-    :class="{ dragging: isDragging, resizing: isResizing }"
+    :class="{ dragging: isDragging, resizing: isResizing, editing: isEditing }"
     :style="{
       transform: `translate(${isDragging ? tempX : widget.x}px, ${isDragging ? tempY : widget.y}px)`,
       width: `${isResizing ? tempWidth : widget.width}px`,
@@ -171,17 +206,38 @@ const remove = () => {
       <div class="drag-pill"></div>
     </div>
     
-    <!-- Floating Close Button -->
-    <button class="widget-close" @click.stop="remove" aria-label="Close widget">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
+    <!-- Floating Action Buttons -->
+    <div class="widget-actions">
+      <!-- Add as Context -->
+      <button class="widget-action-btn" @click.stop="addAsContext" aria-label="Add to chat context" title="Add to chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+      
+      <!-- Edit Toggle -->
+      <button class="widget-action-btn" :class="{ active: isEditing }" @click.stop="toggleEdit" aria-label="Edit widget" title="Edit">
+        <svg v-if="!isEditing" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </button>
+      
+      <!-- Close -->
+      <button class="widget-action-btn widget-action-close" @click.stop="remove" aria-label="Close widget" title="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
     
     <!-- Widget Content -->
     <div class="widget-body">
-      <component :is="Component" v-if="Component" :data="widget.data" />
+      <component :is="Component" v-if="Component" :data="widget.data" :is-editing="isEditing" @save="handleSave" />
       <div v-else class="widget-error">Unknown widget type: {{ widget.type }}</div>
     </div>
     
@@ -307,46 +363,70 @@ html.light .widget-drag-handle:hover .drag-pill {
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* Floating Close Button */
-.widget-close {
+/* Floating Action Buttons */
+.widget-actions {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.widget.group:hover .widget-actions,
+.widget.editing .widget-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.widget-action-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.4);
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transform: scale(0.9);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 20;
   cursor: pointer;
   backdrop-filter: blur(8px);
+  transition: all 0.15s ease;
 }
 
-html.light .widget-close {
+html.light .widget-action-btn {
   background: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.widget-action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+html.light .widget-action-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
   color: #000;
-  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.widget.group:hover .widget-close, .widget.resizing .widget-close {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.widget-close:hover {
-  background: rgba(231, 76, 60, 0.8);
+.widget-action-btn.active {
+  background: var(--accent, #ff6b8b);
+  color: #fff;
   border-color: transparent;
-  transform: scale(1.1) !important;
 }
 
-html.light .widget-close:hover {
+.widget-action-close:hover {
+  background: rgba(231, 76, 60, 0.8);
+  color: #fff;
+  border-color: transparent;
+}
+
+html.light .widget-action-close:hover {
   background: rgba(231, 76, 60, 0.9);
   color: #fff;
 }
