@@ -18,6 +18,37 @@ const editDuration = ref(Math.floor(initialDuration.value / 60))
 
 let timerInterval: number | null = null
 
+const playRing = () => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    
+    const playNote = (freq: number, delay: number) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      
+      const startTime = ctx.currentTime + delay;
+      osc.frequency.setValueAtTime(freq, startTime);
+      
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, startTime + 1.5);
+      
+      osc.start(startTime);
+      osc.stop(startTime + 1.5);
+    };
+
+    playNote(880, 0);       // A5
+    playNote(1108.73, 0.2); // C#6
+  } catch(e) {
+    console.error(e);
+  }
+}
+
 const start = () => {
   if (isRunning.value || timeLeft.value <= 0) return
   isRunning.value = true
@@ -25,8 +56,8 @@ const start = () => {
     if (timeLeft.value > 0) {
       timeLeft.value--
     } else {
-      stop()
-      // Play a sound or something? For now just stop.
+      pause()
+      playRing()
     }
   }, 1000)
 }
@@ -53,8 +84,14 @@ onUnmounted(() => {
   if (timerInterval) clearInterval(timerInterval)
 })
 
+watch(() => props.data.action, (action) => {
+  if (action === 'start') start()
+  else if (action === 'pause' || action === 'stop') pause()
+  else if (action === 'reset') reset()
+})
+
 watch(() => props.data.duration, (newVal) => {
-  if (!isRunning.value) {
+  if (!isRunning.value && newVal !== undefined) {
     timeLeft.value = Number(newVal) || 300
     editDuration.value = Math.floor(timeLeft.value / 60)
   }

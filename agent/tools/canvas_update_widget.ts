@@ -10,7 +10,7 @@ export default defineTool({
     x: z.number().optional().describe("The new X coordinate (optional)."),
     y: z.number().optional().describe("The new Y coordinate (optional)."),
     title: z.string().optional().describe("A new title (optional)."),
-    data: z.record(z.any()).optional().describe("The new data content (optional).")
+    data: z.record(z.any()).optional().describe("The new data content (optional). For timers, you can pass { action: 'start' | 'pause' | 'reset' } to control it.")
   }),
   async execute(input) {
     return {

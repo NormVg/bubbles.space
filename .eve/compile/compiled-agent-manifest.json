@@ -202,7 +202,7 @@
             "type": "string"
           },
           "data": {
-            "description": "The new data content (optional).",
+            "description": "The new data content (optional). For timers, you can pass { action: 'start' | 'pause' | 'reset' } to control it.",
             "type": "object",
             "propertyNames": {
               "type": "string"
