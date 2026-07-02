@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { authClient } from '~/utils/auth-client'
 import { ref } from 'vue'
-import { LogIn } from 'lucide-vue-next'
 
 const isLoading = ref(false)
 
@@ -15,145 +14,162 @@ async function loginWithGoogle() {
 </script>
 
 <template>
-  <div class="landing-container">
-    <div class="glow-bg"></div>
-    <div class="content">
-      <div class="brand">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="logo">
-          <defs>
-            <radialGradient id="bubble" cx="35%" cy="35%" r="65%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-              <stop offset="25%" stop-color="#e2f1ff" stop-opacity="0.7" />
-              <stop offset="70%" stop-color="#90c2ff" stop-opacity="0.4" />
-              <stop offset="95%" stop-color="#5096ff" stop-opacity="0.85" />
-              <stop offset="100%" stop-color="#2070ff" stop-opacity="1" />
-            </radialGradient>
-          </defs>
-          <circle cx="50" cy="50" r="46" fill="url(#bubble)" stroke="#ffffff" stroke-width="2" stroke-opacity="0.6" />
-          <path d="M 25 35 Q 40 15 65 25 Q 45 25 25 35" fill="#ffffff" opacity="0.9" />
-          <circle cx="72" cy="65" r="4" fill="#ffffff" opacity="0.6" />
-        </svg>
-        <h1>Bubbles</h1>
+  <div class="landing-screen">
+    <div class="landing-content">
+      <div class="logo-wrapper">
+        <h1 class="logo-text">BUBBLES</h1>
       </div>
+      
       <p class="tagline">Your AI-powered thinking canvas.</p>
       
-      <button class="login-btn" @click="loginWithGoogle" :disabled="isLoading">
-        <LogIn v-if="!isLoading" class="icon" :size="18" />
-        <span v-if="isLoading" class="spinner"></span>
-        {{ isLoading ? 'Connecting...' : 'Continue with Google' }}
-      </button>
+      <div class="auth-section">
+        <button class="login-btn" @click="loginWithGoogle" :disabled="isLoading">
+          <span v-if="isLoading" class="loader-track">
+            <span class="loader-fill"></span>
+          </span>
+          <span v-else class="btn-text">CONTINUE WITH GOOGLE</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.landing-container {
-  width: 100vw;
-  height: 100vh;
+.landing-screen {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bg-base);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000; /* Sleek dark mode */
-  position: relative;
-  overflow: hidden;
   font-family: var(--font-sans);
 }
 
-.glow-bg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60vw;
-  height: 60vw;
-  background: radial-gradient(circle, rgba(32,112,255,0.15) 0%, rgba(0,0,0,0) 70%);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.content {
-  position: relative;
-  z-index: 1;
+.landing-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  animation: fade-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  gap: 24px;
+  animation: fade-in 1s ease-out forwards;
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+.logo-wrapper {
+  overflow: hidden;
 }
 
-.logo {
-  width: 48px;
-  height: 48px;
+.logo-text {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 12px;
+  margin-right: -12px;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-h1 {
-  font-size: 42px;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -1px;
-  margin: 0;
+html.light .logo-text {
+  font-weight: 400;
 }
 
 .tagline {
-  font-size: 18px;
-  color: #888;
-  margin: 0 0 48px 0;
-  letter-spacing: -0.2px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin: 0 0 32px 0;
+  opacity: 0.6;
+}
+
+.auth-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
 .login-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  cursor: pointer;
+  padding: 8px 16px;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 100px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(10px);
+  justify-content: center;
+  min-width: 180px;
+  min-height: 32px;
 }
 
 .login-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-1px);
-}
-
-.login-btn:active:not(:disabled) {
-  transform: scale(0.97);
+  opacity: 1;
 }
 
 .login-btn:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.btn-text {
+  position: relative;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.btn-text::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--text-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login-btn:hover .btn-text::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Loader styles adapted from splash screen */
+.loader-track {
+  width: 120px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+html.light .loader-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.loader-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--text-primary);
+  width: 30%;
+  animation: indeterminate-load 1s infinite linear;
+  transform-origin: left;
+}
+
+@keyframes indeterminate-load {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
 }
 </style>
