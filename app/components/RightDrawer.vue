@@ -9,6 +9,7 @@
 
     <!-- The actual drawer panel -->
     <aside
+      ref="drawerEl"
       class="right-drawer"
       :style="{ width: currentWidth + 'px' }"
       :class="{ 'is-resizing': isResizing }"
@@ -32,6 +33,7 @@ import { useLocalStorage } from '@vueuse/core'
 import ChatInterface from './chat/ChatInterface.vue'
 
 const uiStore = useUIStore()
+const drawerEl = ref<HTMLElement | null>(null)
 
 function clampDrawerWidth(width: number) {
   if (typeof window === 'undefined') return width
@@ -62,6 +64,7 @@ function startResize(e: MouseEvent) {
 }
 
 let resizeRaf: number | null = null
+let currentDragWidth = 0
 
 function doResize(e: MouseEvent) {
   if (!isResizing.value) return
@@ -73,8 +76,14 @@ function doResize(e: MouseEvent) {
   resizeRaf = requestAnimationFrame(() => {
     // Reverse the calculation since dragging left increases width from the right side
     const newWidth = window.innerWidth - e.clientX - 10 // Account for right-drawer-wrapper right: 10px offset
-
-    currentWidth.value = clampDrawerWidth(newWidth)
+    
+    currentDragWidth = clampDrawerWidth(newWidth)
+    
+    // Direct DOM Bypass for 1:1 Interaction
+    if (drawerEl.value) {
+      drawerEl.value.style.width = currentDragWidth + 'px'
+    }
+    
     resizeRaf = null
   })
 }
@@ -83,8 +92,11 @@ function endResize() {
   isResizing.value = false
   document.body.style.cursor = ''
 
-  // Only write to localStorage ONCE at the end of the drag to prevent extreme lag
-  drawerWidth.value = clampDrawerWidth(currentWidth.value)
+  // Sync back to Vue reactivity once at the end of the drag
+  if (currentDragWidth > 0) {
+    currentWidth.value = currentDragWidth
+    drawerWidth.value = currentDragWidth
+  }
 
   window.removeEventListener('mousemove', doResize)
   window.removeEventListener('mouseup', endResize)
