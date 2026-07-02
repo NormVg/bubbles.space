@@ -485,8 +485,9 @@ const parseUserMessage = (text: string) => {
   let inWidget = false
   
   for (const line of lines) {
+    const trimmedLine = line.trim()
     if (inWidget) {
-      if (line === '[/Widget]') {
+      if (trimmedLine === '[/Widget]') {
         inWidget = false
       }
       continue // Skip widget body lines
@@ -495,17 +496,17 @@ const parseUserMessage = (text: string) => {
     if (inQuotes) {
       if (line.startsWith('> ')) {
         currentQuote.push(line.substring(2))
-      } else if (line.trim() === '') {
+      } else if (trimmedLine === '') {
         if (currentQuote.length > 0) {
           parsedQuotes.push(currentQuote.join('\n').trim())
           currentQuote = []
         }
-      } else if (line.startsWith('[Widget: ')) {
+      } else if (trimmedLine.startsWith('[Widget: ')) {
         if (currentQuote.length > 0) {
           parsedQuotes.push(currentQuote.join('\n').trim())
           currentQuote = []
         }
-        const label = line.substring(9, line.length - 1)
+        const label = trimmedLine.substring(9, trimmedLine.length - 1)
         parsedWidgets.push({ label })
         inWidget = true
       } else {
@@ -517,8 +518,8 @@ const parseUserMessage = (text: string) => {
         message.push(line)
       }
     } else {
-      if (line.startsWith('[Widget: ')) {
-        const label = line.substring(9, line.length - 1)
+      if (trimmedLine.startsWith('[Widget: ')) {
+        const label = trimmedLine.substring(9, trimmedLine.length - 1)
         parsedWidgets.push({ label })
         inWidget = true
       } else {

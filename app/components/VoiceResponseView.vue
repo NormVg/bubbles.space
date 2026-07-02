@@ -6,9 +6,12 @@ import MarkdownRenderer from './MarkdownRenderer.vue'
 import ToolCallGroup from './chat/ToolCallGroup.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
+import { useChatStore } from '../stores/chat'
+import { LucidePaperclip } from 'lucide-vue-next'
 
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
+const chatStore = useChatStore()
 
 const latestAiMessage = computed(() => {
   const messages = eveAgent.data.value.messages
@@ -88,6 +91,12 @@ const voiceStatusLabel = computed(() => {
       <AILoader :size="12" :color="modeColor" :mode="currentMode" />
       <span>{{ voiceStatusLabel }}</span>
     </div>
+    <div v-if="chatStore.pendingWidgetContexts.length > 0" class="voice-contexts">
+      <div v-for="ctx in chatStore.pendingWidgetContexts" :key="ctx.id" class="voice-context-pill">
+        <LucidePaperclip :size="10" stroke-width="2.5" />
+        <span>{{ ctx.label }}</span>
+      </div>
+    </div>
     
     <div v-if="voiceAgent.transcript.value" class="user-transcript">
       <span class="transcript-label">You:</span> {{ voiceAgent.transcript.value }}
@@ -122,6 +131,31 @@ const voiceStatusLabel = computed(() => {
 
 .voice-response-header:last-child {
   margin-bottom: 0;
+}
+
+.voice-contexts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.voice-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: fit-content;
+}
+
+html.light .voice-context-pill {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .user-transcript {
