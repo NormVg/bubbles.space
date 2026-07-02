@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 
 export interface WidgetContext {
   id: string
@@ -9,7 +9,7 @@ export interface WidgetContext {
 
 export const useChatStore = defineStore('chat', () => {
   const emotion = ref('normal')
-  const pendingWidgetContexts = ref<WidgetContext[]>([])
+  const pendingWidgetContexts = shallowRef<WidgetContext[]>([])
   
   function setEmotion(newEmotion: string) {
     emotion.value = newEmotion

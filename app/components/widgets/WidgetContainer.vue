@@ -350,6 +350,7 @@ watch(() => widget.value, () => {
   min-width: min-content;
   min-height: min-content;
   contain: layout style;
+  content-visibility: auto;
 }
 
 /* Light mode support */

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import type { EveMessage } from 'eve/vue'
 import type { HandleMessageStreamEvent, SessionState } from 'eve/client'
@@ -11,8 +11,8 @@ export const useConversationStore = defineStore('conversations', () => {
   const activeConversationId = useLocalStorage<string>('bubbles-active-conversation-id', '')
   
   // State
-  const metaList = ref<ConversationMeta[]>([])
-  const activeDetail = ref<ConversationDetail | null>(null)
+  const metaList = shallowRef<ConversationMeta[]>([])
+  const activeDetail = shallowRef<ConversationDetail | null>(null)
   const isInitialized = ref(false)
   const isInitializing = ref(false)
 
@@ -112,7 +112,7 @@ export const useConversationStore = defineStore('conversations', () => {
   async function updateSession(id: string, session: SessionState) {
     await conversationService.updateSessionOnly(id, session)
     if (activeDetail.value && activeDetail.value.id === id) {
-      activeDetail.value.session = session
+      activeDetail.value = { ...activeDetail.value, session }
     }
   }
 
@@ -130,12 +130,14 @@ export const useConversationStore = defineStore('conversations', () => {
     const { meta: nextMeta, detail: nextDetail } = await conversationService.saveSnapshot(currentMeta, input)
     
     // Update local reactive state
-    const index = metaList.value.findIndex((m: ConversationMeta) => m.id === id)
+    const newMetaList = [...metaList.value]
+    const index = newMetaList.findIndex((m: ConversationMeta) => m.id === id)
     if (index >= 0) {
-      metaList.value[index] = nextMeta
+      newMetaList[index] = nextMeta
     }
     // Re-sort
-    metaList.value.sort((a: ConversationMeta, b: ConversationMeta) => b.updatedAt.localeCompare(a.updatedAt))
+    newMetaList.sort((a: ConversationMeta, b: ConversationMeta) => b.updatedAt.localeCompare(a.updatedAt))
+    metaList.value = newMetaList
 
     if (activeDetail.value && activeDetail.value.id === id) {
       activeDetail.value = nextDetail
