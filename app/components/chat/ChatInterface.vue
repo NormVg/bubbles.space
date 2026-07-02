@@ -298,6 +298,24 @@ watch(showSessions, async (isShowingSessions) => {
 
 const processedToolCalls = new Set<string>()
 
+/** Build a stable dedup key for a tool call part */
+const getToolKey = (msgId: string, part: any, partIndex: number): string => {
+  return part.toolCallId || `${msgId}__${part.toolName}__${partIndex}`
+}
+
+/** Try to extract a widget action from a tool output */
+const tryApplyWidgetAction = (output: any) => {
+  if (!output || typeof output !== 'object') return
+  const res = output
+  if (res.action === 'add_widget') {
+    widgetStore.addWidget(res.payload)
+  } else if (res.action === 'update_widget') {
+    widgetStore.updateWidget(res.payload.id, res.payload)
+  } else if (res.action === 'remove_widget') {
+    widgetStore.removeWidget(res.payload.id)
+  }
+}
+
 onMounted(() => {
   appStore.fetchLocation()
   attachMessageObserver()
@@ -305,12 +323,19 @@ onMounted(() => {
   setTimeout(() => scrollToBottom(true), 100)
 
   // Pre-fill processed tool calls so we don't re-trigger actions on refresh
+  // Also apply any already-completed widget actions from previous sessions
   const messages = agent.data.value.messages || []
   for (const msg of messages) {
     if (msg.role !== 'assistant') continue
-    for (const part of msg.parts) {
-      if (part.type === 'dynamic-tool' && part.toolCallId) {
-        processedToolCalls.add(part.toolCallId)
+    for (let i = 0; i < msg.parts.length; i++) {
+      const part = msg.parts[i] as any
+      if (part.type === 'dynamic-tool') {
+        const key = getToolKey(msg.id, part, i)
+        processedToolCalls.add(key)
+        // Apply widget actions from prior sessions on reload
+        if ((part.state === 'output-available' || part.state === 'approval-responded') && part.output) {
+          tryApplyWidgetAction(part.output)
+        }
       }
     }
   }
@@ -321,22 +346,13 @@ watch(() => agent.data.value.messages, (messages) => {
   if (!messages) return
   for (const msg of messages) {
     if (msg.role !== 'assistant') continue
-    for (const part of msg.parts) {
-      if (part.type === 'dynamic-tool' && part.state === 'done' && part.toolCallId && part.result) {
-        if (!processedToolCalls.has(part.toolCallId)) {
-          processedToolCalls.add(part.toolCallId)
-          try {
-            const res = JSON.parse(part.result)
-            if (res.action === 'add_widget') {
-              widgetStore.addWidget(res.payload)
-            } else if (res.action === 'update_widget') {
-              widgetStore.updateWidget(res.payload.id, res.payload)
-            } else if (res.action === 'remove_widget') {
-              widgetStore.removeWidget(res.payload.id)
-            }
-          } catch(e) {
-            console.error('Failed to parse widget tool result', e)
-          }
+    for (let i = 0; i < msg.parts.length; i++) {
+      const part = msg.parts[i] as any
+      if (part.type === 'dynamic-tool' && (part.state === 'output-available' || part.state === 'approval-responded') && part.output) {
+        const key = getToolKey(msg.id, part, i)
+        if (!processedToolCalls.has(key)) {
+          processedToolCalls.add(key)
+          tryApplyWidgetAction(part.output)
         }
       }
     }
