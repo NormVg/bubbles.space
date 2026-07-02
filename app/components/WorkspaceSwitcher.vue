@@ -160,7 +160,7 @@ function toggleExpand() {
         </button>
         <!-- Delete cross just for visual parity with screenshot -->
         <button
-          v-if="widgetStore.activeWorkspaceId === workspace.id && widgetStore.workspaces.length > 1"
+          v-if="widgetStore.activeWorkspaceId === workspace.id && workspace.id !== 'main'"
           class="ws-delete"
           title="Delete workspace"
           @click.stop="deleteWorkspace(workspace.id)"

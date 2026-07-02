@@ -67,6 +67,7 @@ export const useWidgetStore = defineStore('widgets', () => {
   }
 
   const deleteWorkspace = (id: string) => {
+    if (id === 'main') return // Cannot delete the default main workspace
     if (workspaces.value.length <= 1) return // Prevent deleting last workspace
     workspaces.value = workspaces.value.filter(w => w.id !== id)
     if (activeWorkspaceId.value === id) {
