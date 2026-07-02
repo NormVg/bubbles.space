@@ -24,7 +24,7 @@ const remove = (id: string) => {
       </div>
 
       <div class="archive-list" v-else>
-        <div v-for="widget in store.archivedWidgets" :key="widget.id" class="archive-item group">
+        <div v-for="(widget, index) in store.archivedWidgets" :key="widget.id" class="archive-item group" :style="{ animationDelay: `${index * 0.04 + 0.05}s` }">
           <div class="item-info">
             <h4 class="item-title">{{ widget.title || 'Untitled Widget' }}</h4>
             <span class="item-type">{{ widget.type }}</span>
@@ -116,7 +116,19 @@ html.light .archive-list::-webkit-scrollbar-thumb {
   padding: 10px 12px;
   border-radius: 10px;
   background: transparent;
-  transition: all 0.2s ease-out;
+  transition: background 0.2s ease-out;
+  animation: item-cascade 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes item-cascade {
+  0% {
+    opacity: 0;
+    transform: translateX(12px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 .archive-item:hover {
@@ -207,15 +219,24 @@ html.light .action-btn:hover {
   color: #E24B4A; /* Danger text */
 }
 
-/* Slide transition */
-.slide-left-enter-active,
+/* Slide transition - broken into segments completing at different rates */
+.slide-left-enter-active {
+  transition: 
+    opacity 0.3s cubic-bezier(0.2, 0, 0, 1), 
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    backdrop-filter 0.4s ease;
+}
+
 .slide-left-leave-active {
-  transition: opacity 0.25s ease-out, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: 
+    opacity 0.2s ease-in, 
+    transform 0.25s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .slide-left-enter-from,
 .slide-left-leave-to {
   opacity: 0;
-  transform: translateX(16px);
+  transform: translateX(20px) scale(0.97);
+  backdrop-filter: blur(0px);
 }
 </style>
