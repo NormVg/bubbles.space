@@ -293,6 +293,15 @@ watch(() => widget.value, () => {
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </button>
+
+      <!-- Archive -->
+      <button class="widget-action-btn" @click.stop="store.archiveWidget(props.id)" aria-label="Archive widget" title="Archive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="21 8 21 21 3 21 3 8"></polyline>
+          <rect x="1" y="3" width="22" height="5"></rect>
+          <line x1="10" y1="12" x2="14" y2="12"></line>
+        </svg>
+      </button>
       
       <!-- Close -->
       <button class="widget-action-btn widget-action-close" @click.stop="remove" aria-label="Close widget" title="Close">

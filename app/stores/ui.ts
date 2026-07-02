@@ -31,8 +31,19 @@ export const useUIStore = defineStore('ui', () => {
     isRightDrawerOpen.value = !isRightDrawerOpen.value
   }
 
+  const isArchiveOpen = ref(false)
+
+  function toggleArchive() {
+    isArchiveOpen.value = !isArchiveOpen.value
+  }
+
+  function closeArchive() {
+    isArchiveOpen.value = false
+  }
+
   return { 
     isSettingsOpen, openSettings, closeSettings, toggleSettings,
-    isRightDrawerOpen, rightDrawerContent, openRightDrawer, closeRightDrawer, toggleRightDrawer
+    isRightDrawerOpen, rightDrawerContent, openRightDrawer, closeRightDrawer, toggleRightDrawer,
+    isArchiveOpen, toggleArchive, closeArchive
   }
 })

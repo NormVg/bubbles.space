@@ -50,7 +50,17 @@
         <LucidePackage class="icon" :size="16" :stroke-width="1.5" />
       </button>
 
-      <!-- Icon 4: Settings -->
+      <!-- Icon 4: Archive -->
+      <button 
+        class="qa-btn archive-btn" 
+        :class="{ active: uiStore.isArchiveOpen }"
+        title="Archive" 
+        @click="uiStore.toggleArchive"
+      >
+        <LucideArchive class="icon" :size="16" :stroke-width="1.5" />
+      </button>
+
+      <!-- Icon 5: Settings -->
       <button class="qa-btn" title="Settings" @click="uiStore.toggleSettings">
         <LucideSettings class="icon" :size="16" :stroke-width="1.5" />
       </button>

@@ -14,6 +14,7 @@ export interface Widget {
 
 export const useWidgetStore = defineStore('widgets', () => {
   const widgets = shallowRef<Widget[]>([])
+  const archivedWidgets = shallowRef<Widget[]>([])
 
   // Simulated DB fetch / Load from LocalStorage
   const init = async () => {
@@ -33,6 +34,11 @@ export const useWidgetStore = defineStore('widgets', () => {
           data: { content: '### Hello!\nThis is a spatial workspace. You can drag widgets around, and Bubbles can create new ones for you!' }
         })
       }
+      
+      const archived = localStorage.getItem('bubbles_archived_widgets')
+      if (archived) {
+        archivedWidgets.value = JSON.parse(archived)
+      }
     } catch (e) {
       console.error('Failed to load widgets', e)
     }
@@ -41,11 +47,12 @@ export const useWidgetStore = defineStore('widgets', () => {
   // Simulated DB sync / Save to LocalStorage
   const syncToDB = async () => {
     localStorage.setItem('bubbles_canvas_widgets', JSON.stringify(widgets.value))
+    localStorage.setItem('bubbles_archived_widgets', JSON.stringify(archivedWidgets.value))
     // Future: await fetch('/api/widgets/sync', { method: 'POST', body: JSON.stringify(widgets.value) })
   }
 
   // Watch for changes to auto-sync
-  watch(widgets, () => {
+  watch([widgets, archivedWidgets], () => {
     syncToDB()
   }, { deep: true })
 
@@ -142,12 +149,44 @@ export const useWidgetStore = defineStore('widgets', () => {
     widgets.value = widgets.value.filter(w => w.id !== id)
   }
 
+  const archiveWidget = (id: string) => {
+    const idx = widgets.value.findIndex(w => w.id === id)
+    if (idx !== -1) {
+      const widgetToArchive = widgets.value[idx]
+      // Add to archived list
+      archivedWidgets.value = [...archivedWidgets.value, widgetToArchive]
+      // Remove from canvas
+      removeWidget(id)
+    }
+  }
+
+  const restoreWidget = (id: string) => {
+    const idx = archivedWidgets.value.findIndex(w => w.id === id)
+    if (idx !== -1) {
+      const widgetToRestore = archivedWidgets.value[idx]
+      
+      // Remove from archive
+      archivedWidgets.value = archivedWidgets.value.filter(w => w.id !== id)
+      
+      // Re-add to canvas (this will automatically find a safe position if needed)
+      addWidget(widgetToRestore)
+    }
+  }
+
+  const permanentlyDeleteArchivedWidget = (id: string) => {
+    archivedWidgets.value = archivedWidgets.value.filter(w => w.id !== id)
+  }
+
   return {
     widgets,
+    archivedWidgets,
     init,
     addWidget,
     updateWidget,
     removeWidget,
+    archiveWidget,
+    restoreWidget,
+    permanentlyDeleteArchivedWidget,
     findSafePosition
   }
 })

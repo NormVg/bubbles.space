@@ -5,6 +5,7 @@ import BubblesAvatar from './BubblesAvatar.vue'
 import QuickAccessBar from './QuickAccessBar.vue'
 import SettingsModal from './SettingsModal.vue'
 import RightDrawer from './RightDrawer.vue'
+import ArchivePanel from './ArchivePanel.vue'
 import AgentSessionProvider from './AgentSessionProvider.vue'
 import { useConversationStore } from '../stores/conversations'
 
@@ -51,6 +52,7 @@ onMounted(() => {
     <QuickAccessBar />
 
     <!-- Overlays -->
+    <ArchivePanel />
     <SettingsModal />
   </div>
 </template>
@@ -115,6 +117,7 @@ onMounted(() => {
 :deep(.hud-avatar-wrapper),
 :deep(.quick-access-hud),
 :deep(.settings-modal-overlay),
+:deep(.archive-panel),
 :deep(.right-drawer-wrapper) {
   pointer-events: auto;
 }
