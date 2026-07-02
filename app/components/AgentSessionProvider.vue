@@ -3,13 +3,32 @@ import { onBeforeUnmount, watch, computed } from 'vue'
 import { useEveAgent } from 'eve/vue'
 import { setActiveAppAgent } from '../composables/useAppAgent'
 import { useConversationStore } from '../stores/conversations'
+import { useWidgetStore } from '../stores/widgets'
 
 const conversationStore = useConversationStore()
 const conversationId = computed(() => conversationStore.activeConversationId)
+const widgetStore = useWidgetStore()
 
 const agent = useEveAgent({
   initialEvents: conversationStore.activeConversationEvents as any,
   initialSession: conversationStore.activeDetail?.session as any,
+  toolHandlers: {
+    canvas_read_widget: async ({ id }: { id: string }) => {
+      const widget = widgetStore.widgets.find(w => w.id === id)
+      if (!widget) return `Widget with ID ${id} not found on canvas.`
+      
+      let textContent = ''
+      if (widget.type === 'markdown') {
+        textContent = widget.data.content || ''
+      } else if (widget.type === 'mermaid') {
+        textContent = `\`\`\`mermaid\n${widget.data.chart || ''}\n\`\`\``
+      } else {
+        textContent = JSON.stringify(widget.data)
+      }
+      
+      return `Content of ${widget.title || widget.type} (ID: ${id}):\n\n${textContent}`
+    }
+  },
   onSessionChange(session) {
     if (conversationId.value) {
       void conversationStore.updateSession(conversationId.value, session)

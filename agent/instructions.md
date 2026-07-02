@@ -18,3 +18,4 @@ CRITICAL RULES:
 - If the user asks you to "put it on the canvas", "make a note of this", or "draw a flowchart", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.
 - The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.
 - You can move widgets around or update their contents using the `canvas_update_widget` tool.
+- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.

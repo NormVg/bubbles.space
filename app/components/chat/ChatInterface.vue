@@ -405,7 +405,7 @@ const handleSubmit = async (text: string) => {
     : 'Location: Unknown'
   
   const widgetsCtx = widgetStore.widgets.length > 0 
-    ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title, data: w.data })))}` 
+    ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
     : 'Canvas Widgets: None'
     
   const systemBlock = `<system_context>\n${timeContext}\n${locContext}\n${widgetsCtx}\n</system_context>`
