@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { db } from '../db';
 import { workspace, widget } from '../db/schema';
 
@@ -39,8 +39,8 @@ export class WorkspaceRepository {
       .onConflictDoUpdate({
         target: workspace.id,
         set: {
-          label: (workspace as any).excluded.label,
-          canvasState: (workspace as any).excluded.canvasState,
+          label: sql`excluded.label`,
+          canvasState: sql`excluded.canvas_state`,
           updatedAt: new Date(),
         },
       });
@@ -57,14 +57,14 @@ export class WorkspaceRepository {
       .onConflictDoUpdate({
         target: widget.id,
         set: {
-          workspaceId: (widget as any).excluded.workspaceId,
-          type: (widget as any).excluded.type,
-          x: (widget as any).excluded.x,
-          y: (widget as any).excluded.y,
-          width: (widget as any).excluded.width,
-          height: (widget as any).excluded.height,
-          data: (widget as any).excluded.data,
-          isArchived: (widget as any).excluded.isArchived,
+          workspaceId: sql`excluded.workspace_id`,
+          type: sql`excluded.type`,
+          x: sql`excluded.x`,
+          y: sql`excluded.y`,
+          width: sql`excluded.width`,
+          height: sql`excluded.height`,
+          data: sql`excluded.data`,
+          isArchived: sql`excluded.is_archived`,
           updatedAt: new Date(),
         },
       });
