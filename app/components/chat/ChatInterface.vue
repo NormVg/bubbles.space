@@ -353,17 +353,17 @@ const handleSubmit = async (text: string) => {
 
   // Inject user's Soul and Identity
   // @ts-ignore - better-auth extended fields
-  const soulCtx = session.value.data?.user?.systemPrompt 
+  const soulCtx = session.data.value?.user?.systemPrompt 
     // @ts-ignore
-    ? `User's Custom Instructions (The Soul):\n${session.value.data.user.systemPrompt}` 
+    ? `User's Custom Instructions (The Soul):\n${session.data.value.user.systemPrompt}` 
     : ''
   // @ts-ignore
-  const identityCtx = session.value.data?.user?.aboutMe 
+  const identityCtx = session.data.value?.user?.aboutMe 
     // @ts-ignore
-    ? `About The User:\n${session.value.data.user.aboutMe}` 
+    ? `About The User:\n${session.data.value.user.aboutMe}` 
     : ''
   // @ts-ignore
-  const userName = session.value.data?.user?.name || 'User'
+  const userName = session.data.value?.user?.name || 'User'
 
   const systemParts = [
     timeContext, 
