@@ -297,6 +297,7 @@ watch(showSessions, async (isShowingSessions) => {
 })
 
 const processedToolCalls = new Set<string>()
+const toolWatcherReady = ref(false)
 
 /** Build a stable dedup key for a tool call part */
 const getToolKey = (msgId: string, part: any, partIndex: number): string => {
@@ -335,11 +336,14 @@ onMounted(() => {
       }
     }
   }
+  
+  // Now that all existing tool calls are registered, enable the watcher
+  toolWatcherReady.value = true
 })
 
-// Watch for new tool executions
+// Watch for new tool executions (only after onMounted pre-fill is complete)
 watch(() => agent.data.value.messages, (messages) => {
-  if (!messages) return
+  if (!toolWatcherReady.value || !messages) return
   for (const msg of messages) {
     if (msg.role !== 'assistant') continue
     for (let i = 0; i < msg.parts.length; i++) {
