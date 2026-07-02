@@ -325,13 +325,22 @@ watch(() => widget.value, () => {
         </svg>
       </button>
 
-      <!-- Transfer -->
+      <!-- Archive -->
+      <button class="widget-action-btn" @click.stop="store.archiveWidget(props.id)" aria-label="Archive widget" title="Archive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="21 8 21 21 3 21 3 8"></polyline>
+          <rect x="1" y="3" width="22" height="5"></rect>
+          <line x1="10" y1="12" x2="14" y2="12"></line>
+        </svg>
+      </button>
+
+      <!-- More Options (Transfer, etc) -->
       <div class="transfer-dropdown-container">
-        <button class="widget-action-btn" :class="{ active: showTransferMenu }" @click.stop="toggleTransferMenu" aria-label="Transfer widget" title="Transfer to Workspace">
+        <button class="widget-action-btn" :class="{ active: showTransferMenu }" @click.stop="toggleTransferMenu" aria-label="More options" title="More Options">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-            <polyline points="10 17 15 12 10 7" />
-            <line x1="15" y1="12" x2="3" y2="12" />
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="19" cy="12" r="1"></circle>
+            <circle cx="5" cy="12" r="1"></circle>
           </svg>
         </button>
         
@@ -348,29 +357,18 @@ watch(() => widget.value, () => {
                 {{ ws.label }}
               </button>
               <div v-if="otherWorkspaces.length === 0" class="transfer-menu-empty">
-                No other workspaces available
+                No other workspaces
               </div>
             </div>
+            
+            <div class="transfer-menu-divider"></div>
+            
+            <button class="transfer-menu-item danger" @click.stop="remove">
+              Delete Widget
+            </button>
           </div>
         </Transition>
       </div>
-
-      <!-- Archive -->
-      <button class="widget-action-btn" @click.stop="store.archiveWidget(props.id)" aria-label="Archive widget" title="Archive">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="21 8 21 21 3 21 3 8"></polyline>
-          <rect x="1" y="3" width="22" height="5"></rect>
-          <line x1="10" y1="12" x2="14" y2="12"></line>
-        </svg>
-      </button>
-      
-      <!-- Close -->
-      <button class="widget-action-btn widget-action-close" @click.stop="remove" aria-label="Close widget" title="Close">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
     </div>
     
     <!-- Widget Content -->
@@ -502,14 +500,20 @@ html.light .widget-drag-handle:hover .drag-pill {
 }
 
 .widget-title {
+  position: absolute;
+  left: 14px;
+  top: 14px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-secondary);
-  margin-top: 4px;
   opacity: 0.6;
   pointer-events: none;
+  max-width: calc(100% - 140px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -656,11 +660,26 @@ html.light .transfer-menu {
 }
 
 .transfer-menu-empty {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   padding: 8px;
   text-align: center;
   font-style: italic;
+}
+
+.transfer-menu-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 4px 0;
+}
+
+.transfer-menu-item.danger {
+  color: var(--danger);
+}
+
+.transfer-menu-item.danger:hover {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--danger);
 }
 
 .fade-pop-enter-active,
