@@ -6,7 +6,7 @@ export default defineTool({
   inputSchema: z.object({
     id: z.string().describe("The ID of the widget to read."),
   }),
-  handler: async ({ id }) => {
+  async execute({ id }) {
     // This tool is intercepted by the client, which injects the result.
     // If the server reaches this, it means the client didn't handle it.
     throw new Error(`Widget read failed: Client did not intercept the tool call for widget ID ${id}.`)
