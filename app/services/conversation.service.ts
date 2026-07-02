@@ -86,10 +86,14 @@ export class ConversationService {
   }
 
   private getMessageText(message: EveMessage): string {
-    return message.parts
+    const raw = message.parts
       .filter(part => part.type === 'text')
       .map(part => part.text)
       .join('')
+    
+    return raw
+      .replace(/<system_context>[\s\S]*?<\/system_context>\n*/g, '')
+      .replace(/\[Widget: .*?\][\s\S]*?\[\/Widget\]\n*/g, '')
       .trim()
   }
 

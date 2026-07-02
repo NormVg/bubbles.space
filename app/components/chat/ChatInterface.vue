@@ -10,7 +10,6 @@
         @click="toggleSessionsView"
       >
         <span class="session-title">{{ activeConversationTitle }}</span>
-        <span class="session-count">{{ sessionCountLabel }}</span>
         <LucideChevronDown class="session-chevron" :class="{ open: showSessions }" :size="14" stroke-width="1.8" />
       </button>
 
@@ -572,8 +571,16 @@ const playCopySound = () => {
 }
 
 const handleCopy = async (text: string, isUser: boolean) => {
+  let textToCopy = text
+  if (isUser) {
+    const cleaned = cleanUserText(text)
+    textToCopy = parseUserMessage(cleaned).text
+  }
+  
+  if (!textToCopy) return
+  
   try {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(textToCopy);
     playCopySound();
     
     if (isUser) {
