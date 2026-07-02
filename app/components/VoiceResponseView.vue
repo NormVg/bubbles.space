@@ -57,7 +57,7 @@ const currentMode = computed(() => {
    
    if (latestAiMessage.value) {
      const hasProcessingTool = latestAiMessage.value.parts.some(p => 
-       p.type === 'dynamic-tool' && ['input-streaming', 'input-available', 'approval-requested'].includes(p.state)
+       p.type === 'dynamic-tool' && ['input-streaming', 'input-available', 'approval-requested', 'running'].includes(p.state)
      )
      if (hasProcessingTool) return 'tool'
    }

@@ -41,7 +41,7 @@ const props = defineProps<{
 
 // Auto-expand if there are processing tools
 const isProcessing = computed(() => {
-  return props.tools.some(t => ['input-streaming', 'input-available', 'approval-requested'].includes(t.state))
+  return props.tools.some(t => ['input-streaming', 'input-available', 'approval-requested', 'running'].includes(t.state))
 })
 
 const expanded = ref(isProcessing.value)
