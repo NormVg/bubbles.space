@@ -103,12 +103,14 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
-  // Simulated DB fetch / Load from LocalStorage
+  // Load from LocalStorage instantly, then reconcile with DB
   const init = async () => {
     try {
+      // 1. Instant Local Load
       const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
       const savedActiveId = localStorage.getItem('bubbles_active_workspace')
       
+      let hasLocalData = false
       if (savedWorkspaces) {
         const parsed = JSON.parse(savedWorkspaces)
         if (parsed && Array.isArray(parsed) && parsed.length > 0) {
@@ -118,13 +120,14 @@ export const useWidgetStore = defineStore('widgets', () => {
           } else {
             activeWorkspaceId.value = workspaces.value[0].id
           }
-          return
+          hasLocalData = true
         }
       }
       
-      // Migration from old single-workspace structure OR failsafe if empty
-      const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
-      const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
+      if (!hasLocalData) {
+        // Fallback for brand new users or legacy migration
+        const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
+        const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
         
         const mainWorkspace: Workspace = {
           id: 'main',
@@ -149,15 +152,62 @@ export const useWidgetStore = defineStore('widgets', () => {
         
         workspaces.value = [mainWorkspace]
         activeWorkspaceId.value = 'main'
+      }
+
+      // 2. Background DB Sync
+      try {
+        const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
+        
+        if (serverWorkspaces && serverWorkspaces.length > 0) {
+          // DB has data, it becomes the source of truth
+          workspaces.value = serverWorkspaces
+          if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
+            activeWorkspaceId.value = serverWorkspaces[0].id
+          }
+          // Update local storage immediately to match DB
+          localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
+          localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+        } else if (hasLocalData || workspaces.value.length > 0) {
+          // DB is empty, but we have local/legacy data. Push it to DB.
+          await syncToDB(true)
+        }
+      } catch (dbErr) {
+        console.error('Failed to sync with DB, staying in offline mode:', dbErr)
+      }
     } catch (e) {
       console.error('Failed to load workspaces', e)
     }
   }
 
-  // Simulated DB sync / Save to LocalStorage
-  const syncToDB = async () => {
+  // Debounce state
+  let syncTimeout: any = null
+
+  // Save to LocalStorage instantly, debounce save to DB
+  const syncToDB = async (force = false) => {
+    // 1. Instant Local Save (0 latency UI)
     localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
     localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+
+    // 2. Debounced DB Save
+    if (syncTimeout) clearTimeout(syncTimeout)
+    
+    const pushToDB = async () => {
+      try {
+        await $fetch('/api/sync', {
+          method: 'POST',
+          body: workspaces.value
+        })
+        console.log('Synced to DB successfully.')
+      } catch (e) {
+        console.error('Failed to push to DB:', e)
+      }
+    }
+
+    if (force) {
+      await pushToDB()
+    } else {
+      syncTimeout = setTimeout(pushToDB, 2000)
+    }
   }
 
   // Watch for changes to auto-sync
