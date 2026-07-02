@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
   const updateData: any = {};
   if (body.systemPrompt !== undefined) updateData.systemPrompt = body.systemPrompt;
   if (body.aboutMe !== undefined) updateData.aboutMe = body.aboutMe;
+  if (body.name !== undefined) updateData.name = body.name;
   
   if (Object.keys(updateData).length > 0) {
     updateData.updatedAt = new Date();

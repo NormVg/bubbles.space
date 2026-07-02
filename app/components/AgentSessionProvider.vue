@@ -29,11 +29,12 @@ const agent = useEveAgent({
       
       return `Content of ${widget.title || widget.type} (ID: ${id}):\n\n${textContent}`
     },
-    update_user_settings: async ({ systemPrompt, aboutMe }: { systemPrompt?: string; aboutMe?: string }) => {
+    update_user_settings: async ({ systemPrompt, aboutMe, name }: { systemPrompt?: string; aboutMe?: string; name?: string }) => {
       try {
         const payload: Record<string, string> = {}
         if (systemPrompt !== undefined) payload.systemPrompt = systemPrompt
         if (aboutMe !== undefined) payload.aboutMe = aboutMe
+        if (name !== undefined) payload.name = name
         
         await $fetch('/api/user/settings', {
           method: 'POST',
@@ -46,6 +47,7 @@ const agent = useEveAgent({
         const updated: string[] = []
         if (systemPrompt !== undefined) updated.push('Soul (System Prompt)')
         if (aboutMe !== undefined) updated.push('About Me')
+        if (name !== undefined) updated.push('Name')
         return `Successfully updated: ${updated.join(', ')}. The changes are saved and will take effect immediately.`
       } catch (error) {
         return `Failed to update user settings. Please try again.`

@@ -161,7 +161,7 @@
               <div class="user-auto-fields" v-if="session.data">
                 <div class="auto-field">
                   <span class="auto-label">name</span>
-                  <span class="auto-value">{{ session.data.user.name }}</span>
+                  <input type="text" v-model="editName" class="auto-input" />
                 </div>
                 <div class="auto-field">
                   <span class="auto-label">email</span>
@@ -196,11 +196,13 @@ const session = authClient.useSession()
 
 const editSystemPrompt = ref('')
 const editAboutMe = ref('')
+const editName = ref('')
 const isSaving = ref(false)
 
 // Sync form when session loads
 watch(() => session.value.data, (data) => {
   if (data?.user) {
+    editName.value = data.user.name || ''
     // @ts-ignore - better-auth types are extended at runtime
     editSystemPrompt.value = data.user.systemPrompt || ''
     // @ts-ignore
@@ -212,6 +214,7 @@ async function saveUserSettings() {
   isSaving.value = true
   try {
     await authClient.updateUser({
+      name: editName.value,
       systemPrompt: editSystemPrompt.value,
       aboutMe: editAboutMe.value
     })
@@ -372,7 +375,7 @@ const colorMode = useColorMode({
 
 .settings-main {
   flex: 1;
-  padding: 32px 40px;
+  padding: 48px 40px 32px;
   overflow-y: auto;
   font-family: var(--font-sans);
 }
@@ -700,6 +703,24 @@ const colorMode = useColorMode({
   font-size: 14px;
   font-weight: 500;
   color: var(--text-primary);
+}
+
+.auto-input {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+  border-bottom: 1px dashed var(--border-subtle);
+  padding: 2px 0;
+  transition: border-color 0.2s;
+}
+
+.auto-input:focus {
+  border-color: var(--accent);
 }
 
 .save-btn {
