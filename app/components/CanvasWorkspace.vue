@@ -16,6 +16,7 @@ const scale = ref(1)
 const offset = reactive({ x: 0, y: 0 })
 const isPanning = ref(false)
 const panStart = reactive({ x: 0, y: 0 })
+const edgeGlow = reactive({ top: 0, bottom: 0, left: 0, right: 0 })
 
 const ZOOM_MAX = 3
 const ZOOM_SPEED = 0.002
@@ -108,10 +109,26 @@ function doPan(e: MouseEvent) {
   const clamped = clampOffset(rawX, rawY, scale.value)
   offset.x = clamped.x
   offset.y = clamped.y
+
+  // Calculate overscroll distance for edge glows
+  const overX = rawX - clamped.x
+  const overY = rawY - clamped.y
+
+  // Smoothly map overscroll to opacity for a very minimal effect
+  const maxOverscroll = 120 // pixels
+  const maxOpacity = 0.12 // Reduced significantly for subtlety
+  edgeGlow.left = Math.max(0, Math.min(maxOpacity, (overX / maxOverscroll) * maxOpacity))
+  edgeGlow.right = Math.max(0, Math.min(maxOpacity, (-overX / maxOverscroll) * maxOpacity))
+  edgeGlow.top = Math.max(0, Math.min(maxOpacity, (overY / maxOverscroll) * maxOpacity))
+  edgeGlow.bottom = Math.max(0, Math.min(maxOpacity, (-overY / maxOverscroll) * maxOpacity))
 }
 
 function endPan() {
   isPanning.value = false
+  edgeGlow.top = 0
+  edgeGlow.bottom = 0
+  edgeGlow.left = 0
+  edgeGlow.right = 0
 }
 
 // ── Zoom ───────────────────────────────────────────────────
@@ -192,6 +209,12 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     :style="{ cursor }"
     @mousedown="startPan"
   >
+    <!-- Edge visual feedback when hitting boundaries -->
+    <div class="edge-glow top" :style="{ opacity: edgeGlow.top }"></div>
+    <div class="edge-glow bottom" :style="{ opacity: edgeGlow.bottom }"></div>
+    <div class="edge-glow left" :style="{ opacity: edgeGlow.left }"></div>
+    <div class="edge-glow right" :style="{ opacity: edgeGlow.right }"></div>
+
     <!-- Background is now applied at the viewport level so it fills everything.
          The dots pan and scale identically to the canvas world via CSS. -->
     <div
@@ -237,5 +260,33 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   left: 0;
   transform-origin: 0 0;
   will-change: transform;
+}
+
+.edge-glow {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  /* Fast follow when pulling, slow fade when released */
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Added a very subtle mix-blend-mode for character */
+  mix-blend-mode: plus-lighter;
+}
+
+/* Reduced size and switched to a more neutral text-primary color for minimalism */
+.edge-glow.top {
+  top: 0; left: 0; right: 0; height: 48px;
+  background: linear-gradient(to bottom, var(--text-primary), transparent);
+}
+.edge-glow.bottom {
+  bottom: 0; left: 0; right: 0; height: 48px;
+  background: linear-gradient(to top, var(--text-primary), transparent);
+}
+.edge-glow.left {
+  top: 0; bottom: 0; left: 0; width: 48px;
+  background: linear-gradient(to right, var(--text-primary), transparent);
+}
+.edge-glow.right {
+  top: 0; bottom: 0; right: 0; width: 48px;
+  background: linear-gradient(to left, var(--text-primary), transparent);
 }
 </style>
