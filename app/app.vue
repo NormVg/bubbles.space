@@ -1,14 +1,25 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import CanvasWorkspace from './components/CanvasWorkspace.vue'
 import HudOverlay from './components/HudOverlay.vue'
+import SplashScreen from './components/SplashScreen.vue'
 import { useUIStore } from './stores/ui'
 
 const uiStore = useUIStore()
+const isAppReady = ref(false)
+
+onMounted(() => {
+  // Simulate app initialization and loading assets
+  setTimeout(() => {
+    isAppReady.value = true
+  }, 2000)
+})
 </script>
 
 <template>
-  <div class="desktop">
-    <!-- Removed shift-back scale and blur so the canvas stays perfectly clear -->
+  <div class="desktop" :class="{ ready: isAppReady }">
+    <SplashScreen :is-ready="isAppReady" />
+
     <div class="canvas-wrapper">
       <CanvasWorkspace @canvas-click="() => {}" />
     </div>
@@ -58,13 +69,21 @@ const uiStore = useUIStore()
   width: 100%;
   height: 100%;
   background-color: var(--bg-base);
-  animation: canvas-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: scale(0.96);
   will-change: transform, opacity;
 }
 
+.desktop.ready .canvas-wrapper {
+  animation: canvas-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .hud-overlay {
+  opacity: 0;
+}
+
+.desktop.ready .hud-overlay {
   animation: hud-reveal 1s ease-out forwards;
   animation-delay: 0.15s;
-  opacity: 0;
 }
 </style>
