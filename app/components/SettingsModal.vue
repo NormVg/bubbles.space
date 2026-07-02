@@ -98,6 +98,25 @@
               </div>
             </div>
 
+            <!-- ACCOUNT TAB -->
+            <div v-if="activeTab === 'account'" class="setting-group">
+              <h3>Account Profile</h3>
+              <div class="setting-item account-details-item" v-if="session.data">
+                <div class="account-profile">
+                  <img v-if="session.data.user.image" :src="session.data.user.image" alt="Profile" class="account-avatar" />
+                  <div v-else class="account-avatar placeholder">{{ session.data.user.name.charAt(0) }}</div>
+                  <div class="account-info">
+                    <span class="account-name">{{ session.data.user.name }}</span>
+                    <span class="account-email">{{ session.data.user.email }}</span>
+                  </div>
+                </div>
+                <button class="logout-btn" @click="logout" title="Sign Out">
+                  <LucideLogOut :size="15" />
+                  Sign Out
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -110,10 +129,22 @@ import { ref } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useColorMode } from '@vueuse/core'
 import BubblesAvatar from './BubblesAvatar.vue'
+import { authClient } from '~/utils/auth-client'
 
 const uiStore = useUIStore()
-const activeTab = ref('appearance') // Default to appearance so they see it immediately
+const activeTab = ref('account') // Default to account tab to test
 const previewEmotion = ref('normal')
+const session = authClient.useSession()
+
+async function logout() {
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        window.location.href = '/'
+      }
+    }
+  })
+}
 
 const colorMode = useColorMode({
   emitAuto: true,
@@ -405,6 +436,71 @@ const colorMode = useColorMode({
   border: 1px dashed var(--border-subtle);
   border-radius: 12px;
   margin-left: 20px;
+}
+
+/* ─── Account Tab ──────────────────────────────────────── */
+.account-details-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.account-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.account-email {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 60, 60, 0.1);
+  color: #ff4444;
+  border: 1px solid rgba(255, 60, 60, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 60, 60, 0.15);
+  border-color: rgba(255, 60, 60, 0.3);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
