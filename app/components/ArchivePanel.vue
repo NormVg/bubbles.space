@@ -15,24 +15,26 @@ const remove = (id: string) => {
 </script>
 
 <template>
-  <Transition name="popover-fade">
-    <div v-if="uiStore.isArchiveOpen" class="archive-popover">
+  <Transition name="slide-left">
+    <div v-if="uiStore.isArchiveOpen" class="archive-panel">
+      
       <div v-if="store.archivedWidgets.length === 0" class="empty-state">
-        <span class="empty-text">No archived widgets</span>
+        <LucideArchive :size="24" class="empty-icon" />
+        <p>Archive is empty</p>
       </div>
 
-      <div class="popover-list" v-else>
-        <div v-for="widget in store.archivedWidgets" :key="widget.id" class="popover-item group">
-          <div class="item-content">
-            <span class="item-title">{{ widget.title || widget.type }}</span>
+      <div class="archive-list" v-else>
+        <div v-for="widget in store.archivedWidgets" :key="widget.id" class="archive-item group">
+          <div class="item-info">
+            <h4 class="item-title">{{ widget.title || 'Untitled Widget' }}</h4>
             <span class="item-type">{{ widget.type }}</span>
           </div>
           <div class="item-actions">
-            <button class="icon-btn restore" @click="restore(widget.id)" title="Restore">
-              <LucideRotateCcw :size="14" :stroke-width="2" />
+            <button class="action-btn restore" @click="restore(widget.id)" title="Restore">
+              <LucideRotateCcw :size="14" stroke-width="2" />
             </button>
-            <button class="icon-btn delete" @click="remove(widget.id)" title="Delete">
-              <LucideTrash2 :size="14" :stroke-width="2" />
+            <button class="action-btn delete" @click="remove(widget.id)" title="Permanently Delete">
+              <LucideTrash2 :size="14" stroke-width="2" />
             </button>
           </div>
         </div>
@@ -42,91 +44,100 @@ const remove = (id: string) => {
 </template>
 
 <style scoped>
-.archive-popover {
+.archive-panel {
   position: absolute;
-  bottom: 74px; /* Above the Quick Access Bar */
-  right: 16px;
-  width: 240px;
-  background: var(--bg-surface-1, #141414); /* Solid bg for popover text legibility */
-  border: 1px solid var(--border-default, rgba(255, 255, 255, 0.08));
-  border-radius: 12px; /* radius-large */
-  box-shadow: 0 4px 16px rgba(0,0,0,0.60), 0 20px 64px rgba(0,0,0,0.50); /* Modal elevation */
-  padding: 6px 0;
-  z-index: 100;
-  overflow: hidden;
+  /* Placed to the LEFT of the Quick Access Bar */
+  bottom: 16px;
+  right: 70px;
+  width: 260px;
+  max-height: 400px;
+  background: rgba(20, 20, 22, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
 }
 
-html.light .archive-popover {
-  background: var(--bg-surface-1, #F7F7F6);
-  border: 1px solid var(--border-default, rgba(0, 0, 0, 0.08));
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 20px 64px rgba(0,0,0,0.08);
+html.light .archive-panel {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .empty-state {
-  padding: 16px;
-  text-align: center;
-}
-
-.empty-text {
-  font-size: 13px; /* small */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
   color: var(--text-muted, rgba(255, 255, 255, 0.35));
 }
 
-html.light .empty-text {
-  color: var(--text-muted, rgba(0, 0, 0, 0.38));
+.empty-icon {
+  margin-bottom: 8px;
+  opacity: 0.5;
 }
 
-.popover-list {
+.empty-state p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.archive-list {
   display: flex;
   flex-direction: column;
-  max-height: 320px;
   overflow-y: auto;
-  padding: 0 6px; /* Give items room for border-radius */
+  padding: 8px;
+  gap: 4px;
 }
 
-/* Custom Scrollbar */
-.popover-list::-webkit-scrollbar {
+/* Custom scrollbar */
+.archive-list::-webkit-scrollbar {
   width: 4px;
 }
-.popover-list::-webkit-scrollbar-thumb {
+.archive-list::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
 }
-html.light .popover-list::-webkit-scrollbar-thumb {
+html.light .archive-list::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.popover-item {
+.archive-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  height: 44px;
-  border-radius: 8px; /* radius-medium */
-  transition: background 100ms ease-out;
-  cursor: default;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: transparent;
+  transition: all 0.2s ease-out;
 }
 
-.popover-item:hover {
-  background: var(--bg-surface-2, #1C1C1C);
+.archive-item:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
-html.light .popover-item:hover {
-  background: var(--bg-surface-2, #F0F0EF);
+html.light .archive-item:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-.item-content {
+.item-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   overflow: hidden;
   flex: 1;
 }
 
 .item-title {
-  font-size: 13px; /* small */
+  margin: 0;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-primary, #EFEFEF);
   white-space: nowrap;
@@ -139,85 +150,72 @@ html.light .item-title {
 }
 
 .item-type {
-  font-size: 11px; /* caption */
-  font-weight: 400;
-  color: var(--text-muted, rgba(255, 255, 255, 0.35));
+  font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-html.light .item-type {
-  color: var(--text-muted, rgba(0, 0, 0, 0.38));
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 .item-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   opacity: 0;
-  transform: translateX(4px);
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
+  transform: translateX(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.popover-item:hover .item-actions {
+.archive-item:hover .item-actions {
   opacity: 1;
   transform: translateX(0);
 }
 
-.icon-btn {
+.action-btn {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
-  background: transparent;
-  border: none;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
   color: var(--text-secondary, rgba(255, 255, 255, 0.55));
-  transition: all 150ms ease-out;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-html.light .icon-btn {
+html.light .action-btn {
+  background: rgba(0, 0, 0, 0.03);
   color: var(--text-secondary, rgba(0, 0, 0, 0.55));
 }
 
-.icon-btn.restore:hover {
+.action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary, #EFEFEF);
+  transform: scale(1.05);
 }
 
-html.light .icon-btn.restore:hover {
+html.light .action-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   color: var(--text-primary, #111110);
 }
 
-.icon-btn.delete:hover {
-  background: hsla(0, 65%, 60%, 0.14); /* Danger muted bg dark */
+.action-btn.delete:hover {
+  background: rgba(226, 75, 74, 0.15); /* Danger muted bg */
   color: #E24B4A; /* Danger text */
 }
 
-html.light .icon-btn.delete:hover {
-  background: hsla(0, 72%, 54%, 0.12); /* Danger muted bg light */
-  color: #E24B4A;
+/* Slide transition */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: opacity 0.25s ease-out, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Popover Animation */
-.popover-fade-enter-active {
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
-}
-
-.popover-fade-leave-active {
-  transition: opacity 100ms ease-in, transform 100ms ease-in; /* Exit faster */
-}
-
-.popover-fade-enter-from {
+.slide-left-enter-from,
+.slide-left-leave-to {
   opacity: 0;
-  transform: scale(0.97) translateY(4px);
-}
-
-.popover-fade-leave-to {
-  opacity: 0;
-  transform: scale(0.97);
+  transform: translateX(16px);
 }
 </style>
