@@ -209,9 +209,10 @@ const remove = () => {
       height: `${isResizing ? tempHeight : widget.height}px`
     }"
   >
-    <!-- Drag Handle -->
+    <!-- Drag Handle & Title -->
     <div class="widget-drag-handle" @mousedown="onMouseDown">
       <div class="drag-pill"></div>
+      <div v-if="widget.title" class="widget-title">{{ widget.title }}</div>
     </div>
     
     <!-- Floating Action Buttons -->
@@ -329,29 +330,24 @@ html.light .widget:hover {
   margin: auto;
 }
 
-/* Drag Handle */
+/* Drag Handle & Title */
 .widget-drag-handle {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 24px;
+  height: 36px;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding-top: 6px;
   cursor: grab;
   z-index: 20;
-  opacity: 0;
-  transition: opacity 0.2s ease;
 }
 
 .widget-drag-handle:active {
   cursor: grabbing;
-}
-
-.widget.group:hover .widget-drag-handle, .widget.dragging .widget-drag-handle {
-  opacity: 1;
 }
 
 .drag-pill {
@@ -359,11 +355,16 @@ html.light .widget:hover {
   height: 4px;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.2);
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
 }
 
 html.light .drag-pill {
   background: rgba(0, 0, 0, 0.15);
+}
+
+.widget.group:hover .drag-pill, .widget.dragging .drag-pill {
+  opacity: 1;
 }
 
 .widget-drag-handle:hover .drag-pill {
@@ -373,6 +374,18 @@ html.light .drag-pill {
 html.light .widget-drag-handle:hover .drag-pill {
   background: rgba(0, 0, 0, 0.3);
 }
+
+.widget-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 
 /* Floating Action Buttons */
 .widget-actions {
