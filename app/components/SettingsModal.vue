@@ -200,7 +200,7 @@ const editName = ref('')
 const isSaving = ref(false)
 
 // Sync form when session loads
-watch(() => session.data.value, (data) => {
+watch(() => session.data, (data) => {
   if (data?.user) {
     editName.value = data.user.name || ''
     // @ts-ignore - better-auth types are extended at runtime

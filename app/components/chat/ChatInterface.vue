@@ -351,19 +351,20 @@ const handleSubmit = async (text: string) => {
     ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
     : 'Canvas Widgets: None'
 
-  // Inject user's Soul and Identity
+  // Inject user's Soul and Identity with a fresh fetch to ensure reliability
+  const { data: sessionData } = await authClient.getSession()
+  
   // @ts-ignore - better-auth extended fields
-  const soulCtx = session.data.value?.user?.systemPrompt 
+  const soulCtx = sessionData?.user?.systemPrompt 
     // @ts-ignore
-    ? `User's Custom Instructions (The Soul):\n${session.data.value.user.systemPrompt}` 
+    ? `User's Custom Instructions (The Soul):\n${sessionData.user.systemPrompt}` 
     : ''
   // @ts-ignore
-  const identityCtx = session.data.value?.user?.aboutMe 
+  const identityCtx = sessionData?.user?.aboutMe 
     // @ts-ignore
-    ? `About The User:\n${session.data.value.user.aboutMe}` 
+    ? `About The User:\n${sessionData.user.aboutMe}` 
     : ''
-  // @ts-ignore
-  const userName = session.data.value?.user?.name || 'User'
+  const userName = sessionData?.user?.name || 'User'
 
   const systemParts = [
     timeContext, 

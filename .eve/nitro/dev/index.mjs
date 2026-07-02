@@ -194,7 +194,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -205,17 +205,17 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -245,7 +245,7 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 var canvas_read_widget_default = defineTool({
 	description: "Read the full contents of a widget on the canvas using its ID. Use this when you need to see the exact text, markdown, or diagram source code of a specific widget.",
@@ -255,7 +255,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -268,7 +268,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -289,7 +289,7 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/get_app_stats.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/get_app_stats.ts
 var get_app_stats_exports = /* @__PURE__ */ __exportAll({ default: () => get_app_stats_default });
 var get_app_stats_default = defineTool({
 	description: "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
@@ -319,7 +319,7 @@ var get_app_stats_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -361,7 +361,7 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/unsplash_search.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/unsplash_search.ts
 var unsplash_search_exports = /* @__PURE__ */ __exportAll({ default: () => unsplash_search_default });
 var unsplash_search_default = defineTool({
 	description: "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
@@ -388,7 +388,7 @@ var unsplash_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -437,7 +437,7 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent/tools/wikipedia_search.ts
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent/tools/wikipedia_search.ts
 var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
 var wikipedia_search_default = defineTool({
 	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
@@ -478,7 +478,7 @@ var wikipedia_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -506,9 +506,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "b266a9b7e5dca5b10de9b130aab4d76658ed09791e31aa8c057973e1e128a079"
+			"sha256": "4c4149d5764739e6c514c28511e1aacc32e2631eafc0a90e1139c3485afd57b8"
 		},
-		"sourceGraphHash": "63aae7d42fe8ff795c0d67a25c78d3d068bbcf5877ba3e188ccfb6677681c96d",
+		"sourceGraphHash": "f6349329584797a8901001a2d861815ea450ff2387b98ef2446dc076f03f789a",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -523,8 +523,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -826,7 +826,7 @@ const manifest = {
 	"instructions": {
 		"name": "instructions",
 		"logicalPath": "instructions.md",
-		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location (e.g., if they ask for the \"Temperature\", fetch the weather for the latitude/longitude provided in the system context).\n- NEVER ask the user for their location or local time if it is provided in the `<system_context>`. If it says \"Unknown\", only then you may ask.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n- For images: DO NOT hallucinate image URLs. Always use the `unsplash_search` tool to fetch real image URLs based on the user's prompt before creating an image widget.\n\n## Tone & Style\n",
+		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude, and user profile) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location.\n- The `<system_context>` also contains the user's Name, their \"Soul\" (custom instructions for your personality), and \"About The User\" (identity). You MUST act according to the \"Soul\" instructions, and you MUST remember and use the user's Name and Identity in conversation.\n- NEVER ask the user for their name or background if it is already provided in the `<system_context>`.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n- For images: DO NOT hallucinate image URLs. Always use the `unsplash_search` tool to fetch real image URLs based on the user's prompt before creating an image widget.\n\n## Tone & Style\n",
 		"sourceId": "instructions.md",
 		"sourceKind": "markdown"
 	},
@@ -847,7 +847,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3y94ol-52df9dc8-832d-4fbc-83a2-569b2cdef1e1/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr3yhxla-c0acc482-439c-4516-8222-bf5ad57e11af/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
