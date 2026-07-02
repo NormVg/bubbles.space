@@ -95,16 +95,21 @@ export const useWidgetStore = defineStore('widgets', () => {
       const savedActiveId = localStorage.getItem('bubbles_active_workspace')
       
       if (savedWorkspaces) {
-        workspaces.value = JSON.parse(savedWorkspaces)
-        if (savedActiveId && workspaces.value.some(w => w.id === savedActiveId)) {
-          activeWorkspaceId.value = savedActiveId
-        } else {
-          activeWorkspaceId.value = workspaces.value[0].id
+        const parsed = JSON.parse(savedWorkspaces)
+        if (parsed && Array.isArray(parsed) && parsed.length > 0) {
+          workspaces.value = parsed
+          if (savedActiveId && workspaces.value.some(w => w.id === savedActiveId)) {
+            activeWorkspaceId.value = savedActiveId
+          } else {
+            activeWorkspaceId.value = workspaces.value[0].id
+          }
+          return
         }
-      } else {
-        // Migration from old single-workspace structure
-        const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
-        const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
+      }
+      
+      // Migration from old single-workspace structure OR failsafe if empty
+      const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
+      const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
         
         const mainWorkspace: Workspace = {
           id: 'main',
