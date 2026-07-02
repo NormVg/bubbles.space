@@ -35,7 +35,6 @@ const statusText = computed(() => {
 <template>
   <div class="sync-status" :class="widgetStore.syncStatus">
     <component :is="statusIcon" class="sync-icon" :class="{ 'spin': widgetStore.syncStatus === 'syncing' }" />
-    <span class="sync-text">{{ statusText }}</span>
   </div>
 </template>
 
@@ -43,48 +42,42 @@ const statusText = computed(() => {
 .sync-status {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  font-size: 0.75rem;
-  font-weight: 500;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   color: var(--text-secondary);
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
-  pointer-events: auto; /* Ensure it blocks pointer events so it's a solid element */
+  pointer-events: auto;
 }
 
-/* Saved State */
+/* Saved State - Ultra minimal, almost invisible until hovered */
 .sync-status.saved {
   color: var(--text-tertiary);
-  opacity: 0.7;
+  opacity: 0.3;
 }
-.sync-status.saved .sync-icon {
+.sync-status.saved:hover {
+  opacity: 0.8;
   color: #10b981; /* Emerald 500 */
 }
 
-/* Syncing State */
+/* Syncing State - Active and spinning */
 .sync-status.syncing {
   color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-.sync-status.syncing .sync-icon {
-  color: var(--text-primary);
+  opacity: 1;
 }
 
-/* Offline State */
+/* Offline State - Amber alert */
 .sync-status.offline, .sync-status.error {
   color: #f59e0b; /* Amber 500 */
-  border-color: rgba(245, 158, 11, 0.3);
+  opacity: 1;
 }
 
 .sync-icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5px;
 }
 
 .spin {

@@ -27,17 +27,49 @@ export const useConversationStore = defineStore('conversations', () => {
   async function init() {
     if (isInitialized.value || isInitializing.value) return
     isInitializing.value = true
-    if (typeof window === 'undefined') return // SSR guard
+    
+    try {
+      // 1. Instant Local Load
+      const localMetaStr = localStorage.getItem('bubbles-meta-conversations')
+      let hasLocalData = false
+      if (localMetaStr) {
+        const parsed = JSON.parse(localMetaStr)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          metaList.value = parsed
+          hasLocalData = true
+        }
+      }
 
-    const loadedMeta = await conversationService.loadMetadataList()
-    metaList.value = loadedMeta
-    if (loadedMeta.length === 0) {
-      await ensureConversation()
-    } else if (!activeConversationId.value || !loadedMeta.find(m => m.id === activeConversationId.value)) {
-      await selectConversation(loadedMeta[0]!.id)
-    } else {
-      // Reload active detail
-      await loadActiveDetail(activeConversationId.value)
+      // 2. Background DB Sync
+      try {
+        const serverMeta = await $fetch<ConversationMeta[]>('/api/chat')
+        
+        if (serverMeta && serverMeta.length > 0) {
+          metaList.value = serverMeta
+          localStorage.setItem('bubbles-meta-conversations', JSON.stringify(serverMeta))
+        } else if (hasLocalData) {
+          // DB is empty but we have local data. Push legacy chats to DB.
+          for (const meta of metaList.value) {
+            const detailStr = localStorage.getItem(`bubbles-conv-${meta.id}`)
+            if (detailStr) {
+              const detail = JSON.parse(detailStr)
+              await $fetch('/api/chat', { method: 'POST', body: { ...meta, ...detail } })
+            }
+          }
+        }
+      } catch (dbErr) {
+        console.error('Failed to load chat metadata from DB:', dbErr)
+      }
+
+      if (metaList.value.length === 0) {
+        await ensureConversation()
+      } else if (!activeConversationId.value || !metaList.value.find(m => m.id === activeConversationId.value)) {
+        await selectConversation(metaList.value[0]!.id)
+      } else {
+        await loadActiveDetail(activeConversationId.value)
+      }
+    } catch (e) {
+      console.error('Failed to init conversations:', e)
     }
 
     isInitialized.value = true
@@ -46,10 +78,24 @@ export const useConversationStore = defineStore('conversations', () => {
 
   async function loadActiveDetail(id: string) {
     if (!id) return
-    const detail = await conversationService.loadDetail(id)
-    if (detail) {
-      activeDetail.value = detail
+    
+    // 1. Instant Local Load
+    const localDetailStr = localStorage.getItem(`bubbles-conv-${id}`)
+    if (localDetailStr) {
+      activeDetail.value = JSON.parse(localDetailStr)
       activeConversationId.value = id
+    }
+
+    // 2. Background DB Sync
+    try {
+      const serverDetail = await $fetch<ConversationDetail & ConversationMeta>(`/api/chat/${id}`)
+      if (serverDetail) {
+        activeDetail.value = serverDetail
+        activeConversationId.value = id
+        localStorage.setItem(`bubbles-conv-${id}`, JSON.stringify(serverDetail))
+      }
+    } catch (e) {
+      console.error('Failed to fetch chat details from DB:', e)
     }
   }
 
@@ -60,15 +106,33 @@ export const useConversationStore = defineStore('conversations', () => {
     }
   })
 
+  // Debounced Sync Engine
+  let syncTimeout: any = null
+
+  async function syncChatToDB(meta: ConversationMeta, detail: ConversationDetail) {
+    // 1. Instant Local Save
+    localStorage.setItem(`bubbles-conv-${meta.id}`, JSON.stringify(detail))
+    localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
+
+    // 2. Debounced DB Save
+    if (syncTimeout) clearTimeout(syncTimeout)
+    syncTimeout = setTimeout(async () => {
+      try {
+        await $fetch('/api/chat', {
+          method: 'POST',
+          body: { ...meta, ...detail }
+        })
+      } catch (e) {
+        console.error('Failed to sync chat to DB:', e)
+      }
+    }, 2000)
+  }
+
   // Actions
   async function ensureConversation() {
     if (!isInitialized.value && !isInitializing.value) await init()
     if (metaList.value.length === 0) {
-      const { meta, detail } = await conversationService.createNewConversation()
-      metaList.value = [meta]
-      activeDetail.value = detail
-      activeConversationId.value = meta.id
-      return meta
+      return await createConversation()
     }
     const active = activeConversationMeta.value
     if (active) return active
@@ -78,10 +142,21 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function createConversation(title = 'New chat') {
-    const { meta, detail } = await conversationService.createNewConversation(title)
+    const now = new Date().toISOString()
+    const id = crypto.randomUUID()
+    
+    const meta: ConversationMeta = {
+      id, title, createdAt: now, updatedAt: now, messageCount: 0, lastMessagePreview: ''
+    }
+    const detail: ConversationDetail = {
+      id, events: []
+    }
+    
     metaList.value = [meta, ...metaList.value]
     activeDetail.value = detail
-    activeConversationId.value = meta.id
+    activeConversationId.value = id
+    
+    await syncChatToDB(meta, detail)
     return meta
   }
 
@@ -92,15 +167,18 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function deleteConversation(id: string) {
-    await conversationService.deleteConversation(id)
+    try {
+      await $fetch(`/api/chat/${id}`, { method: 'DELETE' })
+    } catch (e) {
+      console.error('Failed to delete chat from DB:', e)
+    }
     
+    localStorage.removeItem(`bubbles-conv-${id}`)
     metaList.value = metaList.value.filter((c: ConversationMeta) => c.id !== id)
+    localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
 
     if (metaList.value.length === 0) {
-      const { meta, detail } = await conversationService.createNewConversation()
-      metaList.value = [meta]
-      activeDetail.value = detail
-      activeConversationId.value = meta.id
+      await createConversation()
       return
     }
 
@@ -110,9 +188,20 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function updateSession(id: string, session: SessionState) {
-    await conversationService.updateSessionOnly(id, session)
+    const meta = metaList.value.find(m => m.id === id)
+    if (!meta) return
+    
     if (activeDetail.value && activeDetail.value.id === id) {
       activeDetail.value = { ...activeDetail.value, session }
+      await syncChatToDB(meta, activeDetail.value)
+    } else {
+      // If updating a non-active session, load it first
+      const localDetailStr = localStorage.getItem(`bubbles-conv-${id}`)
+      if (localDetailStr) {
+        const detail = JSON.parse(localDetailStr)
+        detail.session = session
+        await syncChatToDB(meta, detail)
+      }
     }
   }
 
@@ -127,7 +216,42 @@ export const useConversationStore = defineStore('conversations', () => {
     const currentMeta = metaList.value.find((m: ConversationMeta) => m.id === id)
     if (!currentMeta) return
 
-    const { meta: nextMeta, detail: nextDetail } = await conversationService.saveSnapshot(currentMeta, input)
+    const now = new Date().toISOString()
+    const messageCount = input.messages.length
+
+    // Helper functions directly inside
+    const getMessageText = (message: EveMessage): string => {
+      const raw = message.parts.filter(part => part.type === 'text').map(part => part.text).join('')
+      return raw.replace(/<system_context>[\s\S]*?<\/system_context>\n*/g, '').replace(/\[Widget: .*?\][\s\S]*?\[\/Widget\]\n*/g, '').trim()
+    }
+    
+    const createTitle = (messages: readonly EveMessage[]): string => {
+      const firstUserText = messages.filter(message => message.role === 'user').map(m => getMessageText(m)).find(text => text.length > 0)
+      if (!firstUserText) return 'New chat'
+      return firstUserText.length > 44 ? `${firstUserText.slice(0, 44).trim()}...` : firstUserText
+    }
+    
+    const createPreview = (messages: readonly EveMessage[]): string => {
+      const lastText = [...messages].reverse().map(m => getMessageText(m)).find(text => text.length > 0)
+      if (!lastText) return ''
+      return lastText.length > 72 ? `${lastText.slice(0, 72).trim()}...` : lastText
+    }
+
+    const title = currentMeta.title === 'New chat' ? createTitle(input.messages) : currentMeta.title
+
+    const nextMeta: ConversationMeta = {
+      ...currentMeta,
+      title,
+      updatedAt: messageCount > currentMeta.messageCount ? now : currentMeta.updatedAt,
+      messageCount,
+      lastMessagePreview: createPreview(input.messages)
+    }
+
+    const nextDetail: ConversationDetail = {
+      id: currentMeta.id,
+      session: input.session,
+      events: [...input.events]
+    }
     
     // Update local reactive state
     const newMetaList = [...metaList.value]
@@ -135,13 +259,14 @@ export const useConversationStore = defineStore('conversations', () => {
     if (index >= 0) {
       newMetaList[index] = nextMeta
     }
-    // Re-sort
     newMetaList.sort((a: ConversationMeta, b: ConversationMeta) => b.updatedAt.localeCompare(a.updatedAt))
     metaList.value = newMetaList
 
     if (activeDetail.value && activeDetail.value.id === id) {
       activeDetail.value = nextDetail
     }
+
+    await syncChatToDB(nextMeta, nextDetail)
   }
 
   return {

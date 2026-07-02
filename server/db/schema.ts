@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, jsonb, real } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, jsonb, real, integer } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -67,4 +67,16 @@ export const widget = pgTable("widget", {
 	isArchived: boolean("is_archived").default(false).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const conversation = pgTable('conversation', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  title: text('title').notNull().default('New chat'),
+  messageCount: integer('message_count').default(0).notNull(),
+  lastMessagePreview: text('last_message_preview').default(''),
+  session: jsonb('session'), // Eve agent session state
+  events: jsonb('events').default([]).notNull(), // Chat history event array
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
