@@ -1,6 +1,5 @@
 # ALWAYS USE  all requred design skill for making UI. and specially userinterface-wiki and always use maya-design too
- and alwasy break down animation into small small differnet differnet segments , which complete at different rate so the app feel alive and not monotonous and more rich in design
-
+ and alwasy break down animation into small small differnet differnet segments , which complete at different rate so the app feel alive and not monotonous and more rich in design 
 ## Purpose
 
 You are a senior-level software engineer specialized in Nuxt 4, Vue 3, TypeScript, Nitro, PostgreSQL, API design, and modern SaaS architecture.
@@ -489,17 +488,18 @@ Avoid shortcuts.
 
 # Performance Rules
 
-Performance is part of the feature.
+Performance is a first-class feature in this application, which is a heavy, interactive desktop-grade canvas. You must fight for every millisecond of performance to ensure buttery smooth 60fps on all devices.
 
-Always consider:
+Always consider the following Enterprise-Grade Optimization Techniques:
 
-* Bundle size
-* Hydration cost
-* API response time
-* Query efficiency
-* Re-renders
+* **Direct DOM Bypass for 1:1 Interactions:** Never use Vue's reactivity system (or libraries like GSAP) for raw mouse tracking (dragging, panning, resizing). Bind to `element.style.transform` directly in vanilla JS to prevent VDOM thrashing, and only sync the final state to Vue on `mouseup`.
+* **shallowRef for Heavy Data:** When storing massive JSON structures, huge arrays, or complex objects in Pinia or component state, ALWAYS use `shallowRef` instead of `ref`. This prevents Vue from recursively creating thousands of expensive reactive Proxies.
+* **CSS Containment (`contain: strict` or `layout style`):** Apply CSS containment to heavy, independent components (like widgets on a canvas). This isolates the component so its internal layout/paint changes never trigger global browser layout recalculations.
+* **SVG/DOM Memoization (`v-memo` / `v-once`):** Use `v-memo` on complex DOM subtrees (like Mermaid SVGs or large data graphs) so Vue completely skips diffing them during unrelated component re-renders.
+* **Viewport Virtualization:** Off-screen elements in large lists or vast canvases should be culled from the DOM or hidden using `content-visibility: auto` to save GPU memory and paint time.
+* **Filter Optimization:** Avoid large `blur()` filters (e.g., `backdrop-filter: blur(24px)` or drop-shadow blurs > 8px). They are extremely GPU-intensive. Cap blurs at 4px-8px and compensate with opacity for a highly performant glass aesthetic.
 
-Optimize where meaningful without sacrificing readability. Nuxt encourages performance-conscious component and hydration strategies.
+Optimize aggressively where meaningful, but document your optimization decisions clearly.
 
 ---
 
