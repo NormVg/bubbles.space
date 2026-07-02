@@ -14,7 +14,8 @@ const emit = defineEmits<{
 const initialDuration = computed(() => Number(props.data.duration) || 300)
 const timeLeft = ref(initialDuration.value)
 const isRunning = ref(false)
-const editDuration = ref(Math.floor(initialDuration.value / 60))
+const editMinutes = ref(Math.floor(initialDuration.value / 60))
+const editSeconds = ref(initialDuration.value % 60)
 
 let timerInterval: number | null = null
 
@@ -93,16 +94,18 @@ watch(() => props.data.action, (action) => {
 watch(() => props.data.duration, (newVal) => {
   if (!isRunning.value && newVal !== undefined) {
     timeLeft.value = Number(newVal) || 300
-    editDuration.value = Math.floor(timeLeft.value / 60)
+    editMinutes.value = Math.floor(timeLeft.value / 60)
+    editSeconds.value = timeLeft.value % 60
   }
 })
 
 watch(() => props.isEditing, (editing) => {
   if (editing) {
     pause()
-    editDuration.value = Math.floor(initialDuration.value / 60)
+    editMinutes.value = Math.floor(initialDuration.value / 60)
+    editSeconds.value = initialDuration.value % 60
   } else {
-    const newSeconds = Math.max(1, editDuration.value * 60)
+    const newSeconds = Math.max(1, editMinutes.value * 60 + editSeconds.value)
     emit('save', { duration: newSeconds })
     timeLeft.value = newSeconds
   }
@@ -122,8 +125,18 @@ const progress = computed(() => {
 <template>
   <div class="timer-widget-content">
     <div v-if="isEditing" class="timer-edit">
-      <label>Minutes:</label>
-      <input type="number" v-model="editDuration" min="1" max="999" class="timer-input" />
+      <label>Set Timer:</label>
+      <div class="time-inputs">
+        <div class="time-input-group">
+          <input type="number" v-model="editMinutes" min="0" max="999" class="timer-input" />
+          <span class="time-label">m</span>
+        </div>
+        <span class="time-separator">:</span>
+        <div class="time-input-group">
+          <input type="number" v-model="editSeconds" min="0" max="59" class="timer-input" />
+          <span class="time-label">s</span>
+        </div>
+      </div>
     </div>
     <div v-else class="timer-display" @click="toggle">
       <!-- Progress Ring SVG -->
@@ -268,8 +281,30 @@ html.light .control-btn {
 .timer-edit {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-separator {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.time-label {
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
 .timer-input {
@@ -279,9 +314,10 @@ html.light .control-btn {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 16px;
-  width: 100px;
+  width: 60px;
   text-align: center;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
 html.light .timer-input {

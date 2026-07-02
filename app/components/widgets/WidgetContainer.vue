@@ -426,8 +426,8 @@ html.light .widget-action-btn:hover {
 }
 
 .widget-action-btn.active {
-  background: var(--accent, #ff6b8b);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-foreground);
   border-color: transparent;
 }
 
