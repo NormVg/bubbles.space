@@ -334,7 +334,7 @@ watch(() => widget.value, () => {
         </svg>
       </button>
 
-      <!-- More Options (Transfer, etc) -->
+      <!-- More Options -->
       <div class="transfer-dropdown-container">
         <button class="widget-action-btn" :class="{ active: showTransferMenu }" @click.stop="toggleTransferMenu" aria-label="More options" title="More Options">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -354,6 +354,10 @@ watch(() => widget.value, () => {
                 class="transfer-menu-item"
                 @click.stop="moveToWorkspace(ws.id)"
               >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
                 {{ ws.label }}
               </button>
               <div v-if="otherWorkspaces.length === 0" class="transfer-menu-empty">
@@ -364,6 +368,10 @@ watch(() => widget.value, () => {
             <div class="transfer-menu-divider"></div>
             
             <button class="transfer-menu-item danger" @click.stop="remove">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
               Delete Widget
             </button>
           </div>
@@ -569,9 +577,15 @@ html.light .widget-action-btn:hover {
 }
 
 .widget-action-btn.active {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  border-color: transparent;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+html.light .widget-action-btn.active {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .widget-action-btn.success {
@@ -602,14 +616,14 @@ html.light .widget-action-close:hover {
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 8px;
-  width: 180px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+  width: 190px;
+  background: rgba(24, 24, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0,0,0,0.2);
   padding: 6px;
   z-index: 1000;
   display: flex;
@@ -617,19 +631,22 @@ html.light .widget-action-close:hover {
 }
 
 html.light .transfer-menu {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 .transfer-menu-header {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
-  padding: 6px 8px;
-  margin-bottom: 2px;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 8px 10px 6px 10px;
+}
+
+html.light .transfer-menu-header {
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .transfer-menu-list {
@@ -640,46 +657,86 @@ html.light .transfer-menu {
 
 .transfer-menu-item {
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: left;
   background: transparent;
   border: none;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 13px;
-  padding: 8px 8px;
-  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.15s ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+html.light .transfer-menu-item {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.transfer-menu-item svg {
+  opacity: 0.6;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
 .transfer-menu-item:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+html.light .transfer-menu-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #000;
+}
+
+.transfer-menu-item:hover svg {
+  opacity: 1;
 }
 
 .transfer-menu-empty {
-  font-size: 11px;
-  color: var(--text-muted);
-  padding: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 12px;
   text-align: center;
   font-style: italic;
 }
 
+html.light .transfer-menu-empty {
+  color: rgba(0, 0, 0, 0.4);
+}
+
 .transfer-menu-divider {
   height: 1px;
-  background: var(--glass-border);
-  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 6px 4px;
+}
+
+html.light .transfer-menu-divider {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .transfer-menu-item.danger {
   color: var(--danger);
 }
 
+.transfer-menu-item.danger svg {
+  color: var(--danger);
+  opacity: 0.8;
+}
+
 .transfer-menu-item.danger:hover {
   background: rgba(231, 76, 60, 0.15);
   color: var(--danger);
+}
+
+.transfer-menu-item.danger:hover svg {
+  opacity: 1;
 }
 
 .fade-pop-enter-active,
