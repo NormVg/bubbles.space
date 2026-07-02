@@ -323,7 +323,7 @@ onMounted(() => {
   setTimeout(() => scrollToBottom(true), 100)
 
   // Pre-fill processed tool calls so we don't re-trigger actions on refresh
-  // Also apply any already-completed widget actions from previous sessions
+  // DO NOT apply widget actions here, because local storage handles persistence!
   const messages = agent.data.value.messages || []
   for (const msg of messages) {
     if (msg.role !== 'assistant') continue
@@ -332,10 +332,6 @@ onMounted(() => {
       if (part.type === 'dynamic-tool') {
         const key = getToolKey(msg.id, part, i)
         processedToolCalls.add(key)
-        // Apply widget actions from prior sessions on reload
-        if ((part.state === 'output-available' || part.state === 'approval-responded') && part.output) {
-          tryApplyWidgetAction(part.output)
-        }
       }
     }
   }

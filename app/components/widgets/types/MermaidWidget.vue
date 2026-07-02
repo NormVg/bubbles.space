@@ -17,21 +17,14 @@ defineProps<{
   padding: 16px;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden; /* Hide scrollbars, let it scale */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Force the mermaid SVG to scale and fill the container */
-.mermaid-widget-content :deep(.markdown-renderer svg) {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-}
-
-/* Remove min-width constraints that might prevent scaling down */
-.mermaid-widget-content :deep(.markdown-renderer .mermaid) {
+/* Make sure the wrapper takes full height */
+.mermaid-widget-content :deep(> div) {
   width: 100%;
   height: 100%;
   display: flex;
@@ -39,15 +32,27 @@ defineProps<{
   justify-content: center;
 }
 
+/* Force the mermaid SVG to scale and fill the container perfectly */
+.mermaid-widget-content :deep(svg) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain; /* Keeps aspect ratio while scaling */
+}
+
+/* Remove constraints from any intermediate mermaid wrappers */
+.mermaid-widget-content :deep(.mermaid) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+}
+
+/* Hide scrollbars since we are scaling to fit */
 .mermaid-widget-content::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.mermaid-widget-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-.mermaid-widget-content::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 10px;
+  display: none;
 }
 </style>
