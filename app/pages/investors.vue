@@ -222,6 +222,8 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Access to the private developer group.
 * Early access to ecosystem applications.
 
+<a href="#" class="md-link">[ -> Fund & Get Founder's Pass ]</a>
+
 ### [2] Early Backer / Sponsor ($500+)
 
 * All perks of the Founder's Pass.
@@ -229,6 +231,8 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Priority feature requests.
 * Lifetime supporter recognition.
 * Name/Logo on "Sponsors" Wall.
+
+<a href="#" class="md-link">[ -> Fund & Become a Sponsor ]</a>
 
 ### [3] Angel Investor (Custom)
 
@@ -238,6 +242,8 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Private roadmap sessions.
 * Early API partnerships.
 * Access to ecosystem and platform strategy discussions.
+
+<a href="mailto:founders@tao.hq" class="md-link">[ -> Discuss Angel Investment ]</a>
 
 ---
 
