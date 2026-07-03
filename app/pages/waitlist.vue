@@ -35,29 +35,20 @@ async function signOut() {
         </p>
       </div>
 
-      <div class="founders-card">
+      <div class="founders-section">
         <div class="founders-header">
-          <span class="founders-badge">EARLY ADOPTER</span>
+          <div class="founders-badge">[ EARLY ADOPTER ]</div>
           <h2>Unlock Instant Access</h2>
           <p>Become a Founding Member to bypass the waitlist immediately.</p>
         </div>
         
         <ul class="perks-list">
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Instant access to the private beta
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Lifetime Pro Status (No subscriptions)
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            Access to the private developer group
-          </li>
+          <li><span class="bullet">•</span> Instant access to the private beta</li>
+          <li><span class="bullet">•</span> Lifetime Pro Status (No subscriptions)</li>
+          <li><span class="bullet">•</span> Access to the private developer group</li>
         </ul>
 
-        <a href="#" class="buy-button">Get Founder's Pass - $49</a>
+        <a href="#" class="buy-button">GET FOUNDER'S PASS — $49</a>
       </div>
       
       
@@ -234,24 +225,18 @@ html.light .loader-track {
   100% { transform: translateX(350%); }
 }
 
-/* Founder's Pass Card */
-.founders-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 32px;
+/* Minimalist Founder's Section */
+.founders-section {
   width: 100%;
   text-align: left;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  position: relative;
-  overflow: hidden;
   margin-top: 16px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-html.light .founders-card {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.06);
+html.light .founders-section {
+  border-color: rgba(0, 0, 0, 0.05);
 }
 
 .founders-header {
@@ -259,26 +244,24 @@ html.light .founders-card {
 }
 
 .founders-badge {
-  display: inline-block;
-  background: var(--text-primary);
-  color: var(--bg-base);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  padding: 4px 10px;
-  border-radius: 20px;
+  letter-spacing: 2px;
   margin-bottom: 16px;
+  display: block;
 }
 
 .founders-header h2 {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   margin: 0 0 8px 0;
   color: var(--text-primary);
+  letter-spacing: 1px;
 }
 
 .founders-header p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
@@ -301,32 +284,34 @@ html.light .founders-card {
   color: var(--text-secondary);
 }
 
-.perks-list svg {
-  width: 16px;
-  height: 16px;
-  color: #A855F7;
-  flex-shrink: 0;
+.bullet {
+  color: var(--text-muted);
+  font-size: 10px;
 }
 
 .buy-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--text-primary);
-  color: var(--bg-base);
+  background: transparent;
+  color: var(--text-primary);
   text-decoration: none;
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
   width: 100%;
 }
 
+html.light .buy-button {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
 .buy-button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  background: var(--text-primary);
+  color: var(--bg-base);
 }
 </style>
