@@ -37,20 +37,8 @@ async function signOut() {
     </div>
 
     <div class="scroll-content">
-      <div class="founders-section">
-        <div class="founders-header">
-          <div class="founders-badge">[ EARLY ADOPTER ]</div>
-          <h2>Unlock Instant Access</h2>
-          <p>Become a Founding Member to bypass the waitlist immediately.</p>
-        </div>
-        
-        <ul class="perks-list">
-          <li><span class="bullet">•</span> Instant access to the private beta</li>
-          <li><span class="bullet">•</span> Lifetime Pro Status (No subscriptions)</li>
-          <li><span class="bullet">•</span> Access to the private developer group</li>
-        </ul>
-
-        <a href="#" class="buy-button">GET FOUNDER'S PASS — $49</a>
+      <div class="manifesto-section">
+        <NuxtLink to="/investors" class="manifesto-btn">READ FULL MANIFESTO</NuxtLink>
       </div>
       
       
@@ -238,68 +226,30 @@ html.light .loader-track {
   100% { transform: translateX(350%); }
 }
 
-/* Minimalist Founder's Section */
-.founders-section {
+.manifesto-section {
   width: 100%;
-  text-align: left;
-  margin-top: 16px;
-  padding: 32px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  max-width: 400px;
 }
 
-html.light .founders-section {
-  border-color: rgba(0, 0, 0, 0.05);
-}
-
-.founders-header {
-  margin-bottom: 24px;
-}
-
-.founders-badge {
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-  font-size: 10px;
-  letter-spacing: 2px;
-  margin-bottom: 16px;
+.manifesto-btn {
   display: block;
-}
-
-.founders-header h2 {
-  font-size: 16px;
-  font-weight: 400;
-  margin: 0 0 8px 0;
+  width: 100%;
+  padding: 16px;
+  background: transparent;
   color: var(--text-primary);
-  letter-spacing: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  transition: all 0.2s ease;
 }
 
-.founders-header p {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.perks-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 32px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.perks-list li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.bullet {
-  color: var(--text-muted);
-  font-size: 10px;
+.manifesto-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .buy-button {
