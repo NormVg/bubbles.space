@@ -4,50 +4,51 @@ import { ref } from 'vue'
 import BubblesAvatar from '~/components/BubblesAvatar.vue'
 
 const isLoading = ref(false)
-const config = useRuntimeConfig()
-const isLocked = config.public.appLocked
+const { data: session } = authClient.useSession()
 
-async function loginWithGoogle() {
+async function signOut() {
   isLoading.value = true
-  await authClient.signIn.social({
-    provider: "google",
-    callbackURL: "/app"
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        window.location.href = '/'
+      }
+    }
   })
 }
 </script>
 
 <template>
-  <div class="landing-screen">
-    <div class="landing-content">
+  <div class="waitlist-screen">
+    <div class="waitlist-content">
       <div class="avatar-wrapper">
-        <BubblesAvatar :interactive="true" :trackCursor="true" />
-      </div>
-      <div class="logo-wrapper">
-        <h1 class="logo-text">BUBBLES</h1>
+        <BubblesAvatar :interactive="true" :trackCursor="true" emotionOverride="happy" />
       </div>
       
-      <p class="tagline">YOUR PERSISTENT AI WORKSPACE.</p>
+      <div class="message-container">
+        <h1 class="logo-text">YOU'RE ON THE LIST</h1>
+        <p class="tagline">BUBBLES IS NOT PUBLICLY LIVE YET.</p>
+        
+        <p class="sub-text">
+          Thank you for registering! We have secured your spot.<br>
+          We will notify you at <strong class="email-highlight">{{ session?.user?.email }}</strong> when access is granted.
+        </p>
+      </div>
       
       <div class="auth-section">
-        <button class="login-btn" @click="loginWithGoogle" :disabled="isLoading">
+        <button class="signout-btn" @click="signOut" :disabled="isLoading">
           <span v-if="isLoading" class="loader-track">
             <span class="loader-fill"></span>
           </span>
-          <span v-else class="btn-text">{{ isLocked ? 'JOIN THE WAITLIST' : 'CONTINUE WITH GOOGLE' }}</span>
+          <span v-else class="btn-text">SIGN OUT</span>
         </button>
       </div>
-    </div>
-    
-    <div class="landing-footer">
-      <NuxtLink to="/terms">Terms</NuxtLink>
-      <span class="divider">•</span>
-      <NuxtLink to="/privacy">Privacy</NuxtLink>
     </div>
   </div>
 </template>
 
 <style scoped>
-.landing-screen {
+.waitlist-screen {
   position: absolute;
   inset: 0;
   background-color: var(--bg-base);
@@ -57,12 +58,14 @@ async function loginWithGoogle() {
   font-family: var(--font-sans);
 }
 
-.landing-content {
+.waitlist-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
   animation: fade-in 1s ease-out forwards;
+  max-width: 480px;
+  text-align: center;
 }
 
 @keyframes fade-in {
@@ -71,22 +74,22 @@ async function loginWithGoogle() {
 }
 
 .avatar-wrapper {
-  margin-bottom: -8px; /* Pull the text slightly closer to the avatar */
-  transform: scale(1.2); /* Make the avatar a bit larger for the landing page */
+  transform: scale(1.2);
 }
 
-.logo-wrapper {
-  overflow: hidden;
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
 .logo-text {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 300;
-  letter-spacing: 12px;
-  margin-right: -12px;
+  letter-spacing: 4px;
   color: var(--text-primary);
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 html.light .logo-text {
@@ -95,25 +98,37 @@ html.light .logo-text {
 
 .tagline {
   font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 1px;
+  font-weight: 500;
+  letter-spacing: 2px;
   color: var(--text-secondary);
   text-transform: uppercase;
-  margin: 0 0 32px 0;
-  opacity: 0.6;
+  margin: 0;
+}
+
+.sub-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.email-highlight {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .auth-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  margin-top: 16px;
 }
 
-.login-btn {
+.signout-btn {
   background: transparent;
   border: none;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 400;
@@ -126,15 +141,16 @@ html.light .logo-text {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 180px;
+  min-width: 140px;
   min-height: 32px;
 }
 
-.login-btn:hover:not(:disabled) {
+.signout-btn:hover:not(:disabled) {
   opacity: 1;
+  color: var(--text-primary);
 }
 
-.login-btn:disabled {
+.signout-btn:disabled {
   cursor: not-allowed;
 }
 
@@ -155,14 +171,13 @@ html.light .logo-text {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.login-btn:hover .btn-text::after {
+.signout-btn:hover .btn-text::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 
-/* Loader styles adapted from splash screen */
 .loader-track {
-  width: 120px;
+  width: 100px;
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
   position: relative;
@@ -188,37 +203,5 @@ html.light .loader-track {
 @keyframes indeterminate-load {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(350%); }
-}
-
-.landing-footer {
-  position: absolute;
-  bottom: 32px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  opacity: 0.4;
-  transition: opacity 0.2s ease;
-}
-
-.landing-footer:hover {
-  opacity: 0.8;
-}
-
-.landing-footer a {
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.landing-footer a:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
-
-.divider {
-  color: var(--text-secondary);
 }
 </style>

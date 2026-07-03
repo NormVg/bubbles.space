@@ -13,5 +13,11 @@ export default defineNuxtConfig({
   },
   nitro: {
     experimental: { websocket: true }
+  },
+  runtimeConfig: {
+    public: {
+      appLocked: process.env.APP_LOCKED === 'true',
+      whitelistedEmails: process.env.WHITELISTED_EMAILS || ''
+    }
   }
 })
