@@ -200,9 +200,7 @@ const handleMouseLeave = () => {
 
 const handleClick = () => {
   if (!props.interactive) return;
-  
-  isBouncing.value = true;
-  setTimeout(() => isBouncing.value = false, 400);
+
   
   const now = Date.now();
   clickTimestamps.value.push(now);
