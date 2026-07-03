@@ -20,7 +20,7 @@ async function signOut() {
 
 <template>
   <div class="waitlist-screen">
-    <div class="waitlist-content">
+    <div class="hero-section">
       <div class="avatar-wrapper">
         <BubblesAvatar :interactive="true" :trackCursor="true" emotionOverride="happy" />
       </div>
@@ -34,7 +34,9 @@ async function signOut() {
           We will notify you at <ClientOnly><strong class="email-highlight">{{ session?.user?.email }}</strong></ClientOnly> when access is granted.
         </p>
       </div>
+    </div>
 
+    <div class="scroll-content">
       <div class="founders-section">
         <div class="founders-header">
           <div class="founders-badge">[ EARLY ADOPTER ]</div>
@@ -69,20 +71,32 @@ async function signOut() {
   position: absolute;
   inset: 0;
   background-color: var(--bg-base);
-  display: flex;
-  flex-direction: column;
+  display: block;
   overflow-y: auto;
   font-family: var(--font-sans);
+  scroll-behavior: smooth;
 }
 
-.waitlist-content {
-  margin: auto;
-  padding: 64px 24px 120px 24px;
+.hero-section {
+  height: 100vh;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  animation: fade-in 1s ease-out forwards;
+  text-align: center;
+  padding: 24px;
+}
+
+.scroll-content {
+  margin: 0 auto;
+  padding: 0 24px 120px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  animation: fade-in 1s ease-out forwards;
   max-width: 480px;
   width: 100%;
   text-align: center;
