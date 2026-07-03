@@ -34,6 +34,12 @@ async function loginWithGoogle() {
           <span v-else class="btn-text">CONTINUE WITH GOOGLE</span>
         </button>
       </div>
+      
+      <div class="landing-footer">
+        <NuxtLink to="/terms">Terms</NuxtLink>
+        <span class="divider">•</span>
+        <NuxtLink to="/privacy">Privacy</NuxtLink>
+      </div>
     </div>
   </div>
 </template>
@@ -180,5 +186,37 @@ html.light .loader-track {
 @keyframes indeterminate-load {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(350%); }
+}
+
+.landing-footer {
+  position: absolute;
+  bottom: 32px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.landing-footer:hover {
+  opacity: 0.8;
+}
+
+.landing-footer a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.landing-footer a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.divider {
+  color: var(--text-secondary);
 }
 </style>
