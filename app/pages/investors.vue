@@ -213,13 +213,31 @@ const toc = computed(() => {
   return headings
 })
 
-// Wrap headings in spans with IDs so we can scroll to them
+// Wrap markdown elements in spans for color syntax highlighting
 const parsedManifesto = computed(() => {
   let parsed = manifestoContent
+  
+  // 1. TOC Headings
   for (const item of toc.value) {
     const regex = new RegExp(`^# ${item.title}$`, 'gm')
-    parsed = parsed.replace(regex, `<span id="${item.id}" class="heading-anchor"># ${item.title}</span>`)
+    parsed = parsed.replace(regex, `<span id="${item.id}" class="heading-anchor md-h2"># ${item.title}</span>`)
   }
+
+  // 2. H3 Headings
+  parsed = parsed.replace(/^### (.*)$/gm, '<span class="md-h3">### $1</span>')
+
+  // 3. Blockquotes
+  parsed = parsed.replace(/^> (.*)$/gm, '<span class="md-quote">> $1</span>')
+
+  // 4. Bold text
+  parsed = parsed.replace(/\*\*(.*?)\*\*/g, '<span class="md-bold">**$1**</span>')
+
+  // 5. Lists
+  parsed = parsed.replace(/^\* (.*)$/gm, '<span class="md-list-item">* $1</span>')
+
+  // 6. Horizontal Rules
+  parsed = parsed.replace(/^---$/gm, '<span class="md-hr">---</span>')
+
   return parsed
 })
 
@@ -340,11 +358,42 @@ const scrollTo = (id: string) => {
 
 /* Specific Markdown Styling */
 .md-content {
-  font-family: var(--font-mono), 'JetBrains Mono', monospace;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  line-height: 1.8;
+  color: var(--text-secondary);
   white-space: pre-wrap; /* Crucial for keeping raw markdown formatting */
+}
+
+/* Syntax highlighted markdown elements */
+:deep(.md-h2) {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+:deep(.md-h3) {
+  color: #E5E7EB;
+  font-weight: 500;
+}
+
+:deep(.md-quote) {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+:deep(.md-bold) {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+:deep(.md-list-item) {
+  color: #D1D5DB;
+}
+
+:deep(.md-hr) {
+  color: var(--border-color);
 }
 
 /* Anchor spacing for injected HTML */
