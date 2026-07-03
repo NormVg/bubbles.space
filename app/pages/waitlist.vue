@@ -34,6 +34,32 @@ async function signOut() {
           We will notify you at <strong class="email-highlight">{{ session?.user?.email }}</strong> when access is granted.
         </p>
       </div>
+
+      <div class="founders-card">
+        <div class="founders-header">
+          <span class="founders-badge">EARLY ADOPTER</span>
+          <h2>Unlock Instant Access</h2>
+          <p>Become a Founding Member to bypass the waitlist immediately.</p>
+        </div>
+        
+        <ul class="perks-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Instant access to the private beta
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Lifetime Pro Status (No subscriptions)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Access to the private developer group
+          </li>
+        </ul>
+
+        <a href="#" class="buy-button">Get Founder's Pass - $49</a>
+      </div>
+      
       
       <div class="auth-section">
         <button class="signout-btn" @click="signOut" :disabled="isLoading">
@@ -203,5 +229,101 @@ html.light .loader-track {
 @keyframes indeterminate-load {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(350%); }
+}
+
+/* Founder's Pass Card */
+.founders-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  text-align: left;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+html.light .founders-card {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.founders-header {
+  margin-bottom: 24px;
+}
+
+.founders-badge {
+  display: inline-block;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.founders-header h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+}
+
+.founders-header p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.perks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perks-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.perks-list svg {
+  width: 16px;
+  height: 16px;
+  color: #A855F7;
+  flex-shrink: 0;
+}
+
+.buy-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: 100%;
+}
+
+.buy-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 </style>
