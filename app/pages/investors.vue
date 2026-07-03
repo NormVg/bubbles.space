@@ -11,22 +11,22 @@
       <div class="md-content">
         <div class="line"># Bubbles: A Spatial AI Workspace</div>
         <br>
-        <div class="line muted">// THE PHILOSOPHY</div>
+        <div class="line muted">## THE PHILOSOPHY</div>
         <div class="line">We are not building another generic chat interface wrapper.</div>
         <div class="line">We are building a persistent, spatial intelligence layer for your desktop.</div>
         <div class="line">We believe that AI should live alongside you, contextually aware, rather than trapped in a browser tab.</div>
         <br>
-        <div class="line muted">// THE PRODUCT</div>
+        <div class="line muted">## THE PRODUCT</div>
         <div class="line">Bubbles is a heavy, interactive desktop-grade canvas built for buttery-smooth 60fps performance.</div>
         <div class="line">It is a reactive entity. It is alive.</div>
         <br>
-        <div class="line muted">// WHAT WE EXPECT FROM A PARTNER</div>
+        <div class="line muted">## WHAT WE EXPECT FROM A PARTNER</div>
         <div class="line">We are not looking for "dumb money". We are looking for visionary partners who understand deep architecture, zero-latency local-first systems, and long-term bets. If you just want a quick ARR flip, this is not for you.</div>
         <div class="line">- You understand technical debt and why we refuse it.</div>
         <div class="line">- You have a thesis on spatial computing and AI.</div>
         <div class="line">- You let founders build.</div>
         <br>
-        <div class="line muted">// THE ASK</div>
+        <div class="line muted">## THE ASK</div>
         <div class="line">We are currently accepting a limited number of early backers to fund our runway.</div>
         <br>
         <div class="line">### [1] Founder's Pass ($49)</div>
