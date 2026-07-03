@@ -79,18 +79,21 @@ async function signOut() {
   inset: 0;
   background-color: var(--bg-base);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  overflow-y: auto;
   font-family: var(--font-sans);
 }
 
 .waitlist-content {
+  margin: auto;
+  padding: 64px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
   animation: fade-in 1s ease-out forwards;
   max-width: 480px;
+  width: 100%;
   text-align: center;
 }
 
