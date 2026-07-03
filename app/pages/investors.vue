@@ -159,7 +159,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Access to the private developer group.
 * Early access to ecosystem applications.
 
-<a href="#" class="md-link">[ -> Fund & Get Founder's Pass ]</a>
+<a href="#" class="md-button">Fund & Get Founder's Pass</a>
 
 ### [2] Early Backer / Sponsor ($500+)
 
@@ -169,7 +169,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Lifetime supporter recognition.
 * Name/Logo on "Sponsors" Wall.
 
-<a href="#" class="md-link">[ -> Fund & Become a Sponsor ]</a>
+<a href="#" class="md-button">Fund & Become a Sponsor</a>
 
 ### [3] Angel Investor (Custom)
 
@@ -180,7 +180,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Early API partnerships.
 * Access to ecosystem and platform strategy discussions.
 
-<a href="mailto:founders@tao.hq" class="md-link">[ -> Discuss Angel Investment ]</a>
+<a href="mailto:founders@tao.hq" class="md-button">Discuss Angel Investment</a>
 
 ---
 
@@ -213,30 +213,47 @@ const toc = computed(() => {
   return headings
 })
 
-// Wrap markdown elements in spans for color syntax highlighting
+// Parse markdown into clean semantic HTML elements
 const parsedManifesto = computed(() => {
   let parsed = manifestoContent
   
-  // 1. TOC Headings
+  // 1. TOC Headings (H2)
   for (const item of toc.value) {
     const regex = new RegExp(`^# ${item.title}$`, 'gm')
-    parsed = parsed.replace(regex, `<span id="${item.id}" class="heading-anchor md-h2"># ${item.title}</span>`)
+    parsed = parsed.replace(regex, `<h2 id="${item.id}" class="heading-anchor md-h2">${item.title}</h2>`)
   }
 
   // 2. H3 Headings
-  parsed = parsed.replace(/^### (.*)$/gm, '<span class="md-h3">### $1</span>')
+  parsed = parsed.replace(/^### (.*)$/gm, '<h3 class="md-h3">$1</h3>')
 
   // 3. Blockquotes
-  parsed = parsed.replace(/^> (.*)$/gm, '<span class="md-quote">> $1</span>')
+  parsed = parsed.replace(/^> (.*)$/gm, '<blockquote class="md-quote">$1</blockquote>')
 
   // 4. Bold text
-  parsed = parsed.replace(/\*\*(.*?)\*\*/g, '<span class="md-bold">**$1**</span>')
+  parsed = parsed.replace(/\*\*(.*?)\*\*/g, '<strong class="md-bold">$1</strong>')
 
   // 5. Lists
-  parsed = parsed.replace(/^\* (.*)$/gm, '<span class="md-list-item">* $1</span>')
+  parsed = parsed.replace(/^\* (.*)$/gm, '<div class="md-list-item"><span class="md-bullet"></span><span class="md-list-text">$1</span></div>')
 
   // 6. Horizontal Rules
-  parsed = parsed.replace(/^---$/gm, '<span class="md-hr">---</span>')
+  parsed = parsed.replace(/^---$/gm, '<hr class="md-hr" />')
+
+  // 7. Wrap paragraphs
+  parsed = parsed.split(/\n\n+/).map(block => {
+    block = block.trim()
+    if (!block) return ''
+    if (
+      block.startsWith('<h2') || 
+      block.startsWith('<h3') || 
+      block.startsWith('<blockquote') || 
+      block.startsWith('<div class="md-list-item"') || 
+      block.startsWith('<hr') || 
+      block.startsWith('<a')
+    ) {
+      return block
+    }
+    return `<p class="md-p">${block}</p>`
+  }).join('\n')
 
   return parsed
 })
@@ -359,28 +376,43 @@ const scrollTo = (id: string) => {
 /* Specific Markdown Styling */
 .md-content {
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--text-secondary);
-  white-space: pre-wrap; /* Crucial for keeping raw markdown formatting */
 }
 
-/* Syntax highlighted markdown elements */
+:deep(.md-p) {
+  margin-bottom: 24px;
+}
+
 :deep(.md-h2) {
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 18px;
-  letter-spacing: 0.5px;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  margin-top: 48px;
+  margin-bottom: 24px;
+}
+:deep(.md-h2:first-child) {
+  margin-top: 0;
 }
 
 :deep(.md-h3) {
-  color: #E5E7EB;
+  color: var(--text-primary);
   font-weight: 500;
+  font-size: 18px;
+  margin-top: 32px;
+  margin-bottom: 16px;
 }
 
 :deep(.md-quote) {
   color: var(--text-muted);
   font-style: italic;
+  border-left: 2px solid var(--border-color);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 :deep(.md-bold) {
@@ -389,17 +421,50 @@ const scrollTo = (id: string) => {
 }
 
 :deep(.md-list-item) {
-  color: #D1D5DB;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+:deep(.md-bullet) {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  margin-top: 11px;
 }
 
 :deep(.md-hr) {
-  color: var(--border-color);
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 48px 0;
+}
+
+:deep(.md-button) {
+  display: inline-block;
+  color: var(--text-primary);
+  text-decoration: none;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+
+:deep(.md-button:hover) {
+  border-color: var(--text-secondary);
 }
 
 /* Anchor spacing for injected HTML */
 :deep(.heading-anchor) {
   scroll-margin-top: 40px;
-  display: inline-block;
 }
 
 .md-link {
