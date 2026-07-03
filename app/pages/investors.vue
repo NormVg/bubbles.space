@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const manifestoContent = `# Bubbles: The Spatial AI Manifesto
+const manifestoContent = `# Bubbles: The Personal OS Manifesto
 
 ---
 
