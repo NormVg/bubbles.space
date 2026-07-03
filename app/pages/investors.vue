@@ -1,109 +1,91 @@
 <template>
-  <div class="investors-page">
-    <div class="investors-container">
-      <div class="header">
-        <NuxtLink to="/" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back to Bubbles
-        </NuxtLink>
-        <div class="badge">BACK THE FUTURE</div>
-        <h1>Investors & Sponsors</h1>
-        <p class="subtitle">Join us in building the most aesthetic, spatial AI workspace. Support the development of Bubbles and secure your place in our founding community.</p>
-      </div>
-
-      <div class="tiers-grid">
-        <!-- Tier 1: Founder's Pass -->
-        <div class="tier-card">
-          <div class="tier-header">
-            <h3>Founder's Pass</h3>
-            <div class="price">$49 <span>One-time</span></div>
-            <p>For individuals who want early access and lifetime perks.</p>
-          </div>
-          <ul class="tier-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Instant Private Beta Access</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Lifetime Pro Status</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> "Founding Member" In-App Badge</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Private Dev Discord Access</li>
-          </ul>
-          <a href="#" class="tier-btn">Get Founder's Pass</a>
-        </div>
-
-        <!-- Tier 2: Early Sponsor -->
-        <div class="tier-card highlight">
-          <div class="tier-header">
-            <h3>Early Sponsor</h3>
-            <div class="price">$500+ <span>One-time</span></div>
-            <p>For businesses and hardcore supporters who want a direct line to the team.</p>
-          </div>
-          <ul class="tier-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> All Founder's Pass Perks</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Direct Line to Dev Team</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Priority Feature Requests</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Name/Logo on "Sponsors" Wall</li>
-          </ul>
-          <a href="#" class="tier-btn primary">Become a Sponsor</a>
-        </div>
-
-        <!-- Tier 3: Angel Investor -->
-        <div class="tier-card">
-          <div class="tier-header">
-            <h3>Angel Investor</h3>
-            <div class="price">Custom <span>Funding</span></div>
-            <p>For visionary investors interested in equity and deep partnerships.</p>
-          </div>
-          <ul class="tier-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Equity Discussions</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Board / Advisory Roles</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Deep Architectural Access</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Early API Integrations</li>
-          </ul>
-          <a href="#" class="tier-btn outline">Contact Us</a>
-        </div>
+  <div class="manifesto-page">
+    <div class="manifesto-container">
+      <div class="editor-content">
+        <span class="line"><span class="h1"># Bubbles: A Spatial AI Workspace</span></span>
+        <span class="line empty"></span>
+        <span class="line"><span class="comment">// THE PHILOSOPHY</span></span>
+        <span class="line">We are not building another generic chat interface wrapper. We are</span>
+        <span class="line">building a persistent, spatial intelligence layer for your desktop.</span>
+        <span class="line">We believe that AI should live alongside you, contextually aware,</span>
+        <span class="line">rather than trapped in a browser tab.</span>
+        <span class="line empty"></span>
+        <span class="line"><span class="comment">// THE PRODUCT</span></span>
+        <span class="line">Bubbles is a heavy, interactive desktop-grade canvas built for</span>
+        <span class="line">buttery-smooth 60fps performance. It is a reactive entity.</span>
+        <span class="line">It is alive.</span>
+        <span class="line empty"></span>
+        <span class="line"><span class="comment">// WHAT WE EXPECT FROM A PARTNER</span></span>
+        <span class="line">We are not looking for "dumb money". We are looking for visionary</span>
+        <span class="line">partners who understand deep architecture, zero-latency local-first</span>
+        <span class="line">systems, and long-term bets. If you just want a quick ARR flip,</span>
+        <span class="line">this is not for you.</span>
+        <span class="line"><span class="list-item">- You understand technical debt and why we refuse it.</span></span>
+        <span class="line"><span class="list-item">- You have a thesis on spatial computing and AI.</span></span>
+        <span class="line"><span class="list-item">- You let founders build.</span></span>
+        <span class="line empty"></span>
+        <span class="line"><span class="comment">// THE ASK</span></span>
+        <span class="line">We are currently accepting a limited number of early backers to</span>
+        <span class="line">fund our runway.</span>
+        <span class="line empty"></span>
+        <span class="line"><span class="h3">### [1] Founder's Pass ($49)</span></span>
+        <span class="line"><span class="list-item">- Instant access to the private beta.</span></span>
+        <span class="line"><span class="list-item">- Lifetime Pro Status (no subscriptions).</span></span>
+        <span class="line"><span class="list-item">- Access to the private developer group.</span></span>
+        <span class="line"><a href="#" class="md-link">[Purchase Access]</a></span>
+        <span class="line empty"></span>
+        <span class="line"><span class="h3">### [2] Early Backer / Sponsor ($500+)</span></span>
+        <span class="line"><span class="list-item">- All perks of the Founder's Pass.</span></span>
+        <span class="line"><span class="list-item">- Direct line to the core engineering team.</span></span>
+        <span class="line"><span class="list-item">- Priority feature requests.</span></span>
+        <span class="line"><a href="#" class="md-link">[Become a Sponsor]</a></span>
+        <span class="line empty"></span>
+        <span class="line"><span class="h3">### [3] Angel Investor (Custom)</span></span>
+        <span class="line"><span class="list-item">- Equity discussions.</span></span>
+        <span class="line"><span class="list-item">- Deep architectural access and early API integrations.</span></span>
+        <span class="line"><a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact]</a></span>
+        <span class="line empty"></span>
+        <span class="line">---</span>
+        <span class="line empty"></span>
+        <span class="line"><NuxtLink to="/" class="md-link">[&lt;- Back to Bubbles]</NuxtLink></span>
+        <span class="line empty"></span>
+        <span class="line cursor"></span>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.investors-page {
+.manifesto-page {
   min-height: 100vh;
   height: 100vh;
   overflow-y: auto;
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  background-color: #050505; /* Deep, terminal-like black */
+  color: #E2E8F0; /* Clean, slightly muted white */
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', Courier, monospace;
   padding: 80px 24px;
 }
 
-.investors-container {
-  max-width: 1000px;
+html.light .manifesto-page {
+  background-color: #F8FAFC;
+  color: #334155;
+}
+
+.manifesto-container {
+  max-width: 800px;
   margin: 0 auto;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: fade-in 0.8s ease-out forwards;
 }
 
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 48px;
-  transition: color 0.2s ease;
-}
-
-.back-link:hover {
-  color: var(--text-primary);
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  animation: fade-in 1s ease-out forwards;
+html.light .manifesto-container {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 @keyframes fade-in {
@@ -111,196 +93,106 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.badge {
-  display: inline-block;
-  background: rgba(168, 85, 247, 0.1);
-  color: #A855F7;
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  padding: 6px 14px;
-  border-radius: 20px;
-}
-
-.header h1 {
-  font-size: 48px;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  margin: 0;
-  color: var(--text-primary);
-}
-
-.subtitle {
-  font-size: 18px;
+.editor-content {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
   line-height: 1.6;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0;
 }
 
-.tiers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  animation: fade-in 1s ease-out 0.2s forwards;
-  opacity: 0;
+.line {
+  display: block;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
-.tier-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+.line.empty {
+  height: 22.4px; /* Matches line-height (14px * 1.6) */
 }
 
-html.light .tier-card {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.06);
+.h1 {
+  color: #38BDF8; /* Sky blue for main heading */
+  font-weight: 700;
+  font-size: 16px;
 }
 
-.tier-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.1);
+html.light .h1 {
+  color: #0284C7;
 }
 
-html.light .tier-card:hover {
-  border-color: rgba(0, 0, 0, 0.15);
+.h3 {
+  color: #A855F7; /* Purple for subheadings */
+  font-weight: 600;
 }
 
-.tier-card.highlight {
-  background: rgba(168, 85, 247, 0.03);
-  border-color: rgba(168, 85, 247, 0.3);
-  position: relative;
+html.light .h3 {
+  color: #7E22CE;
 }
 
-.tier-card.highlight::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #A855F7, #EC4899);
-  border-radius: 20px 20px 0 0;
+.comment {
+  color: #64748B; /* Slate grey for comments */
+  font-style: italic;
 }
 
-.tier-header {
-  margin-bottom: 32px;
+html.light .comment {
+  color: #94A3B8;
 }
 
-.tier-header h3 {
-  font-size: 20px;
-  font-weight: 500;
-  margin: 0 0 16px 0;
-  color: var(--text-primary);
+.list-item {
+  color: #CBD5E1;
 }
 
-.price {
-  font-size: 40px;
-  font-weight: 300;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+html.light .list-item {
+  color: #475569;
 }
 
-.price span {
-  font-size: 14px;
-  color: var(--text-secondary);
-  font-weight: 400;
-}
-
-.tier-header p {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  margin: 0;
-  min-height: 42px;
-}
-
-.tier-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 40px 0;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.tier-features li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.tier-features svg {
-  width: 18px;
-  height: 18px;
-  color: #A855F7;
-  flex-shrink: 0;
-}
-
-.tier-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.md-link {
+  color: #10B981; /* Emerald green for links */
   text-decoration: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
+  transition: opacity 0.2s ease, text-shadow 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
 }
 
-html.light .tier-btn {
-  background: rgba(0, 0, 0, 0.05);
+html.light .md-link {
+  color: #059669;
 }
 
-.tier-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+.md-link:hover {
+  opacity: 0.8;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
 }
 
-html.light .tier-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+html.light .md-link:hover {
+  text-shadow: none;
+  text-decoration: underline;
 }
 
-.tier-btn.primary {
-  background: var(--text-primary);
-  color: var(--bg-base);
+/* Blinking cursor effect at the end */
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: #E2E8F0;
+  margin-top: 8px;
+  animation: blink 1s step-end infinite;
 }
 
-.tier-btn.primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+html.light .cursor {
+  background-color: #334155;
 }
 
-.tier-btn.outline {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
-html.light .tier-btn.outline {
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-.tier-btn.outline:hover {
-  border-color: var(--text-primary);
-}
-
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 36px;
+@media (max-width: 600px) {
+  .manifesto-container {
+    padding: 24px;
+  }
+  .editor-content {
+    font-size: 13px;
   }
 }
 </style>
