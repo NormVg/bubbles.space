@@ -1,15 +1,5 @@
-<template>
-  <div class="legal-page">
-    <div class="legal-container">
-      <div class="legal-header">
-        <NuxtLink to="/" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back to Bubbles
-        </NuxtLink>
-      </div>
-
-      <div class="md-content">
-# Bubbles: Demo & Investor Brief
+<script setup lang="ts">
+const manifestoContent = `# Bubbles: Demo & Investor Brief
 
 ---
 
@@ -252,7 +242,21 @@ We are currently accepting a limited number of early backers to accelerate produ
 
 ---
 
-> **We're building Bubbles, a proactive AI companion and ecosystem of agent-first applications, so people can delegate their digital lives and focus on what truly matters.**
+> **We're building Bubbles, a proactive AI companion and ecosystem of agent-first applications, so people can delegate their digital lives and focus on what truly matters.**`
+</script>
+
+<template>
+  <div class="legal-page">
+    <div class="legal-container">
+      <div class="legal-header">
+        <NuxtLink to="/" class="back-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Bubbles
+        </NuxtLink>
+      </div>
+
+      <div class="md-content">
+        {{ manifestoContent }}
 
 <NuxtLink to="/" class="md-link">[Back to Bubbles](/)</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact](mailto:founders@tao.hq)</a>
       </div>
