@@ -18,7 +18,7 @@ async function loginWithGoogle() {
   <div class="landing-screen">
     <div class="landing-content">
       <div class="avatar-wrapper">
-        <BubblesAvatar :interactive="false" />
+        <BubblesAvatar :interactive="true" :trackCursor="true" />
       </div>
       <div class="logo-wrapper">
         <h1 class="logo-text">BUBBLES</h1>
