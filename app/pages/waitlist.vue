@@ -78,8 +78,7 @@ async function signOut() {
 }
 
 .hero-section {
-  height: 100vh;
-  min-height: 500px;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,7 +86,7 @@ async function signOut() {
   gap: 32px;
   animation: fade-in 1s ease-out forwards;
   text-align: center;
-  padding: 24px;
+  padding: 40px 24px;
 }
 
 .scroll-content {
