@@ -34,12 +34,12 @@ async function loginWithGoogle() {
           <span v-else class="btn-text">CONTINUE WITH GOOGLE</span>
         </button>
       </div>
-      
-      <nav class="glass-nav-bar">
-        <NuxtLink to="/terms" class="nav-link">Terms</NuxtLink>
-        <div class="nav-divider"></div>
-        <NuxtLink to="/privacy" class="nav-link">Privacy</NuxtLink>
-      </nav>
+    </div>
+    
+    <div class="landing-footer">
+      <NuxtLink to="/terms">Terms</NuxtLink>
+      <span class="divider">•</span>
+      <NuxtLink to="/privacy">Privacy</NuxtLink>
     </div>
   </div>
 </template>
@@ -188,66 +188,35 @@ html.light .loader-track {
   100% { transform: translateX(350%); }
 }
 
-.glass-nav-bar {
+.landing-footer {
   position: absolute;
   bottom: 32px;
   display: flex;
+  gap: 12px;
   align-items: center;
-  gap: 16px;
-  padding: 8px 24px;
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-  opacity: 0.7;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: fade-in-up 1s ease-out 0.5s both;
-}
-
-html.light .glass-nav-bar {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.glass-nav-bar:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-html.light .glass-nav-bar:hover {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.nav-link {
-  color: var(--text-secondary);
-  text-decoration: none;
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-weight: 500;
-  transition: color 0.2s ease;
-  position: relative;
-  padding: 4px 0;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
 }
 
-.nav-link:hover {
+.landing-footer:hover {
+  opacity: 0.8;
+}
+
+.landing-footer a {
   color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.nav-divider {
-  width: 1px;
-  height: 12px;
-  background: var(--text-secondary);
-  opacity: 0.3;
+.landing-footer a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
 }
 
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 0.7; transform: translateY(0); }
+.divider {
+  color: var(--text-secondary);
 }
 </style>
