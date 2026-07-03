@@ -214,7 +214,10 @@ const handleGlobalMouseMove = (e) => {
   const x = (e.clientX - centerX) / centerX;
   const y = (e.clientY - centerY) / centerY;
   
-  faceOffsetX.value = x * maxOffset;
+  // If the SVG is horizontally inverted, we need to invert the X translation
+  const directionMultiplier = props.invert ? -1 : 1;
+  
+  faceOffsetX.value = x * maxOffset * directionMultiplier;
   faceOffsetY.value = y * maxOffset;
 };
 
