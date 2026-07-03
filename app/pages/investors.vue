@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const manifestoContent = `# Bubbles: The Personal OS Manifesto
 
 ---
@@ -252,27 +254,69 @@ We are currently accepting a limited number of early backers to accelerate produ
 > **We're building Bubbles, a proactive AI companion and ecosystem of agent-first applications, so people can delegate their digital lives and focus on what truly matters.**
 
 `
+
+// Extract headings for the TOC
+const toc = computed(() => {
+  const headings = []
+  const lines = manifestoContent.split('\n')
+  for (const line of lines) {
+    if (line.startsWith('# ')) {
+      const title = line.replace('# ', '').trim()
+      if (title.startsWith('Bubbles:')) continue // Skip the main title
+      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      headings.push({ title, id })
+    }
+  }
+  return headings
+})
+
+// Wrap headings in spans with IDs so we can scroll to them
+const parsedManifesto = computed(() => {
+  let parsed = manifestoContent
+  for (const item of toc.value) {
+    const regex = new RegExp(`^# ${item.title}$`, 'gm')
+    parsed = parsed.replace(regex, `<span id="${item.id}" class="heading-anchor"># ${item.title}</span>`)
+  }
+  return parsed
+})
+
+const scrollTo = (id: string) => {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 </script>
 
 <template>
   <div class="legal-page">
-    <div class="legal-container">
-      <div class="legal-header">
+    <div class="layout-container">
+      
+      <!-- Sidebar TOC -->
+      <aside class="sidebar">
         <NuxtLink to="/" class="back-link">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back to Bubbles
         </NuxtLink>
-      </div>
+        <div class="toc-title">INDEX</div>
+        <ul class="toc-list">
+          <li v-for="item in toc" :key="item.id">
+            <a :href="`#${item.id}`" @click.prevent="scrollTo(item.id)">{{ item.title }}</a>
+          </li>
+        </ul>
+      </aside>
 
-      <div class="md-content">
-        {{ manifestoContent }}<NuxtLink to="/" class="md-link">[Back to Bubbles]</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact]</a>
-      </div>
+      <!-- Main Document -->
+      <main class="main-content">
+        <div class="md-content" v-html="parsedManifesto"></div>
+        <NuxtLink to="/" class="md-link">[Back to Bubbles]</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact]</a>
+      </main>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-/* Inherit the exact layout from terms.vue */
 .legal-page {
   min-height: 100vh;
   height: 100vh;
@@ -281,15 +325,23 @@ We are currently accepting a limited number of early backers to accelerate produ
   color: var(--text-primary);
   font-family: var(--font-sans);
   padding: 80px 24px;
+  scroll-behavior: smooth;
 }
 
-.legal-container {
-  max-width: 680px;
+.layout-container {
+  max-width: 960px;
   margin: 0 auto;
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
 }
 
-.legal-header {
-  margin-bottom: 48px;
+/* Sidebar styling */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0px;
 }
 
 .back-link {
@@ -301,10 +353,46 @@ We are currently accepting a limited number of early backers to accelerate produ
   font-size: 14px;
   font-weight: 500;
   transition: color 0.2s ease;
+  margin-bottom: 48px;
 }
 
 .back-link:hover {
   color: var(--text-primary);
+}
+
+.toc-title {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toc-list a {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: block;
+}
+
+.toc-list a:hover {
+  color: var(--text-primary);
+}
+
+.main-content {
+  flex-grow: 1;
+  max-width: 680px;
 }
 
 /* Specific Markdown Styling */
@@ -314,6 +402,12 @@ We are currently accepting a limited number of early backers to accelerate produ
   line-height: 1.7;
   color: var(--text-primary);
   white-space: pre-wrap; /* Crucial for keeping raw markdown formatting */
+}
+
+/* Anchor spacing for injected HTML */
+:deep(.heading-anchor) {
+  scroll-margin-top: 40px;
+  display: inline-block;
 }
 
 .md-link {
@@ -326,5 +420,20 @@ We are currently accepting a limited number of early backers to accelerate produ
 
 .md-link:hover {
   opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .layout-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+  }
+  .back-link {
+    margin-bottom: 24px;
+  }
 }
 </style>
