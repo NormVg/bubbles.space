@@ -157,22 +157,35 @@ const handleMouseUp = () => {
 };
 
 const handleMouseMove = (e) => {
-  if (!props.interactive || !isDragging.value) return;
+  if (!props.interactive) return;
   
   const currentX = e.clientX;
+  
+  if (lastMouseX.value === 0) {
+    lastMouseX.value = currentX;
+    return;
+  }
+  
   const deltaX = currentX - lastMouseX.value;
   
-  if (Math.abs(deltaX) > 5) {
+  // You no longer need to click to "scratch". Just swiping your mouse back and forth over it works!
+  if (Math.abs(deltaX) > 15) {
     const direction = Math.sign(deltaX);
     if (direction !== lastDirection.value) {
       scratchCount.value++;
       lastDirection.value = direction;
       lastMouseX.value = currentX;
       
-      // If scratched back and forth 4 times, trigger happy
-      if (scratchCount.value >= 4) {
+      // Reset count if they stop swiping for half a second
+      clearTimeout(window.swipeResetTimer);
+      window.swipeResetTimer = setTimeout(() => {
+        scratchCount.value = 0;
+      }, 500);
+      
+      // Trigger happy on 3 back-and-forth swipes
+      if (scratchCount.value >= 3) {
         triggerEmotion('happy', 4000);
-        scratchCount.value = 0; // reset
+        scratchCount.value = 0; 
       }
     }
   }
@@ -181,6 +194,8 @@ const handleMouseMove = (e) => {
 const handleMouseLeave = () => {
   if (!props.interactive) return;
   isDragging.value = false;
+  lastMouseX.value = 0;
+  scratchCount.value = 0;
 };
 
 const handleClick = () => {
