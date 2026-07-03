@@ -5,32 +5,7 @@ const manifestoContent = `# Bubbles: The Personal OS Manifesto
 
 ---
 
-# THE PHILOSOPHY
 
-Software today is fragmented.
-
-People spend their days switching between apps, managing tabs, copying information between tools, and manually coordinating their digital lives. AI has made software more capable, but most AI products still operate in a simple loop:
-
-**You ask. It responds.**
-
-We believe the next generation of computing will be fundamentally different.
-
-It will be:
-
-* Persistent.
-* Context-aware.
-* Proactive.
-* Agent-driven.
-
-At Bubbles, we're building a world where everyone has a personal AI companion that understands their goals, remembers their context, and works on their behalf.
-
-Our vision isn't another chatbot or another productivity app.
-
-Our vision is a new computing layer:
-
-> **A personal AI that lives alongside you and quietly helps run your digital life.**
-
----
 
 # THE PRODUCT
 
@@ -120,45 +95,7 @@ We believe the next decade will be defined by companies that successfully build 
 
 ---
 
-# MARKET OPPORTUNITY
 
-The markets of productivity software, knowledge management, collaboration tools, and personal AI represent a multi-billion-dollar opportunity.
-
-Our long-term ambition is larger than productivity software.
-
-We believe every person will eventually have:
-
-* A personal AI companion
-* A persistent digital memory
-* An intelligent operating layer between themselves and software
-
-Bubbles is being built to become that layer.
-
----
-
-# OUR ADVANTAGES
-
-### Agent-first from day one
-
-Not retrofitting AI into existing software.
-
-### Memory as infrastructure
-
-Long-term context is a core primitive.
-
-### Ecosystem strategy
-
-Products strengthen one another through shared intelligence.
-
-### Persistent relationship with the user
-
-Bubbles becomes more valuable over time.
-
-### Long-term vision
-
-Building a new computing platform rather than a single feature.
-
----
 
 # ROADMAP
 
