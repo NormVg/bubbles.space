@@ -59,6 +59,8 @@
 <style scoped>
 .legal-page {
   min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
