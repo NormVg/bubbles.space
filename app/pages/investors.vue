@@ -249,7 +249,9 @@ We are currently accepting a limited number of early backers to accelerate produ
 
 ---
 
-> **We're building Bubbles, a proactive AI companion and ecosystem of agent-first applications, so people can delegate their digital lives and focus on what truly matters.**`
+> **We're building Bubbles, a proactive AI companion and ecosystem of agent-first applications, so people can delegate their digital lives and focus on what truly matters.**
+
+`
 </script>
 
 <template>
@@ -263,9 +265,7 @@ We are currently accepting a limited number of early backers to accelerate produ
       </div>
 
       <div class="md-content">
-        {{ manifestoContent }}
-
-<NuxtLink to="/" class="md-link">[Back to Bubbles](/)</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact](mailto:founders@tao.hq)</a>
+        {{ manifestoContent }}<NuxtLink to="/" class="md-link">[Back to Bubbles]</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact]</a>
       </div>
     </div>
   </div>
