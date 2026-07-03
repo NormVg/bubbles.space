@@ -201,26 +201,22 @@ html.light .loader-track {
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  opacity: 0.4;
-  transition: opacity 0.2s ease;
-}
-
-.landing-footer:hover {
-  opacity: 0.8;
 }
 
 .landing-footer a {
   color: var(--text-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .landing-footer a:hover {
-  color: var(--text-primary);
+  opacity: 1;
   text-decoration: underline;
 }
 
 .divider {
   color: var(--text-secondary);
+  opacity: 0.4;
 }
 </style>
