@@ -31,7 +31,7 @@ async function signOut() {
         
         <p class="sub-text">
           Thank you for registering! We have secured your spot.<br>
-          We will notify you at <strong class="email-highlight">{{ session?.user?.email }}</strong> when access is granted.
+          We will notify you at <ClientOnly><strong class="email-highlight">{{ session?.user?.email }}</strong></ClientOnly> when access is granted.
         </p>
       </div>
 
@@ -77,11 +77,11 @@ async function signOut() {
 
 .waitlist-content {
   margin: auto;
-  padding: 64px 24px;
+  padding: 64px 24px 120px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   animation: fade-in 1s ease-out forwards;
   max-width: 480px;
   width: 100%;
