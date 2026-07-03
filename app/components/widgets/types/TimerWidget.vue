@@ -125,7 +125,7 @@ const progress = computed(() => {
 <template>
   <div class="timer-widget-content">
     <div v-if="isEditing" class="timer-edit">
-      <label>Set Timer:</label>
+      <label class="edit-label">Set Timer</label>
       <div class="time-inputs">
         <div class="time-input-group">
           <input type="number" v-model="editMinutes" min="0" max="999" class="timer-input" />
@@ -139,25 +139,27 @@ const progress = computed(() => {
       </div>
     </div>
     <div v-else class="timer-display" @click="toggle">
-      <!-- Progress Ring SVG -->
-      <svg class="progress-ring" viewBox="0 0 100 100">
-        <circle class="progress-ring-track" cx="50" cy="50" r="45"></circle>
-        <circle 
-          class="progress-ring-circle" 
-          cx="50" cy="50" r="45"
-          :stroke-dasharray="283"
-          :stroke-dashoffset="283 - (283 * progress) / 100"
-        ></circle>
-      </svg>
-      
-      <div class="time-text" :class="{ 'time-ending': timeLeft <= 10 && isRunning }">
-        {{ formattedTime }}
+      <div class="ring-container">
+        <!-- Progress Ring SVG -->
+        <svg class="progress-ring" viewBox="0 0 100 100">
+          <circle class="progress-ring-track" cx="50" cy="50" r="46"></circle>
+          <circle 
+            class="progress-ring-circle" 
+            cx="50" cy="50" r="46"
+            :stroke-dasharray="289.02"
+            :stroke-dashoffset="289.02 - (289.02 * progress) / 100"
+          ></circle>
+        </svg>
+        
+        <div class="time-text" :class="{ 'time-ending': timeLeft <= 10 && isRunning }">
+          {{ formattedTime }}
+        </div>
       </div>
       
-      <div class="timer-controls">
+      <div class="timer-controls-pill" @click.stop>
         <button class="control-btn" @click.stop="toggle" :title="isRunning ? 'Pause' : 'Start'">
-          <svg v-if="isRunning" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <svg v-if="isRunning" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"></path></svg>
         </button>
         <button class="control-btn" @click.stop="reset" title="Reset">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
@@ -176,6 +178,7 @@ const progress = computed(() => {
   align-items: center;
   justify-content: center;
   color: var(--text-primary);
+  font-family: var(--font-sans);
 }
 
 .timer-display {
@@ -189,76 +192,107 @@ const progress = computed(() => {
   cursor: pointer;
 }
 
+.ring-container {
+  position: relative;
+  width: min(90%, 100vh);
+  height: min(90%, 100vh);
+  max-width: 260px;
+  max-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .progress-ring {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg);
-  width: min(90%, 100vh); /* Scale based on available space */
-  height: min(90%, 100vh);
-  max-width: 200px;
-  max-height: 200px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  pointer-events: none;
 }
 
 .progress-ring-track {
   fill: transparent;
-  stroke: rgba(255, 255, 255, 0.05);
-  stroke-width: 4;
+  stroke: rgba(255, 255, 255, 0.03);
+  stroke-width: 2;
 }
+
 html.light .progress-ring-track {
   stroke: rgba(0, 0, 0, 0.05);
 }
 
 .progress-ring-circle {
   fill: transparent;
-  stroke: var(--accent, #ff6b8b);
+  stroke: var(--accent, #a78bfa);
   stroke-width: 4;
   stroke-linecap: round;
   transition: stroke-dashoffset 1s linear;
+  filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.3));
 }
 
 .time-text {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: clamp(2rem, 15cqw, 4rem);
+  font-family: var(--font-mono, 'SF Mono', monospace);
+  font-size: clamp(2.5rem, 18cqi, 5rem);
   font-weight: 300;
   letter-spacing: -0.05em;
+  color: var(--text-primary);
   z-index: 2;
   transition: color 0.3s ease;
+  user-select: none;
 }
 
 .time-ending {
   color: #ef4444;
-  animation: pulse 1s infinite alternate;
+  animation: pulse 1s infinite alternate cubic-bezier(0.4, 0, 0.6, 1);
+  text-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
 }
 
 @keyframes pulse {
-  from { opacity: 1; }
-  to { opacity: 0.5; }
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(0.98); }
 }
 
-.timer-controls {
+.timer-controls-pill {
   position: absolute;
-  bottom: 24px;
+  bottom: 12px;
+  left: 50%;
+  transform: translate(-50%, 16px) scale(0.95);
   display: flex;
-  gap: 12px;
-  z-index: 2;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 32px;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.2s ease;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
 }
 
-.timer-display:hover .timer-controls {
+html.light .timer-controls-pill {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+}
+
+.timer-display:hover .timer-controls-pill {
   opacity: 1;
-  transform: translateY(0);
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
 }
 
 .control-btn {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,66 +300,78 @@ html.light .progress-ring-track {
   transition: all 0.2s ease;
 }
 
-html.light .control-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
 .control-btn:hover {
-  background: var(--accent, #ff6b8b);
-  color: #fff;
-  border-color: transparent;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
 }
 
+html.light .control-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Mode Styles */
 .timer-edit {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.2);
+}
+
+.edit-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
 }
 
 .time-inputs {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .time-input-group {
   display: flex;
-  align-items: center;
-  gap: 4px;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .time-separator {
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 300;
+  font-size: 24px;
+  color: var(--text-muted);
+  margin-top: -4px;
 }
 
 .time-label {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .timer-input {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  padding: 8px 12px;
+  padding: 8px 0;
   border-radius: 8px;
-  font-size: 16px;
-  width: 60px;
+  font-size: 24px;
+  font-weight: 300;
+  font-family: var(--font-mono, monospace);
+  width: 72px;
   text-align: center;
   outline: none;
-  transition: border-color 0.2s ease;
-}
-
-html.light .timer-input {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 .timer-input:focus {
-  border-color: var(--accent, #ff6b8b);
+  border-color: var(--accent, #a78bfa);
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.2);
 }
 </style>
