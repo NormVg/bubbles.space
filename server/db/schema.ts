@@ -1,16 +1,5 @@
-import { pgTable, text, timestamp, boolean, jsonb, real, integer, uniqueIndex, customType } from "drizzle-orm/pg-core";
-
-const vector = customType<{ data: number[]; driverData: string }>({
-  dataType() {
-    return 'vector';
-  },
-  toDriver(value: number[]) {
-    return `[${value.join(',')}]`;
-  },
-  fromDriver(value: string) {
-    return JSON.parse(value);
-  },
-});
+import { pgTable, text, timestamp, boolean, jsonb, real, integer, uniqueIndex, index, halfvec } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 
 export const user = pgTable("user", {
@@ -111,7 +100,7 @@ export const memory = pgTable('memory', {
   confidence: real('confidence').default(1.0).notNull(),
   accessCount: integer('access_count').default(0).notNull(),
   state: text('state').default('active').notNull(),
-  embedding: vector('embedding'),
+  embedding: halfvec('embedding', { dimensions: 2048 }),
   // Temporal truth-window columns
   validFrom: timestamp('valid_from').defaultNow().notNull(),
   validTo: timestamp('valid_to'),
@@ -121,4 +110,6 @@ export const memory = pgTable('memory', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
   lastAccessedAt: timestamp('last_accessed_at').defaultNow()
-});
+}, (table) => ({
+  embeddingIndex: index('embedding_idx').using('hnsw', sql`${table.embedding} halfvec_cosine_ops`)
+}));

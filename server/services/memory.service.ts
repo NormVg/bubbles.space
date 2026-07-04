@@ -11,8 +11,16 @@ const openrouter = new OpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY
 });
 
+const embeddingCache = new Map<string, number[]>();
+const MAX_CACHE_SIZE = 1000;
+
 async function generateEmbedding(text: string): Promise<number[] | null> {
   if (!text) return null;
+  
+  if (embeddingCache.has(text)) {
+    return embeddingCache.get(text)!;
+  }
+  
   try {
     const embedding = await openrouter.embeddings.generate({
       requestBody: {
@@ -21,7 +29,15 @@ async function generateEmbedding(text: string): Promise<number[] | null> {
         encodingFormat: "float"
       }
     });
-    return embedding.data[0].embedding;
+    const result = embedding.data[0].embedding;
+    
+    if (embeddingCache.size >= MAX_CACHE_SIZE) {
+      const firstKey = embeddingCache.keys().next().value;
+      if (firstKey) embeddingCache.delete(firstKey);
+    }
+    embeddingCache.set(text, result);
+    
+    return result;
   } catch (error) {
     console.error('Failed to generate embedding:', error);
     return null;

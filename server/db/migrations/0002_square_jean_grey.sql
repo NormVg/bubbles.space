@@ -1,0 +1,1 @@
+CREATE INDEX "embedding_idx" ON "memory" USING hnsw ("embedding" vector_cosine_ops);

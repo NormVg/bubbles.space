@@ -39,8 +39,21 @@
                 <!-- AI Message -->
                 <ChatMessageAI v-else-if="hasRenderableParts(message)" :message="message" :isDone="agent.status.value !== 'streaming'" @copy="handleCopy(getTextContent(message), false)" @reply="handleReply(message)" />
               </div>
+              
+              <!-- Optimistic User Message while fetching memory -->
+              <div v-if="mockOptimisticMessage">
+                <ChatMessageUser :message="mockOptimisticMessage" @copy="handleCopy(getTextContent(mockOptimisticMessage), true)" />
+              </div>
             </div>
             
+            <!-- Memory Fetching Loader -->
+            <div v-if="isFetchingMemory" class="ai-message-wrapper thinking-loader-wrapper">
+              <div class="thinking-content">
+                <AILoader :size="16" :color="modeColor" :mode="currentMode" />
+                <span class="thinking-text" :style="{ color: modeColor }">Exploring...</span>
+              </div>
+            </div>
+
             <!-- Status Loader -->
             <div v-if="agent.status.value === 'submitted' || agent.status.value === 'streaming'" class="ai-message-wrapper thinking-loader-wrapper">
               <div class="thinking-content">
@@ -51,7 +64,7 @@
           </div>
 
           <!-- Empty State -->
-          <div v-if="agent.data.value.messages.length === 0" class="chat-empty-state">
+          <div v-if="agent.data.value.messages.length === 0 && !mockOptimisticMessage" class="chat-empty-state">
             <div class="avatar-wrapper">
               <BubblesAvatar :size="64" />
             </div>
@@ -98,6 +111,7 @@ import { useVoiceAgent } from '../../composables/useVoiceAgent'
 import { useAppAgent } from '../../composables/useAppAgent'
 import { useWidgetStore } from '../../stores/widgets'
 import { authClient } from '~/utils/auth-client'
+import { useChatSubmit } from '~/composables/useChatSubmit'
 
 const agent = useAppAgent()
 const chatStore = useChatStore()
@@ -275,7 +289,7 @@ const tryApplyWidgetAction = (output: any) => {
 }
 
 onMounted(() => {
-  appStore.fetchLocation()
+  appStore.fetchLocation(true)
   attachMessageObserver()
   // Initial scroll
   setTimeout(() => scrollToBottom(true), 100)
@@ -322,6 +336,18 @@ onBeforeUnmount(() => {
 })
 
 const activeContexts = ref<Array<{ type: string; text: string; id: string }>>([])
+const isFetchingMemory = ref(false)
+const optimisticUserMessage = ref('')
+
+const mockOptimisticMessage = computed<EveMessage | null>(() => {
+  if (!optimisticUserMessage.value) return null
+  return {
+    id: 'optimistic_user_msg',
+    role: 'user',
+    createdAt: new Date(),
+    parts: [{ type: 'text', text: optimisticUserMessage.value }]
+  }
+})
 
 const handleReply = (message: EveMessage) => {
   // Prevent duplicate contexts
@@ -338,89 +364,25 @@ const removeContext = (index: number) => {
   activeContexts.value.splice(index, 1)
 }
 
-const handleSubmit = async (text: string) => {
-  let finalMessage = text
-  
-  // Format hidden system context
-  const timeContext = `Local Time: ${new Date().toLocaleString()}`
-  const locContext = appStore.location 
-    ? `Location: ${appStore.location.city || 'Unknown City'}, ${appStore.location.region || 'Unknown Region'} (Lat: ${appStore.location.latitude}, Lon: ${appStore.location.longitude})` 
-    : 'Location: Unknown'
-  
-  const widgetsCtx = widgetStore.widgets.length > 0 
-    ? `Canvas Widgets:\n${JSON.stringify(widgetStore.widgets.map(w => ({ id: w.id, type: w.type, x: Math.round(w.x), y: Math.round(w.y), title: w.title })))}` 
-    : 'Canvas Widgets: None'
-
-  // Inject user's Soul and Identity with a fresh fetch to ensure reliability
-  const { data: sessionData } = await authClient.getSession()
-  
-  // Fetch semantic memory (RAG)
-  let semanticCtx = '';
-  try {
-    const memRes = await fetch(`/api/memory/semantic-search?q=${encodeURIComponent(text)}`);
-    if (memRes.ok) {
-      const memories = await memRes.json();
-      if (memories && memories.length > 0) {
-        semanticCtx = `Semantic Memory Context (Pre-fetched):\n${memories.map((m: any) => `[${m.path}]\nTitle: ${m.title}\n${m.content}`).join('\n\n')}`;
-      }
-    }
-  } catch (err) {
-    console.error('Failed to fetch semantic memory:', err);
-  }
-
-  // @ts-ignore - better-auth extended fields
-  const soulCtx = sessionData?.user?.systemPrompt 
-    // @ts-ignore
-    ? `User's Custom Instructions (The Soul):\n${sessionData.user.systemPrompt}` 
-    : ''
-  // @ts-ignore
-  const identityCtx = sessionData?.user?.aboutMe 
-    // @ts-ignore
-    ? `About The User (user.md):\n${sessionData.user.aboutMe}` 
-    : ''
-
-  const systemParts = [
-    timeContext, 
-    locContext, 
-    widgetsCtx, 
-    soulCtx, 
-    identityCtx,
-    semanticCtx,
-    `System Info (Hidden): UserID="${sessionData?.user?.id || ''}"`
-  ].filter(Boolean)
-    
-  const systemBlock = `<system_context>\n${systemParts.join('\n')}\n</system_context>`
-  
-  const consumedWidgets = chatStore.consumeWidgetContexts()
-  
-  if (activeContexts.value.length > 0 || consumedWidgets.length > 0) {
-    // Format message contexts
-    const msgContextPrefix = activeContexts.value.map(ctx => {
-      return `> ${ctx.text.split('\n').join('\n> ')}`
-    }).join('\n\n')
-    
-    // Format widget contexts
-    const widgetContextPrefix = consumedWidgets.map(wCtx => {
-      return `[Widget: ${wCtx.label}]\n${wCtx.text}\n[/Widget]`
-    }).join('\n\n')
-    
-    const allContexts = [msgContextPrefix, widgetContextPrefix].filter(Boolean).join('\n\n')
-    
-    finalMessage = `${systemBlock}\n\n${allContexts}\n\n${text}`
-    activeContexts.value = [] // clear after sending
-  } else {
-    finalMessage = `${systemBlock}\n\n${text}`
-  }
-  
-  setTimeout(() => scrollToBottom(true), 50)
-  await agent.send({ message: finalMessage })
-}
+const { handleSubmit } = useChatSubmit(
+  agent,
+  optimisticUserMessage,
+  isFetchingMemory,
+  activeContexts,
+  scrollToBottom
+)
 
 const getTextContent = (message: EveMessage) => {
-  return message.parts
+  const rawText = message.parts
     .filter(part => part.type === 'text')
     .map(part => part.text)
     .join('')
+  
+  if (message.role === 'user') {
+    return rawText.replace(/<system_context>[\s\S]*?<\/system_context>\n*/g, '').trim()
+  }
+  
+  return rawText
 }
 
 const hasRenderableParts = (message: EveMessage) => {
@@ -696,6 +658,11 @@ const handleCopy = async (text: string, isUser: boolean) => {
   display: flex;
   flex-direction: column;
   z-index: 5;
+}
+
+.chat-messages-inner > div {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 150px;
 }
 
 /* ─── Thinking Loader ────────────────────────────────────────── */

@@ -1,0 +1,1 @@
+ALTER TABLE "memory" ALTER COLUMN "embedding" SET DATA TYPE halfvec(2048);

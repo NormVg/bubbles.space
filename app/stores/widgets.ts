@@ -195,11 +195,23 @@ export const useWidgetStore = defineStore('widgets', () => {
   let syncTimeout: any = null
   let retryInterval: any = null
 
-  // Save to LocalStorage instantly, debounce save to DB
+  let localSyncTimeout: any = null
+
+  // Save to LocalStorage non-blocking, debounce save to DB
   const syncToDB = async (force = false) => {
-    // 1. Instant Local Save (0 latency UI)
-    localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
-    localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+    // 1. Non-blocking Local Save (prevents UI hitching on deep watch triggers)
+    if (localSyncTimeout) clearTimeout(localSyncTimeout)
+    localSyncTimeout = setTimeout(() => {
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
+          localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+        })
+      } else {
+        localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
+        localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+      }
+    }, 100)
 
     // 2. Debounced DB Save
     if (syncTimeout) clearTimeout(syncTimeout)

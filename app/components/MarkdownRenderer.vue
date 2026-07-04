@@ -17,7 +17,7 @@ const isDark = useDark()
 </script>
 
 <template>
-  <div class="markdown-wrapper">
+  <div class="markdown-wrapper" v-memo="[content, isDone, isDark]">
     <ClientOnly>
       <MarkdownRender 
         class="custom-md-renderer"

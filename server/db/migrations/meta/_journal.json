@@ -15,6 +15,34 @@
       "when": 1783179941958,
       "tag": "0001_tiresome_matthew_murdock",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783187024263,
+      "tag": "0002_square_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783187099690,
+      "tag": "0003_violet_weapon_omega",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783187151984,
+      "tag": "0004_legal_mentallo",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783187184119,
+      "tag": "0005_hesitant_rocket_raccoon",
+      "breakpoints": true
     }
   ]
 }
