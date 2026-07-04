@@ -2,21 +2,21 @@
   "compile": {
     "moduleMap": {
       "path": ".eve/compile/module-map.mjs",
-      "sha256": "8aa9e139a7393a0fab4bae8668c5bddebfe4c0982fef42420eb54bc9c034366b"
+      "sha256": "7fbbe77ab5ac8677859fd86788abe2965cc186408366d34bf63af060d0e17afb"
     }
   },
   "discovery": {
     "diagnostics": {
       "path": ".eve/discovery/diagnostics.json",
-      "sha256": "b26fc8e66ee943f962b1bab4a790f6a611ce7e6738aa29f83ea53b73cc362c63"
+      "sha256": "342f17ad0a1b7401c41a5da66f70932b6ab6b637a9ea4104d23a58610bdbc151"
     },
     "manifest": {
       "path": ".eve/discovery/agent-discovery-manifest.json",
-      "sha256": "4c4149d5764739e6c514c28511e1aacc32e2631eafc0a90e1139c3485afd57b8"
+      "sha256": "2b9d1f60aca8b065a717e3a25fa70e21271db982dbd55f4b353162d5786c875e"
     },
-    "sourceGraphHash": "f6349329584797a8901001a2d861815ea450ff2387b98ef2446dc076f03f789a",
+    "sourceGraphHash": "4337e8fec781cff3ad820409d57534dfd8760cfbacdbfbb54fdbf4787810aaf4",
     "summary": {
-      "errors": 0,
+      "errors": 1,
       "warnings": 0
     }
   },
@@ -25,6 +25,6 @@
     "version": "0.16.2"
   },
   "kind": "eve-compile-metadata",
-  "status": "ready",
+  "status": "failed",
   "version": 5
 }

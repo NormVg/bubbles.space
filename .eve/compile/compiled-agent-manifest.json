@@ -57,7 +57,7 @@
     }
   },
   "diagnosticsSummary": {
-    "errors": 0,
+    "errors": 1,
     "warnings": 0
   },
   "disabledFrameworkTools": [],
@@ -256,6 +256,133 @@
       "logicalPath": "tools/get_weather.ts",
       "name": "get_weather",
       "sourceId": "tools/get_weather.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Retrieve a specific memory by its unique ID from OpenMemory.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier (UUID) of the memory."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "logicalPath": "tools/openmemory_get.ts",
+      "name": "openmemory_get",
+      "sourceId": "tools/openmemory_get.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "List recent memories from OpenMemory for a specific user.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "description": "Filter memories by user_id.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of memories to return (default: 20).",
+            "type": "number"
+          }
+        }
+      },
+      "logicalPath": "tools/openmemory_list.ts",
+      "name": "openmemory_list",
+      "sourceId": "tools/openmemory_list.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Search for relevant memories in OpenMemory based on a query string.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search text to query memory for."
+          },
+          "user_id": {
+            "description": "Filter memories by a specific user identifier.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of results to return (default: 10).",
+            "type": "number"
+          },
+          "sectors": {
+            "description": "Filter by specific cognitive sectors (episodic, semantic, procedural, emotional, reflective).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "logicalPath": "tools/openmemory_query.ts",
+      "name": "openmemory_query",
+      "sourceId": "tools/openmemory_query.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Reinforce a specific memory in OpenMemory to increase its salience and prevent decay.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier (UUID) of the memory to reinforce."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "logicalPath": "tools/openmemory_reinforce.ts",
+      "name": "openmemory_reinforce",
+      "sourceId": "tools/openmemory_reinforce.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Store a new memory in OpenMemory.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The text content of the memory to store."
+          },
+          "user_id": {
+            "description": "The user identifier this memory belongs to.",
+            "type": "string"
+          },
+          "tags": {
+            "description": "An optional list of tags for the memory.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "logicalPath": "tools/openmemory_store.ts",
+      "name": "openmemory_store",
+      "sourceId": "tools/openmemory_store.ts",
       "sourceKind": "module"
     },
     {

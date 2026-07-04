@@ -1,6 +1,6 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { mem } from "./_memory";
+import { mem } from "../utils/memory";
 
 export default defineTool({
   description: "Retrieve a specific memory by its unique ID from OpenMemory.",
