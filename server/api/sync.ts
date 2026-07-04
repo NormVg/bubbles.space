@@ -33,18 +33,7 @@ export default defineEventHandler(async (event) => {
   // 3. Handle POST /api/sync
   if (event.method === 'POST') {
     try {
-      const body = await new Promise((resolve, reject) => {
-        let bodyStr = '';
-        event.node.req.on('data', chunk => bodyStr += chunk.toString());
-        event.node.req.on('end', () => {
-          try {
-            resolve(bodyStr ? JSON.parse(bodyStr) : null);
-          } catch (e) {
-            resolve(null); // Invalid JSON, will trigger the 400 error below
-          }
-        });
-        event.node.req.on('error', reject);
-      });
+      const body = await readBody(event);
       
       if (!body || !Array.isArray(body)) {
         throw createError({

@@ -20,6 +20,7 @@
     "cheerio": "^1.2.0",
     "drizzle-orm": "^0.45.2",
     "eve": "^0.16.2",
+    "h3": "^1.15.11",
     "katex": "^0.17.0",
     "lucide-vue-next": "^1.0.0",
     "markstream-vue": "1.0.5-beta.0",
