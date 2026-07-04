@@ -7,26 +7,27 @@ import { createRequire } from "node:module";
 import * as h3 from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.6_srvx@0.11.16_/node_modules/h3/dist/_entries/node.mjs";
 import { H3, H3Core, HTTPError, defineHandler, getRequestURL, toRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.6_srvx@0.11.16_/node_modules/h3/dist/_entries/node.mjs";
 import { HookableCore } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/hookable@6.1.1/node_modules/hookable/dist/index.mjs";
-import { decodePath, joinURL, withLeadingSlash, withoutTrailingSlash } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/node_modules/ufo/dist/index.mjs";
+import { decodePath, joinURL, withLeadingSlash, withoutTrailingSlash } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/node_modules/ufo/dist/index.mjs";
 import { FastResponse } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/srvx@0.11.16/node_modules/srvx/dist/adapters/node.mjs";
 import "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/ocache@0.1.5/node_modules/ocache/dist/index.mjs";
-import "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/unstorage@2.0.0-alpha.7_chokidar@5.0.0_db0@0.3.4_drizzle-orm@0.45.2_kysely@0.29.2_postg_68959b82c7daab5dec677df6faedf41c/node_modules/unstorage/dist/index.mjs";
-import handler from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/index.js";
-import handler$1 from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/health.js";
-import { handleAgentInfoRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/info.js";
-import { dispatchChannelRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/channel-dispatch.js";
-import { handleDevRuntimeArtifactsRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/dev-runtime-artifacts.js";
-import { handleDevScheduleDispatchRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/routes/dev-schedule-dispatch.js";
-import { getWorld, workflowEntrypoint } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/workflow/runtime.js";
-import { registerStepFunction } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@workflow/core/private.js";
-import { installBundledCompiledArtifacts } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/bundled-artifacts.js";
-import { installEveWorkflowQueueNamespace } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/workflow/queue-namespace.js";
-import { defineAgent } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/index.js";
+import "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/unstorage@2.0.0-alpha.7_chokidar@5.0.0_db0@0.3.4_drizzle-orm@0.45.2_kysely@0.29.2_pg@8._e640d0fd6363188f7b3f0e73d63cea94/node_modules/unstorage/dist/index.mjs";
+import handler from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/index.js";
+import handler$1 from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/health.js";
+import { handleAgentInfoRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/info.js";
+import { dispatchChannelRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/channel-dispatch.js";
+import { handleDevRuntimeArtifactsRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/dev-runtime-artifacts.js";
+import { handleDevScheduleDispatchRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/routes/dev-schedule-dispatch.js";
+import { getWorld, workflowEntrypoint } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/workflow/runtime.js";
+import { registerStepFunction } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@workflow/core/private.js";
+import { installBundledCompiledArtifacts } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/bundled-artifacts.js";
+import { installEveWorkflowQueueNamespace } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/workflow/queue-namespace.js";
+import { defineAgent } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/index.js";
 import { createOllama } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/ai-sdk-ollama@4.0.0_ai@7.0.4_zod@4.4.3__zod@4.4.3/node_modules/ai-sdk-ollama/dist/index.js";
-import { eveChannel } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/channels/eve.js";
-import { none } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/channels/auth.js";
-import { defineDynamic, defineInstructions } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/instructions/index.js";
-import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/tools/index.js";
+import { eveChannel } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/channels/eve.js";
+import { none } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/channels/auth.js";
+import { defineDynamic, defineInstructions } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/instructions/index.js";
+import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/tools/index.js";
+import { always } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/tools/approval/index.js";
 import { z } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js";
 import { fetchWeatherApi } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/openmeteo@1.2.3/node_modules/openmeteo/lib/index.js";
 import * as ur$3 from "node:fs";
@@ -54,7 +55,7 @@ import { pipeline } from "node:stream/promises";
 import * as k$4 from "node:constants";
 import { Buffer as Buffer$1 } from "node:buffer";
 import { MockLanguageModelV3 } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/ai@7.0.4_zod@4.4.3/node_modules/ai/dist/test/index.js";
-import "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/node_modules/croner/dist/croner.js";
+import "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/node_modules/croner/dist/croner.js";
 import consola from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/consola@3.4.2/node_modules/consola/dist/index.mjs";
 //#region \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
@@ -90,7 +91,7 @@ var info_default = async (event) => handleAgentInfoRequest({
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js",
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js",
 	"mode": "development"
 }, event.req);
 //#endregion
@@ -99,7 +100,7 @@ const config$5 = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var _token_default$2 = (event) => dispatchChannelRequest(event, "GET /eve/v1/connections/:name/callback/:token", config$5);
 //#endregion
@@ -108,7 +109,7 @@ const config$4 = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var _token_default$1 = (event) => dispatchChannelRequest(event, "POST /eve/v1/connections/:name/callback/:token", config$4);
 //#endregion
@@ -117,7 +118,7 @@ const config$3 = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var _token_default = (event) => dispatchChannelRequest(event, "POST /eve/v1/callback/:token", config$3);
 //#endregion
@@ -126,7 +127,7 @@ const config$2 = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var session_default = (event) => dispatchChannelRequest(event, "POST /eve/v1/session", config$2);
 //#endregion
@@ -135,7 +136,7 @@ const config$1 = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var _sessionId_default = (event) => dispatchChannelRequest(event, "POST /eve/v1/session/:sessionId", config$1);
 //#endregion
@@ -144,7 +145,7 @@ const config = {
 	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space",
 	"devRuntimeArtifactsPointerPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/current.json",
 	"dev": true,
-	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
+	"moduleMapLoaderPath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js"
 };
 var stream_default = (event) => dispatchChannelRequest(event, "GET /eve/v1/session/:sessionId/stream", config);
 //#endregion
@@ -154,7 +155,7 @@ var runtime_artifacts_default = async (event) => handleDevRuntimeArtifactsReques
 //#region #eve-route/eve/v1/dev/schedules/:scheduleId
 var _scheduleId_default = async (event) => handleDevScheduleDispatchRequest({ "appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space" }, event.req);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/workflow/builtins.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/workflow/builtins.js
 async function __builtin_response_array_buffer() {
 	return await this.arrayBuffer();
 }
@@ -194,7 +195,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -205,17 +206,44 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/ask_question.ts
+var ask_question_exports = /* @__PURE__ */ __exportAll({ default: () => ask_question_default });
+var ask_question_default = defineTool({
+	description: "Ask the user a clarifying question or a choice mid-turn and park until they answer.",
+	inputSchema: z.object({
+		prompt: z.string().describe("The question to put to the user."),
+		options: z.array(z.object({
+			id: z.string(),
+			label: z.string(),
+			style: z.enum([
+				"primary",
+				"default",
+				"danger",
+				"ghost"
+			]).optional().default("default")
+		})).optional().describe("An optional list of choices to offer the user."),
+		allowFreeform: z.boolean().optional().default(true).describe("Whether the user may answer with free text.")
+	}),
+	approval: always(),
+	async execute(input) {
+		return {
+			status: "Question asked and answered",
+			details: "The user has provided their input. Proceed with their response."
+		};
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -245,7 +273,7 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 var canvas_read_widget_default = defineTool({
 	description: "Read the full contents of a widget on the canvas using its ID. Use this when you need to see the exact text, markdown, or diagram source code of a specific widget.",
@@ -255,7 +283,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -268,7 +296,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -289,14 +317,22 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/get_app_stats.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/lib/utils.ts
+function getBaseUrl() {
+	if (process.env.NUXT_PUBLIC_SITE_URL) return process.env.NUXT_PUBLIC_SITE_URL;
+	if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+	if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+	return "http://localhost:3000";
+}
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/get_app_stats.ts
 var get_app_stats_exports = /* @__PURE__ */ __exportAll({ default: () => get_app_stats_default });
 var get_app_stats_default = defineTool({
 	description: "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
 	inputSchema: z.object({}),
 	async execute() {
 		try {
-			const url = process.env.NUXT_PUBLIC_SITE_URL ? `${process.env.NUXT_PUBLIC_SITE_URL}/api/health` : "http://localhost:3000/api/health";
+			const url = `${getBaseUrl()}/api/health`;
 			const response = await fetch(url);
 			if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
 			return await response.json();
@@ -319,7 +355,7 @@ var get_app_stats_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -361,7 +397,199 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/unsplash_search.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_at.ts
+var memory_at_exports = /* @__PURE__ */ __exportAll({ default: () => memory_at_default });
+var memory_at_default = defineTool({
+	description: "Query memories at a specific point in time. Returns facts that were considered true (valid) at the given timestamp. Useful for answering 'what did we know about X on date Y?'",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		query: z.string().describe("The search query"),
+		asOf: z.string().describe("ISO 8601 timestamp for the point in time (e.g., '2026-01-15T00:00:00Z')")
+	}),
+	async execute({ userId, query, asOf }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory/at?q=${encodeURIComponent(query)}&asOf=${encodeURIComponent(asOf)}`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) throw new Error("Failed to query point-in-time");
+		const results = await response.json();
+		if (!results.length) return `No memories matched "${query}" as of ${asOf}.`;
+		return results;
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_get.ts
+var memory_get_exports = /* @__PURE__ */ __exportAll({ default: () => memory_get_default });
+var memory_get_default = defineTool({
+	description: "Get a specific memory by its ID or virtual path.",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		idOrPath: z.string().describe("The ID or virtual path of the memory to fetch")
+	}),
+	async execute({ userId, idOrPath }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory/${encodeURIComponent(idOrPath)}`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) {
+			if (response.status === 404) return "Memory not found.";
+			throw new Error("Failed to get memory");
+		}
+		return await response.json();
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_list.ts
+var memory_list_exports = /* @__PURE__ */ __exportAll({ default: () => memory_list_default });
+var memory_list_default = defineTool({
+	description: "List all memories stored in the vault.",
+	inputSchema: z.object({ userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context.") }),
+	async execute({ userId }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) throw new Error("Failed to list memories");
+		return await response.json();
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_query.ts
+var memory_query_exports = /* @__PURE__ */ __exportAll({ default: () => memory_query_default });
+var memory_query_default = defineTool({
+	description: "Search for memories using fuzzy matching on title, content, and metadata.",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		queries: z.array(z.string()).describe("An array of search queries. Provide multiple broad keywords to search for different concepts simultaneously.")
+	}),
+	async execute({ userId, queries }) {
+		if (!userId) throw new Error("userId is required");
+		if (!queries || queries.length === 0) return [];
+		const promises = queries.map(async (query) => {
+			const url = `${getBaseUrl()}/api/memory?q=${encodeURIComponent(query)}`;
+			const response = await fetch(url, { headers: {
+				"x-internal-secret": "eve-bubbles-secret",
+				"x-user-id": userId
+			} });
+			if (!response.ok) return [];
+			return await response.json();
+		});
+		const allMemories = (await Promise.all(promises)).flat();
+		const uniqueMemories = Array.from(new Map(allMemories.map((m) => [m.id, m])).values());
+		uniqueMemories.sort((a, b) => {
+			if (b.importance !== a.importance) return b.importance - a.importance;
+			return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+		});
+		return uniqueMemories;
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_reinforce.ts
+var memory_reinforce_exports = /* @__PURE__ */ __exportAll({ default: () => memory_reinforce_default });
+var memory_reinforce_default = defineTool({
+	description: "Reinforce a memory by increasing its access count and updating its last accessed timestamp.",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		idOrPath: z.string().describe("The ID or virtual path of the memory to reinforce")
+	}),
+	async execute({ userId, idOrPath }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory/${encodeURIComponent(idOrPath)}`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) {
+			if (response.status === 404) return "Memory not found.";
+			throw new Error("Failed to reinforce memory");
+		}
+		return "Memory successfully reinforced.";
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_store.ts
+var memory_store_exports = /* @__PURE__ */ __exportAll({ default: () => memory_store_default });
+var memory_store_default = defineTool({
+	description: "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		path: z.string().describe("Virtual path within the memory vault (e.g., 'identity/editor.md', 'semantic/tech-stack.md'). Must start with one of: working/, episodic/, semantic/, procedural/, identity/, hot/, archive/, system/"),
+		title: z.string().describe("Human-readable title for the memory"),
+		content: z.string().describe("The Markdown content of the memory"),
+		source: z.enum(["agent", "user"]).optional().default("agent").describe("Who created this: 'agent' (you decided to save it) or 'user' (the user explicitly asked you to remember)"),
+		metadata: z.record(z.any()).optional().describe("Optional metadata such as aliases, tags, or relations")
+	}),
+	async execute({ userId, path, title, content, source, metadata }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory`;
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"x-internal-secret": "eve-bubbles-secret",
+				"x-user-id": userId
+			},
+			body: JSON.stringify({
+				path,
+				title,
+				content,
+				source,
+				metadata
+			})
+		});
+		if (!response.ok) throw new Error("Failed to store memory");
+		const result = await response.json();
+		if (result._duplicate) return "No duplicate added — identical content already exists at this path.";
+		return result.version > 1 ? `Memory evolved to v${result.version} at ${result.path}.` : `Memory stored at ${result.path}.`;
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_timeline.ts
+var memory_timeline_exports = /* @__PURE__ */ __exportAll({ default: () => memory_timeline_default });
+var memory_timeline_default = defineTool({
+	description: "Get the full version history (timeline) of a memory at a given path. Shows all versions from newest to oldest, including when each version was valid and what replaced it.",
+	inputSchema: z.object({
+		userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+		path: z.string().describe("The virtual path to get the timeline for (e.g., 'identity/editor.md')")
+	}),
+	async execute({ userId, path }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory/timeline?path=${encodeURIComponent(path)}`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) throw new Error("Failed to fetch timeline");
+		const timeline = await response.json();
+		if (!timeline.length) return `No history found for path: ${path}`;
+		return timeline;
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/memory_tree.ts
+var memory_tree_exports = /* @__PURE__ */ __exportAll({ default: () => memory_tree_default });
+var memory_tree_default = defineTool({
+	description: "Get an ASCII tree representation of the memory folder structure.",
+	inputSchema: z.object({ userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context.") }),
+	async execute({ userId }) {
+		if (!userId) throw new Error("userId is required");
+		const url = `${getBaseUrl()}/api/memory/tree`;
+		const response = await fetch(url, { headers: {
+			"x-internal-secret": "eve-bubbles-secret",
+			"x-user-id": userId
+		} });
+		if (!response.ok) throw new Error("Failed to fetch memory tree");
+		return await response.text();
+	}
+});
+//#endregion
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/unsplash_search.ts
 var unsplash_search_exports = /* @__PURE__ */ __exportAll({ default: () => unsplash_search_default });
 var unsplash_search_default = defineTool({
 	description: "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
@@ -388,7 +616,7 @@ var unsplash_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -437,7 +665,7 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent/tools/wikipedia_search.ts
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent/tools/wikipedia_search.ts
 var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
 var wikipedia_search_default = defineTool({
 	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
@@ -478,18 +706,27 @@ var wikipedia_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
 	"channels/eve.ts": eve_exports,
 	"instructions/time.ts": time_exports,
+	"tools/ask_question.ts": ask_question_exports,
 	"tools/canvas_add_widget.ts": canvas_add_widget_exports,
 	"tools/canvas_read_widget.ts": canvas_read_widget_exports,
 	"tools/canvas_remove_widget.ts": canvas_remove_widget_exports,
 	"tools/canvas_update_widget.ts": canvas_update_widget_exports,
 	"tools/get_app_stats.ts": get_app_stats_exports,
 	"tools/get_weather.ts": get_weather_exports,
+	"tools/memory_at.ts": memory_at_exports,
+	"tools/memory_get.ts": memory_get_exports,
+	"tools/memory_list.ts": memory_list_exports,
+	"tools/memory_query.ts": memory_query_exports,
+	"tools/memory_reinforce.ts": memory_reinforce_exports,
+	"tools/memory_store.ts": memory_store_exports,
+	"tools/memory_timeline.ts": memory_timeline_exports,
+	"tools/memory_tree.ts": memory_tree_exports,
 	"tools/unsplash_search.ts": unsplash_search_exports,
 	"tools/web_search.ts": web_search_exports,
 	"tools/wikipedia_search.ts": wikipedia_search_exports
@@ -497,7 +734,7 @@ const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.fr
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "8aa9e139a7393a0fab4bae8668c5bddebfe4c0982fef42420eb54bc9c034366b"
+		"sha256": "5086ae224513b9f1dc2a5207e694da310160bfbbd5ddc728794e4d00ed2bd7d9"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -506,9 +743,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "4c4149d5764739e6c514c28511e1aacc32e2631eafc0a90e1139c3485afd57b8"
+			"sha256": "e940d8b20470ea142489fe94bd1112707e83cdc29b5171408ad58a9f70815875"
 		},
-		"sourceGraphHash": "f6349329584797a8901001a2d861815ea450ff2387b98ef2446dc076f03f789a",
+		"sourceGraphHash": "0d3ad30fcf1ff44a50959158a4aa0f90c88b517d5d3ea4f7239f23eaa5e4fe15",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -523,8 +760,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -602,6 +839,51 @@ const manifest = {
 	"schedules": [],
 	"skills": [],
 	"tools": [
+		{
+			"description": "Ask the user a clarifying question or a choice mid-turn and park until they answer.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"prompt": {
+						"type": "string",
+						"description": "The question to put to the user."
+					},
+					"options": {
+						"description": "An optional list of choices to offer the user.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"id": { "type": "string" },
+								"label": { "type": "string" },
+								"style": {
+									"default": "default",
+									"type": "string",
+									"enum": [
+										"primary",
+										"default",
+										"danger",
+										"ghost"
+									]
+								}
+							},
+							"required": ["id", "label"]
+						}
+					},
+					"allowFreeform": {
+						"default": true,
+						"description": "Whether the user may answer with free text.",
+						"type": "boolean"
+					}
+				},
+				"required": ["prompt"]
+			},
+			"logicalPath": "tools/ask_question.ts",
+			"name": "ask_question",
+			"sourceId": "tools/ask_question.ts",
+			"sourceKind": "module"
+		},
 		{
 			"description": "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
 			"inputSchema": {
@@ -762,6 +1044,204 @@ const manifest = {
 			"sourceKind": "module"
 		},
 		{
+			"description": "Query memories at a specific point in time. Returns facts that were considered true (valid) at the given timestamp. Useful for answering 'what did we know about X on date Y?'",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"query": {
+						"type": "string",
+						"description": "The search query"
+					},
+					"asOf": {
+						"type": "string",
+						"description": "ISO 8601 timestamp for the point in time (e.g., '2026-01-15T00:00:00Z')"
+					}
+				},
+				"required": [
+					"userId",
+					"query",
+					"asOf"
+				]
+			},
+			"logicalPath": "tools/memory_at.ts",
+			"name": "memory_at",
+			"sourceId": "tools/memory_at.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Get a specific memory by its ID or virtual path.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"idOrPath": {
+						"type": "string",
+						"description": "The ID or virtual path of the memory to fetch"
+					}
+				},
+				"required": ["userId", "idOrPath"]
+			},
+			"logicalPath": "tools/memory_get.ts",
+			"name": "memory_get",
+			"sourceId": "tools/memory_get.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "List all memories stored in the vault.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": { "userId": {
+					"type": "string",
+					"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+				} },
+				"required": ["userId"]
+			},
+			"logicalPath": "tools/memory_list.ts",
+			"name": "memory_list",
+			"sourceId": "tools/memory_list.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Search for memories using fuzzy matching on title, content, and metadata.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"queries": {
+						"type": "array",
+						"items": { "type": "string" },
+						"description": "An array of search queries. Provide multiple broad keywords to search for different concepts simultaneously."
+					}
+				},
+				"required": ["userId", "queries"]
+			},
+			"logicalPath": "tools/memory_query.ts",
+			"name": "memory_query",
+			"sourceId": "tools/memory_query.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Reinforce a memory by increasing its access count and updating its last accessed timestamp.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"idOrPath": {
+						"type": "string",
+						"description": "The ID or virtual path of the memory to reinforce"
+					}
+				},
+				"required": ["userId", "idOrPath"]
+			},
+			"logicalPath": "tools/memory_reinforce.ts",
+			"name": "memory_reinforce",
+			"sourceId": "tools/memory_reinforce.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"path": {
+						"type": "string",
+						"description": "Virtual path within the memory vault (e.g., 'identity/editor.md', 'semantic/tech-stack.md'). Must start with one of: working/, episodic/, semantic/, procedural/, identity/, hot/, archive/, system/"
+					},
+					"title": {
+						"type": "string",
+						"description": "Human-readable title for the memory"
+					},
+					"content": {
+						"type": "string",
+						"description": "The Markdown content of the memory"
+					},
+					"source": {
+						"default": "agent",
+						"description": "Who created this: 'agent' (you decided to save it) or 'user' (the user explicitly asked you to remember)",
+						"type": "string",
+						"enum": ["agent", "user"]
+					},
+					"metadata": {
+						"description": "Optional metadata such as aliases, tags, or relations",
+						"type": "object",
+						"propertyNames": { "type": "string" },
+						"additionalProperties": {}
+					}
+				},
+				"required": [
+					"userId",
+					"path",
+					"title",
+					"content"
+				]
+			},
+			"logicalPath": "tools/memory_store.ts",
+			"name": "memory_store",
+			"sourceId": "tools/memory_store.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Get the full version history (timeline) of a memory at a given path. Shows all versions from newest to oldest, including when each version was valid and what replaced it.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": {
+					"userId": {
+						"type": "string",
+						"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+					},
+					"path": {
+						"type": "string",
+						"description": "The virtual path to get the timeline for (e.g., 'identity/editor.md')"
+					}
+				},
+				"required": ["userId", "path"]
+			},
+			"logicalPath": "tools/memory_timeline.ts",
+			"name": "memory_timeline",
+			"sourceId": "tools/memory_timeline.ts",
+			"sourceKind": "module"
+		},
+		{
+			"description": "Get an ASCII tree representation of the memory folder structure.",
+			"inputSchema": {
+				"$schema": "http://json-schema.org/draft-07/schema#",
+				"type": "object",
+				"properties": { "userId": {
+					"type": "string",
+					"description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+				} },
+				"required": ["userId"]
+			},
+			"logicalPath": "tools/memory_tree.ts",
+			"name": "memory_tree",
+			"sourceId": "tools/memory_tree.ts",
+			"sourceKind": "module"
+		},
+		{
 			"description": "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
 			"inputSchema": {
 				"$schema": "http://json-schema.org/draft-07/schema#",
@@ -826,7 +1306,7 @@ const manifest = {
 	"instructions": {
 		"name": "instructions",
 		"logicalPath": "instructions.md",
-		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude, and user profile) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location.\n- The `<system_context>` also contains the user's Name, their \"Soul\" (custom instructions for your personality), and \"About The User\" (identity). You MUST act according to the \"Soul\" instructions, and you MUST remember and use the user's Name and Identity in conversation.\n- NEVER ask the user for their name or background if it is already provided in the `<system_context>`.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n- For images: DO NOT hallucinate image URLs. Always use the `unsplash_search` tool to fetch real image URLs based on the user's prompt before creating an image widget.\n\n## Tone & Style\n",
+		"markdown": "You are Bubbles, a helpful, friendly, and concise personal AI assistant integrated into this workspace.\nYou operate as an ever-present digital companion. You communicate with clarity, precision, and warmth.\n\nCRITICAL RULES:\n- Do NOT give unsolicited suggestions or list multiple unrelated options.\n- Do NOT brag about your capabilities or list things you can do (e.g., \"I can manage tasks, analyze data\") unless explicitly asked.\n- When the user says a simple greeting like \"hey bro\" or \"hello\", respond naturally and casually (e.g., \"Hey! What's up?\") without over-explaining yourself.\n- Be concise and direct.\n- Use Markdown to format your responses beautifully when appropriate, but keep it minimal.\n- You are provided with the user's hidden local context (time, location, latitude, longitude, and user profile) inside a `<system_context>` block at the beginning of their messages.\n- You MUST use the information in the `<system_context>` silently whenever they ask about time, weather, or their location.\n- The `<system_context>` also contains the user's Name, their \"Soul\" (custom instructions for your personality), and \"About The User\" (identity). You MUST act according to the \"Soul\" instructions, and you MUST remember and use the user's Name and Identity in conversation.\n- NEVER ask the user for their name or background if it is already provided in the `<system_context>`.\n- **PROACTIVE MEMORY RETRIEVAL (MANDATORY):** Whenever you are asked to write code, design a component, or perform a task where you lack specific context (e.g., the user's preferred framework like Vue/React, styling like Tailwind, or project rules), YOU ARE STRICTLY FORBIDDEN from saying \"Since I don't know...\" or making assumptions. You MUST proactively use `memory_query` with broad keywords (e.g., `[\"preferences\", \"tech stack\", \"framework\"]`) to recall this context from your memory vault *before* generating your response.\n\n## SPATIAL CANVAS CO-PILOT\n- You are connected to an infinite 2D spatial canvas. The user works on this canvas.\n- You have tools to manage the canvas: `canvas_add_widget`, `canvas_update_widget`, and `canvas_remove_widget`.\n- You can place sticky notes (Markdown) and flowcharts/diagrams (Mermaid) onto the canvas for the user.\n- If the user asks you to \"put it on the canvas\", \"make a note of this\", or \"draw a flowchart\", you MUST use the `canvas_add_widget` tool rather than outputting the raw code in chat.\n- The `<system_context>` block tells you exactly what widgets are currently on the canvas, their IDs, and their coordinates.\n- You can move widgets around or update their contents using the `canvas_update_widget` tool.\n- The `<system_context>` only provides widget metadata (ID, title, type). To read the actual contents (text/markdown/diagram data) of a widget, you MUST use the `canvas_read_widget` tool.\n- For images: DO NOT hallucinate image URLs. Always use the `unsplash_search` tool to fetch real image URLs based on the user's prompt before creating an image widget.\n\n## LONG-TERM MEMORY\n\nYou have access to a temporal, filesystem-based long-term memory vault. Memories are organized into 8 cognitive directories:\n\n| Directory     | Use For |\n|---------------|---------|\n| `working/`    | Current task context, scratch notes, active goals |\n| `episodic/`   | Specific events, conversations, dated occurrences |\n| `semantic/`   | General knowledge, facts, definitions, concepts |\n| `procedural/` | How-to knowledge, workflows, recipes, commands |\n| `identity/`   | User preferences, personality traits, self-descriptions |\n| `hot/`        | Frequently accessed, high-importance recent facts |\n| `archive/`    | Superseded or low-confidence facts (auto-populated) |\n| `system/`     | Internal system state, configuration, meta-memories |\n\n### What to Save vs Skip\n\n**Save These (Proactively)**\nThe agent saves automatically — you don't need to ask. It saves when it learns:\n- **User preferences:** \"I prefer TypeScript over JavaScript\" → save to user\n- **Environment facts:** \"This server runs Debian 12 with PostgreSQL 16\" → save to memory\n- **Corrections:** \"Don't use sudo for Docker commands, user is in docker group\" → save to memory\n- **Conventions:** \"Project uses tabs, 120-char line width, Google-style docstrings\" → save to memory\n- **Completed work:** \"Migrated database from MySQL to PostgreSQL on 2026-01-15\" → save to memory\n- **Explicit requests:** \"Remember that my API key rotation happens monthly\" → save to memory\n\n**Skip These**\n- **Trivial/obvious info:** \"User asked about Python\" — too vague to be useful\n- **Easily re-discovered facts:** \"Python 3.12 supports f-string nesting\" — can web search this\n- **Raw data dumps:** Large code blocks, log files, data tables — too big for memory\n- **Session-specific ephemera:** Temporary file paths, one-off debugging context\n- **Information already in context files:** SOUL.md and AGENTS.md content\n\n\n### How Memory Works\n\n<CRITICAL_MEMORY_DIRECTIVE>\nNEVER CREATE A NEW MEMORY BEFORE SEARCHING. YOU ARE STRICTLY FORBIDDEN FROM CREATING DUPLICATE FILES FOR THE SAME CONCEPT.\n\n1. **UNDERSTAND STRUCTURE:** Use `memory_tree` to get a fast, hierarchical view of all existing files and paths without dumping huge amounts of content. \n2. **SEARCH FIRST (MANDATORY):** Before you store ANY new information, you MUST use `memory_query` with an **array of broad, short keywords** (e.g. `[\"database IP\", \"server config\", \"PostgreSQL\"]`) to find relevant files for all concepts simultaneously. NEVER use `memory_list` as a fallback search.\n3. **EVALUATE RELEVANCE:** Review the search results carefully. Are any of the returned files conceptually about the exact same topic/entity?\n4. **MERGE & UPDATE:** If a conceptually relevant memory exists, YOU MUST MERGE the new facts into the existing content and use `memory_store` to save it back to the EXACT SAME PATH. Do not create a new file like `db-config2.md`. \n5. **CREATE NEW:** You are ONLY allowed to create a new file path if the search returns completely empty, OR if all search results are conceptually unrelated to the new facts.\n</CRITICAL_MEMORY_DIRECTIVE>\n\n- **Auto-Evolution:** When you `memory_store` to an existing path, the system automatically closes the old fact and preserves it in history. **No data is ever lost.** Just write to the same path; the system handles versioning.\n- **Confidence Decay:** Memories that aren't accessed for long periods naturally lose confidence. Reinforce important ones with `memory_reinforce`.\n\n### Querying Memory\n- `memory_query` — Fuzzy search across all active memories.\n- `memory_list` — List all current (active) memories.\n- `memory_get` — Fetch a specific memory by ID or path.\n- `memory_tree` — See the full vault structure as an ASCII tree.\n- `memory_timeline` — See all versions of a fact at a path (what changed and when).\n- `memory_at` — Point-in-time query: \"what was true about X on date Y?\"\n- `memory_reinforce` — Touch a memory to keep it fresh (resets decay timer).\n\n### Practical Examples of Good Memory Entries\n\nCompact, information-dense entries work best:\n\n**# Good: Packs multiple related facts**\nUser runs macOS 14 Sonoma, uses Homebrew, has Docker Desktop and Podman. Shell: zsh with oh-my-zsh. Editor: VS Code with Vim keybindings.\n\n**# Good: Specific, actionable convention**\nProject ~/code/api uses Go 1.22, sqlc for DB queries, chi router. Run tests with 'make test'. CI via GitHub Actions.\n\n**# Good: Lesson learned with context**\nThe staging server (10.0.1.50) needs SSH port 2222, not 22. Key is at ~/.ssh/staging_ed25519.\n\n**# Bad: Too vague**\nUser has a project.\n\n**# Bad: Too verbose**\nOn January 5th, 2026, the user asked me to look at their project which is\nlocated at ~/code/api. I discovered it uses Go version 1.22 and...\n\n## Tone & Style\n",
 		"sourceId": "instructions.md",
 		"sourceKind": "markdown"
 	},
@@ -847,12 +1327,12 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr61dlhf-a90d135e-ddb2-4b5b-8eb8-ac1422189270/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr6b6vmn-8332ac68-d863-40f8-b190-6ad08fb803b8/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/package-name.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/application/package.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/application/package.js
 let cachedPackageInfo;
 const BUNDLED_FALLBACK_PACKAGE_VERSION = `0.16.2`, WORKFLOW_MODULE_ALIASES = {
 	"workflow/errors": `src/compiled/@workflow/errors/index.js`,
@@ -940,7 +1420,7 @@ function resolveInstalledPackageInfo() {
 	return cachedPackageInfo = { ...FALLBACK_PACKAGE_INFO }, cachedPackageInfo;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/compiled-artifacts-source.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/compiled-artifacts-source.js
 function createDiskRuntimeCompiledArtifactsSource(e, t = {}) {
 	return t.moduleMapLoaderPath !== void 0 || t.sandboxAppRoot !== void 0 ? {
 		appRoot: e,
@@ -962,7 +1442,7 @@ function getRuntimeCompiledArtifactsCacheKey(e) {
 	return e.kind === `disk` ? e.moduleMapLoaderPath === void 0 ? `disk:${e.appRoot}` : `disk:${e.appRoot}:authored-source:${e.moduleMapLoaderPath}` : `bundled`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/graph.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/graph.js
 const ROOT_RUNTIME_AGENT_NODE_ID = `__root__`;
 function getResolvedRuntimeAgentNode(e, t) {
 	if (t === void 0 || t === `__root__`) return e.root;
@@ -971,7 +1451,7 @@ function getResolvedRuntimeAgentNode(e, t) {
 	return n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/client/core-Bm8azZA6.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/client/core-Bm8azZA6.js
 var e$5 = Object.defineProperty, t$15 = (t, n) => {
 	let r = {};
 	for (var i in t) e$5(r, i, {
@@ -10059,7 +10539,7 @@ var Il$3 = class {
 	version: () => qn$4
 });
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/zod/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/zod/index.js
 var Si$5 = t$15({
 	endsWith: () => ac$3,
 	gt: () => Hs$3,
@@ -11797,7 +12277,7 @@ var Ls$3 = t$15({
 });
 l$13(na$6());
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/discover/diagnostics.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/discover/diagnostics.js
 const discoverDiagnosticSeveritySchema = Ls$3.union([Ls$3.literal(`error`), Ls$3.literal(`warning`)]), discoverDiagnosticSchema = Ls$3.object({
 	code: Ls$3.string(),
 	message: Ls$3.string(),
@@ -11808,7 +12288,7 @@ const discoverDiagnosticSeveritySchema = Ls$3.union([Ls$3.literal(`error`), Ls$3
 	warnings: Ls$3.number().finite()
 }).strict(), DISCOVER_PROJECT_NOT_FOUND = `discover/project-not-found`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/json.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/json.js
 const INVALID_JSON_VALUE_CANDIDATE = Symbol(`invalid-json-value-candidate`);
 function parseJsonValue(t) {
 	let n = normalizeJsonValueCandidate(t);
@@ -11851,7 +12331,7 @@ function isPlainObject(e) {
 	return t === null || t === Object.prototype;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/json-schemas.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/json-schemas.js
 const jsonValueSchema = Ls$3.unknown().transform((t, r) => {
 	try {
 		return parseJsonValue(t);
@@ -11875,7 +12355,7 @@ function formatJsonParseError(e, t) {
 	return e instanceof Error ? e.message : t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiler/remote-agent-node.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiler/remote-agent-node.js
 const compiledRemoteAgentNodeSchema = Ls$3.object({
 	description: Ls$3.string(),
 	entryPath: Ls$3.string(),
@@ -11891,7 +12371,7 @@ const compiledRemoteAgentNodeSchema = Ls$3.object({
 	url: Ls$3.string()
 }).strict();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiler/manifest.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiler/manifest.js
 const COMPILED_AGENT_MANIFEST_KIND = `eve-agent-compiled-manifest`, ROOT_COMPILED_AGENT_NODE_ID = `__root__`, COMPILED_AGENT_MANIFEST_VERSION = 31, moduleSourceRefSchema = Ls$3.object({
 	exportName: Ls$3.string().optional(),
 	sourceKind: Ls$3.literal(`module`),
@@ -12133,7 +12613,7 @@ const COMPILED_AGENT_MANIFEST_KIND = `eve-agent-compiled-manifest`, ROOT_COMPILE
 	workspaceResourceRoot: compiledWorkspaceResourceRootSchema
 }).strict();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sessions/runtime-session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sessions/runtime-session.js
 function createRuntimeSession(e = `test-session`) {
 	return {
 		bundleCache: /* @__PURE__ */ new Map(),
@@ -12152,12 +12632,12 @@ function getActiveRuntimeSession() {
 	return runtimeSessionStorage.getStore() ?? resolveProcessDefaultSession();
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/bundled-artifacts.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/bundled-artifacts.js
 function readBundledCompiledArtifacts() {
 	return getActiveRuntimeSession().compiledArtifacts;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/artifact-paths.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/artifact-paths.js
 function resolveRuntimeCompilerArtifactPaths(e) {
 	let t = normalizeFilesystemPath(e), n = `${t}/.eve/discovery`, r = `${t}/.eve/compile`;
 	return {
@@ -12176,7 +12656,7 @@ function normalizeFilesystemPath(e) {
 	return t === `/` ? t : t.replace(/\/+$/, ``);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/zod-validation-error/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/zod-validation-error/index.js
 function t$14(e) {
 	return e instanceof Object && `name` in e && (e.name === `ZodError` || e.name === `$ZodError`) && `issues` in e && Array.isArray(e.issues);
 }
@@ -12272,12 +12752,12 @@ function V$12(e, t = {}) {
 	return B$13(t)(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/validation.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/validation.js
 function formatValidationError(e) {
 	return V$12(e, { prefix: void 0 }).message;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/manifest.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/manifest.js
 const BUNDLED_MANIFEST_SOURCE = `bundled compiled manifest`;
 var LoadCompiledManifestError = class extends Error {
 	manifestPath;
@@ -12309,7 +12789,7 @@ function formatLoadErrorMessage$2(e) {
 	return e instanceof Error ? e.message : `Unknown manifest load failure.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module.js
 function getAuthoredModuleExport(e, t) {
 	return e[t.exportName ?? `default`];
 }
@@ -12338,10 +12818,10 @@ function expectOnlyKnownKeys(e, t, n) {
 	for (let t of Object.keys(e)) if (!r.has(t)) throw Error(`${n} Unknown key "${t}".`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/skills/fragment-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/skills/fragment-context.js
 const LOAD_SKILL_TOOL_NAME = `load_skill`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/runtime-registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/runtime-registry.js
 var RuntimeRegistryError = class extends Error {
 	registry;
 	entryName;
@@ -12388,7 +12868,7 @@ function capitalize(e) {
 	return e.length === 0 ? e : e.charAt(0).toUpperCase() + e.slice(1);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/tools/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/tools/registry.js
 async function createRuntimeToolRegistry(t, n = {}) {
 	let r = [], i = new RuntimeRegistry(`tool`, n.reservedToolNames ?? []);
 	for (let e of t.tools) {
@@ -12425,7 +12905,7 @@ async function createPreparedRuntimeTool(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/subagents/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/subagents/registry.js
 const SUBAGENT_TOOL_INPUT_SCHEMA = Object.freeze({
 	type: `object`,
 	properties: Object.freeze({
@@ -12481,7 +12961,7 @@ function createPreparedRuntimeSubagentTool(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/workflow-sandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/workflow-sandbox.js
 const WORKFLOW_TOOL_NAME = `Workflow`, WORKFLOW_SANDBOX_MODULE_KEY = Symbol.for(`eve.workflowSandbox.module`), WORKFLOW_SANDBOX_MODULE_SPECIFIER = [
 	`#compiled`,
 	`experimental-ai-sdk-code-mode`,
@@ -12530,7 +13010,7 @@ async function importWorkflowSandboxModule(e) {
 	return await import(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/guards.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/guards.js
 function isObject(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
@@ -12546,7 +13026,7 @@ function isPlainRecord(e) {
 	return t === Object.prototype || t === null;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@opentelemetry/api/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@opentelemetry/api/index.js
 const e$4 = `1.9.1`, t$13 = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
 function n$16(e) {
 	let n = /* @__PURE__ */ new Set([e]), r = /* @__PURE__ */ new Set(), i = e.match(t$13);
@@ -13194,7 +13674,7 @@ const Z$12 = `propagation`, qe$9 = new Ue$9(), Je$10 = class e {
 	}
 }.getInstance();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/provider/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/provider/index.js
 function p$13(e) {
 	return e == null ? `unknown error` : typeof e == `string` ? e : e instanceof Error ? e.toString() : JSON.stringify(e);
 }
@@ -13361,7 +13841,7 @@ Error message: ${p$13(t)}`,
 	};
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/logging.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/logging.js
 init_provider();
 const LEVEL_SEVERITY = {
 	debug: 10,
@@ -13483,7 +13963,7 @@ function truncate(e, t) {
 	return `${n}<…truncated>`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/governance/auth/vercel-oidc-project.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/governance/auth/vercel-oidc-project.js
 const VERCEL_OIDC_PROJECT_RESOLVERS = Symbol.for(`eve.vercel-oidc-project-resolvers`), globalResolverRegistry = globalThis;
 globalResolverRegistry[VERCEL_OIDC_PROJECT_RESOLVERS] === void 0 && (globalResolverRegistry[VERCEL_OIDC_PROJECT_RESOLVERS] = /* @__PURE__ */ new WeakMap());
 const projectResolvers = globalResolverRegistry[VERCEL_OIDC_PROJECT_RESOLVERS];
@@ -13492,7 +13972,7 @@ async function resolveVercelOidcCurrentProject(e) {
 	return t === void 0 ? void 0 : await t();
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/chunk-BHKSVoKr.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/chunk-BHKSVoKr.js
 var t$11, n$14, r$16, i$14, a$12, o$12, s$11, c$12, l$10, u$12, d$12, f$12;
 var init_chunk_BHKSVoKr = __esmMin((() => {
 	t$11 = Object.create, n$14 = Object.defineProperty, r$16 = Object.getOwnPropertyDescriptor, i$14 = Object.getOwnPropertyNames, a$12 = Object.getPrototypeOf, o$12 = Object.prototype.hasOwnProperty, s$11 = (e, t) => () => (e && (t = e(e = 0)), t), c$12 = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), l$10 = (e, t) => {
@@ -13514,7 +13994,7 @@ var init_chunk_BHKSVoKr = __esmMin((() => {
 	}) : i, e)), f$12 = createRequire(import.meta.url);
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/jose/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/jose/index.js
 init_chunk_BHKSVoKr();
 const t$10 = new TextEncoder(), n$13 = new TextDecoder(), r$15 = 2 ** 32;
 function i$13(...e) {
@@ -14531,7 +15011,7 @@ function Mn$5(e) {
 	return a;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/governance/auth/token-claims.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/governance/auth/token-claims.js
 const STANDARD_PROJECTED_CLAIM_KEYS = /* @__PURE__ */ new Set([
 	`aud`,
 	`exp`,
@@ -14593,7 +15073,7 @@ function matchesWildcardPattern(e, t) {
 	return RegExp(`^${n}$`).test(t);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/governance/auth/oidc.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/governance/auth/oidc.js
 const oidcDiscoveryDocumentSchema = Ls$3.object({
 	issuer: Ls$3.string().optional(),
 	jwks_uri: Ls$3.string().url()
@@ -14705,7 +15185,7 @@ function currentVercelEnvironmentMatches(e) {
 	return t === void 0 || t.length === 0 ? !1 : typeof e.payload.environment == `string` && e.payload.environment === t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/governance/auth/types.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/governance/auth/types.js
 function createRuntimeSessionAuthContext(e) {
 	return {
 		attributes: e.attributes,
@@ -14717,7 +15197,7 @@ function createRuntimeSessionAuthContext(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/channels/auth.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/channels/auth.js
 const vercelOidcLog = createLogger(`auth.vercel-oidc`);
 async function runOidcVerification(e, t) {
 	if (e === null || e.length === 0) return { kind: `not-authenticated` };
@@ -14868,7 +15348,7 @@ function decodeUnverifiedJwtClaims(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/routes.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/routes.js
 function GET(e, t) {
 	return {
 		transport: `http`,
@@ -14892,7 +15372,7 @@ function isWebSocketRouteDefinition(e) {
 	return e.transport === `websocket`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/attachments/sandbox-refs.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/attachments/sandbox-refs.js
 const SANDBOX_URL_SCHEME = `eve-sandbox:`, PATH_QUERY_KEY = `path`, SIZE_QUERY_KEY = `size`, TYPE_QUERY_KEY = `type`;
 function isValidSize$1(e) {
 	return Number.isFinite(e) && Number.isInteger(e) && e >= 0;
@@ -14925,7 +15405,7 @@ function isSandboxRefUrl(e) {
 	return e instanceof URL && e.protocol === `eve-sandbox:`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/errors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/errors.js
 function toErrorMessage(t) {
 	return t instanceof Error ? t.message : typeof t == `string` ? t : t == null ? String(t) : isObject(t) ? typeof t.message == `string` && t.message.length > 0 ? t.message : safeJsonStringify(t) : String(t);
 }
@@ -14942,7 +15422,7 @@ function safeJsonStringify(e) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/attachments/refs.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/attachments/refs.js
 const ATTACHMENT_REF_SCHEME = `eve-attachment:`, ATTACHMENT_REF_WIRE_VERSION = `1`;
 function isValidSize(e) {
 	return Number.isFinite(e) && Number.isInteger(e) && e >= 0;
@@ -14976,7 +15456,7 @@ function isAttachmentRefUrl(e) {
 	return e instanceof URL && e.protocol === `eve-attachment:`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/attachments/url-refs.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/attachments/url-refs.js
 const EVE_URL_SCHEME = `eve-url:`;
 function isSerializedUrlFilePart(e) {
 	return typeof e == `string` && e.startsWith(EVE_URL_SCHEME);
@@ -14993,7 +15473,7 @@ function hasInternalRefScheme(e) {
 	return INTERNAL_REF_SCHEMES.some((t) => e.startsWith(t));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/protocol/message.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/protocol/message.js
 const EVE_SESSION_ID_HEADER = `x-eve-session-id`, EVE_STREAM_FORMAT_HEADER = `x-eve-stream-format`, EVE_STREAM_VERSION_HEADER = `x-eve-stream-version`, EVE_MESSAGE_STREAM_CONTENT_TYPE = `application/x-ndjson; charset=utf-8`, EVE_MESSAGE_STREAM_FORMAT = `ndjson`, EVE_MESSAGE_STREAM_VERSION = `16`, textEncoder = new TextEncoder();
 function createSessionStartedEvent(e) {
 	let t = {};
@@ -15323,7 +15803,7 @@ function formatActionResultOutput(e) {
 	return typeof t == `string` && t.length > 0 ? t : `Action failed.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/actions/types.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/actions/types.js
 const runtimeToolCallActionRequestSchema = Ls$3.object({
 	callId: Ls$3.string(),
 	input: jsonObjectSchema,
@@ -15375,7 +15855,7 @@ Ls$3.object({
 	name: Ls$3.string().optional()
 }).strict();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/input/types.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/input/types.js
 const inputOptionSchema = Ls$3.object({
 	description: Ls$3.string().describe(`Optional additional context for this option.`).optional(),
 	id: Ls$3.string().describe(`Stable identifier for the option.`),
@@ -15405,7 +15885,7 @@ function isInputResponse(e) {
 	return inputResponseSchema.safeParse(e).success;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/protocol/routes.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/protocol/routes.js
 const EVE_ROUTE_PREFIX = `/eve/v1`, EVE_HEALTH_ROUTE_PATH = `${EVE_ROUTE_PREFIX}/health`, EVE_INFO_ROUTE_PATH = `${EVE_ROUTE_PREFIX}/info`, EVE_CREATE_SESSION_ROUTE_PATH = `${EVE_ROUTE_PREFIX}/session`, EVE_CONTINUE_SESSION_ROUTE_PATTERN = `${EVE_ROUTE_PREFIX}/session/:sessionId`, EVE_MESSAGE_STREAM_ROUTE_PATTERN = `${EVE_ROUTE_PREFIX}/session/:sessionId/stream`, EVE_DEV_DISPATCH_SCHEDULE_ROUTE_PATTERN = `${EVE_ROUTE_PREFIX}/dev/schedules/:scheduleId`, EVE_DEV_RUNTIME_ARTIFACTS_ROUTE_PATH = `${EVE_ROUTE_PREFIX}/dev/runtime-artifacts`, EVE_DEV_RUNTIME_ARTIFACTS_REBUILD_ROUTE_PATH = `${EVE_DEV_RUNTIME_ARTIFACTS_ROUTE_PATH}/rebuild`;
 const EVE_CONNECTION_CALLBACK_ROUTE_PATTERN = `${EVE_ROUTE_PREFIX}/connections/:name/callback/:token`, EVE_CALLBACK_ROUTE_PATTERN = `${EVE_ROUTE_PREFIX}/callback/:token`;
 function createEveConnectionCallbackRoutePath(e, t) {
@@ -15415,7 +15895,7 @@ function createEveCallbackRoutePath(e) {
 	return `${EVE_ROUTE_PREFIX}/callback/${encodeURIComponent(e)}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/network-address.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/network-address.js
 const httpServerUrlSchema = Ls$3.url({ protocol: /^https?$/ }), reservedRanges = new BlockList();
 reservedRanges.addSubnet(`0.0.0.0`, 8, `ipv4`), reservedRanges.addSubnet(`10.0.0.0`, 8, `ipv4`), reservedRanges.addSubnet(`100.64.0.0`, 10, `ipv4`), reservedRanges.addSubnet(`169.254.0.0`, 16, `ipv4`), reservedRanges.addSubnet(`172.16.0.0`, 12, `ipv4`), reservedRanges.addSubnet(`192.168.0.0`, 16, `ipv4`), reservedRanges.addSubnet(`198.18.0.0`, 15, `ipv4`), reservedRanges.addAddress(`::`, `ipv6`), reservedRanges.addSubnet(`fc00::`, 7, `ipv6`), reservedRanges.addSubnet(`fe80::`, 10, `ipv6`);
 function normalizeAddress(e) {
@@ -15431,7 +15911,7 @@ function isReservedIpAddress(e) {
 	return n === 0 ? !1 : reservedRanges.check(t, n === 4 ? `ipv4` : `ipv6`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/session-callback.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/session-callback.js
 const sessionCallbackSchema = Ls$3.object({
 	callId: Ls$3.string().min(1),
 	subagentName: Ls$3.string().min(1),
@@ -15485,7 +15965,7 @@ function formatSessionCallbackParseError(e) {
 	return `Invalid callback metadata: ${e.issues.map((e) => `${e.path.length === 0 ? `callback` : `callback.${e.path.join(`.`)}`}: ${e.message}`).join(`; `)}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/compiled-channel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/compiled-channel.js
 const CHANNEL_SENTINEL = `eve:channel`, CHANNEL_INSTRUMENTATION_KIND = Symbol.for(`eve.channel.instrumentationKind`), CHANNEL_INSTRUMENTATION_KINDS = Symbol.for(`eve.channel.instrumentationKinds`), channelInstrumentationKindGlobal = globalThis;
 channelInstrumentationKindGlobal[CHANNEL_INSTRUMENTATION_KINDS] ??= /* @__PURE__ */ new Map();
 const channelInstrumentationKinds = channelInstrumentationKindGlobal[CHANNEL_INSTRUMENTATION_KINDS];
@@ -15506,7 +15986,7 @@ function channelRouteSignature(e) {
 `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/adapter.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/adapter.js
 const log$17 = createLogger(`channel.adapter`);
 function defaultDeliverResult(e) {
 	if (e.message !== void 0) return {
@@ -15544,7 +16024,7 @@ async function callAdapterEventHandler(e, t, n) {
 	return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/key.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/key.js
 const KEY_REGISTRY_GLOBAL_KEY = Symbol.for(`eve.context-key-registry`), globalKeyRegistryContainer = globalThis;
 globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY] === void 0 && (globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY] = /* @__PURE__ */ new Map());
 const keyRegistry = globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY];
@@ -15562,10 +16042,10 @@ function resolveKey(e) {
 	return keyRegistry.get(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/keys.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/keys.js
 const AuthKey = new ContextKey(`eve.auth`), InitiatorAuthKey = new ContextKey(`eve.initiatorAuth`), SessionIdKey = new ContextKey(`eve.sessionId`), ContinuationTokenKey = new ContextKey(`eve.continuationToken`), ChannelRequestIdKey = new ContextKey(`eve.channelRequestId`), ChannelInstrumentationKey = new ContextKey(`eve.channelInstrumentation`), ModeKey = new ContextKey(`eve.mode`), ParentSessionKey = new ContextKey(`eve.parentSession`), CapabilitiesKey = new ContextKey(`eve.capabilities`), SessionCallbackKey = new ContextKey(`eve.sessionCallback`), SessionKey = new ContextKey(`eve.session`), SandboxKey = new ContextKey(`eve.sandbox`), SessionDynamicToolMetadataKey = new ContextKey(`eve.sessionDynamicToolMetadata`), TurnDynamicToolMetadataKey = new ContextKey(`eve.turnDynamicToolMetadata`), LiveStepToolsKey = new ContextKey(`eve.liveStepTools`), DynamicSkillManifestKey = new ContextKey(`eve.dynamicSkillManifest`), SessionDynamicInstructionsKey = new ContextKey(`eve.sessionDynamicInstructions`), TurnDynamicInstructionsKey = new ContextKey(`eve.turnDynamicInstructions`);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/container.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/container.js
 const EVE_CONTEXT_STORAGE_KEY = Symbol.for(`eve.context-storage`);
 var ContextContainer = class {
 	_durableValues = /* @__PURE__ */ new Map();
@@ -15609,10 +16089,10 @@ function loadContext() {
 	return e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/workspace/types.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/workspace/types.js
 const WORKSPACE_ROOT$1 = `/workspace`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/skills/sandbox-access.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/skills/sandbox-access.js
 const FRONTMATTER_PATTERN = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
 function assertSafeSkillId(e) {
 	if (e.length === 0 || e.trim() !== e || e.startsWith(`.`) || e.includes(`/`) || e.includes(`\\`) || e.includes(`..`) || /^[A-Za-z]:/.test(e)) throw Error(`Expected skill id to be a non-empty safe path segment without whitespace, separators, "." prefix, or "..".`);
@@ -15659,7 +16139,7 @@ function skillFilePath(t, n) {
 	return `${WORKSPACE_ROOT$1}/skills/${t}/${n}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/build-callback-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/build-callback-context.js
 function buildCallbackContext() {
 	let r = loadContext(), i = r.require(SessionKey);
 	return {
@@ -15685,7 +16165,7 @@ function buildCallbackContext() {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/cors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/cors.js
 function normalizeChannelCors(e) {
 	if (e === void 0 || e === !1) return;
 	if (e === !0) return {};
@@ -15730,10 +16210,10 @@ function normalizePreflight(e) {
 	return { statusCode: t };
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/http.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/http.js
 const HTTP_ADAPTER_KIND = `http`, HTTP_ADAPTER = { kind: HTTP_ADAPTER_KIND };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/definitions/defineChannel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/definitions/defineChannel.js
 function defineChannel(t) {
 	let n = buildAdapter(t), i = normalizeChannelCors(t.cors);
 	return {
@@ -15796,7 +16276,7 @@ function buildAdapter(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/attachments/data.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/attachments/data.js
 async function fileDataToBytes(e) {
 	return typeof Buffer < `u` && Buffer.isBuffer(e) ? e : e instanceof Uint8Array ? Buffer.from(e) : e instanceof ArrayBuffer ? Buffer.from(new Uint8Array(e)) : typeof e == `string` ? decodeStringData(e) : e instanceof URL && e.protocol === `data:` ? decodeStringData(e.href) : null;
 }
@@ -15833,7 +16313,7 @@ function estimateBase64ByteLength(e) {
 	return t.endsWith(`==`) ? n = 2 : t.endsWith(`=`) && (n = 1), Math.max(0, Math.floor(t.length * 3 / 4) - n);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/channels/upload-policy.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/channels/upload-policy.js
 const DEFAULT_UPLOAD_POLICY = Object.freeze({
 	allowedMediaTypes: `*`,
 	maxBytes: 25 * 1024 * 1024
@@ -15906,7 +16386,7 @@ function formatUploadPolicyViolation(e) {
 	return `${t} has media type "${e.mediaType}" which is not allowed by this route.${n}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/channels/eve.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/channels/eve.js
 const log$16 = createLogger(`eve.channel`);
 function defaultEveAuth(e) {
 	return e.eve.caller;
@@ -16314,7 +16794,7 @@ function serializeAsNdjson(e) {
 	} }));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-FLIfyJ4Y.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-FLIfyJ4Y.js
 function n$12(e, t, n) {
 	return n === 1 ? e : t;
 }
@@ -16459,7 +16939,7 @@ var init_dist_FLIfyJ4Y = __esmMin((() => {
 	}))(), 1);
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-Dxrjttr2.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-Dxrjttr2.js
 function n$11(e) {
 	return typeof e == `object` && !!e && `name` in e && `message` in e;
 }
@@ -16716,7 +17196,7 @@ var init_dist_Dxrjttr2 = __esmMin((() => {
 	}));
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@workflow/core/private.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@workflow/core/private.js
 function a$9(e) {
 	let t = e.split(`//`);
 	if (t.length !== 3 || t[0] !== `step`) return [];
@@ -16760,7 +17240,7 @@ var init_private = __esmMin((() => {
 	]);
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/src-CQuMexnO.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/src-CQuMexnO.js
 var src_CQuMexnO_exports = /* @__PURE__ */ __exportAll({ t: () => W$7 });
 var t$7, n$9, r$11, i$9, a$8, o$8, s$8, c$7, l$7, u$8, d$8, f$8, p$9, m$8, h$8, g$8, _$7, v$8, y$6, b$9, x$10, S$10, C$11, w$12, T$10, E$10, D$9, O$7, k$9, A$8, j$8, M$8, N$8, P$8, F$8, I$8, L$8, R$9, z$10, B$9, V$8, H$8, U$8, W$7;
 var init_src_CQuMexnO = __esmMin((() => {
@@ -17791,7 +18271,7 @@ var init_src_CQuMexnO = __esmMin((() => {
 	}));
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/resume-hook-CUCPW67D.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/resume-hook-CUCPW67D.js
 var resume_hook_CUCPW67D_exports = /* @__PURE__ */ __exportAll({
 	i: () => C$10,
 	n: () => E$9,
@@ -17891,7 +18371,7 @@ var init_resume_hook_CUCPW67D = __esmMin((() => {
 	});
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/wrapper-CQmdlFyy.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/wrapper-CQmdlFyy.js
 var wrapper_CQmdlFyy_exports = /* @__PURE__ */ __exportAll({ WebSocketServer: () => v$7 });
 var i$8, a$7, o$7, s$7, c$6, l$6, u$7, d$7, f$7, p$8, m$7, h$7, g$7, _$6, v$7;
 var init_wrapper_CQmdlFyy = __esmMin((() => {
@@ -19530,7 +20010,7 @@ var init_wrapper_CQmdlFyy = __esmMin((() => {
 	v$7 = _$6.default;
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/functions-CnVBREsg.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/functions-CnVBREsg.js
 var functions_CnVBREsg_exports = /* @__PURE__ */ __exportAll({ default: () => functions_CnVBREsg_default });
 var t$6, n$8, r$10, i$7, a$6, o$6, s$6, c$5, l$5, u$6, d$6, f$6, p$7, functions_CnVBREsg_default;
 var init_functions_CnVBREsg = __esmMin((() => {
@@ -20140,7 +20620,7 @@ var init_functions_CnVBREsg = __esmMin((() => {
 	functions_CnVBREsg_default = p$7();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/attribute-changes-DUxG-Gic.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/attribute-changes-DUxG-Gic.js
 var attribute_changes_DUxG_Gic_exports = /* @__PURE__ */ __exportAll({
 	$: () => sb,
 	$n: () => Nf$1,
@@ -34570,7 +35050,7 @@ var init_attribute_changes_DUxG_Gic = __esmMin((() => {
 	};
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/run-CVlF84yI.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/run-CVlF84yI.js
 async function B$7(t, n, r) {
 	"use step";
 	return await _S(() => {
@@ -34844,7 +35324,7 @@ var init_run_CVlF84yI = __esmMin((() => {
 	};
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/token-J7YP0s9a.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/token-J7YP0s9a.js
 var token_J7YP0s9a_exports = /* @__PURE__ */ __exportAll({ default: () => token_J7YP0s9a_default });
 var r$9, token_J7YP0s9a_default;
 var init_token_J7YP0s9a = __esmMin((() => {
@@ -34887,7 +35367,7 @@ var init_token_J7YP0s9a = __esmMin((() => {
 	token_J7YP0s9a_default = r$9();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/token-Bm-WLAUB.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/token-Bm-WLAUB.js
 var token_Bm_WLAUB_exports = /* @__PURE__ */ __exportAll({ default: () => token_Bm_WLAUB_default });
 var r$8, token_Bm_WLAUB_default;
 var init_token_Bm_WLAUB = __esmMin((() => {
@@ -34930,7 +35410,7 @@ var init_token_Bm_WLAUB = __esmMin((() => {
 	token_Bm_WLAUB_default = r$8();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@workflow/core/runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@workflow/core/runtime.js
 function Ir$3(e, t = 10) {
 	let n = parseInt(e, t);
 	if (!Number.isNaN(n) && n >= 0 && n <= 65535) return n;
@@ -56263,12 +56743,12 @@ Cause: ${t}`);
 	for (let e = 0; e < 64; e++) rv[nv.charCodeAt(e)] = e;
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/workflow/runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/workflow/runtime.js
 init_runtime();
 init_runtime();
 process.env.WORKFLOW_TURBO = `0`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/authorization-complete-page.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/authorization-complete-page.js
 function buildAuthorizationCompletePage() {
 	return new Response(`<!doctype html>
 <html lang="en">
@@ -56331,7 +56811,7 @@ function buildAuthorizationCompletePage() {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/callback-route.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/callback-route.js
 const HTTP_CONNECTION_CALLBACK_CHANNEL_NAME_PREFIX = `eve/v1/connections/callback`, HANDLED_METHODS$1 = [`GET`, `POST`];
 function getConnectionCallbackChannelDefinitions() {
 	return HANDLED_METHODS$1.map((e) => buildCallbackChannelDefinition$1(e));
@@ -56404,7 +56884,7 @@ async function projectAuthorizationCallback(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/session-callback-route.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/session-callback-route.js
 const HTTP_SESSION_CALLBACK_CHANNEL_NAME_PREFIX = `eve/v1/callback`, HANDLED_METHODS = [`POST`];
 function getSessionCallbackChannelDefinitions() {
 	return HANDLED_METHODS.map((e) => buildCallbackChannelDefinition(e));
@@ -56489,7 +56969,7 @@ function projectSessionCallbackResult(e) {
 	}, { status: 400 });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-channels/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-channels/index.js
 function getFrameworkChannelDefinitions() {
 	let r = eveChannel$1({ auth: [vercelOidc(), localDev()] }), i = [];
 	for (let e of r.routes) isHttpRouteDefinition(e) && i.push({
@@ -56514,10 +56994,10 @@ function getAllFrameworkChannelNames() {
 	]);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/providers/connection-key.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/providers/connection-key.js
 const ConnectionRegistryKey = new ContextKey(`eve.connectionRegistry`);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/file-state.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/file-state.js
 const ReadFileStateKey = new ContextKey(`eve.readFile`);
 function normalizeModelPath(t) {
 	return posix.normalize(t);
@@ -56544,7 +57024,7 @@ function clearReadFileState() {
 	loadContext().set(ReadFileStateKey, { byTarget: {} });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/todo.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/todo.js
 const TodoStateKey = new ContextKey(`eve.todo`);
 function formatTodoSummary(e) {
 	return e.items.length === 0 ? void 0 : `[Your task list was preserved across context compaction]\n${e.items.map((e) => `- [${e.status === `completed` ? `x` : e.status === `cancelled` ? `-` : ` `}] [${e.priority}] ${e.content}`).join(`
@@ -56697,7 +57177,7 @@ const TODO_ITEM_SCHEMA = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/ask-question.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/ask-question.js
 const ASK_QUESTION_TOOL_NAME = `ask_question`, askQuestionToolInputSchema = inputRequestSchema.omit({
 	action: !0,
 	display: !0,
@@ -56716,7 +57196,7 @@ const ASK_QUESTION_TOOL_NAME = `ask_question`, askQuestionToolInputSchema = inpu
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/web-search.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/web-search.js
 const WEB_SEARCH_OPENAI_OUTPUT_SCHEMA = {
 	$schema: `http://json-schema.org/draft-07/schema#`,
 	additionalProperties: !1,
@@ -56878,7 +57358,7 @@ const WEB_SEARCH_OPENAI_OUTPUT_SCHEMA = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/require-sandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/require-sandbox.js
 async function requireSandboxSession() {
 	let t = loadContext().get(SandboxKey);
 	if (t === void 0) throw Error(`This tool requires sandbox access on the runtime context. Ensure the step is running inside a managed runtime context with sandbox support.`);
@@ -56890,7 +57370,7 @@ function validateAbsoluteFilePath(e) {
 	if (!e.startsWith(`/`)) throw Error(`filePath must be an absolute path. Received: "${e}". Use an absolute path such as /workspace/foo.ts.`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/truncate-output.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/truncate-output.js
 const MAX_OUTPUT_LINES = 2e3, MAX_OUTPUT_BYTES = 50 * 1024, MAX_LINE_LENGTH = 2e3, LINE_TRUNCATION_SUFFIX = ` [truncated]`;
 function truncateHead(e) {
 	return truncateByDirection(e, `head`);
@@ -56921,7 +57401,7 @@ function countLogicalLines(e) {
 	return e.length > 0 && e[e.length - 1] === `` ? e.length - 1 : e.length;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/application/optional-package-install.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/application/optional-package-install.js
 const EVE_DEV_ENV_FLAG = `EVE_DEV`;
 function isEveDevEnvironment() {
 	return process.env[EVE_DEV_ENV_FLAG] === `1`;
@@ -57146,7 +57626,7 @@ function toMessage(e) {
 	return e instanceof Error ? e.message : String(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bash-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bash-tool.js
 async function executeBashOnSandbox(t, n) {
 	let r = await runWithDevelopmentSandboxProgress(t, n.command), i = truncateTail(r.stdout), a = truncateTail(r.stderr), o = i.truncated || a.truncated, s = i.output;
 	i.truncated && (s = `[stdout truncated: showing last ${i.outputLines} of ${i.totalLines} lines]\n` + s);
@@ -57181,7 +57661,7 @@ function formatCommand$1(e) {
 	return t.length <= 240 ? t : `${t.slice(0, 239)}…`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/bash.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/bash.js
 const BASH_INPUT_SCHEMA = {
 	additionalProperties: !1,
 	properties: { command: {
@@ -57220,12 +57700,12 @@ const BASH_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/shell-quote.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/shell-quote.js
 function shellQuote(e) {
 	return `'${e.replace(/'/g, `'\\''`)}'`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/ripgrep-probe.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/ripgrep-probe.js
 const probes = /* @__PURE__ */ new Map();
 async function ripgrepIsAvailable(t) {
 	let n = probes.get(t.id);
@@ -57242,7 +57722,7 @@ async function runProbe(e) {
 	return (await e.run({ command: `command -v rg >/dev/null 2>&1` })).exitCode === 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/glob-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/glob-tool.js
 async function executeGlobOnSandbox(n, a) {
 	let o = a.path ?? `/workspace`;
 	validateAbsoluteFilePath(o);
@@ -57306,7 +57786,7 @@ function buildGlobExecutionError(e, t, n) {
 	return Error(`glob failed (exit ${t}): ${i}\nCommand: ${e}`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/glob.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/glob.js
 const GLOB_INPUT_SCHEMA = {
 	additionalProperties: !1,
 	properties: {
@@ -57368,7 +57848,7 @@ const GLOB_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/grep-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/grep-tool.js
 async function executeGrepOnSandbox(t, n) {
 	let r = n.path ?? `/workspace`;
 	validateAbsoluteFilePath(r);
@@ -57454,7 +57934,7 @@ function buildGrepExecutionError(e, t, n) {
 	return Error(`grep failed (exit ${t}): ${i}\nCommand: ${e}`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/grep.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/grep.js
 const GREP_INPUT_SCHEMA = {
 	additionalProperties: !1,
 	properties: {
@@ -57535,7 +58015,7 @@ const GREP_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/read-file-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/read-file-tool.js
 async function executeReadFileOnSandbox(r, i) {
 	let { filePath: a, offset: o, limit: s } = i;
 	validateAbsoluteFilePath(a);
@@ -57584,7 +58064,7 @@ async function executeReadFileOnSandbox(r, i) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/read-file.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/read-file.js
 const READ_FILE_INPUT_SCHEMA = {
 	additionalProperties: !1,
 	properties: {
@@ -57657,7 +58137,7 @@ const READ_FILE_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/skill.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/skill.js
 async function executeLoadSkillTool(e) {
 	let r = loadContext(), i = r.get(SandboxKey);
 	if (i === void 0) throw Error(`The load_skill tool requires sandbox access on the runtime context. Ensure the step is running inside a managed runtime context with sandbox support.`);
@@ -57700,7 +58180,7 @@ const SKILL_OUTPUT_SCHEMA = { type: `string` }, SKILL_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/turndown/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/turndown/index.js
 var e$2 = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), t$5 = e$2(((e, t) => {
 	t.exports = n, n.CAPTURING_PHASE = 1, n.AT_TARGET = 2, n.BUBBLING_PHASE = 3;
 	function n(e, t) {
@@ -70033,7 +70513,7 @@ function nt$7(e) {
 	return e != null && (typeof e == `string` || e.nodeType && (e.nodeType === 1 || e.nodeType === 9 || e.nodeType === 11));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/web-fetch/html.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/web-fetch/html.js
 function convertHtmlToMarkdown(t) {
 	let n = new Qe$7({
 		bulletListMarker: `-`,
@@ -70073,7 +70553,7 @@ function decodeHtmlEntities(e) {
 	return e.replace(ENTITY_PATTERN, (e) => ENTITY_MAP[e.toLowerCase()] ?? e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/web-fetch/tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/web-fetch/tool.js
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024;
 async function executeWebFetchTool(n) {
 	let { url: r, format: i = `markdown`, timeout: a } = n;
@@ -70112,7 +70592,7 @@ function buildHeaders(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/web-fetch.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/web-fetch.js
 async function executeWebFetch(e) {
 	return executeWebFetchTool(e);
 }
@@ -70176,7 +70656,7 @@ const WEB_FETCH_INPUT_SCHEMA = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/write-file-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/write-file-tool.js
 async function executeWriteFileOnSandbox(e, t) {
 	let { filePath: n, content: r } = t;
 	validateAbsoluteFilePath(n);
@@ -70210,7 +70690,7 @@ async function executeWriteFileOnSandbox(e, t) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/write-file.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/write-file.js
 const WRITE_FILE_INPUT_SCHEMA = {
 	additionalProperties: !1,
 	properties: {
@@ -70258,7 +70738,7 @@ const WRITE_FILE_TOOL_DEFINITION = {
 	sourceKind: `module`
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/index.js
 const ALL_FRAMEWORK_TOOLS = [
 	ASK_QUESTION_TOOL_DEFINITION,
 	BASH_TOOL_DEFINITION,
@@ -70278,7 +70758,7 @@ function getAllFrameworkToolNames() {
 	return new Set(ALL_FRAMEWORK_TOOLS.map((e) => e.name));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/connections/errors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/connections/errors.js
 var ConnectionAuthorizationRequiredError = class extends Error {
 	connectionName;
 	constructor(e, t) {
@@ -70299,7 +70779,7 @@ function isConnectionAuthorizationFailedError(e) {
 	return e instanceof Error && e.name === `ConnectionAuthorizationFailedError`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/authorization.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/authorization.js
 const AUTHORIZATION_BRAND = `__eveAuthorization`, AUTHORIZATION_PENDING_BRAND = `__eveAuthorizationPending`;
 function requestAuthorization(e) {
 	return {
@@ -70368,12 +70848,12 @@ function getPendingAuthorization(e) {
 	if (!(typeof t != `object` || !t)) return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/types.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/types.js
 function supportsInteractiveAuthorization(e) {
 	return e?.startAuthorization !== void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/authorization-tokens.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/authorization-tokens.js
 const ConnectionAuthorizationTokensKey = new ContextKey(`eve.connectionAuthorizationTokens`);
 function readCachedToken(e, t, n) {
 	let r = e.get(ConnectionAuthorizationTokensKey)?.[t]?.[n];
@@ -70402,7 +70882,7 @@ function asContainer$1(e) {
 	return e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/principal.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/principal.js
 function principalKey(e) {
 	return e.type === `app` ? `app` : e.issuer === void 0 ? `user:${e.id}` : `user:${e.issuer}:${e.id}`;
 }
@@ -70433,7 +70913,7 @@ function buildUserPrincipalRequiredMessage(e, t, n, r) {
 	return i = n === void 0 ? `it was invoked outside an eve context, so no authenticated user can be resolved.` : r == null ? `the active session has no authenticated user.` : t.vercelConnect !== void 0 && r.authenticator === `local-dev` ? `the local request fell back to local development access instead of authenticating a Vercel user. Ensure this directory is linked and the Vercel CLI can mint a Vercel OIDC token, then retry.` : `the active session is scoped to "${r.principalType}", not an authenticated user.`, `Connection "${e}" is user-scoped, but ${i} User-scoped connections require route auth that resolves an authenticated user. If this connection should use credentials shared by the agent instead, configure it as an app-scoped connection.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/scoped-authorization.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/scoped-authorization.js
 const LOCAL_HTTP_VERCEL_CONNECT_HOSTNAMES = /* @__PURE__ */ new Set([`127.0.0.1`, `[::1]`]);
 async function resolveScopedToken(t) {
 	let { scope: n, authorization: r, connection: i } = t, a = contextStorage.getStore(), o = resolveConnectionPrincipal(n, r, a);
@@ -70517,7 +70997,7 @@ function stampChallengeDisplayName(e, t) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/validate-authorization.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/validate-authorization.js
 function validateAuthorizationSpec(e, t = `auth`) {
 	if (typeof e != `object` || !e) return `The "${t}" field must be an object with a "getToken" method.`;
 	let n = e;
@@ -70573,7 +71053,7 @@ function extractVercelConnectMarker(e) {
 	if (!(typeof t != `string` || t.length === 0)) return { connector: t };
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/resolve-authorization.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/resolve-authorization.js
 const ConnectionAuthorizationResolversKey = new ContextKey(`eve.connectionAuthorizationResolvers`);
 async function resolveConnectionAuthorization(t, n) {
 	let r = t.authorization;
@@ -70594,7 +71074,7 @@ function getResolverCache(e) {
 	return e.setVirtualContext(ConnectionAuthorizationResolversKey, n), n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/connection-search-dynamic.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/connection-search-dynamic.js
 const logger = createLogger(`framework.connection-search-dynamic`), CONNECTION_SEARCH_OUTPUT_SCHEMA = {
 	items: {
 		additionalProperties: !1,
@@ -70872,7 +71352,7 @@ function createConnectionSearchResolver() {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-helpers.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-helpers.js
 var ResolveAgentError = class extends Error {
 	logicalPath;
 	sourceId;
@@ -70900,13 +71380,13 @@ async function loadResolvedModuleExport(n) {
 	}));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-definition/channel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-definition/channel.js
 function normalizeChannelDefinition(e, t) {
 	if (!isCompiledChannel(e)) throw Error(`${t} Use \`defineChannel({ routes, ... })\` (or a wrapper like \`slackChannel\` / \`eveChannel\`) — bare \`{ fetch, receive? }\` channel objects are no longer supported.`);
 	return e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-channel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-channel.js
 async function resolveChannelDefinition(r, i, a) {
 	try {
 		let t = normalizeChannelDefinition(await loadResolvedModuleExport({
@@ -70953,7 +71433,7 @@ function resolveWebSocketRoute(e, t) {
 	if (!(t === void 0 || e.method !== `WEBSOCKET` || !isWebSocketRouteDefinition(t))) return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/tool-result-narrowing.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/tool-result-narrowing.js
 const DEFINITION_KEY = Symbol.for(`eve.definition-source-key`), REGISTRY_SYMBOL = Symbol.for(`eve.definition-source-registry`), registryContainer = globalThis;
 registryContainer[REGISTRY_SYMBOL] === void 0 && (registryContainer[REGISTRY_SYMBOL] = /* @__PURE__ */ new Map());
 const definitionSourceRegistry = registryContainer[REGISTRY_SYMBOL];
@@ -70983,7 +71463,7 @@ function formatDefinitionSourceForWarning(e) {
 	return e.logicalPath === void 0 ? `${e.kind} "${e.name}"` : `${e.kind} "${e.name}" from "${e.logicalPath}"`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-connection.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-connection.js
 async function resolveConnectionDefinition(t, n, r) {
 	try {
 		let i = expectObjectRecord(await loadResolvedModuleExport({
@@ -71025,7 +71505,7 @@ async function resolveConnectionDefinition(t, n, r) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-hook.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-hook.js
 async function resolveHookDefinition(a, o, s) {
 	try {
 		let n = expectObjectRecord(await loadResolvedModuleExport({
@@ -71057,7 +71537,7 @@ function describe$4(e, t) {
 	return `Expected the hook export "${e.exportName ?? `default`}" from "${e.logicalPath}" ${t}.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/lazy-backend.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/lazy-backend.js
 function lazyBackend(e) {
 	let t;
 	function resolve() {
@@ -71076,7 +71556,7 @@ function lazyBackend(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-cli.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-cli.js
 var DockerUnavailableError = class extends Error {
 	constructor(e) {
 		super("The Docker sandbox backend requires Docker, but the `docker` CLI was not found. Install and start Docker Desktop, OrbStack, Colima, or another runtime exposing a Docker-compatible `docker` CLI (or point EVE_DOCKER_PATH at one, e.g. Podman). Alternatively use microsandbox(), the dependency-free justbash(), vercel(), or defaultSandbox() to pick by availability.", { cause: e }), this.name = `DockerUnavailableError`;
@@ -71175,7 +71655,7 @@ function firstLine(e) {
 `, 1)[0]?.trim() ?? ``;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-utils.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-utils.js
 function expectDockerSuccess(e, t) {
 	if (e.exitCode !== 0) {
 		let n = e.stderr.trim() || e.stdout.trim() || `exit code ${e.exitCode}`;
@@ -71183,7 +71663,7 @@ function expectDockerSuccess(e, t) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/development-run.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/development-run.js
 const EVE_DEVELOPMENT_SANDBOX_RUN_ID_ENV = `EVE_DEVELOPMENT_SANDBOX_RUN_ID`, EVE_DEVELOPMENT_SANDBOX_METADATA_PATH_TAG = `eve.metadataPath`, EVE_DEVELOPMENT_SANDBOX_RUN_ID_TAG = `devRunId`, initializedBackendsByRunId = /* @__PURE__ */ new Map();
 function getDevelopmentSandboxRunId() {
 	let e = process.env[EVE_DEVELOPMENT_SANDBOX_RUN_ID_ENV];
@@ -71209,7 +71689,7 @@ function markDevelopmentSandboxBackendInitialized(e) {
 	n === void 0 && (n = /* @__PURE__ */ new Set(), initializedBackendsByRunId.set(t, n)), n.add(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/stream-utils.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/stream-utils.js
 async function streamToBuffer(e) {
 	let t = [];
 	for await (let n of e) t.push(n);
@@ -71221,7 +71701,7 @@ function bufferToStream(e) {
 	} });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/local-backend-utils.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/local-backend-utils.js
 function createFileBackedInternalSandboxSession(e) {
 	return {
 		id: e.id,
@@ -71294,7 +71774,7 @@ async function writeSandboxSeedFiles(e, t) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-base-setup.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-base-setup.js
 function buildDockerBaseSetupScript() {
 	return [
 		`set -e`,
@@ -71304,7 +71784,7 @@ function buildDockerBaseSetupScript() {
 `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-container.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-container.js
 const DOCKER_SANDBOX_LABEL = `eve.sandbox`, DOCKER_KEEPALIVE_ARGS = [`-c`, `sleep 2147483647`];
 async function startDockerContainer(t) {
 	let i = [
@@ -71333,7 +71813,7 @@ async function runDockerBaseSetup(e, r) {
 	]), `prepare base runtime in sandbox container "${r}"`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-network.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-network.js
 async function setDockerNetworkPolicy(e, t, n) {
 	if (n !== `allow-all` && n !== `deny-all`) throw Error(`The local Docker sandbox backend supports only the "allow-all" and "deny-all" network policies. Domain-level allow-lists and credential brokering require the Vercel backend (vercel()) or microsandbox().`);
 	let r = await e.run([
@@ -71369,7 +71849,7 @@ async function setDockerNetworkPolicy(e, t, n) {
 	]), `connect sandbox container "${t}" to the bridge network`));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-options.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-options.js
 function resolveDockerSandboxOptions(e = {}) {
 	return {
 		env: e.env ?? {},
@@ -71393,7 +71873,7 @@ function sortStringRecord(e) {
 	return Object.fromEntries(Object.entries(e).sort(([e], [t]) => e.localeCompare(t)));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-session.js
 const DOCKER_KILL_TREE_SCRIPT = [
 	`pid_file="$1"`,
 	`target="$(cat "$pid_file" 2>/dev/null)" || exit 0`,
@@ -71492,7 +71972,7 @@ function createDockerInternalSession(s) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/runtime-errors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/runtime-errors.js
 var RuntimeNoActiveSessionError = class extends Error {
 	code = `NO_ACTIVE_SESSION`;
 	continuationToken;
@@ -71501,7 +71981,7 @@ var RuntimeNoActiveSessionError = class extends Error {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/subagent-adapter.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/subagent-adapter.js
 const log$15 = createLogger(`execution.subagent-adapter`), SUBAGENT_ADAPTER_KIND = `subagent`;
 function isSubagentAdapterState(e) {
 	if (typeof e != `object` || !e) return !1;
@@ -71548,7 +72028,7 @@ async function forwardSubagentInputRequestStep(t) {
 }
 registerStepFunction("step//eve@0.16.2//forwardSubagentInputRequestStep", forwardSubagentInputRequestStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/session.js
 function buildSessionHandle(i) {
 	return {
 		get id() {
@@ -71575,7 +72055,7 @@ function namespaceContinuationToken(e, t) {
 	return `${e.slice(0, n + 1)}${t}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/schedule-auth.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/schedule-auth.js
 const SCHEDULE_APP_AUTH = {
 	attributes: {},
 	authenticator: `app`,
@@ -71586,13 +72066,13 @@ function isScheduleAppAuth(e) {
 	return e?.authenticator === SCHEDULE_APP_AUTH.authenticator && e.principalId === SCHEDULE_APP_AUTH.principalId && e.principalType === SCHEDULE_APP_AUTH.principalType;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/send.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/send.js
 const log$14 = createLogger(`channel.send`);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/schedule.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/schedule.js
 const SCHEDULE_ADAPTER_KIND = `schedule`, SCHEDULE_ADAPTER = { kind: SCHEDULE_ADAPTER_KIND };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/channels/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/channels/registry.js
 const FRAMEWORK_ADAPTERS = [
 	HTTP_ADAPTER,
 	SUBAGENT_ADAPTER,
@@ -71651,7 +72131,7 @@ function carriesAdapterBehavior(e) {
 	return !1;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sessions/runtime-context-keys.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sessions/runtime-context-keys.js
 const ChannelKey = new ContextKey(`eve.channel`, { codec: {
 	serialize(t) {
 		return {
@@ -71678,7 +72158,7 @@ const ChannelKey = new ContextKey(`eve.channel`, { codec: {
 	}
 } });
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/serialize.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/serialize.js
 const log$13 = createLogger(`context.serialize`);
 function serializeContext(e) {
 	let t = {};
@@ -71712,7 +72192,7 @@ async function deserializeContext(e) {
 	return i;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/eve-workflow-attributes.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/eve-workflow-attributes.js
 function readChannelKind(e) {
 	let n = e[`eve.channel`]?.kind;
 	return isNonEmptyString(n) ? n : void 0;
@@ -71777,10 +72257,10 @@ function buildTurnAttributes(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@workflow/errors/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@workflow/errors/index.js
 init_dist_Dxrjttr2();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/attributes/normalize.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/attributes/normalize.js
 function truncateForTag(e, t = 256) {
 	if (t <= 0) return ``;
 	let n = new TextEncoder();
@@ -71804,7 +72284,7 @@ function normalizeEveAttributes(e) {
 	return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/instrumentation.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/instrumentation.js
 const FRAMEWORK_CHANNEL_KINDS = /* @__PURE__ */ new Set([
 	`http`,
 	`schedule`,
@@ -71853,7 +72333,7 @@ function resolveInstrumentationProjection(n) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/instrumentation.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/instrumentation.js
 const log$12 = createLogger(`channel.instrumentation`);
 function buildChannelInstrumentationProjection(e) {
 	let { adapter: t, channelName: n, existingKind: r } = e;
@@ -71882,7 +72362,7 @@ function resolveMetadata(e) {
 	}) ?? {};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/channel-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/channel-context.js
 function setChannelContext(e, t, n = {}) {
 	e.set(ChannelKey, t), e.set(ChannelInstrumentationKey, buildChannelInstrumentationProjection({
 		adapter: t,
@@ -71891,7 +72371,7 @@ function setChannelContext(e, t, n = {}) {
 	}));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/runtime-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/runtime-context.js
 function buildRunContext(t) {
 	let { bundle: n, run: r } = t, i = new ContextContainer(), a = r.auth;
 	if (i.set(BundleKey, n), setChannelContext(i, r.adapter, { channelName: r.channelName }), r.channelMetadata !== void 0) {
@@ -71904,7 +72384,7 @@ function buildRunContext(t) {
 	return i.set(ContinuationTokenKey, r.continuationToken ?? ``), i.set(ModeKey, r.mode), i.set(AuthKey, a), i.set(InitiatorAuthKey, r.initiatorAuth ?? a), r.capabilities !== void 0 && i.set(CapabilitiesKey, r.capabilities), r.requestId !== void 0 && i.set(ChannelRequestIdKey, r.requestId), r.callback !== void 0 && i.set(SessionCallbackKey, r.callback), r.parent !== void 0 && i.set(ParentSessionKey, r.parent), i;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/ndjson-stream.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/ndjson-stream.js
 function parseNdjsonStream(e) {
 	let t = new TextDecoder(), n = ``, r, i = !1;
 	return new ReadableStream({
@@ -71938,7 +72418,7 @@ function parseNdjsonStream(e) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/workflow-runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/workflow-runtime.js
 const WORKFLOW_ENTRY_NAME = `workflowEntry`, TURN_WORKFLOW_NAME = `turnWorkflow`, EVE_PACKAGE_INFO = resolveInstalledPackageInfo(), LATEST_DEPLOYMENT_UNSUPPORTED_MESSAGE = `deploymentId 'latest' requires a World that implements resolveLatestDeploymentId()`, STABLE_WORKFLOW_NAMES = /* @__PURE__ */ new Set([WORKFLOW_ENTRY_NAME, TURN_WORKFLOW_NAME]), STABLE_ID_BASE = EVE_PACKAGE_INFO.name, log$11 = createLogger(`execution.workflow-runtime`), workflowEntryReference = { workflowId: `workflow//${STABLE_ID_BASE}//${WORKFLOW_ENTRY_NAME}` }, turnWorkflowReference = { workflowId: `workflow//${STABLE_ID_BASE}//${TURN_WORKFLOW_NAME}` };
 function createWorkflowRuntime(e) {
 	return {
@@ -72023,12 +72503,12 @@ function normalizeWorkflowHook(e) {
 	return { runId: t };
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/application/paths.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/application/paths.js
 function resolveSandboxCacheDirectory(e) {
 	return join(e, `.eve`, `sandbox-cache`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker-templates.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker-templates.js
 const DOCKER_TEMPLATE_IMAGE_REPOSITORY = `eve-sandbox-template`;
 function dockerTemplateImageReference(e) {
 	return dockerTemplateImageReferenceFromTag(dockerTemplateImageTag(e));
@@ -72074,7 +72554,7 @@ function resolveDockerTemplateMarkersDirectory(e) {
 	return join(resolveSandboxCacheDirectory(e), `docker`, `templates`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/logging-session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/logging-session.js
 function createLoggingSandboxSession(e) {
 	let { log: t, session: n } = e;
 	return {
@@ -72133,7 +72613,7 @@ function truncateOneLine(e) {
 	return t.length <= 240 ? t : `${t.slice(0, 239)}…`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/session.js
 function buildSandboxSession(n, r = async () => {}) {
 	async function run(e) {
 		let t = await n.spawn(e), [r, i, { exitCode: a }] = await Promise.all([
@@ -72239,7 +72719,7 @@ function encodeString(e, t) {
 	return t === `utf-8` || t === `utf8` ? new TextEncoder().encode(e) : Buffer.from(e, t);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/definitions/sandbox-backend.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/definitions/sandbox-backend.js
 var SandboxTemplateNotProvisionedError = class SandboxTemplateNotProvisionedError extends Error {
 	backendName;
 	templateKey;
@@ -72251,7 +72731,7 @@ var SandboxTemplateNotProvisionedError = class SandboxTemplateNotProvisionedErro
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/docker.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/docker.js
 const DOCKER_BACKEND_NAME = `docker`;
 function createDockerSandboxBackend(c = {}) {
 	let l = c.dockerCli ?? createDockerCli(), u = resolveDockerSandboxOptions(c.createOptions), d = createDockerSandboxOptionsHash(u), f;
@@ -72381,7 +72861,7 @@ function getDockerContainerName(e) {
 	return typeof t == `string` ? t : void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/multiplexed-command.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/multiplexed-command.js
 function createOutputChannel() {
 	let e = !1, t;
 	return {
@@ -72433,7 +72913,7 @@ function adaptMultiplexedCommandToSandboxProcess(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/just-bash-runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/just-bash-runtime.js
 let justBashModulePromise;
 async function loadJustBashModule(e) {
 	return justBashModulePromise ??= loadOptionalEnginePackage({
@@ -72560,7 +73040,7 @@ function isStringRecord(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e) && Object.values(e).every((e) => typeof e == `string`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/just-bash.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/just-bash.js
 const JUST_BASH_CACHE_DIRECTORY_NAME = `just-bash`, JUST_BASH_BACKEND_NAME = `just-bash`;
 function createJustBashSandboxBackend(t = {}) {
 	let r = t.createOptions?.autoInstall ?? !0;
@@ -72629,7 +73109,7 @@ function getLocalRootPath(e) {
 	return typeof t == `string` ? t : void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-options.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-options.js
 const MICROSANDBOX_DEFAULT_IMAGE = `ghcr.io/vercel/eve:latest`, MICROSANDBOX_DEFAULT_CPUS = 1, MICROSANDBOX_DEFAULT_MEMORY_MIB = 1024, MICROSANDBOX_DEFAULT_PULL_POLICY = `if-missing`, MICROSANDBOX_USER = `vercel-sandbox`;
 function resolveMicrosandboxOptions(e) {
 	return {
@@ -72655,7 +73135,7 @@ function microsandboxOptionsForHash(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-platform.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-platform.js
 function isMicrosandboxPlatformSupported() {
 	return process.platform === `darwin` && process.arch === `arm64` ? !0 : process.platform === `linux` && (process.arch === `x64` || process.arch === `arm64`) && isGlibcLinux() ? process.env.MSB_PATH !== void 0 || existsSync(`/dev/kvm`) : !1;
 }
@@ -72742,7 +73222,7 @@ mkdir -p ${WORKSPACE_ROOT$1}
 chown ${MICROSANDBOX_USER}:${MICROSANDBOX_USER} ${WORKSPACE_ROOT$1}
 `;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-metadata.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-metadata.js
 const MICROSANDBOX_METADATA_VERSION = 2, MICROSANDBOX_METADATA_FILE_NAME = `metadata.json`;
 function resolveMicrosandboxMetadataPath(e) {
 	return join(e, MICROSANDBOX_METADATA_FILE_NAME);
@@ -72790,7 +73270,7 @@ function isRecord$5(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-create.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-create.js
 async function createMicrosandboxWithProgress(e) {
 	let t = { phase: `resolving the image` };
 	try {
@@ -72864,7 +73344,7 @@ function microsandboxErrorHint(e) {
 	return e === void 0 ? void 0 : MICROSANDBOX_ERROR_HINTS[e];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-network.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-network.js
 function applyMicrosandboxNetwork(e, t) {
 	let n = createMicrosandboxNetworkPlan(t);
 	return n.disabled ? e.disableNetwork() : n.policy === null && n.transformHeaderRules.length === 0 ? e : e.network((e) => {
@@ -73024,7 +73504,7 @@ function createStableHash$2(t) {
 	return createHash(`sha256`).update(t).digest(`hex`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-process.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-process.js
 function adaptMicrosandboxExecToSandboxProcess(e) {
 	let t, n, r, i, a, o = new Promise((e, t) => {
 		i = e, a = t;
@@ -73072,7 +73552,7 @@ async function nextWithTimeout(e, t) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-runtime.js
 const MICROSANDBOX_STOP_TIMEOUT_MS = 1e4;
 var MicrosandboxVm = class {
 	#e;
@@ -73364,7 +73844,7 @@ function resolveMicrosandboxLabels(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-templates.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-templates.js
 const MICROSANDBOX_CACHE_DIRECTORY_NAME = `microsandbox`;
 function resolveMicrosandboxTemplateRootPath(e, t) {
 	return resolveLocalBackendTemplateRootPath(e, MICROSANDBOX_CACHE_DIRECTORY_NAME, t);
@@ -73373,7 +73853,7 @@ function resolveMicrosandboxSessionRootPath(e, t) {
 	return resolveLocalBackendSessionRootPath(e, MICROSANDBOX_CACHE_DIRECTORY_NAME, t);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox-lifecycle.js
 const activeMicrosandboxSessionHandles = /* @__PURE__ */ new Map();
 async function prewarmMicrosandboxTemplate(i) {
 	i.prewarmInput.log?.(`loading microsandbox runtime`);
@@ -73512,7 +73992,7 @@ function cacheHandle(e, t) {
 	return activeMicrosandboxSessionHandles.set(e, t), t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/microsandbox.js
 const MICROSANDBOX_BACKEND_NAME = `microsandbox`;
 function createMicrosandboxSandboxBackend(t = {}) {
 	let n = resolveMicrosandboxOptions(t.createOptions), r = createStableHash$1(JSON.stringify(microsandboxOptionsForHash(n))).slice(0, 20);
@@ -73544,22 +74024,22 @@ function createMicrosandboxSandboxBackend(t = {}) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/sandbox/backends/docker.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/sandbox/backends/docker.js
 function docker(e) {
 	return createDockerSandboxBackend({ createOptions: e });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/sandbox/backends/just-bash.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/sandbox/backends/just-bash.js
 function justbash(e) {
 	return createJustBashSandboxBackend({ createOptions: e });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/sandbox/backends/microsandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/sandbox/backends/microsandbox.js
 function microsandbox(e) {
 	return createMicrosandboxSandboxBackend({ createOptions: e });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-base-runtime.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-base-runtime.js
 async function ensureVercelSandboxBaseRuntime(t) {
 	await runSandboxBootstrapStep(t, {
 		failureMessage: `Failed to initialize Vercel sandbox base runtime.`,
@@ -73602,7 +74082,7 @@ async function readBootstrapFailure(e) {
 `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-create-sdk.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-create-sdk.js
 async function createVercelEveImageSandbox(e) {
 	let t = {
 		...e.createOptions,
@@ -73612,7 +74092,7 @@ async function createVercelEveImageSandbox(e) {
 }
 const VERCEL_EVE_SANDBOX_IMAGE = `vercel/eve:latest`;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-errors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-errors.js
 function isVercelSnapshotUnavailableError(e) {
 	for (let t of walkErrorChain$1(e)) if ((t.response?.status ?? t.status ?? t.statusCode) === 410) return !0;
 	return !1;
@@ -73626,7 +74106,7 @@ function* walkErrorChain$1(e) {
 	for (; t != null && !n.has(t);) n.add(t), yield t, t = t.cause;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@vercel/oidc/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@vercel/oidc/index.js
 var t$4 = Object.create, n$6 = Object.defineProperty, r$6 = Object.getOwnPropertyDescriptor, i$5 = Object.getOwnPropertyNames, a$4 = Object.getPrototypeOf, o$4 = Object.prototype.hasOwnProperty, s$4 = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), c$3 = (e, t, a, s) => {
 	if (t && typeof t == `object` || typeof t == `function`) for (var c = i$5(t), l = 0, u = c.length, d; l < u; l++) d = c[l], !o$4.call(e, d) && d !== a && n$6(e, d, {
 		get: ((e) => t[e]).bind(null, d),
@@ -74058,7 +74538,7 @@ ${e.message}`), t ? new m.VercelOidcTokenError(t) : e;
 	var u = b$6(), p = f$4(), m = d$4(), h = _$4(), g = v$5();
 }))(), S$7 = x$7.AccessTokenMissingError, C$7 = x$7.RefreshAccessTokenFailedError, w$8 = x$7.getContext, T$6 = x$7.getVercelOidcToken, E$6 = x$7.getVercelOidcTokenSync, D$5 = x$7.getVercelToken;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-credentials.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-credentials.js
 function getVercelSandboxFetch(e) {
 	return e.fetch ?? globalThis.fetch;
 }
@@ -74097,7 +74577,7 @@ function base64UrlToBase64(e) {
 	return t.padEnd(Math.ceil(t.length / 4) * 4, `=`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-lookup.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-lookup.js
 async function getNamedVercelSandbox(e) {
 	try {
 		return await e.sandboxModule.Sandbox.get(await getVercelSandboxGetOptions(e));
@@ -74134,7 +74614,7 @@ function errorMessage$1(e) {
 	return String(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-read-stream.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel-read-stream.js
 function normalizeVercelReadStream(t) {
 	if (t === null || isWebReadableStream(t)) return t;
 	if (t instanceof Readable) return Readable.toWeb(t);
@@ -74144,7 +74624,7 @@ function isWebReadableStream(e) {
 	return `getReader` in e && typeof e.getReader == `function`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/node/dist-BdTs18CF.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/node/dist-BdTs18CF.js
 var t$3, n$5, r$5, i$4, a$3, o$3, s$3, c$2, l$2, u$3, d$3, f$3, p$4, m$4, h$4;
 var init_dist_BdTs18CF = __esmMin((() => {
 	t$3 = Object.create, n$5 = Object.defineProperty, r$5 = Object.getOwnPropertyDescriptor, i$4 = Object.getOwnPropertyNames, a$3 = Object.getPrototypeOf, o$3 = Object.prototype.hasOwnProperty, c$2 = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), u$3 = (e, t, a, s) => {
@@ -74160,7 +74640,7 @@ var init_dist_BdTs18CF = __esmMin((() => {
 	m$4 = Symbol.for(`workflow-serialize`), h$4 = Symbol.for(`workflow-deserialize`);
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/node/retry-DkR2H1Y0.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/node/retry-DkR2H1Y0.js
 var t$2, n$4, r$4, i$3;
 var init_retry_DkR2H1Y0 = __esmMin((() => {
 	init_dist_BdTs18CF();
@@ -74316,7 +74796,7 @@ var init_retry_DkR2H1Y0 = __esmMin((() => {
 	}));
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/node/version-TugPKZua.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/node/version-TugPKZua.js
 function n$3(e, t, n) {
 	function r(n, r) {
 		if (n._zod || Object.defineProperty(n, "_zod", {
@@ -77489,7 +77969,7 @@ var init_version_TugPKZua = __esmMin((() => {
 	qa$2 = `2.2.1`;
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/node/token-ORseRyWn.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/node/token-ORseRyWn.js
 var token_ORseRyWn_exports = /* @__PURE__ */ __exportAll({ default: () => token_ORseRyWn_default });
 var r$2, token_ORseRyWn_default;
 var init_token_ORseRyWn = __esmMin((() => {
@@ -77532,7 +78012,7 @@ var init_token_ORseRyWn = __esmMin((() => {
 	token_ORseRyWn_default = r$2();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/node/auth-DF_ft5ea.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/node/auth-DF_ft5ea.js
 var auth_DF_ft5ea_exports = /* @__PURE__ */ __exportAll({
 	NotOk: () => G$5,
 	OAuth: () => R$4,
@@ -78122,7 +78602,7 @@ var init_auth_DF_ft5ea = __esmMin((() => {
 	}), Z$6 = `vercel-sandbox-default-project`;
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@vercel/sandbox/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@vercel/sandbox/index.js
 var sandbox_exports = /* @__PURE__ */ __exportAll({
 	APIError: () => A$3,
 	Command: () => Fr$1,
@@ -96607,7 +97087,7 @@ ${e.message}`), t ? new f.VercelOidcTokenError(t) : e;
 	Ba$1 = `vercel-forwarded-host`, Va$1 = `vercel-forwarded-scheme`, Ha$1 = `vercel-forwarded-port`, Ua$1 = `vercel-forwarded-path`, Wa$1 = `vercel-sandbox-oidc-token`, Ga$1 = /* @__PURE__ */ new Map();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/bindings/vercel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/bindings/vercel.js
 function createVercelSandbox(e = {}) {
 	let t = e.loadSandboxModule ?? (async () => await Promise.resolve().then(() => (init_sandbox(), sandbox_exports))), n = {
 		timeout: DEFAULT_SANDBOX_TIMEOUT_MS,
@@ -96879,12 +97359,12 @@ function errorMessage(e) {
 }
 const DEFAULT_SANDBOX_TIMEOUT_MS = 1800 * 1e3, VERCEL_SANDBOX_TAG_LIMIT = 5;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/sandbox/backends/vercel.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/sandbox/backends/vercel.js
 function vercel(e) {
 	return createVercelSandbox({ createOptions: e });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/sandbox/backends/default.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/sandbox/backends/default.js
 const PRODUCTION_PROBES = {
 	isDeployedOnVercel: () => !!process.env.VERCEL,
 	isDockerAvailable: () => isDockerDaemonAvailableSync(),
@@ -96897,7 +97377,7 @@ function selectDefaultSandbox(e, t) {
 	return t.isDeployedOnVercel() ? vercel(e?.vercel) : t.isDockerAvailable() ? docker(e?.docker) : t.isMicrosandboxSupported() ? microsandbox(e?.microsandbox) : justbash(e?.justBash);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-sandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-sandbox.js
 async function resolveSandboxDefinition(n, i, a) {
 	try {
 		let t = expectObjectRecord(await loadResolvedModuleExport({
@@ -96935,7 +97415,7 @@ function resolveBackend(e, t) {
 	return r;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-dynamic-instructions.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-dynamic-instructions.js
 async function resolveDynamicInstructionsDefinition(i, a, o) {
 	try {
 		let n = expectObjectRecord(expectObjectRecord(await loadResolvedModuleExport({
@@ -96965,7 +97445,7 @@ function describe$3(e, t) {
 	return `Expected the dynamic instructions export "${e.exportName ?? `default`}" from "${e.logicalPath}" ${t}.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-dynamic-skill.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-dynamic-skill.js
 async function resolveDynamicSkillDefinition(i, a, o) {
 	try {
 		let n = expectObjectRecord(expectObjectRecord(await loadResolvedModuleExport({
@@ -96995,7 +97475,7 @@ function describe$2(e, t) {
 	return `Expected the dynamic skill export "${e.exportName ?? `default`}" from "${e.logicalPath}" ${t}.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-dynamic-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-dynamic-tool.js
 async function resolveDynamicToolDefinition(i, a, o) {
 	try {
 		let n = expectObjectRecord(await loadResolvedModuleExport({
@@ -97030,7 +97510,7 @@ function describe$1(e, t) {
 	return `Expected the dynamic tool export "${e.exportName ?? `default`}" from "${e.logicalPath}" ${t}.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-tool.js
 async function resolveToolDefinition(i, a, o) {
 	try {
 		let n = expectObjectRecord(await loadResolvedModuleExport({
@@ -97075,7 +97555,7 @@ function isFlexibleSchema(e) {
 	return typeof e == `object` && !!e && `~standard` in e && typeof e[`~standard`] == `object`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-agent.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-agent.js
 async function resolveAgent(e) {
 	let t = e.manifest.skills.map((e) => ({
 		...e,
@@ -97164,7 +97644,7 @@ function createResolvedAgentConfig(e) {
 	return e.config.experimental !== void 0 && (n.experimental = { workflow: e.config.experimental.workflow === void 0 ? void 0 : { world: e.config.experimental.workflow.world } }), e.config.outputSchema !== void 0 && (n.outputSchema = e.config.outputSchema), e.config.reasoning !== void 0 && (n.reasoning = e.config.reasoning), e.config.source !== void 0 && (n.source = createResolvedModuleSourceRef(e.config.source)), n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/skills/instructions.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/skills/instructions.js
 function formatAvailableSkillsSection(e) {
 	return e.length === 0 ? null : [
 		`Available skills`,
@@ -97180,7 +97660,7 @@ function formatAvailableSkillLine(t) {
 	return `- ${t.name}: ${t.description} (path: ${WORKSPACE_ROOT$1}/skills/${t.name}/SKILL.md)`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/workspace/spec.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/workspace/spec.js
 function createWorkspacePromptSection(t) {
 	return t.rootEntries.length === 0 ? void 0 : [
 		`Workspace`,
@@ -97197,7 +97677,7 @@ function createWorkspacePromptSection(t) {
 `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/prompt/connections.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/prompt/connections.js
 function formatConnectionsSection(e) {
 	return [
 		`## Connections`,
@@ -97213,7 +97693,7 @@ function formatConnectionsSection(e) {
 `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/prompt/compose.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/prompt/compose.js
 function composeRuntimeBasePrompt(e) {
 	return [
 		...createInstructionsPromptBlocks(e.instructions),
@@ -97243,7 +97723,7 @@ function createSkillsPromptBlocks(t) {
 	return n === null ? [] : [n];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/bootstrap.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/bootstrap.js
 const BOOTSTRAP_RUNTIME_MODEL_ID = `eve-bootstrap-model`, BOOTSTRAP_RUNTIME_SYSTEM_PROMPT = `You are the eve bootstrap agent. Be concise, stay grounded in the current conversation, and do not assume tools are available unless the runtime provides them.`;
 function createResolvedRuntimeTurnAgent(e) {
 	let t = e.agent;
@@ -97266,7 +97746,7 @@ function createResolvedRuntimeTurnAgent(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/hooks/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/hooks/registry.js
 function createRuntimeHookRegistry(e) {
 	let t = /* @__PURE__ */ new Map(), n = [];
 	for (let r of e) for (let [e, i] of Object.entries(r.events)) {
@@ -97287,7 +97767,7 @@ function createRuntimeHookRegistry(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sandbox/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sandbox/registry.js
 const DEFAULT_SANDBOX_SOURCE_ID = `eve:default-sandbox`;
 function createRuntimeSandboxRegistry(e) {
 	return { sandbox: {
@@ -97304,7 +97784,7 @@ function createFrameworkSandboxDefinition() {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/resolve-agent-graph.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/resolve-agent-graph.js
 var ResolveRuntimeAgentGraphError = class extends Error {
 	logicalPath;
 	nodeId;
@@ -97469,7 +97949,7 @@ function toRuntimeNodeId(e) {
 	return e === ROOT_COMPILED_AGENT_NODE_ID ? ROOT_RUNTIME_AGENT_NODE_ID : e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiler/module-map.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiler/module-map.js
 const compiledModuleNodeScopeSchema = Ls$3.object({ modules: Ls$3.record(Ls$3.string(), Ls$3.object({}).passthrough()) }).strict(), compiledModuleMapSchema = Ls$3.object({ nodes: Ls$3.record(Ls$3.string(), compiledModuleNodeScopeSchema) }).strict();
 function collectModuleRefsForManifest(e) {
 	let t = /* @__PURE__ */ new Map();
@@ -97535,7 +98015,7 @@ function collectModuleRefsForManifest(e) {
 	}), [...t.values()];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/module-map.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/module-map.js
 const BUNDLED_MODULE_MAP_SOURCE = `bundled compiled module map`;
 var LoadCompiledModuleMapError = class extends Error {
 	moduleMapPath;
@@ -97571,7 +98051,7 @@ function createFileImportSpecifier$1(e) {
 	return /^[A-Za-z]:\//.test(t) ? `file:///${encodeURI(t)}` : t.startsWith(`/`) ? `file://${encodeURI(t)}` : t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/discover/filesystem.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/discover/filesystem.js
 const SUPPORTED_AUTHORED_MODULE_FILE_EXTENSIONS = [
 	`.cts`,
 	`.mts`,
@@ -97581,7 +98061,7 @@ const SUPPORTED_AUTHORED_MODULE_FILE_EXTENSIONS = [
 	`.js`
 ], PROJECT_MARKER_FILE_NAMES = [`package.json`, `vercel.json`], PROJECT_MARKER_FILE_NAME_SET = new Set(PROJECT_MARKER_FILE_NAMES);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-asset-import-plugin.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-asset-import-plugin.js
 const AUTHORED_ASSET_CODE_EXTENSIONS = [
 	`.ts`,
 	`.tsx`,
@@ -97673,7 +98153,7 @@ function getAssetMimeType(e) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-bundle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-bundle.js
 function createAuthoredModuleBundleError(e, t) {
 	let n = t instanceof Error ? t.message : String(t), r = [];
 	return (/\.node(?:\b|["'?])/i.test(n) || /native addon|native module|invalid utf-?8|Could not load .*\.node/i.test(n)) && r.push(`If this comes from a native Node package, keep that package external with agent build.externalDependencies so Vercel/Nitro traces it instead of bundling it.`), /Unexpected character|No loader is configured|Could not load|Unknown file extension/i.test(n) && r.push(`If this comes from an asset import, eve only supports assets that Rolldown can emit for a Node ESM bundle; otherwise load the file through fs/import.meta.url or externalize the package.`), Error([
@@ -97684,7 +98164,7 @@ function createAuthoredModuleBundleError(e, t) {
 `));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/jsonc-parser/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/jsonc-parser/index.js
 function e(e, i = !1) {
 	let a = e.length, o = 0, s = ``, c = 0, l = 16, u = 0, d = 0, f = 0, p = 0, m = 0;
 	function h(t, n) {
@@ -98305,7 +98785,7 @@ var B$2;
 	e[e.InvalidSymbol = 1] = `InvalidSymbol`, e[e.InvalidNumberFormat = 2] = `InvalidNumberFormat`, e[e.PropertyNameExpected = 3] = `PropertyNameExpected`, e[e.ValueExpected = 4] = `ValueExpected`, e[e.ColonExpected = 5] = `ColonExpected`, e[e.CommaExpected = 6] = `CommaExpected`, e[e.CloseBraceExpected = 7] = `CloseBraceExpected`, e[e.CloseBracketExpected = 8] = `CloseBracketExpected`, e[e.EndOfFileExpected = 9] = `EndOfFileExpected`, e[e.InvalidCommentToken = 10] = `InvalidCommentToken`, e[e.UnexpectedEndOfComment = 11] = `UnexpectedEndOfComment`, e[e.UnexpectedEndOfString = 12] = `UnexpectedEndOfString`, e[e.UnexpectedEndOfNumber = 13] = `UnexpectedEndOfNumber`, e[e.InvalidUnicode = 14] = `InvalidUnicode`, e[e.InvalidEscapeCharacter = 15] = `InvalidEscapeCharacter`, e[e.InvalidCharacter = 16] = `InvalidCharacter`;
 })(B$2 ||= {});
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-package-tsconfig-paths.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-package-tsconfig-paths.js
 const packageTsConfigPathsCache = /* @__PURE__ */ new Map(), nearestPackageRootCache = /* @__PURE__ */ new Map();
 function createAuthoredPackageTsConfigPathsPlugin(e) {
 	return {
@@ -98435,7 +98915,7 @@ function isPathInsideOrEqual$1(e, t) {
 	return i === a || i.startsWith(`${a}${sep}`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/bundler/nitro-rolldown.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/bundler/nitro-rolldown.js
 let rolldownPromise, rolldownParseAstPromise;
 function loadNitroRolldown() {
 	return rolldownPromise ??= (async () => await import(pathToFileURL(createRequire(createRequire(import.meta.url).resolve(`nitro/package.json`)).resolve(`rolldown`)).href))(), rolldownPromise;
@@ -98450,10 +98930,10 @@ function getSingleRolldownChunk(e, t) {
 	return r;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/nitro/host/server-external-packages.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/nitro/host/server-external-packages.js
 const SERVER_EXTERNAL_PACKAGES = `@alinea/generated.@appsignal/nodejs.@aws-sdk/client-kms.@aws-sdk/client-s3.@aws-sdk/client-sso.@aws-sdk/s3-presigned-post.@blockfrost/blockfrost-js.@datadog/flagging-core.@highlight-run/node.@huggingface/transformers.@jpg-store/lucid-cardano.@libsql/client.@mikro-orm/core.@mikro-orm/knex.@node-rs/argon2.@node-rs/bcrypt.@prisma/client.@react-pdf/renderer.@sentry/profiling-node.@smithy/util-stream.@sparticuz/chromium.@sparticuz/chromium-min.@statsig/statsig-node-core.@swc/core.@xenova/transformers.@zenstackhq/runtime.argon2.autoprefixer.aws-crt.bcrypt.better-sqlite3.canvas.chromadb-default-embed.config.cpu-features.cypress.dd-trace.eslint.express.firebase-admin.htmlrewriter.import-in-the-middle.isolated-vm.jest.jsdom.keyv.libsql.mdx-bundler.mongodb.mongoose.newrelic.next-mdx-remote.next-seo.node-cron.node-pty.node-web-audio-api.onnxruntime-node.oslo.pg.pino.pino-pretty.pino-roll.playwright.playwright-core.postcss.prettier.prisma.puppeteer.puppeteer-core.ravendb.require-in-the-middle.rimraf.sharp.shiki.sqlite3.thread-stream.ts-morph.ts-node.typescript.vscode-oniguruma.webpack.websocket.zeromq`.split(`.`);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/node-esm-compat-banner.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/node-esm-compat-banner.js
 const BANNER_LINES = [{
 	importLine: `import { fileURLToPath as __eveFileURLToPath } from "node:url";`,
 	declarationLine: `const __filename = __eveFileURLToPath(import.meta.url);`,
@@ -98525,7 +99005,7 @@ function encodeVlqInteger(e) {
 	return n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-loader.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-loader.js
 const AUTHORED_BUNDLED_MODULE_EXTENSION = /\.[cm]?[jt]sx?$/, AUTHORED_MODULE_BUNDLE_DIRECTORY_PATH = join(`node_modules`, `.cache`, `eve`, `authored-modules`), RESOLVE_EXTENSIONS = [
 	`.ts`,
 	`.tsx`,
@@ -98772,7 +99252,7 @@ function resolveAuthoredPackageRoot(e) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiler/model-catalog.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiler/model-catalog.js
 const COMPILED_RUNTIME_MODEL_CATALOG_CACHE_KIND = `eve-model-catalog-cache`, catalogModelProviderSchema = Ls$3.object({
 	provider: Ls$3.string().min(1),
 	providerModelId: Ls$3.string().min(1),
@@ -98810,7 +99290,7 @@ const compiledRuntimeModelCatalogCacheSchema = Ls$3.object({
 	}]
 ]);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/json-schema.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/json-schema.js
 function normalizeJsonSchemaDefinition(t, n = `input`) {
 	return isStandardSchema(t) ? parseJsonObject(t[`~standard`].jsonSchema[n]({ target: `draft-07` })) : parseJsonObject(t);
 }
@@ -98818,7 +99298,7 @@ function isStandardSchema(e) {
 	return typeof e == `object` && !!e && `~standard` in e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-definition/core.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-definition/core.js
 function normalizeAgentDefinition(e, r) {
 	let a = expectObjectRecord(e, r);
 	if (expectOnlyKnownKeys(a, [
@@ -98901,12 +99381,12 @@ function normalizeAgentCompactionDefinition(e, r) {
 	return a;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/runtime-model.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/runtime-model.js
 function formatLanguageModelGatewayId(e) {
 	return typeof e == `string` ? e : `${e.provider.split(`.`)[0]}/${e.modelId.replace(/^(claude-[a-z]+-\d+)-(\d+)$/, `$1.$2`)}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/dynamic-tool-definition.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/dynamic-tool-definition.js
 const ALLOWED_DYNAMIC_TOOL_EVENTS = /* @__PURE__ */ new Set([
 	`session.started`,
 	`turn.started`,
@@ -98925,10 +99405,10 @@ function isBrandedSkillEntry(e) {
 	return typeof e == `object` && !!e && e[SKILL_BRAND] === !0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/public/definitions/tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/public/definitions/tool.js
 const ENABLE_WORKFLOW_TOOL_SENTINEL_KIND = `eve:enable-workflow-tool`, ExperimentalWorkflow = Object.freeze({ kind: ENABLE_WORKFLOW_TOOL_SENTINEL_KIND });
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/skill-package.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/skill-package.js
 const WORKSPACE_ROOT = `/workspace`;
 function normalizeSkillPackage(e) {
 	assertSafeSkillPackageName(e.name);
@@ -98969,10 +99449,10 @@ function comparePaths(e, t) {
 	return e < t ? -1 : +(e > t);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiler/artifacts.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiler/artifacts.js
 const COMPILE_METADATA_KIND = `eve-compile-metadata`, COMPILE_METADATA_VERSION = 5;
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/loaders/compile-metadata.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/loaders/compile-metadata.js
 const compileArtifactDigestSchema = Ls$3.object({
 	path: Ls$3.string(),
 	sha256: Ls$3.string()
@@ -99024,7 +99504,7 @@ function formatLoadErrorMessage(e) {
 	return e instanceof Error ? e.message : `Unknown compile metadata load failure.`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/cache-key.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/cache-key.js
 async function resolveRuntimeCompiledArtifactsVersionedCacheKey(n) {
 	let r = getRuntimeCompiledArtifactsCacheKey(n), i = await resolveCompileMetadataMtimeMs(n);
 	try {
@@ -99047,7 +99527,7 @@ function formatMtimeMsForCacheKey(e) {
 	return Math.floor(e).toString(36);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sessions/compiled-agent-cache.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sessions/compiled-agent-cache.js
 const isCacheDisabled = process.env.EVE_DISABLE_AGENT_CACHE === `1`;
 function isDevelopmentRuntimeSnapshotRoot(e) {
 	return e.replaceAll(`\\`, `/`).includes(`/.eve/dev-runtime/snapshots/`);
@@ -99120,7 +99600,7 @@ function collectResolvedChannels(e) {
 	return [...t.values()];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/proxy-input-requests.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/proxy-input-requests.js
 const PROXY_INPUT_REQUESTS_KEY = `eve.runtime.proxyInputRequests`;
 function getProxyInputRequests(e) {
 	return new Map(Object.entries(readMap(e)));
@@ -99167,7 +99647,7 @@ function writeMap(t, n) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/actions/keys.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/actions/keys.js
 function getRuntimeActionRequestKey(e) {
 	switch (e.kind) {
 		case `load-skill`: return `runtime-action:${e.kind}:${e.callId}`;
@@ -99184,7 +99664,7 @@ function getRuntimeActionResultKey(e) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/runtime-actions.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/runtime-actions.js
 const PENDING_RUNTIME_ACTION_BATCH_KEY = `eve.runtime.pendingActionBatch`;
 function getPendingRuntimeActionBatch(e) {
 	let t = e?.[PENDING_RUNTIME_ACTION_BATCH_KEY];
@@ -99383,13 +99863,13 @@ function toMutableJsonValue(e) {
 	return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/shared/empty-delivery.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/shared/empty-delivery.js
 const EMPTY_DELIVERY_SENTINEL = `<eve-empty-delivery/>`, CONDITIONAL_DELIVERY_INSTRUCTION = `Conditional delivery\nOnly when the current task explicitly makes delivery conditional and there is nothing to report, reply with exactly ${EMPTY_DELIVERY_SENTINEL} and no other text. Do not use this marker for ordinary conversations, after input or approval responses, or merely because you have no additional commentary. Never return an empty response; use the marker to intentionally deliver nothing.`;
 function hasEmptyDeliverySentinel(e) {
 	return e?.includes(`<eve-empty-delivery/>`) ?? !1;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/tool-output-serialization.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/tool-output-serialization.js
 var ToolOutputSerializationError = class extends TypeError {
 	toolCallId;
 	toolName;
@@ -99413,7 +99893,7 @@ function withToolOutputSerializationError(e, t) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/action-result-helpers.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/action-result-helpers.js
 function toJsonValue(n) {
 	return isAuthorizationSignal(n) ? parseJsonValue(authorizationPendingAsJsonObject({ connections: n.challenges.map((e) => e.name) })) : isAuthorizationPendingModelOutput(n) ? parseJsonValue(authorizationPendingAsJsonObject(n)) : parseJsonValue(n === void 0 ? null : n);
 }
@@ -99478,7 +99958,7 @@ function isToolResultError(e) {
 	return e.type === `error-json` || e.type === `error-text` || e.type === `execution-denied`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/tool-interrupts.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/tool-interrupts.js
 const PendingToolInterruptsKey = new ContextKey(`eve.pendingToolInterrupts`);
 function stashToolInterrupt(e, t, n) {
 	let r = e.get(PendingToolInterruptsKey) ?? {};
@@ -99494,7 +99974,7 @@ function asContainer(e) {
 	return e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/stream-actions.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/stream-actions.js
 function createProviderStreamActionBatch(t) {
 	let n = /* @__PURE__ */ new Map(), r = Promise.resolve(), i, a, o, emitPendingActions = async () => {
 		if (n.size === 0) return;
@@ -99532,7 +100012,7 @@ function createProviderStreamActionBatch(t) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/emission.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/emission.js
 const HARNESS_EMISSION_STATE_KEY = `eve.harness.emission`, DEFAULT_EMISSION_STATE = {
 	sessionStarted: !1,
 	sequence: 0,
@@ -99792,7 +100272,7 @@ function isInlineAuthorizationToolResult(e) {
 	return n !== void 0 && isAuthorizationSignal(n);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/session.js
 function createCompactionConfig(e = {}) {
 	let t = e.thresholdPercent ?? .9, n = {
 		recentWindowSize: 10,
@@ -99890,7 +100370,7 @@ function createSessionToolDefinitions(e) {
 	}));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/durable-session-migrations/chain.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/durable-session-migrations/chain.js
 function runMigrationChain(e) {
 	if (typeof e.value != `object` || e.value === null) throw Error(`${e.label}: value has no numeric "version" field.`);
 	let t = e.value.version, n;
@@ -99914,7 +100394,7 @@ function runMigrationChain(e) {
 	return n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/durable-session-migrations/snapshot.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/durable-session-migrations/snapshot.js
 const snapshotMigrations = [];
 function migrateDurableSessionSnapshot(e) {
 	return runMigrationChain({
@@ -99925,7 +100405,7 @@ function migrateDurableSessionSnapshot(e) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/durable-session-store.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/durable-session-store.js
 const EVE_SESSION_STREAM_NAMESPACE = `eve.session`, DURABLE_SESSION_VERSION = 1, DURABLE_SESSION_READ_TIMEOUT_MS = 1e4;
 function projectSessionState(t) {
 	return {
@@ -99972,7 +100452,7 @@ function createDurableSessionState(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/create-session-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/create-session-step.js
 async function createSessionStep(e) {
 	let t = await getCompiledRuntimeAgentBundle({
 		compiledArtifactsSource: e.compiledArtifactsSource,
@@ -99989,7 +100469,7 @@ async function createSessionStep(e) {
 }
 registerStepFunction("step//eve@0.16.2//createSessionStep", createSessionStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/delegated-parent-notification.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/delegated-parent-notification.js
 async function notifyDelegatedParentStep(e) {
 	if (e.result === void 0) return;
 	let t = (await deserializeContext(e.serializedContext)).get(ChannelKey);
@@ -100002,7 +100482,7 @@ async function notifyDelegatedParentStep(e) {
 }
 registerStepFunction("step//eve@0.16.2//notifyDelegatedParentStep", notifyDelegatedParentStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/adapter-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/adapter-context.js
 function buildAdapterContext(e, t) {
 	let n = {
 		ctx: t,
@@ -100012,7 +100492,7 @@ function buildAdapterContext(e, t) {
 	return e.createAdapterContext ? e.createAdapterContext(n) : n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/workflow-callback-url.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/workflow-callback-url.js
 function resolveVercelProductionCallbackBaseUrl() {
 	return process.env.VERCEL_ENV === `production` && process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null;
 }
@@ -100025,7 +100505,7 @@ function createWorkflowCallbackUrl(e, t) {
 	return r && n.searchParams.set(`x-vercel-protection-bypass`, r), n.toString();
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/subagent-invocation.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/subagent-invocation.js
 function formatSubagentInvocation(e) {
 	return { message: [
 		`You are the subagent "${e.name}".`,
@@ -100039,7 +100519,7 @@ function formatSubagentInvocation(e) {
 `) };
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/remote-agent-dispatch.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/remote-agent-dispatch.js
 async function startRemoteAgentSession(n) {
 	let r = n.callbackToken ?? n.session.continuationToken;
 	if (!r) throw Error(`Cannot dispatch remote agent without a parent continuation token.`);
@@ -100095,7 +100575,7 @@ function trimTrailingSlash(e) {
 	return e.endsWith(`/`) ? e.slice(0, -1) : e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/subagent-tool.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/subagent-tool.js
 function buildSubagentRunInput(n) {
 	let { action: r, auth: i, batchEvent: a, capabilities: o, channelMetadata: s, initiatorAuth: c, session: l } = n, u = mintSubagentContinuationToken(`${l.sessionId}:${r.callId}`), d = l.rootSessionId ?? l.sessionId;
 	return {
@@ -100145,7 +100625,7 @@ function formatSubagentCallInputMessage(e) {
 	}).message;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/dispatch-runtime-actions-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/dispatch-runtime-actions-step.js
 const log$10 = createLogger(`execution.dispatch-runtime-actions`);
 async function dispatchRuntimeActionsStep(e) {
 	let s = await readDurableSession(e.sessionState), u = getPendingRuntimeActionBatch(s.state);
@@ -100248,7 +100728,7 @@ function createRemoteAgentStartFailureResult(e) {
 }
 registerStepFunction("step//eve@0.16.2//dispatchRuntimeActionsStep", dispatchRuntimeActionsStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-runtime-action-state.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-runtime-action-state.js
 const WORKFLOW_RUNTIME_ACTION_INTERRUPT_KIND = `eve.workflow-runtime-action`;
 function isWorkflowRuntimeActionInterrupt(e) {
 	return isRecord$4(e) && isRecord$4(e.payload) && e.payload.kind === `eve.workflow-runtime-action`;
@@ -100298,7 +100778,7 @@ function isRecord$4(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-interrupt-state.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-interrupt-state.js
 const PENDING_KEY = `eve.harness.pendingWorkflowInterrupt`;
 function getPendingWorkflowInterrupt(e) {
 	let n = e?.[PENDING_KEY];
@@ -100334,7 +100814,7 @@ function isRecord$3(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/dispatch-workflow-runtime-actions-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/dispatch-workflow-runtime-actions-step.js
 async function dispatchWorkflowRuntimeActionsStep(e) {
 	let t = await readDurableSession(e.sessionState), n = getPendingWorkflowInterrupt(t.state);
 	if (n === void 0) return {
@@ -100370,13 +100850,13 @@ async function dispatchWorkflowRuntimeActionsStep(e) {
 }
 registerStepFunction("step//eve@0.16.2//dispatchWorkflowRuntimeActionsStep", dispatchWorkflowRuntimeActionsStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/forward-turn-delivery-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/forward-turn-delivery-step.js
 async function forwardTurnDeliveryStep(e) {
 	await E$9(e.inboxToken, e.payload);
 }
 registerStepFunction("step//eve@0.16.2//forwardTurnDeliveryStep", forwardTurnDeliveryStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/session-callback-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/session-callback-step.js
 const log$9 = createLogger(`execution.session-callback`);
 async function fireSessionCallbackStep(e) {
 	let n = e.serializedContext[`eve.sessionId`] ?? ``, i = e.serializedContext[SessionCallbackKey.name];
@@ -100418,13 +100898,13 @@ function parseSerializedSessionCallback(e) {
 }
 registerStepFunction("step//eve@0.16.2//fireSessionCallbackStep", fireSessionCallbackStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/turn-control-protocol.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/turn-control-protocol.js
 async function sendTurnControlStep(e) {
 	await E$9(e.controlToken, e.payload);
 }
 registerStepFunction("step//eve@0.16.2//sendTurnControlStep", sendTurnControlStep);
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/durable-session-migrations/turn-workflow.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/durable-session-migrations/turn-workflow.js
 function createTurnWorkflowInput(e) {
 	return {
 		capabilities: e.capabilities,
@@ -100441,7 +100921,7 @@ function createTurnWorkflowInput(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/messages.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/messages.js
 function coalesceTurnInputs(e, t) {
 	let n = coalesceInputResponses({
 		a: e.inputResponses,
@@ -100485,7 +100965,7 @@ function toUserContentArray(e) {
 	}] : [] : Array.isArray(e) ? [...e] : [];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/hook-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/hook-lifecycle.js
 async function dispatchStreamEventHooks(e) {
 	let t = e.registry.streamEventsByType.get(e.event.type) ?? [], n = e.registry.streamEventsWildcard;
 	if (t.length === 0 && n.length === 0) return;
@@ -100508,7 +100988,7 @@ function buildHookContext(i) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/dynamic-resolve-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/dynamic-resolve-context.js
 function buildResolveContext(e, t) {
 	let n = e.get(SessionIdKey) ?? ``, r = e.get(AuthKey) ?? null, i = e.get(InitiatorAuthKey) ?? null, a = e.get(ChannelKey), o = e.get(ContinuationTokenKey), s = e.get(ChannelInstrumentationKey);
 	return {
@@ -100528,7 +101008,7 @@ function buildResolveContext(e, t) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/dynamic-instruction-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/dynamic-instruction-lifecycle.js
 const log$8 = createLogger(`dynamic-instructions`);
 function lowerToSystemMessage(e) {
 	let t = e.markdown.trim();
@@ -100579,7 +101059,7 @@ async function dispatchDynamicInstructionEvent(e) {
 	t.set(c, d);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/dynamic-skill-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/dynamic-skill-lifecycle.js
 const log$7 = createLogger(`dynamic-skills`);
 function qualifyDynamicSkillNames(e, t, n) {
 	let r = Object.keys(n), i = [];
@@ -100656,7 +101136,7 @@ async function dispatchDynamicSkillEvent(e) {
 	a.set(DynamicSkillManifestKey, m), a.setVirtualContext(PendingSkillAnnouncementKey, formatDynamicSkillAnnouncement(m));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/dynamic-tool-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/dynamic-tool-lifecycle.js
 const log$6 = createLogger(`dynamic-tools`);
 function toHarnessToolDefinition(e, t) {
 	return {
@@ -100780,7 +101260,7 @@ async function dispatchDynamicToolEvent(e) {
 	n.set(u, [...f, ...c]);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-D7CzPkf8.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/dist-D7CzPkf8.js
 function f$1(e, t, n) {
 	function r(n, r) {
 		if (n._zod || Object.defineProperty(n, "_zod", {
@@ -109207,7 +109687,7 @@ var init_dist_D7CzPkf8 = __esmMin((() => {
 	};
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/mcp/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/mcp/index.js
 init_provider();
 init_dist_D7CzPkf8();
 const oe$2 = {
@@ -110774,7 +111254,7 @@ var Jt$2 = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/mcp-client.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/mcp-client.js
 var McpConnectionClient = class {
 	#e;
 	#t;
@@ -110936,7 +111416,7 @@ async function resolveHeaderValue(e, t) {
 	return typeof e == `function` ? await e(t()) : await e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/openapi-operations.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/openapi-operations.js
 const HTTP_METHODS = [
 	`get`,
 	`put`,
@@ -110965,7 +111445,7 @@ function operationDescription(e) {
 	return typeof e.summary == `string` && e.summary.length > 0 ? e.summary : typeof e.description == `string` ? e.description : ``;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/openapi-schema.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/openapi-schema.js
 function buildInputSchema(e, t) {
 	let n = {}, r = [];
 	for (let t of e) n[t.name] = t.description === void 0 ? t.schema : {
@@ -111032,7 +111512,7 @@ function isArray(e) {
 	return Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/openapi-security.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/openapi-security.js
 function resolveSecurity(r, i) {
 	let a = isArray(i.security) ? i.security : isArray(r.security) ? r.security : void 0;
 	if (a === void 0 || a.length === 0) return;
@@ -111080,7 +111560,7 @@ function extractBearerToken(e) {
 	return typeof t == `string` ? /^Bearer\s+(.+)$/i.exec(t)?.[1] : void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/gray-matter/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/gray-matter/index.js
 var __commonJSMin = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), __require = createRequire(import.meta.url), require_kind_of = __commonJSMin(((e, t) => {
 	var n = Object.prototype.toString;
 	t.exports = function(e) {
@@ -115894,7 +116374,7 @@ return ` + str.trim() + `;
 }));
 var gray_matter_default = require_gray_matter();
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/openapi-spec.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/openapi-spec.js
 function parseSpecDocument(e) {
 	try {
 		return JSON.parse(e);
@@ -115942,7 +116422,7 @@ function substituteServerVariables(t, n) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/openapi-client.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/openapi-client.js
 const SWAGGER_PARAMETER_SCHEMA_KEYS = [
 	`default`,
 	`enum`,
@@ -116165,7 +116645,7 @@ async function readResponseBody(e) {
 	return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/connections/registry.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/connections/registry.js
 var ConnectionRegistryImpl = class {
 	#e = /* @__PURE__ */ new Map();
 	#t;
@@ -116195,12 +116675,12 @@ var ConnectionRegistryImpl = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/node.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/node.js
 function getActiveRuntimeNode(e) {
 	return e.require(BundleKey).graph.root;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/providers/connection.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/providers/connection.js
 const connectionProvider = {
 	key: ConnectionRegistryKey,
 	create(e, t) {
@@ -116210,7 +116690,7 @@ const connectionProvider = {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/template-prewarm-lock.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/template-prewarm-lock.js
 const LOCK_TIMEOUT_MS = 900 * 1e3;
 async function waitForSandboxTemplatePrewarmLock(e) {
 	await waitForLockRelease(resolveSandboxTemplatePrewarmLockPath(e), e.log);
@@ -116287,7 +116767,7 @@ function isNotFoundError(e) {
 	return typeof e == `object` && !!e && `code` in e && e.code === `ENOENT`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/authored-module-map-loader.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/authored-module-map-loader.js
 async function loadCompiledModuleMapFromAuthoredSource(e) {
 	return await hydrateCompiledModuleMapFromManifest(await loadCompiledManifest({ compiledArtifactsSource: e.compiledArtifactsSource }));
 }
@@ -116316,12 +116796,12 @@ async function hydrateCompiledNodeScope(n) {
 	return o;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/application/runtime-compiled-artifacts-source.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/application/runtime-compiled-artifacts-source.js
 function createAuthoredSourceRuntimeCompiledArtifactsSource(e) {
 	return createDiskRuntimeCompiledArtifactsSource(e, { moduleMapLoaderPath: resolvePackageSourceFilePath(`src/internal/authored-module-map-loader.ts`) });
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sandbox/keys.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sandbox/keys.js
 async function createRuntimeSandboxKeys(e) {
 	return {
 		sessionKey: await createRuntimeSandboxSessionKey(e),
@@ -116394,7 +116874,7 @@ function sanitizeRuntimeSandboxKey(e) {
 	return e.replaceAll(/[^a-zA-Z0-9._-]+/g, `-`).slice(0, 120);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/sandbox/template-plan.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/sandbox/template-plan.js
 function createRuntimeSandboxTemplatePlan(e) {
 	if (e.definition.bootstrap !== void 0) {
 		if (e.definition.sourceHash === void 0) throw Error(`Sandbox "${e.definition.logicalPath}" defines bootstrap() but has no compiled sourceHash.`);
@@ -116411,7 +116891,7 @@ function createRuntimeSandboxTemplatePlan(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/workspace/seed-files.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/workspace/seed-files.js
 async function materializeWorkspaceDirectory(e) {
 	let t = [];
 	return await addMaterializedDirectoryFiles({
@@ -116440,7 +116920,7 @@ async function addMaterializedDirectoryFiles(r) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/prewarm.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/prewarm.js
 async function prewarmSandboxes(n) {
 	let r = await collectPrewarmTargets(n);
 	if (r.length === 0) return;
@@ -116563,7 +117043,7 @@ function isLocalSandboxBackend(e) {
 	return e === `docker` || e === `microsandbox`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/development-prewarm.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/development-prewarm.js
 const pendingDevelopmentPrewarms = /* @__PURE__ */ new Map(), retainedDevelopmentPrewarmLogs = /* @__PURE__ */ new Map(), completedDevelopmentPrewarmSignatures = /* @__PURE__ */ new Map();
 async function waitForDevelopmentSandboxPrewarm(e) {
 	let t = findPendingPrewarm(resolvePrewarmKeys(e));
@@ -116605,7 +117085,7 @@ async function withProgressHeartbeat(e, t, n) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/sandbox/ensure.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/sandbox/ensure.js
 async function ensureSandboxAccess(n) {
 	let i = n.state?.initialized ?? !1, o = n.state?.session ?? null, s = getRuntimeCompiledArtifactsSandboxAppRoot(n.compiledArtifactsSource) ?? process.cwd(), c = n.registry.sandbox, l;
 	function getHandle() {
@@ -116717,7 +117197,7 @@ function formatNodeLabel(e) {
 	return e === `__root__` ? `root` : e;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/providers/sandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/providers/sandbox.js
 const sandboxProvider = {
 	key: SandboxKey,
 	async create(e, t) {
@@ -116757,7 +117237,7 @@ function resolveTagChannelKind(t) {
 	return t === void 0 ? `unknown` : getAdapterKind(t);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/providers/session.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/providers/session.js
 const sessionProvider = {
 	key: SessionKey,
 	create(e, t) {
@@ -116777,7 +117257,7 @@ const sessionProvider = {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/run-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/run-step.js
 const frameworkProviders = [
 	sessionProvider,
 	connectionProvider,
@@ -116811,7 +117291,7 @@ async function runStep(e, t, n) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/channel/resolve-text.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/channel/resolve-text.js
 function resolveTextToResponse(e, t) {
 	let n = e.trim();
 	if (n.length === 0) return;
@@ -116845,7 +117325,7 @@ function matchOption(e, t) {
 	if (Number.isInteger(i) && i > 0 && i <= t.length) return t[i - 1];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/input-requests.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/input-requests.js
 const PENDING_INPUT_BATCH_KEY = `eve.runtime.pendingInputBatch`, APPROVED_TOOLS_KEY = `eve.runtime.hitl.approvedTools`, DEFERRED_STEP_INPUT_KEY = `eve.runtime.deferredStepInput`, TOOL_EXECUTION_DENIED_MESSAGE = `Tool execution was denied.`;
 function hasStepInput(e) {
 	return e === void 0 ? !1 : e.message !== void 0 || (e.inputResponses?.length ?? 0) > 0;
@@ -117105,7 +117585,7 @@ function resolveToolCallInputObject(e) {
 	return e == null ? {} : parseJsonObject(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/model-call-error.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/model-call-error.js
 const GATEWAY_AUTHENTICATION_ERROR_NAME = `GatewayAuthenticationError`, GATEWAY_AUTH_FAILURE_SUMMARY_NAME = `AI Gateway authentication failed`, UNSUPPORTED_TOOL_TYPE_REGEX = /tool type ['"]([\w.-]+)['"] is not supported/i;
 function summarizeKnownModelCallConfigError(e) {
 	let t = readErrorName(e), r = readErrorMessage(e);
@@ -117294,7 +117774,7 @@ function truncateSnippet(e, t) {
 	return e.length <= t ? e : `${e.slice(0, t)}...<truncated>`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/input-extraction.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/input-extraction.js
 function extractQuestionInputRequests(n) {
 	let r = [];
 	for (let i of n.toolCalls) {
@@ -117337,7 +117817,7 @@ function extractToolApprovalInputRequests(t) {
 	return n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/prompt-cache.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/prompt-cache.js
 const ANTHROPIC_CACHE_MARKER = Object.freeze({ anthropic: Object.freeze({ cacheControl: Object.freeze({ type: `ephemeral` }) }) });
 function detectPromptCachePath(e) {
 	return typeof e == `string` ? { kind: `gateway-auto` } : (typeof e.provider == `string` ? e.provider.toLowerCase() : ``).includes(`anthropic`) ? { kind: `anthropic-direct` } : { kind: `none` };
@@ -117407,7 +117887,7 @@ function applyConversationCacheControl(e, t) {
 	return n;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/context/build-dynamic-tools.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/context/build-dynamic-tools.js
 const log$5 = createLogger(`dynamic-tools`);
 function lookupStepFunction(e) {
 	try {
@@ -117454,7 +117934,7 @@ function buildDynamicTools(e) {
 	];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/internal/attachments/errors.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/internal/attachments/errors.js
 var EveAttachmentError = class extends Error {
 	kind;
 	adapterKind;
@@ -117464,7 +117944,7 @@ var EveAttachmentError = class extends Error {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/attachment-staging.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/attachment-staging.js
 const ATTACHMENTS_ROOT = `/workspace/attachments`, UNSAFE_FILENAME_CHARS = /[^\w.-]+/g;
 async function stageAttachmentsForAdapter(e, t, n) {
 	if (typeof e == `string`) return e;
@@ -117598,7 +118078,7 @@ function safeFilename(e, t) {
 	return n.length > 0 ? n : `file-${t}`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-tool-description.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-tool-description.js
 function workflowToolDescription(e) {
 	let t = e.length > 0 ? e : [`agent`], n = t.map((e) => `\`${e}\``).join(`, `), r = t.filter((e) => e !== `agent`);
 	return `Use \`Workflow\` when a task needs JavaScript to coordinate multiple child-agent calls as one durable step. It is an orchestration tool, not a general-purpose tool runner.
@@ -117641,7 +118121,7 @@ function agentAccess(e) {
 	return /^[A-Za-z_$][A-Za-z0-9_$]*$/u.test(e) ? `tools.${e}` : `tools[${JSON.stringify(e)}]`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-sandbox.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-sandbox.js
 async function applyWorkflowTool(t) {
 	let i = createWorkflowHostTools(t.harnessTools, Object.keys(t.tools));
 	if (Object.keys(i).length === 0) return {
@@ -117702,7 +118182,7 @@ function createWorkflowRuntimeActionHostTool(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-continuation-security.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-continuation-security.js
 const WORKFLOW_CONTINUATION_SECURITY_KEY = `eve.harness.workflowContinuationSecurity`;
 function ensureWorkflowContinuationSecurity(t) {
 	return t.state?.[WORKFLOW_CONTINUATION_SECURITY_KEY] === void 0 ? {
@@ -117725,7 +118205,7 @@ function getWorkflowContinuationSecurity(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-lifecycle.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-lifecycle.js
 const log$4 = createLogger(`harness.workflow-lifecycle`);
 function createWorkflowLifecycle(e) {
 	return {
@@ -117771,7 +118251,7 @@ function createWorkflowLifecycle(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/compaction.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/compaction.js
 const COMPACTION_SYSTEM_PROMPT = [
 	`You are a conversation summarizer.`,
 	`Write a concise but useful summary for continuing the work.`,
@@ -117929,7 +118409,7 @@ function summarizeText(e) {
 	return t.length <= 280 ? t : `${t.slice(0, 280).trimEnd()}…`;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/turn-tag-state.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/turn-tag-state.js
 const HARNESS_TURN_USAGE_STATE_KEY = `eve.harness.turnUsage`, ZERO_USAGE = {
 	cacheReadTokens: 0,
 	cacheWriteTokens: 0,
@@ -117962,7 +118442,7 @@ function accumulateTurnUsage(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/_chunks/workflow/sleep-Dxuzj5to.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/_chunks/workflow/sleep-Dxuzj5to.js
 async function n$1(r) {
 	let i = globalThis[j_];
 	return i || ke$8(`sleep()`, `https://workflow-sdk.dev/docs/api-reference/workflow/sleep`, n$1), i(r);
@@ -117971,7 +118451,7 @@ var init_sleep_Dxuzj5to = __esmMin((() => {
 	init_attribute_changes_DUxG_Gic();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@workflow/core/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@workflow/core/index.js
 var core_exports = /* @__PURE__ */ __exportAll({
 	FatalError: () => D$10,
 	RetryableError: () => O$8,
@@ -118064,7 +118544,7 @@ var init_core = __esmMin((() => {
 	init_sleep_Dxuzj5to();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/attributes/emit.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/attributes/emit.js
 let WARNED_ABOUT_TAG_FAILURE = !1;
 async function setEveAttributes(e) {
 	let t = normalizeEveAttributes(e);
@@ -118079,7 +118559,7 @@ async function setEveAttributes(e) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/instrumentation-runtime-context.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/instrumentation-runtime-context.js
 const log$3 = createLogger(`harness.instrumentation-runtime-context`);
 function buildTelemetryRuntimeContext(e) {
 	if (e.authored === void 0) return;
@@ -118176,13 +118656,13 @@ function snapshotForInstrumentation(e, n) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/instrumentation-config.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/instrumentation-config.js
 const INSTRUMENTATION_CONFIG_GLOBAL_KEY = Symbol.for(`eve.harness-instrumentation-config`), globalContainer = globalThis;
 function getInstrumentationConfig() {
 	return globalContainer[INSTRUMENTATION_CONFIG_GLOBAL_KEY];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/provider-tool-history.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/provider-tool-history.js
 function normalizeProviderToolHistory(e) {
 	let t = findUnmarkedProviderToolCalls(e);
 	if (e.providerExecutedOutcomeIds.size === 0) return {
@@ -118223,7 +118703,7 @@ function findUnmarkedProviderToolCalls(e) {
 	return t;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/workflow-stream-error.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/workflow-stream-error.js
 const WORKFLOW_STREAM_WRITE_ERROR_PATTERN = /^Stream (write|close) failed: HTTP (\d+)(?: \(([^)]*)\))?/;
 function extractWorkflowStreamWriteErrorDetails(e) {
 	for (let t of causeChainMessages(e)) {
@@ -118255,7 +118735,7 @@ function* causeChainMessages(t) {
 	}
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/otel/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/otel/index.js
 init_src_CQuMexnO();
 var n = W$7();
 function r(e) {
@@ -119326,13 +119806,13 @@ var k = class {
 	}
 };
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/otel-integration.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/otel-integration.js
 let registered = !1;
 function ensureOtelIntegration() {
 	registered || (registered = !0, registerTelemetry(new k({ runtimeContext: !0 })));
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/openai/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/openai/index.js
 var openai_exports = /* @__PURE__ */ __exportAll({
 	Experimental_OpenAIRealtimeModel: () => Vt$1,
 	VERSION: () => Mn,
@@ -124870,7 +125350,7 @@ var init_openai = __esmMin((() => {
 	Pn = Nn();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/anthropic/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/anthropic/index.js
 var anthropic_exports = /* @__PURE__ */ __exportAll({
 	VERSION: () => At$1,
 	anthropic: () => Mt$1,
@@ -129031,7 +129511,7 @@ var init_anthropic = __esmMin((() => {
 	Mt$1 = jt$1();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/compiled/@ai-sdk/google/index.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/compiled/@ai-sdk/google/index.js
 var google_exports = /* @__PURE__ */ __exportAll({
 	Experimental_GoogleRealtimeModel: () => yn,
 	VERSION: () => ae,
@@ -133635,7 +134115,7 @@ var init_google = __esmMin((() => {
 	bn = $();
 }));
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/provider-tools.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/provider-tools.js
 const UPSTREAM_TOOL_TYPE_TO_FRAMEWORK_NAME = { web_search_20250305: WEB_SEARCH_TOOL_DEFINITION.name };
 function resolveFrameworkToolFromUpstreamType(e) {
 	return UPSTREAM_TOOL_TYPE_TO_FRAMEWORK_NAME[e] ?? null;
@@ -133680,7 +134160,7 @@ function attachWebSearchOutputSchema(t, n) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/step-hooks.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/step-hooks.js
 function buildStepHooks(e) {
 	let t = e.session, n = e.emit, r;
 	return {
@@ -133762,7 +134242,7 @@ function extractStepUsage(e) {
 	return e.inputTokens !== void 0 && (t.inputTokens = e.inputTokens), e.outputTokens !== void 0 && (t.outputTokens = e.outputTokens), e.inputTokenDetails?.cacheReadTokens !== void 0 && (t.cacheReadTokens = e.inputTokenDetails.cacheReadTokens), e.inputTokenDetails?.cacheWriteTokens !== void 0 && (t.cacheWriteTokens = e.inputTokenDetails.cacheWriteTokens), Object.keys(t).length > 0 ? t : void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/tools.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/tools.js
 const toolApprovals = /* @__PURE__ */ new WeakMap();
 function buildToolSet(e) {
 	let t = {}, n = e.capabilities?.requestInput === !0, i = e.disabledProviderTools;
@@ -133888,7 +134368,7 @@ function buildToolApproval(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/framework-tools/final-output.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/framework-tools/final-output.js
 const FINAL_OUTPUT_TOOL_NAME = `final_output`;
 function buildFinalOutputTool(e) {
 	return {
@@ -133898,7 +134378,7 @@ function buildFinalOutputTool(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/harness/tool-loop.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/harness/tool-loop.js
 const environment = process.env.NODE_ENV ?? `unknown`, eveVersion = resolveInstalledPackageInfo().version, log$2 = createLogger(`harness.tool-loop`);
 function logToolExecutionError(e) {
 	e.toolOutput.type === `tool-error` && logError(log$2, `tool execution failed`, e.toolOutput.error, {
@@ -134781,7 +135261,7 @@ function findAuthorizationSignalFromToolResults(e) {
 	for (let t of e ?? []) if (isAuthorizationSignal(t.output)) return t.output;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/bootstrap-model-utils.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/bootstrap-model-utils.js
 const BOOTSTRAP_RESPONSE_TIMESTAMP = /* @__PURE__ */ new Date(`2026-03-16T00:00:00.000Z`);
 function createBootstrapGenerateResult(t) {
 	return {
@@ -134878,7 +135358,7 @@ function getPromptText(e) {
 	return e.map((e) => getPromptContentText(e.content)).join(` `);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/bootstrap-model.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/bootstrap-model.js
 const bootstrapRuntimeModels = /* @__PURE__ */ new Map();
 function resolveBootstrapRuntimeModel(n) {
 	if (n.id !== BOOTSTRAP_RUNTIME_MODEL_ID) return null;
@@ -134902,7 +135382,7 @@ function createBootstrapModelResult(e, t) {
 	});
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/mock-model-fixtures.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/mock-model-fixtures.js
 function createMockAuthoredToolInput(e, t, n) {
 	let r = getToolInputPropertyNames(e.inputSchema);
 	if (e.name === `ask_question` || hasProperties(r, [`prompt`, `options`])) return createAskQuestionInput(t);
@@ -135014,7 +135494,7 @@ function isRecord$2(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/mock-model-skill-selection.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/mock-model-skill-selection.js
 function getAvailableSkills(t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of t) {
@@ -135072,7 +135552,7 @@ function normalizeText$1(e) {
 	return e.toLowerCase().replace(/[^a-z0-9]+/gu, ` `).trim();
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/mock-structured-output.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/mock-structured-output.js
 function createJsonSchemaSample(e) {
 	if (!isRecord$1(e)) return {};
 	if (`const` in e) return e.const;
@@ -135115,7 +135595,7 @@ function isRecord$1(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/mock-model-adapter.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/mock-model-adapter.js
 const authoredRuntimeModelMocks = /* @__PURE__ */ new Map(), bootstrapWeatherPayloadSchema = Ls$3.object({
 	city: Ls$3.string(),
 	condition: Ls$3.string(),
@@ -135350,7 +135830,7 @@ function isRecord(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/runtime/agent/resolve-model.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/runtime/agent/resolve-model.js
 async function resolveRuntimeModelReference(e, t) {
 	let i = resolveBootstrapRuntimeModel(e);
 	if (i !== null) return i;
@@ -135372,14 +135852,14 @@ function isSourceBackedRuntimeModelReference(e) {
 	return e.source !== void 0;
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/compaction.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/compaction.js
 function preserveFrameworkStateOnCompaction() {
 	clearReadFileState();
 	let e = getTodoCompactionMessage();
 	return e === void 0 ? [] : [e];
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/tool-auth.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/tool-auth.js
 function createToolExecuteWithAuth(e) {
 	let { scope: t, execute: n } = e;
 	return async (e) => {
@@ -135513,7 +135993,7 @@ function missingProviderError(e) {
 	return Error(`${e}: Pass an auth provider, for example ${e}(connect("github/myagent")).`);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/node-step.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/node-step.js
 const log$1 = createLogger(`execution.node-step`), BUILT_IN_AGENT_TOOL_DESCRIPTION = [
 	`Delegate a focused subtask to a fresh copy of yourself.`,
 	`Use it to isolate complex work or split a large task into independent pieces.`,
@@ -135628,7 +136108,7 @@ function maybeJsonSchema(e) {
 	return e === void 0 ? void 0 : jsonSchema(e);
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/subagent-hitl-proxy.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/subagent-hitl-proxy.js
 async function emitProxiedInputRequest(i) {
 	await i.emit(createInputRequestedEvent({
 		requests: i.hookPayload.event.requests,
@@ -135668,7 +136148,7 @@ function routeDeliverPayload(e) {
 	};
 }
 //#endregion
-//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_f8e088bf4b6703d58f84fc1822332495/node_modules/eve/dist/src/execution/workflow-steps.js
+//#region node_modules/.pnpm/eve@0.16.2_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0_3306789dc00c3ed1e9c5f1e0f8f22b11/node_modules/eve/dist/src/execution/workflow-steps.js
 async function turnStep(e) {
 	let t = e, o = await readDurableSession(t.sessionState), l = await deserializeContext(t.serializedContext), f = l.require(ChannelKey), p = l.require(BundleKey);
 	try {
@@ -136017,7 +136497,7 @@ function getAsset(id) {
 	return public_assets_data_default[id];
 }
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/static.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/static.mjs
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = {
 	gzip: ".gz",
@@ -136071,7 +136551,7 @@ var init_tasks = __esmMin((() => {
 	tasks = {};
 }));
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/task.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/task.mjs
 async function runTask(name, { payload = {}, context = {} } = {}) {
 	if (__runningTasks__[name]) return __runningTasks__[name];
 	if (!(name in tasks)) throw new HTTPError({
@@ -136101,7 +136581,7 @@ var init_task = __esmMin((() => {
 	__runningTasks__ = {};
 }));
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/routes/dev-tasks.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/routes/dev-tasks.mjs
 var dev_tasks_exports = /* @__PURE__ */ __exportAll({ default: () => app });
 var taskHandler, app;
 var init_dev_tasks = __esmMin((() => {
@@ -136131,7 +136611,7 @@ var init_dev_tasks = __esmMin((() => {
 }));
 //#endregion
 //#region #nitro/virtual/routing
-const _lazy_N7qkLq = h3.defineLazyEventHandler(() => Promise.resolve().then(() => (init_dev_tasks(), dev_tasks_exports)));
+const _lazy_PBgnfm = h3.defineLazyEventHandler(() => Promise.resolve().then(() => (init_dev_tasks(), dev_tasks_exports)));
 const findRoute = /* @__PURE__ */ (() => {
 	const $0 = {
 		route: "/",
@@ -136162,7 +136642,7 @@ const findRoute = /* @__PURE__ */ (() => {
 		handler: h3.toEventHandler(workflows_handler_default)
 	}, $7 = {
 		route: "/_nitro/tasks/**",
-		handler: _lazy_N7qkLq
+		handler: _lazy_PBgnfm
 	}, $8 = {
 		route: "/eve/v1/connections/:name/callback/:token",
 		method: "GET",
@@ -136288,12 +136768,12 @@ const findRoute = /* @__PURE__ */ (() => {
 })();
 const globalMiddleware = [h3.toEventHandler(static_default)].filter(Boolean);
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/error/utils.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/error/utils.mjs
 function defineNitroErrorHandler(handler) {
 	return handler;
 }
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/error/dev.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/error/dev.mjs
 const errorHandler = defineNitroErrorHandler(async function defaultNitroErrorHandler(error, event) {
 	const res = await defaultHandler(error, event);
 	return new FastResponse(typeof res.body === "string" ? res.body : JSON.stringify(res.body, null, 2), res);
@@ -136315,7 +136795,7 @@ async function defaultHandler(error, event, opts) {
 		};
 	}
 	await loadStackTrace(error).catch(consola.error);
-	const { Youch } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/node_modules/youch/build/index.js");
+	const { Youch } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/node_modules/youch/build/index.js");
 	const youch = new Youch();
 	if (unhandled && !opts?.silent) {
 		const ansiError = (await youch.toANSI(error)).replaceAll(process.cwd(), ".");
@@ -136355,7 +136835,7 @@ async function defaultHandler(error, event, opts) {
 }
 async function loadStackTrace(error) {
 	if (!(error instanceof Error)) return;
-	const { ErrorParser } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/node_modules/youch-core/build/index.js");
+	const { ErrorParser } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/node_modules/youch-core/build/index.js");
 	const parsed = await new ErrorParser().defineSourceLoader(sourceLoader).parse(error);
 	const stack = error.message + "\n" + parsed.frames.map((frame) => fmtFrame(frame)).join("\n");
 	Object.defineProperty(error, "stack", { value: stack });
@@ -136366,7 +136846,7 @@ async function sourceLoader(frame) {
 	if (frame.type === "app") {
 		const rawSourceMap = await readFile(`${frame.fileName}.map`, "utf8").catch(() => {});
 		if (rawSourceMap) {
-			const { SourceMapConsumer } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/node_modules/source-map/source-map.js");
+			const { SourceMapConsumer } = await import("file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/node_modules/source-map/source-map.js");
 			const originalPosition = (await new SourceMapConsumer(rawSourceMap)).originalPositionFor({
 				line: frame.lineNumber,
 				column: frame.columnNumber
@@ -136465,7 +136945,7 @@ function createH3App(config) {
 	return h3App;
 }
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/app.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/app.mjs
 const APP_ID = "default";
 function useNitroApp() {
 	let instance = useNitroApp._instance;
@@ -136499,7 +136979,7 @@ async function resolveWebsocketHooks(req) {
 	return (await serverFetch(req)).crossws || {};
 }
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/runtime/internal/error/hooks.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/runtime/internal/error/hooks.mjs
 function _captureError(error, type) {
 	console.error(`[${type}]`, error);
 	useNitroApp().captureError?.(error, { tags: [type] });
@@ -136512,7 +136992,7 @@ function trapUnhandledErrors() {
 //#region #nitro/virtual/tracing
 const tracingSrvxPlugins = [];
 //#endregion
-//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pos_bb2b3602de43791be559cc68ab3fc7ea/node_modules/nitro/dist/presets/_nitro/runtime/nitro-dev.mjs
+//#region node_modules/.pnpm/nitro@3.0.260610-beta_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0.45.2_kysely@0.29.2_pg@_345cf594f31169625a6ceb2cedc12072/node_modules/nitro/dist/presets/_nitro/runtime/nitro-dev.mjs
 init_task();
 const nitroApp = useNitroApp();
 const nitroHooks = useNitroHooks();

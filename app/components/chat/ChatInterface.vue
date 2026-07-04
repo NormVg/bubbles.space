@@ -370,7 +370,8 @@ const handleSubmit = async (text: string) => {
     locContext, 
     widgetsCtx, 
     soulCtx, 
-    identityCtx
+    identityCtx,
+    `System Info (Hidden): UserID="${sessionData?.user?.id || ''}"`
   ].filter(Boolean)
     
   const systemBlock = `<system_context>\n${systemParts.join('\n')}\n</system_context>`

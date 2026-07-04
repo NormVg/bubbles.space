@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, jsonb, real, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, jsonb, real, integer, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -84,4 +84,27 @@ export const conversation = pgTable('conversation', {
   events: jsonb('events').default([]).notNull(), // Chat history event array
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const memory = pgTable('memory', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  path: text('path').notNull(),
+  title: text('title').notNull(),
+  type: text('type'),
+  content: text('content').default(''),
+  metadata: jsonb('metadata').default({}).notNull(),
+  importance: integer('importance').default(5).notNull(),
+  confidence: real('confidence').default(1.0).notNull(),
+  accessCount: integer('access_count').default(0).notNull(),
+  state: text('state').default('active').notNull(),
+  // Temporal truth-window columns
+  validFrom: timestamp('valid_from').defaultNow().notNull(),
+  validTo: timestamp('valid_to'),
+  supersededBy: text('superseded_by'),
+  source: text('source').default('agent').notNull(),
+  version: integer('version').default(1).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  lastAccessedAt: timestamp('last_accessed_at').defaultNow()
 });

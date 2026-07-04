@@ -1,5 +1,6 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
+import { getBaseUrl } from "../lib/utils";
 
 export default defineTool({
   description: "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
@@ -8,9 +9,7 @@ export default defineTool({
     try {
       // The Nitro server exposes this endpoint. 
       // We try fetching it locally.
-      const url = process.env.NUXT_PUBLIC_SITE_URL 
-        ? `${process.env.NUXT_PUBLIC_SITE_URL}/api/health` 
-        : 'http://localhost:3000/api/health';
+      const url = `${getBaseUrl()}/api/health`;
         
       const response = await fetch(url);
       

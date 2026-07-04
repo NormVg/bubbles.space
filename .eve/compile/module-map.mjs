@@ -3,15 +3,24 @@
 import * as module_0 from "../../agent/agent.ts";
 import * as module_1 from "../../agent/channels/eve.ts";
 import * as module_2 from "../../agent/instructions/time.ts";
-import * as module_3 from "../../agent/tools/canvas_add_widget.ts";
-import * as module_4 from "../../agent/tools/canvas_read_widget.ts";
-import * as module_5 from "../../agent/tools/canvas_remove_widget.ts";
-import * as module_6 from "../../agent/tools/canvas_update_widget.ts";
-import * as module_7 from "../../agent/tools/get_app_stats.ts";
-import * as module_8 from "../../agent/tools/get_weather.ts";
-import * as module_9 from "../../agent/tools/unsplash_search.ts";
-import * as module_10 from "../../agent/tools/web_search.ts";
-import * as module_11 from "../../agent/tools/wikipedia_search.ts";
+import * as module_3 from "../../agent/tools/ask_question.ts";
+import * as module_4 from "../../agent/tools/canvas_add_widget.ts";
+import * as module_5 from "../../agent/tools/canvas_read_widget.ts";
+import * as module_6 from "../../agent/tools/canvas_remove_widget.ts";
+import * as module_7 from "../../agent/tools/canvas_update_widget.ts";
+import * as module_8 from "../../agent/tools/get_app_stats.ts";
+import * as module_9 from "../../agent/tools/get_weather.ts";
+import * as module_10 from "../../agent/tools/memory_at.ts";
+import * as module_11 from "../../agent/tools/memory_get.ts";
+import * as module_12 from "../../agent/tools/memory_list.ts";
+import * as module_13 from "../../agent/tools/memory_query.ts";
+import * as module_14 from "../../agent/tools/memory_reinforce.ts";
+import * as module_15 from "../../agent/tools/memory_store.ts";
+import * as module_16 from "../../agent/tools/memory_timeline.ts";
+import * as module_17 from "../../agent/tools/memory_tree.ts";
+import * as module_18 from "../../agent/tools/unsplash_search.ts";
+import * as module_19 from "../../agent/tools/web_search.ts";
+import * as module_20 from "../../agent/tools/wikipedia_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -20,15 +29,24 @@ export const moduleMap = Object.freeze({
                   "agent.ts": module_0,
                   "channels/eve.ts": module_1,
                   "instructions/time.ts": module_2,
-                  "tools/canvas_add_widget.ts": module_3,
-                  "tools/canvas_read_widget.ts": module_4,
-                  "tools/canvas_remove_widget.ts": module_5,
-                  "tools/canvas_update_widget.ts": module_6,
-                  "tools/get_app_stats.ts": module_7,
-                  "tools/get_weather.ts": module_8,
-                  "tools/unsplash_search.ts": module_9,
-                  "tools/web_search.ts": module_10,
-                  "tools/wikipedia_search.ts": module_11
+                  "tools/ask_question.ts": module_3,
+                  "tools/canvas_add_widget.ts": module_4,
+                  "tools/canvas_read_widget.ts": module_5,
+                  "tools/canvas_remove_widget.ts": module_6,
+                  "tools/canvas_update_widget.ts": module_7,
+                  "tools/get_app_stats.ts": module_8,
+                  "tools/get_weather.ts": module_9,
+                  "tools/memory_at.ts": module_10,
+                  "tools/memory_get.ts": module_11,
+                  "tools/memory_list.ts": module_12,
+                  "tools/memory_query.ts": module_13,
+                  "tools/memory_reinforce.ts": module_14,
+                  "tools/memory_store.ts": module_15,
+                  "tools/memory_timeline.ts": module_16,
+                  "tools/memory_tree.ts": module_17,
+                  "tools/unsplash_search.ts": module_18,
+                  "tools/web_search.ts": module_19,
+                  "tools/wikipedia_search.ts": module_20
                 })
             })
     })
