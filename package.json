@@ -40,5 +40,11 @@
   "devDependencies": {
     "drizzle-kit": "^0.31.10",
     "microsandbox": "^0.6.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sqlite3",
+      "esbuild"
+    ]
   }
 }
