@@ -1,15 +1,8 @@
 {
-  "diagnostics": [
-    {
-      "code": "discover/tool-name-invalid",
-      "message": "Tool filename \"_memory\" is not a legal tool name. Expected ASCII letters, digits, underscores, and dashes only, starting with a letter, up to 64 characters.",
-      "sourcePath": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/agent/tools/_memory.ts",
-      "severity": "error"
-    }
-  ],
+  "diagnostics": [],
   "kind": "eve-discovery-diagnostics",
   "summary": {
-    "errors": 1,
+    "errors": 0,
     "warnings": 0
   },
   "version": 1

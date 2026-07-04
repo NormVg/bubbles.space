@@ -11,7 +11,7 @@
   ],
   "connections": [],
   "diagnosticsSummary": {
-    "errors": 1,
+    "errors": 0,
     "warnings": 0
   },
   "hooks": [],
@@ -66,31 +66,6 @@
       "sourceKind": "module",
       "logicalPath": "tools/get_weather.ts",
       "sourceId": "tools/get_weather.ts"
-    },
-    {
-      "sourceKind": "module",
-      "logicalPath": "tools/openmemory_get.ts",
-      "sourceId": "tools/openmemory_get.ts"
-    },
-    {
-      "sourceKind": "module",
-      "logicalPath": "tools/openmemory_list.ts",
-      "sourceId": "tools/openmemory_list.ts"
-    },
-    {
-      "sourceKind": "module",
-      "logicalPath": "tools/openmemory_query.ts",
-      "sourceId": "tools/openmemory_query.ts"
-    },
-    {
-      "sourceKind": "module",
-      "logicalPath": "tools/openmemory_reinforce.ts",
-      "sourceId": "tools/openmemory_reinforce.ts"
-    },
-    {
-      "sourceKind": "module",
-      "logicalPath": "tools/openmemory_store.ts",
-      "sourceId": "tools/openmemory_store.ts"
     },
     {
       "sourceKind": "module",
