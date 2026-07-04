@@ -354,6 +354,20 @@ const handleSubmit = async (text: string) => {
   // Inject user's Soul and Identity with a fresh fetch to ensure reliability
   const { data: sessionData } = await authClient.getSession()
   
+  // Fetch semantic memory (RAG)
+  let semanticCtx = '';
+  try {
+    const memRes = await fetch(`/api/memory/semantic-search?q=${encodeURIComponent(text)}`);
+    if (memRes.ok) {
+      const memories = await memRes.json();
+      if (memories && memories.length > 0) {
+        semanticCtx = `Semantic Memory Context (Pre-fetched):\n${memories.map((m: any) => `[${m.path}]\nTitle: ${m.title}\n${m.content}`).join('\n\n')}`;
+      }
+    }
+  } catch (err) {
+    console.error('Failed to fetch semantic memory:', err);
+  }
+
   // @ts-ignore - better-auth extended fields
   const soulCtx = sessionData?.user?.systemPrompt 
     // @ts-ignore
@@ -371,6 +385,7 @@ const handleSubmit = async (text: string) => {
     widgetsCtx, 
     soulCtx, 
     identityCtx,
+    semanticCtx,
     `System Info (Hidden): UserID="${sessionData?.user?.id || ''}"`
   ].filter(Boolean)
     

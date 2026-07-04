@@ -2,9 +2,31 @@ import { eq, and, like, or, isNull, isNotNull, lte, gt, gte, desc, sql } from 'd
 import { db } from '../db';
 import { memory } from '../db/schema';
 import { randomUUID } from 'crypto';
+import { OpenRouter } from '@openrouter/sdk';
 
 export type MemoryInsert = typeof memory.$inferInsert;
 export type MemorySelect = typeof memory.$inferSelect;
+
+const openrouter = new OpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY
+});
+
+async function generateEmbedding(text: string): Promise<number[] | null> {
+  if (!text) return null;
+  try {
+    const embedding = await openrouter.embeddings.generate({
+      requestBody: {
+        model: "nvidia/llama-nemotron-embed-vl-1b-v2:free",
+        input: [text],
+        encodingFormat: "float"
+      }
+    });
+    return embedding.data[0].embedding;
+  } catch (error) {
+    console.error('Failed to generate embedding:', error);
+    return null;
+  }
+}
 
 /**
  * Confidence decay factor per day of no access.
@@ -120,6 +142,11 @@ export class MemoryService {
         return { ...withDecay(existing), _duplicate: true };
       }
 
+      const newTitle = data.title || existing.title;
+      const newContent = data.content ?? '';
+      const contentToEmbed = `Title: ${newTitle}\nPath: ${normalizedPath}\nContent: ${newContent}`;
+      const embedding = await generateEmbedding(contentToEmbed);
+
       // Auto-evolution: close the old fact
       await db.update(memory).set({
         validTo: now,
@@ -133,9 +160,9 @@ export class MemoryService {
         id: newId,
         userId,
         path: normalizedPath,
-        title: data.title || existing.title,
+        title: newTitle,
         type: data.type || existing.type,
-        content: data.content ?? '',
+        content: newContent,
         metadata: data.metadata || existing.metadata,
         importance: data.importance ?? existing.importance,
         confidence: data.confidence ?? existing.confidence,
@@ -143,19 +170,25 @@ export class MemoryService {
         version: existing.version + 1,
         validFrom: now,
         state: 'active',
+        embedding,
       }).returning();
 
       return withDecay(inserted);
     }
 
     // First version at this path
+    const newTitle = data.title || normalizedPath.split('/').pop() || 'Untitled';
+    const newContent = data.content ?? '';
+    const contentToEmbed = `Title: ${newTitle}\nPath: ${normalizedPath}\nContent: ${newContent}`;
+    const embedding = await generateEmbedding(contentToEmbed);
+
     const [inserted] = await db.insert(memory).values({
       id: newId,
       userId,
       path: normalizedPath,
-      title: data.title || normalizedPath.split('/').pop() || 'Untitled',
+      title: newTitle,
       type: data.type,
-      content: data.content ?? '',
+      content: newContent,
       metadata: data.metadata || {},
       importance: data.importance,
       confidence: data.confidence,
@@ -163,6 +196,7 @@ export class MemoryService {
       version: 1,
       validFrom: data.validFrom ? new Date(data.validFrom as unknown as string) : now,
       state: 'active',
+      embedding,
     }).returning();
 
     return withDecay(inserted);
@@ -251,6 +285,37 @@ export class MemoryService {
       ),
       orderBy: (memories, { desc }) => [desc(memories.importance), desc(memories.updatedAt)],
       limit: 20
+    });
+
+    return results
+      .filter(m => m.type !== 'directory')
+      .map(withDecay);
+  }
+
+  // ─── Semantic Search ────────────────────────────────────────────────
+
+  /**
+   * Semantic search using pgvector cosine similarity.
+   */
+  static async semanticSearch(userId: string, query: string, limit = 5) {
+    if (!query.trim()) return [];
+    
+    const queryVector = await generateEmbedding(query);
+    if (!queryVector) {
+      // Fallback to text search if embedding fails
+      return this.queryMemories(userId, query);
+    }
+    
+    const vectorLiteral = `[${queryVector.join(',')}]`;
+
+    const results = await db.query.memory.findMany({
+      where: and(
+        eq(memory.userId, userId),
+        eq(memory.state, 'active'),
+        isNotNull(memory.embedding)
+      ),
+      orderBy: (memories, { asc }) => [asc(sql`${memories.embedding} <=> ${vectorLiteral}::vector`)],
+      limit
     });
 
     return results

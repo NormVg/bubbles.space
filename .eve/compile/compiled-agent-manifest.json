@@ -441,6 +441,31 @@
       "sourceKind": "module"
     },
     {
+      "description": "Perform a deep semantic search (Vector/NLP) over the user's memories. Use this if the pre-fetched semantic context wasn't enough to answer the user's question. This understands conceptual similarity rather than exact keyword matches.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."
+          },
+          "query": {
+            "type": "string",
+            "description": "The conceptual query to search for."
+          }
+        },
+        "required": [
+          "userId",
+          "query"
+        ]
+      },
+      "logicalPath": "tools/memory_semantic_search.ts",
+      "name": "memory_semantic_search",
+      "sourceId": "tools/memory_semantic_search.ts",
+      "sourceKind": "module"
+    },
+    {
       "description": "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
       "inputSchema": {
         "$schema": "http://json-schema.org/draft-07/schema#",

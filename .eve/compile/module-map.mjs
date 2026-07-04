@@ -15,12 +15,13 @@ import * as module_11 from "../../agent/tools/memory_get.ts";
 import * as module_12 from "../../agent/tools/memory_list.ts";
 import * as module_13 from "../../agent/tools/memory_query.ts";
 import * as module_14 from "../../agent/tools/memory_reinforce.ts";
-import * as module_15 from "../../agent/tools/memory_store.ts";
-import * as module_16 from "../../agent/tools/memory_timeline.ts";
-import * as module_17 from "../../agent/tools/memory_tree.ts";
-import * as module_18 from "../../agent/tools/unsplash_search.ts";
-import * as module_19 from "../../agent/tools/web_search.ts";
-import * as module_20 from "../../agent/tools/wikipedia_search.ts";
+import * as module_15 from "../../agent/tools/memory_semantic_search.ts";
+import * as module_16 from "../../agent/tools/memory_store.ts";
+import * as module_17 from "../../agent/tools/memory_timeline.ts";
+import * as module_18 from "../../agent/tools/memory_tree.ts";
+import * as module_19 from "../../agent/tools/unsplash_search.ts";
+import * as module_20 from "../../agent/tools/web_search.ts";
+import * as module_21 from "../../agent/tools/wikipedia_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -41,12 +42,13 @@ export const moduleMap = Object.freeze({
                   "tools/memory_list.ts": module_12,
                   "tools/memory_query.ts": module_13,
                   "tools/memory_reinforce.ts": module_14,
-                  "tools/memory_store.ts": module_15,
-                  "tools/memory_timeline.ts": module_16,
-                  "tools/memory_tree.ts": module_17,
-                  "tools/unsplash_search.ts": module_18,
-                  "tools/web_search.ts": module_19,
-                  "tools/wikipedia_search.ts": module_20
+                  "tools/memory_semantic_search.ts": module_15,
+                  "tools/memory_store.ts": module_16,
+                  "tools/memory_timeline.ts": module_17,
+                  "tools/memory_tree.ts": module_18,
+                  "tools/unsplash_search.ts": module_19,
+                  "tools/web_search.ts": module_20,
+                  "tools/wikipedia_search.ts": module_21
                 })
             })
     })

@@ -1,4 +1,17 @@
-import { pgTable, text, timestamp, boolean, jsonb, real, integer, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, jsonb, real, integer, uniqueIndex, customType } from "drizzle-orm/pg-core";
+
+const vector = customType<{ data: number[]; driverData: string }>({
+  dataType() {
+    return 'vector';
+  },
+  toDriver(value: number[]) {
+    return `[${value.join(',')}]`;
+  },
+  fromDriver(value: string) {
+    return JSON.parse(value);
+  },
+});
+
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -98,6 +111,7 @@ export const memory = pgTable('memory', {
   confidence: real('confidence').default(1.0).notNull(),
   accessCount: integer('access_count').default(0).notNull(),
   state: text('state').default('active').notNull(),
+  embedding: vector('embedding'),
   // Temporal truth-window columns
   validFrom: timestamp('valid_from').defaultNow().notNull(),
   validTo: timestamp('valid_to'),

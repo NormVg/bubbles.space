@@ -105,6 +105,11 @@
     },
     {
       "sourceKind": "module",
+      "logicalPath": "tools/memory_semantic_search.ts",
+      "sourceId": "tools/memory_semantic_search.ts"
+    },
+    {
+      "sourceKind": "module",
       "logicalPath": "tools/memory_store.ts",
       "sourceId": "tools/memory_store.ts"
     },
