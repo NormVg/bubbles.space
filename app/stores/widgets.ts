@@ -193,19 +193,24 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
+  let isReloadingFromServer = false
+
   const reloadFromServer = async () => {
     try {
       const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
       if (serverWorkspaces && serverWorkspaces.length > 0) {
-        // Prevent unnecessary full reactivity resets if nothing changed, or just overwrite?
-        // Overwriting entirely can interrupt dragging/typing if active workspace changes.
-        // For a simple implementation, just overwrite workspaces list but maintain active id.
+        isReloadingFromServer = true
         workspaces.value = serverWorkspaces
         if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
           activeWorkspaceId.value = serverWorkspaces[0].id
         }
         localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
         localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+        
+        // NextTick ensures the deep watcher has fired and seen the flag before we reset it
+        nextTick(() => {
+          isReloadingFromServer = false
+        })
       }
     } catch (e) {
       console.error('Failed to reload from server:', e)
@@ -275,6 +280,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 
   // Watch for changes to auto-sync
   watch([workspaces, activeWorkspaceId], () => {
+    if (isReloadingFromServer) return
     syncToDB()
   }, { deep: true })
 
