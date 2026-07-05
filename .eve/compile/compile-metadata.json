@@ -12,9 +12,9 @@
     },
     "manifest": {
       "path": ".eve/discovery/agent-discovery-manifest.json",
-      "sha256": "40aa329679d62c37a5d62396313aaac4f3989e923bcc616dd0278bd9a0811670"
+      "sha256": "6c3c9ffdda571fc423ad3886376319f70b8735c4bc08719204f5113c6e1c5719"
     },
-    "sourceGraphHash": "895c211c9ff28977dc278b837b48ae5c95f8118684af7fe7341f02e92e132c38",
+    "sourceGraphHash": "75e6f5139f8ade95ff7344c6d58ef670fae3d29090ade831526b5b0092738b7e",
     "summary": {
       "errors": 0,
       "warnings": 0
