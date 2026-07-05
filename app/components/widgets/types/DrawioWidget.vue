@@ -20,11 +20,11 @@ const iframeRef = ref<HTMLIFrameElement | null>(null)
 const isLoading = ref(true)
 
 // Configure draw.io embed URL
-// Configure draw.io embed URL
 // proto=json: JSON protocol for postMessage
-// ui=dark: Forces the dark theme matching our app
+// dark=1: Force dark mode
+// theme=dark: Force dark theme
 // libraries=1: Enable shape libraries
-const drawioUrl = 'https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&saveAndExit=0&noSaveBtn=1&noExitBtn=1&ui=dark'
+const drawioUrl = 'https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&saveAndExit=0&noSaveBtn=1&noExitBtn=1&ui=dark&dark=1&theme=dark'
 
 const handleMessage = (event: MessageEvent) => {
   // Ensure the message is from our iframe
@@ -42,14 +42,18 @@ const handleMessage = (event: MessageEvent) => {
           action: 'load',
           descriptor: { format: 'mermaid', data: props.data.mermaid, wrap: true },
           autosave: 1, // Enable autosave so we get real-time updates
-          title: 'Canvas Drawing'
+          title: 'Canvas Drawing',
+          dark: 1,
+          theme: 'dark'
         }), '*')
       } else {
         iframeRef.value?.contentWindow?.postMessage(JSON.stringify({
           action: 'load',
           xml: props.data.xml || '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>',
           autosave: 1, // Enable autosave so we get real-time updates
-          title: 'Canvas Drawing'
+          title: 'Canvas Drawing',
+          dark: 1,
+          theme: 'dark'
         }), '*')
       }
     } 
