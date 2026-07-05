@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { shallowRef, computed, watch, ref } from 'vue'
+import { authClient } from '../utils/auth-client'
 
 export interface Widget {
   id: string
@@ -121,12 +122,19 @@ export const useWidgetStore = defineStore('widgets', () => {
   const init = async () => {
     try {
       isInitializing.value = true
+      
+      // 0. Fetch user session to prevent cross-user data leakage on same browser
+      const { data: session } = await authClient.getSession()
+      const currentUserId = session?.user?.id
+      
       // 1. Instant Local Load
       const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
       const savedActiveId = localStorage.getItem('bubbles_active_workspace')
+      const savedUserId = localStorage.getItem('bubbles_last_user_id')
       
       let hasLocalData = false
-      if (savedWorkspaces) {
+      // Only use local storage if the user matches, or if we have no current user (edge case)
+      if (savedWorkspaces && (!currentUserId || savedUserId === currentUserId)) {
         const parsed = JSON.parse(savedWorkspaces)
         if (parsed && Array.isArray(parsed) && parsed.length > 0) {
           workspaces.value = parsed
@@ -137,6 +145,12 @@ export const useWidgetStore = defineStore('widgets', () => {
           }
           hasLocalData = true
         }
+      }
+      
+      if (currentUserId && savedUserId !== currentUserId) {
+        // Clear old user's data from this browser
+        localStorage.removeItem('bubbles_workspaces')
+        localStorage.removeItem('bubbles_active_workspace')
       }
       
       if (!hasLocalData) {
@@ -185,6 +199,7 @@ export const useWidgetStore = defineStore('widgets', () => {
           // Update local storage immediately to match DB
           localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
           localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+          if (currentUserId) localStorage.setItem('bubbles_last_user_id', currentUserId)
           
           setTimeout(() => {
             isReloadingFromServer = false
@@ -239,15 +254,20 @@ export const useWidgetStore = defineStore('widgets', () => {
   const syncToDB = async (force = false) => {
     // 1. Non-blocking Local Save (prevents UI hitching on deep watch triggers)
     if (localSyncTimeout) clearTimeout(localSyncTimeout)
-    localSyncTimeout = setTimeout(() => {
-      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
-          localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
-        })
-      } else {
+    localSyncTimeout = setTimeout(async () => {
+      const { data: session } = await authClient.getSession()
+      const currentUserId = session?.user?.id
+      
+      const saveLocally = () => {
         localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
         localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+        if (currentUserId) localStorage.setItem('bubbles_last_user_id', currentUserId)
+      }
+      
+      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+        requestIdleCallback(saveLocally)
+      } else {
+        saveLocally()
       }
     }, 100)
 

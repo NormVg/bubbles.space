@@ -73,6 +73,8 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
   ], { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' })
   
   await animOut.finished
+  // MUST cancel WAAPI animations, otherwise their fill: forwards overrides inline styles forever
+  animOut.cancel()
   
   if (currentTransition !== transitionId) return // Cancel if a newer transition started
   
@@ -97,9 +99,10 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
   ], { duration: 350, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' })
   
   animIn.onfinish = () => {
-    if (currentTransition !== transitionId) return
-    // Reset WAAPI overrides so normal panning works again
     animIn.cancel()
+    if (currentTransition !== transitionId) return
+    
+    // Reset WAAPI overrides so normal panning works again
     if (canvasWorldEl.value) {
       canvasWorldEl.value.style.transform = `translate3d(${currentOffsetX}px, ${currentOffsetY}px, 0) scale(${currentScale})`
       canvasWorldEl.value.style.opacity = '1'
