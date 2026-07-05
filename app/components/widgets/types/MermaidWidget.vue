@@ -15,11 +15,17 @@ const emit = defineEmits<{
 const isDark = useDark()
 const svgContent = ref('')
 const isRendering = ref(false)
+const renderError = ref(false)
 const editChart = ref(props.data.chart || '')
+
+const retryRender = () => {
+  renderChart()
+}
 
 const renderChart = async () => {
   if (isRendering.value) return
   isRendering.value = true
+  renderError.value = false
   
   try {
     mermaid.initialize({
@@ -38,8 +44,8 @@ const renderChart = async () => {
     svgContent.value = svg
   } catch (e) {
     console.error('Mermaid render error', e)
-    // Try to fallback to a basic error display
-    svgContent.value = `<div style="color: #e74c3c; padding: 20px; text-align: center;">Failed to render diagram.<br><span style="font-size: 12px; opacity: 0.7;">Syntax error in Mermaid code.</span></div>`
+    renderError.value = true
+    svgContent.value = ''
   } finally {
     isRendering.value = false
   }
@@ -72,7 +78,24 @@ watch(() => props.isEditing, (editing) => {
       placeholder="Write mermaid syntax here..."
       spellcheck="false"
     ></textarea>
-    <div v-else class="mermaid-svg-container" v-html="svgContent"></div>
+    <div v-else class="mermaid-display-wrapper">
+      <!-- Loading State -->
+      <div v-if="isRendering && !svgContent" class="mermaid-loader">
+        <div class="spinner"></div>
+      </div>
+      
+      <!-- Error State -->
+      <div v-else-if="renderError" class="mermaid-error-state">
+        <LucideAlertTriangle :size="32" class="error-icon" />
+        <p>Syntax Error</p>
+        <span class="error-sub">Failed to render diagram</span>
+        <button class="retry-btn" @click.stop="retryRender">
+          <LucideRefreshCw :size="14" /> Retry
+        </button>
+      </div>
+
+      <div v-else class="mermaid-svg-container" :class="{ 'is-loading': isRendering }" v-html="svgContent"></div>
+    </div>
   </div>
 </template>
 
@@ -87,12 +110,96 @@ watch(() => props.isEditing, (editing) => {
   justify-content: center;
 }
 
+.mermaid-display-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.mermaid-error-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-secondary);
+  z-index: 6;
+  gap: 8px;
+}
+
+.error-icon {
+  opacity: 0.5;
+  color: var(--danger, #ef4444);
+}
+
+.mermaid-error-state p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.error-sub {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
 .mermaid-svg-container {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.mermaid-svg-container.is-loading {
+  opacity: 0.5;
 }
 
 /* Force the natively rendered mermaid SVG to scale perfectly */

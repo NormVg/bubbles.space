@@ -66,13 +66,37 @@ const onMouseLeave = () => startAutoPlay()
 
 // Error handling
 const imageFailures = ref<Record<number, boolean>>({})
+const imageLoading = ref<Record<number, boolean>>({})
+const retryTimestamps = ref<Record<number, number>>({})
+
+const handleImageLoad = (index: number) => {
+  imageLoading.value[index] = false
+}
+
 const handleImageError = (event: Event, index: number) => {
-  const img = event.target as HTMLImageElement
+  imageLoading.value[index] = false
   if (!imageFailures.value[index]) {
     imageFailures.value[index] = true
-    // Replace with a reliable placeholder if it fails
-    img.src = `https://picsum.photos/seed/${index + 1}/800/600`
   }
+}
+
+const retryImage = (index: number) => {
+  imageFailures.value[index] = false
+  imageLoading.value[index] = true
+  retryTimestamps.value[index] = Date.now()
+}
+
+const getImageUrl = (url: string, index: number) => {
+  // If it's a first load and neither loading nor failed, set loading
+  if (imageLoading.value[index] === undefined && !imageFailures.value[index]) {
+    imageLoading.value[index] = true
+  }
+  
+  if (retryTimestamps.value[index]) {
+    const sep = url.includes('?') ? '&' : '?'
+    return `${url}${sep}retry=${retryTimestamps.value[index]}`
+  }
+  return url
 }
 
 // Editing
@@ -98,22 +122,30 @@ watch(() => props.isEditing, (editing) => {
     <div v-else class="image-container">
       <Transition name="fade-slide" mode="out-in">
         <div :key="currentIndex" class="main-image-wrapper">
+          <!-- Loading Skeleton -->
+          <div v-if="imageLoading[currentIndex]" class="image-loader">
+            <div class="spinner"></div>
+          </div>
+
+          <!-- Error State -->
+          <div v-if="imageFailures[currentIndex]" class="image-error-state">
+            <LucideImageOff :size="32" class="error-icon" />
+            <p>Failed to load image</p>
+            <button class="retry-btn" @click.stop="retryImage(currentIndex)">
+              <LucideRefreshCw :size="14" /> Retry
+            </button>
+          </div>
+
           <img 
-            :src="imageList[currentIndex]" 
-            :class="['main-image', props.data.objectFit || 'cover']" 
+            v-show="!imageFailures[currentIndex]"
+            :src="getImageUrl(imageList[currentIndex], currentIndex)" 
+            :class="['main-image', props.data.objectFit || 'cover', { 'is-loading': imageLoading[currentIndex] }]" 
             alt="Widget Image" 
             referrerpolicy="no-referrer"
             crossorigin="anonymous"
+            @load="handleImageLoad(currentIndex)"
             @error="(e) => handleImageError(e, currentIndex)"
           />
-          <div v-if="imageFailures[currentIndex]" class="fallback-warning">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            Fallback Image
-          </div>
         </div>
       </Transition>
       
@@ -205,31 +237,80 @@ html.light .edit-mode textarea {
   width: 100%;
   height: 100%;
   position: relative;
+  background: var(--bg-surface);
 }
 
-.fallback-warning {
+.image-loader {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 11px;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.image-error-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-secondary);
+  z-index: 6;
+  gap: 12px;
+}
+
+.error-icon {
+  opacity: 0.5;
+}
+
+.image-error-state p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.retry-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  backdrop-filter: blur(4px);
-  pointer-events: none;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 12px;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 10;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.main-image.is-loading {
+  opacity: 0;
 }
 
 .main-image.contain {

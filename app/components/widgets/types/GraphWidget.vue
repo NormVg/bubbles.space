@@ -10,21 +10,37 @@ const emit = defineEmits<{
   save: [data: Record<string, any>]
 }>()
 
-const defaultData = {
-  graphType: 'line',
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-  datasets: [
-    {
-      label: 'Dataset 1',
-      values: [12, 19, 3, 5, 2],
-      color: 'var(--accent)'
-    }
-  ]
-}
-
 const graphData = computed(() => {
-  return { ...defaultData, ...props.data }
+  const defaultData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [{ values: [120, 180, 150, 200, 220], color: 'var(--accent)' }],
+    graphType: 'line'
+  }
+  
+  // Basic validation check
+  const data = { ...defaultData, ...props.data }
+  if (!data.datasets || !Array.isArray(data.datasets) || data.datasets.length === 0) {
+    dataError.value = true
+  } else {
+    dataError.value = false
+  }
+  
+  return data
 })
+
+const dataError = ref(false)
+
+const resetData = () => {
+  const defaultData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [{ values: [120, 180, 150, 200, 220], color: 'var(--accent)' }],
+    graphType: 'line'
+  }
+  emit('save', defaultData)
+  dataError.value = false
+  jsonError.value = ''
+  editJson.value = JSON.stringify(defaultData, null, 2)
+}
 
 // Editing state
 const editJson = ref(JSON.stringify(graphData.value, null, 2))
@@ -192,7 +208,18 @@ const pieSlices = computed(() => {
     </div>
     
     <div v-else class="graph-display" :class="{ 'is-mounted': isMounted }">
+      <!-- Error State -->
+      <div v-if="dataError" class="graph-error-state">
+        <LucideAlertCircle :size="32" class="error-icon" />
+        <p>Invalid Graph Data</p>
+        <span class="error-sub">Missing datasets or labels</span>
+        <button class="retry-btn" @click.stop="resetData">
+          <LucideRotateCcw :size="14" /> Reset to Default
+        </button>
+      </div>
+
       <svg 
+        v-else
         class="chart-svg" 
         :viewBox="`0 0 ${viewBoxWidth} ${viewBoxHeight}`" 
         preserveAspectRatio="xMidYMid meet"
@@ -357,11 +384,64 @@ html.light .graph-textarea {
   border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Error State */
+.graph-error-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-secondary);
+  z-index: 6;
+  gap: 8px;
+}
+
+.error-icon {
+  opacity: 0.5;
+  color: var(--danger, #ef4444);
+}
+
+.graph-error-state p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.error-sub {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
 /* Chart SVG Styles */
 .graph-display {
   flex: 1;
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
