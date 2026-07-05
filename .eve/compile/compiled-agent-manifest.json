@@ -630,6 +630,70 @@
       "name": "wikipedia_search",
       "sourceId": "tools/wikipedia_search.ts",
       "sourceKind": "module"
+    },
+    {
+      "description": "Fetch all videos from a specific YouTube playlist using its URL or ID.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "urlOrId": {
+            "type": "string",
+            "description": "The playlist URL or ID."
+          },
+          "limit": {
+            "description": "The maximum number of videos to fetch. Defaults to 50.",
+            "type": "number",
+            "maximum": 200
+          }
+        },
+        "required": [
+          "urlOrId"
+        ]
+      },
+      "logicalPath": "tools/youtube_playlist.ts",
+      "name": "youtube_playlist",
+      "sourceId": "tools/youtube_playlist.ts",
+      "sourceKind": "module"
+    },
+    {
+      "description": "Search YouTube for videos, channels, or playlists without needing an API key.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query."
+          },
+          "type": {
+            "description": "The type of search to perform. Defaults to 'video'.",
+            "type": "string",
+            "enum": [
+              "video",
+              "channel",
+              "playlist",
+              "all"
+            ]
+          },
+          "safeSearch": {
+            "description": "Enable safe search to filter out explicit content. Defaults to false.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "The maximum number of results to return. Defaults to 5.",
+            "type": "number",
+            "maximum": 50
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "logicalPath": "tools/youtube_search.ts",
+      "name": "youtube_search",
+      "sourceId": "tools/youtube_search.ts",
+      "sourceKind": "module"
     }
   ],
   "workspaceResourceRoot": {

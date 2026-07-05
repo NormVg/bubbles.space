@@ -22,6 +22,8 @@ import * as module_18 from "../../agent/tools/memory_tree.ts";
 import * as module_19 from "../../agent/tools/unsplash_search.ts";
 import * as module_20 from "../../agent/tools/web_search.ts";
 import * as module_21 from "../../agent/tools/wikipedia_search.ts";
+import * as module_22 from "../../agent/tools/youtube_playlist.ts";
+import * as module_23 from "../../agent/tools/youtube_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -48,7 +50,9 @@ export const moduleMap = Object.freeze({
                   "tools/memory_tree.ts": module_18,
                   "tools/unsplash_search.ts": module_19,
                   "tools/web_search.ts": module_20,
-                  "tools/wikipedia_search.ts": module_21
+                  "tools/wikipedia_search.ts": module_21,
+                  "tools/youtube_playlist.ts": module_22,
+                  "tools/youtube_search.ts": module_23
                 })
             })
     })

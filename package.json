@@ -38,6 +38,7 @@
     "stream-monaco": "^0.0.45",
     "vue": "^3.5.35",
     "vue-router": "^5.1.0",
+    "youtube-sr": "^4.3.12",
     "zod": "^4.4.3"
   },
   "devDependencies": {
