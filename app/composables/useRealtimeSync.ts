@@ -44,6 +44,7 @@ export function useRealtimeSync() {
     let widgetSyncTimeout: any = null
     channel.subscribe('sync:widgets', (msg) => {
       // Ignore our own events
+      console.log(`[Ably] Received message sender: ${msg.data?.senderId}, local: ${localInstanceId}`);
       if (msg.data?.senderId === localInstanceId) return
       
       console.log('Received remote widget sync', msg.data)
@@ -52,7 +53,7 @@ export function useRealtimeSync() {
       if (widgetSyncTimeout) clearTimeout(widgetSyncTimeout)
       widgetSyncTimeout = setTimeout(() => {
         const widgetStore = useWidgetStore()
-        void widgetStore.reloadFromServer()
+        void widgetStore.reloadFromServer('ably-widgets')
       }, 500)
     })
 
@@ -91,7 +92,7 @@ export function useRealtimeSync() {
         if (conversationStore.activeConversationId) {
           void conversationStore.selectConversation(conversationStore.activeConversationId)
         }
-        void widgetStore.reloadFromServer()
+        void widgetStore.reloadFromServer('visibility-change')
       }
     }
     window.addEventListener('visibilitychange', handleVisibility)

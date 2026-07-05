@@ -199,7 +199,8 @@ export const useWidgetStore = defineStore('widgets', () => {
 
   let isReloadingFromServer = false
 
-  const reloadFromServer = async () => {
+  const reloadFromServer = async (source = 'unknown') => {
+    console.log(`[Widgets] reloadFromServer triggered by: ${source}`)
     try {
       const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
       if (serverWorkspaces && serverWorkspaces.length > 0) {
