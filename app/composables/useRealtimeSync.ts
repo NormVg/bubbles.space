@@ -4,6 +4,7 @@ import { authClient } from '~/utils/auth-client'
 
 let globalClient: Ably.Realtime | null = null
 let channel: Ably.RealtimeChannel | null = null
+const localInstanceId = crypto.randomUUID()
 
 export function useRealtimeSync() {
   const authState = authClient.useSession()
@@ -12,7 +13,7 @@ export function useRealtimeSync() {
   if (globalClient) {
     return {
       publish: (event: string, data: any) => {
-        if (channel) channel.publish(event, data)
+        if (channel) channel.publish(event, { ...data, senderId: localInstanceId })
       }
     }
   }
@@ -43,7 +44,7 @@ export function useRealtimeSync() {
     let widgetSyncTimeout: any = null
     channel.subscribe('sync:widgets', (msg) => {
       // Ignore our own events
-      if (msg.connectionId === globalClient?.connection.id) return
+      if (msg.data?.senderId === localInstanceId) return
       
       console.log('Received remote widget sync', msg.data)
       
@@ -58,7 +59,7 @@ export function useRealtimeSync() {
     // Handle conversation syncs
     let conversationSyncTimeout: any = null
     channel.subscribe('sync:conversation', (msg) => {
-      if (msg.connectionId === globalClient?.connection.id) return
+      if (msg.data?.senderId === localInstanceId) return
       console.log('Received remote conversation sync', msg.data)
       
       const data = msg.data as { id: string, action: 'upsert' | 'delete' }
@@ -104,7 +105,7 @@ export function useRealtimeSync() {
 
   return {
     publish: (event: string, data: any) => {
-      if (channel) channel.publish(event, data)
+      if (channel) channel.publish(event, { ...data, senderId: localInstanceId })
     }
   }
 }
