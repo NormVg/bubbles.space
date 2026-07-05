@@ -4,7 +4,6 @@ import { useLocalStorage } from '@vueuse/core'
 import type { EveMessage } from 'eve/vue'
 import type { HandleMessageStreamEvent, SessionState } from 'eve/client'
 import type { ConversationMeta, ConversationDetail } from '../../shared/types/conversation.types'
-import { conversationService } from '../services/conversation.service'
 
 export const useConversationStore = defineStore('conversations', () => {
   // Use useLocalStorage just to persist the active ID, as it is very small
@@ -203,6 +202,13 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function deleteConversation(id: string) {
+    // Cancel any pending sync timers — do NOT flush, just discard
+    if (syncTimeouts.has(id)) {
+      clearTimeout(syncTimeouts.get(id))
+      syncTimeouts.delete(id)
+    }
+    pendingSyncs.delete(id)
+
     try {
       await $fetch(`/api/chat/${id}`, { method: 'DELETE' })
     } catch (e) {
