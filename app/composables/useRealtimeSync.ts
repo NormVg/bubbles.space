@@ -5,6 +5,7 @@ import { authClient } from '~/utils/auth-client'
 let globalClient: Ably.Realtime | null = null
 let channel: Ably.RealtimeChannel | null = null
 const localInstanceId = crypto.randomUUID()
+let isInitializingAbly = false
 
 export function useRealtimeSync() {
   const authState = authClient.useSession()
@@ -19,6 +20,7 @@ export function useRealtimeSync() {
   }
 
   const init = async () => {
+    isInitializingAbly = true
     // We need to wait for auth state to be ready
     if (authState.value.isPending) {
       await new Promise<void>(resolve => {
@@ -92,14 +94,22 @@ export function useRealtimeSync() {
         if (conversationStore.activeConversationId) {
           void conversationStore.selectConversation(conversationStore.activeConversationId)
         }
-        void widgetStore.reloadFromServer('visibility-change')
+        
+        // Prevent snapping back if we have local unsaved changes waiting to push
+        if (!widgetStore.isSyncPending) {
+          void widgetStore.reloadFromServer('visibility-change')
+        }
       }
     }
     window.addEventListener('visibilitychange', handleVisibility)
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('visibilitychange', handleVisibility)
+    })
   }
   
   onMounted(() => {
-    if (!globalClient) {
+    if (!globalClient && !isInitializingAbly) {
       void init()
     }
   })

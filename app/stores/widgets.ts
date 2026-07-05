@@ -37,6 +37,7 @@ export const useWidgetStore = defineStore('widgets', () => {
   // 'offline': Push failed, waiting for connection
   // 'error': Unrecoverable error
   const syncStatus = ref<'saved' | 'syncing' | 'offline' | 'error'>('saved')
+  const isSyncPending = ref(false)
 
   const { publish } = useRealtimeSync()
 
@@ -247,6 +248,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 
     // 2. Debounced DB Save
     if (syncTimeout) clearTimeout(syncTimeout)
+    isSyncPending.value = true
     
     const pushToDB = async () => {
       syncStatus.value = 'syncing'
@@ -256,6 +258,7 @@ export const useWidgetStore = defineStore('widgets', () => {
           body: workspaces.value
         })
         syncStatus.value = 'saved'
+        isSyncPending.value = false
         console.log('Synced to DB successfully.')
         publish('sync:widgets', { ts: Date.now() })
         if (retryInterval) {
@@ -486,6 +489,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     reorderWorkspaces,
     bringToFront,
     reloadFromServer,
-    isInitializing
+    isInitializing,
+    isSyncPending
   }
 })
