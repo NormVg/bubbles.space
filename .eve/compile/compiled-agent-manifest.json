@@ -150,7 +150,9 @@
               "timer",
               "graph",
               "image",
-              "pdf"
+              "pdf",
+              "video",
+              "drawio"
             ],
             "description": "The type of widget to create."
           },
@@ -172,7 +174,7 @@
               "type": "string"
             },
             "additionalProperties": {},
-            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }. For image: { images: ['url1', 'url2'] }. For pdf: { url: 'https://example.com/document.pdf' }"
+            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For graph: { graphType: 'line', labels: [...], datasets: [...] }. For image: { images: ['url1'] }. For pdf: { url: 'https://...pdf' }. For video: { url: 'https://youtube.com/watch?v=...' }. For drawio: { xml: '<mxGraphModel>...</mxGraphModel>' }"
           }
         },
         "required": [

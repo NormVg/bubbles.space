@@ -7,4 +7,6 @@ export const WidgetRegistry: Record<string, any> = {
   graph: defineAsyncComponent(() => import('./types/GraphWidget.vue')),
   image: defineAsyncComponent(() => import('./types/ImageWidget.vue')),
   pdf: defineAsyncComponent(() => import('./types/PdfWidget.vue')),
+  video: defineAsyncComponent(() => import('./types/VideoWidget.vue')),
+  drawio: defineAsyncComponent(() => import('./types/DrawioWidget.vue')),
 }
