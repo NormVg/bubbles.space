@@ -7,7 +7,7 @@ import { useWidgetStore } from '../stores/widgets'
 import { authClient } from '~/utils/auth-client'
 
 const conversationStore = useConversationStore()
-const conversationId = computed(() => conversationStore.activeConversationId)
+const conversationId = conversationStore.activeConversationId
 const widgetStore = useWidgetStore()
 
 const agent = useEveAgent({
@@ -55,8 +55,8 @@ const agent = useEveAgent({
     }
   },
   onSessionChange(session) {
-    if (conversationId.value) {
-      void conversationStore.updateSession(conversationId.value, session)
+    if (conversationId) {
+      void conversationStore.updateSession(conversationId, session)
     }
   }
 })
@@ -67,8 +67,8 @@ let throttleTimeout: any = null
 let lastRun = 0
 
 const runSnapshotUpdate = () => {
-  if (!conversationId.value) return
-  void conversationStore.updateFromAgentSnapshot(conversationId.value, {
+  if (!conversationId) return
+  void conversationStore.updateFromAgentSnapshot(conversationId, {
     events: agent.events.value,
     messages: agent.data.value.messages,
     session: agent.session.value
@@ -96,8 +96,8 @@ watch(
 onBeforeUnmount(() => {
   if (throttleTimeout) clearTimeout(throttleTimeout)
   runSnapshotUpdate()
-  if (conversationId.value) {
-    conversationStore.flushSync(conversationId.value)
+  if (conversationId) {
+    conversationStore.flushSync(conversationId)
   }
   unregister()
 })
