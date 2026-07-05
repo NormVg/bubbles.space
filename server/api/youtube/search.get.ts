@@ -25,9 +25,6 @@ export default defineEventHandler(async (event) => {
       views: item.views
     }));
 
-    // limit
-    items = items.slice(0, params.limit as number);
-
     return {
       success: true,
       data: items

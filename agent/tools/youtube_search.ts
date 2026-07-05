@@ -1,6 +1,7 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import ytSearch from "yt-search";
+import "cheerio"; // Force Nitro to trace and bundle cheerio
 
 export default defineTool({
   description: "Search YouTube for videos, channels, or playlists without needing an API key.",
