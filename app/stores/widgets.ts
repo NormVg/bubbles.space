@@ -207,10 +207,11 @@ export const useWidgetStore = defineStore('widgets', () => {
         localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
         localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
         
-        // NextTick ensures the deep watcher has fired and seen the flag before we reset it
-        nextTick(() => {
+        // Use setTimeout to absolutely guarantee the Vue deep watcher 
+        // (which runs asynchronously) finishes before we reset the flag.
+        setTimeout(() => {
           isReloadingFromServer = false
-        })
+        }, 150)
       }
     } catch (e) {
       console.error('Failed to reload from server:', e)
