@@ -30,7 +30,7 @@ import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles
 import { always } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.16.2_3e1088d529425ac3cadfdbff1d019281/node_modules/eve/dist/src/public/tools/approval/index.js";
 import { z } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js";
 import { fetchWeatherApi } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/openmeteo@1.2.3/node_modules/openmeteo/lib/index.js";
-import YouTubeSR from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/youtube-sr@4.3.12/node_modules/youtube-sr/dist/mod.js";
+import ytSearch from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/yt-search@2.13.1/node_modules/yt-search/dist/yt-search.js";
 import * as ur$3 from "node:fs";
 import g, { createWriteStream, existsSync, mkdirSync, promises, readFileSync, realpathSync, statSync, writeFileSync } from "node:fs";
 import * as lr$3 from "node:path";
@@ -196,7 +196,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -207,17 +207,17 @@ var agent_default = defineAgent({
 	modelContextWindowTokens: 128e3
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 var eve_default = eveChannel({ auth: [none()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/ask_question.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/ask_question.ts
 var ask_question_exports = /* @__PURE__ */ __exportAll({ default: () => ask_question_default });
 var ask_question_default = defineTool({
 	description: "Ask the user a clarifying question or a choice mid-turn and park until they answer.",
@@ -244,7 +244,7 @@ var ask_question_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -277,7 +277,7 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 var canvas_read_widget_default = defineTool({
 	description: "Read the full contents of a widget on the canvas using its ID. Use this when you need to see the exact text, markdown, or diagram source code of a specific widget.",
@@ -287,7 +287,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -300,7 +300,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -321,7 +321,7 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/lib/utils.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/lib/utils.ts
 function getBaseUrl() {
 	if (process.env.NUXT_PUBLIC_SITE_URL) return process.env.NUXT_PUBLIC_SITE_URL;
 	if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
@@ -329,7 +329,7 @@ function getBaseUrl() {
 	return "http://localhost:3000";
 }
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/get_app_stats.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/get_app_stats.ts
 var get_app_stats_exports = /* @__PURE__ */ __exportAll({ default: () => get_app_stats_default });
 var get_app_stats_default = defineTool({
 	description: "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
@@ -359,7 +359,7 @@ var get_app_stats_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -401,7 +401,7 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_at.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_at.ts
 var memory_at_exports = /* @__PURE__ */ __exportAll({ default: () => memory_at_default });
 var memory_at_default = defineTool({
 	description: "Query memories at a specific point in time. Returns facts that were considered true (valid) at the given timestamp. Useful for answering 'what did we know about X on date Y?'",
@@ -424,7 +424,7 @@ var memory_at_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_get.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_get.ts
 var memory_get_exports = /* @__PURE__ */ __exportAll({ default: () => memory_get_default });
 var memory_get_default = defineTool({
 	description: "Get a specific memory by its ID or virtual path.",
@@ -447,7 +447,7 @@ var memory_get_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_list.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_list.ts
 var memory_list_exports = /* @__PURE__ */ __exportAll({ default: () => memory_list_default });
 var memory_list_default = defineTool({
 	description: "List all memories stored in the vault.",
@@ -464,7 +464,7 @@ var memory_list_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_query.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_query.ts
 var memory_query_exports = /* @__PURE__ */ __exportAll({ default: () => memory_query_default });
 var memory_query_default = defineTool({
 	description: "Search for memories using fuzzy matching on title, content, and metadata.",
@@ -494,7 +494,7 @@ var memory_query_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_reinforce.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_reinforce.ts
 var memory_reinforce_exports = /* @__PURE__ */ __exportAll({ default: () => memory_reinforce_default });
 var memory_reinforce_default = defineTool({
 	description: "Reinforce a memory by increasing its access count and updating its last accessed timestamp.",
@@ -517,7 +517,7 @@ var memory_reinforce_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_semantic_search.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_semantic_search.ts
 var memory_semantic_search_exports = /* @__PURE__ */ __exportAll({ default: () => memory_semantic_search_default });
 var memory_semantic_search_default = defineTool({
 	description: "Perform a deep semantic search (Vector/NLP) over the user's memories. Use this if the pre-fetched semantic context wasn't enough to answer the user's question. This understands conceptual similarity rather than exact keyword matches.",
@@ -540,7 +540,7 @@ var memory_semantic_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_store.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_store.ts
 var memory_store_exports = /* @__PURE__ */ __exportAll({ default: () => memory_store_default });
 var memory_store_default = defineTool({
 	description: "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
@@ -577,7 +577,7 @@ var memory_store_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_timeline.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_timeline.ts
 var memory_timeline_exports = /* @__PURE__ */ __exportAll({ default: () => memory_timeline_default });
 var memory_timeline_default = defineTool({
 	description: "Get the full version history (timeline) of a memory at a given path. Shows all versions from newest to oldest, including when each version was valid and what replaced it.",
@@ -599,7 +599,7 @@ var memory_timeline_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/memory_tree.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/memory_tree.ts
 var memory_tree_exports = /* @__PURE__ */ __exportAll({ default: () => memory_tree_default });
 var memory_tree_default = defineTool({
 	description: "Get an ASCII tree representation of the memory folder structure.",
@@ -616,7 +616,7 @@ var memory_tree_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/unsplash_search.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/unsplash_search.ts
 var unsplash_search_exports = /* @__PURE__ */ __exportAll({ default: () => unsplash_search_default });
 var unsplash_search_default = defineTool({
 	description: "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
@@ -643,7 +643,7 @@ var unsplash_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -692,7 +692,7 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/wikipedia_search.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/wikipedia_search.ts
 var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
 var wikipedia_search_default = defineTool({
 	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
@@ -733,37 +733,7 @@ var wikipedia_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/youtube_playlist.ts
-var youtube_playlist_exports = /* @__PURE__ */ __exportAll({ default: () => youtube_playlist_default });
-var youtube_playlist_default = defineTool({
-	description: "Fetch all videos from a specific YouTube playlist using its URL or ID.",
-	inputSchema: z.object({
-		urlOrId: z.string().describe("The playlist URL or ID."),
-		limit: z.number().max(200).optional().describe("The maximum number of videos to fetch. Defaults to 50.")
-	}),
-	async execute({ urlOrId, limit = 50 }) {
-		try {
-			const playlist = await YouTubeSR.getPlaylist(urlOrId, { limit });
-			return {
-				id: playlist.id,
-				title: playlist.title,
-				url: playlist.url,
-				videoCount: playlist.videoCount,
-				channel: playlist.channel?.name,
-				videos: playlist.videos.map((v) => ({
-					id: v.id,
-					title: v.title,
-					url: v.url,
-					duration: v.durationFormatted
-				}))
-			};
-		} catch (error) {
-			throw new Error(`Failed to fetch YouTube playlist: ${error.message}`);
-		}
-	}
-});
-//#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent/tools/youtube_search.ts
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent/tools/youtube_search.ts
 var youtube_search_exports = /* @__PURE__ */ __exportAll({ default: () => youtube_search_default });
 var youtube_search_default = defineTool({
 	description: "Search YouTube for videos, channels, or playlists without needing an API key.",
@@ -775,23 +745,29 @@ var youtube_search_default = defineTool({
 			"playlist",
 			"all"
 		]).optional().describe("The type of search to perform. Defaults to 'video'."),
-		safeSearch: z.boolean().optional().describe("Enable safe search to filter out explicit content. Defaults to false."),
 		limit: z.number().max(50).optional().describe("The maximum number of results to return. Defaults to 5.")
 	}),
-	async execute({ query, type = "video", safeSearch = false, limit = 5 }) {
+	async execute({ query, type = "video", limit = 5 }) {
 		try {
-			return (await YouTubeSR.search(query, {
-				type,
-				safeSearch,
-				limit
-			})).map((item) => {
+			const results = await ytSearch(query);
+			let items = [];
+			if (type === "all") items = [
+				...results.videos,
+				...results.channels,
+				...results.playlists
+			];
+			else if (type === "video") items = results.videos;
+			else if (type === "channel") items = results.channels;
+			else if (type === "playlist") items = results.playlists;
+			items = items.slice(0, limit);
+			return items.map((item) => {
 				if (item.type === "video") return {
 					type: "video",
-					id: item.id,
+					id: item.videoId,
 					title: item.title,
 					url: item.url,
-					duration: item.durationFormatted,
-					channel: item.channel?.name,
+					duration: item.timestamp,
+					channel: item.author?.name,
 					views: item.views
 				};
 				else if (item.type === "channel") return {
@@ -799,11 +775,11 @@ var youtube_search_default = defineTool({
 					id: item.id,
 					name: item.name,
 					url: item.url,
-					subscribers: item.subscribers
+					subscribers: item.subCountLabel
 				};
-				else if (item.type === "playlist") return {
+				else if (item.type === "list") return {
 					type: "playlist",
-					id: item.id,
+					id: item.listId,
 					title: item.title,
 					url: item.url,
 					videoCount: item.videoCount
@@ -816,7 +792,7 @@ var youtube_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -841,13 +817,12 @@ const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.fr
 	"tools/unsplash_search.ts": unsplash_search_exports,
 	"tools/web_search.ts": web_search_exports,
 	"tools/wikipedia_search.ts": wikipedia_search_exports,
-	"tools/youtube_playlist.ts": youtube_playlist_exports,
 	"tools/youtube_search.ts": youtube_search_exports
 }) }) }) });
 const metadata = {
 	"compile": { "moduleMap": {
 		"path": ".eve/compile/module-map.mjs",
-		"sha256": "571d8c86b9d2f735b6b244d3202cb1e08f9d2d6d9168b517bdb50a4389514f13"
+		"sha256": "18cbad72d7be01747dc23b9ba9ef83e2028c37a291ca74381b46598c0d4f31c0"
 	} },
 	"discovery": {
 		"diagnostics": {
@@ -856,9 +831,9 @@ const metadata = {
 		},
 		"manifest": {
 			"path": ".eve/discovery/agent-discovery-manifest.json",
-			"sha256": "289aca82e782a5e14de1db114f82b4482b345c280faf756c1a1f59af3c343769"
+			"sha256": "719411993e2120b77eee616073a8677f08d3c7a44964ca0b5e0fc7606410f139"
 		},
-		"sourceGraphHash": "b93ffcadcab0b16b02888732e38d94599dd8e8dce5024fd0e4cbf4054c90f2f9",
+		"sourceGraphHash": "d7d41db81100aedbf2e927acc6e5b5f57fd7bc35e41e00ca024376279398dd8b",
 		"summary": {
 			"errors": 0,
 			"warnings": 0
@@ -873,8 +848,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -1436,29 +1411,6 @@ const manifest = {
 			"sourceKind": "module"
 		},
 		{
-			"description": "Fetch all videos from a specific YouTube playlist using its URL or ID.",
-			"inputSchema": {
-				"$schema": "http://json-schema.org/draft-07/schema#",
-				"type": "object",
-				"properties": {
-					"urlOrId": {
-						"type": "string",
-						"description": "The playlist URL or ID."
-					},
-					"limit": {
-						"description": "The maximum number of videos to fetch. Defaults to 50.",
-						"type": "number",
-						"maximum": 200
-					}
-				},
-				"required": ["urlOrId"]
-			},
-			"logicalPath": "tools/youtube_playlist.ts",
-			"name": "youtube_playlist",
-			"sourceId": "tools/youtube_playlist.ts",
-			"sourceKind": "module"
-		},
-		{
 			"description": "Search YouTube for videos, channels, or playlists without needing an API key.",
 			"inputSchema": {
 				"$schema": "http://json-schema.org/draft-07/schema#",
@@ -1477,10 +1429,6 @@ const manifest = {
 							"playlist",
 							"all"
 						]
-					},
-					"safeSearch": {
-						"description": "Enable safe search to filter out explicit content. Defaults to false.",
-						"type": "boolean"
 					},
 					"limit": {
 						"description": "The maximum number of results to return. Defaults to 5.",
@@ -1525,7 +1473,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mr7pji45-b741fb03-c152-4bff-9562-a7392a52e434/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mr7qkq6h-62b48db9-4139-4aeb-9bf2-0713d4a72785/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.16.2_3e1088d529425ac3cadfdbff1d019281/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
