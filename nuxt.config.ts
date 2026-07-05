@@ -12,12 +12,7 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    experimental: { websocket: true },
-    // yt-search dynamically requires cheerio at runtime.
-    // Vercel's bundler can't trace dynamic requires, so we force-include it.
-    externals: {
-      inline: ['cheerio']
-    }
+    experimental: { websocket: true }
   },
   runtimeConfig: {
     ablyApiKey: process.env.ABLY_API_KEY || '',

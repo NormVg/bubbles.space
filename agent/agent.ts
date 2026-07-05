@@ -12,5 +12,11 @@ const ollama = createOllama({
 export default defineAgent({
 	model: ollama("gemma4:31b-cloud"),
   modelContextWindowTokens: 128000,
+  build: {
+    // yt-search dynamically requires cheerio at runtime.
+    // Eve's compiler can't trace dynamic requires, so we list them here
+    // to keep them external and trace them into the Vercel output.
+    externalDependencies: ['yt-search', 'cheerio'],
+  },
 });
 
