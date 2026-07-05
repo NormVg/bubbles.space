@@ -19,9 +19,9 @@ export function useRealtimeSync() {
 
   const init = async () => {
     // We need to wait for auth state to be ready
-    if (authState.isPending.value) {
+    if (authState.value.isPending) {
       await new Promise<void>(resolve => {
-        const unwatch = watch(() => authState.isPending.value, (isPending) => {
+        const unwatch = watch(() => authState.value.isPending, (isPending) => {
           if (!isPending) {
             unwatch()
             resolve()
@@ -30,8 +30,8 @@ export function useRealtimeSync() {
       })
     }
 
-    if (!authState.data.value?.user?.id) return
-    const userId = authState.data.value.user.id
+    if (!authState.value.data?.user?.id) return
+    const userId = authState.value.data.user.id
 
     globalClient = new Ably.Realtime({
       authUrl: '/api/ably-token'
