@@ -30,6 +30,7 @@ export interface Workspace {
 export const useWidgetStore = defineStore('widgets', () => {
   const workspaces = shallowRef<Workspace[]>([])
   const activeWorkspaceId = ref<string>('main')
+  const isInitializing = ref(true)
   
   // 'saved': All data pushed to DB
   // 'syncing': Currently pushing to DB
@@ -118,6 +119,7 @@ export const useWidgetStore = defineStore('widgets', () => {
   // Load from LocalStorage instantly, then reconcile with DB
   const init = async () => {
     try {
+      isInitializing.value = true
       // 1. Instant Local Load
       const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
       const savedActiveId = localStorage.getItem('bubbles_active_workspace')
@@ -190,6 +192,8 @@ export const useWidgetStore = defineStore('widgets', () => {
       }
     } catch (e) {
       console.error('Failed to load workspaces', e)
+    } finally {
+      isInitializing.value = false
     }
   }
 
@@ -480,6 +484,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     syncStatus,
     reorderWorkspaces,
     bringToFront,
-    reloadFromServer
+    reloadFromServer,
+    isInitializing
   }
 })

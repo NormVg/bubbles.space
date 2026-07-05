@@ -385,9 +385,13 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   <div
     ref="viewportEl"
     class="canvas-viewport"
-    :style="{ cursor }"
+    :style="{ cursor, pointerEvents: widgetStore.isInitializing ? 'none' : 'auto' }"
     @mousedown="startPan"
   >
+    <!-- Initial Server Sync Overlay -->
+    <div v-if="widgetStore.isInitializing" class="init-overlay">
+      <div class="loader-ring"></div>
+    </div>
     <!-- Edge visual feedback when hitting boundaries -->
     <div ref="edgeGlowTop" class="edge-glow top" style="opacity: 0"></div>
     <div ref="edgeGlowBottom" class="edge-glow bottom" style="opacity: 0"></div>
@@ -427,6 +431,32 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   overflow: hidden;
   user-select: none;
   background: var(--bg-base);
+}
+
+.init-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 10, 10, 0.3);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto; /* Catch all clicks to block canvas interaction */
+}
+
+.loader-ring {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: init-spin 1s linear infinite;
+}
+
+@keyframes init-spin {
+  to { transform: rotate(360deg); }
 }
 
 .canvas-bg {
