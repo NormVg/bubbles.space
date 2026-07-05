@@ -12,7 +12,7 @@ export default defineTool({
   }),
   async execute({ query, type = 'video', safeSearch = false, limit = 5 }) {
     try {
-      const results = await YouTubeSR.search(query, {
+      const results = await YouTubeSR.default.search(query, {
         type,
         safeSearch,
         limit

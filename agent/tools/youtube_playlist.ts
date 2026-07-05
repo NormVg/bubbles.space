@@ -10,7 +10,7 @@ export default defineTool({
   }),
   async execute({ urlOrId, limit = 50 }) {
     try {
-      const playlist = await YouTubeSR.getPlaylist(urlOrId, { limit });
+      const playlist = await YouTubeSR.default.getPlaylist(urlOrId, { limit });
 
       return {
         id: playlist.id,
