@@ -37,6 +37,8 @@ export const useWidgetStore = defineStore('widgets', () => {
   // 'error': Unrecoverable error
   const syncStatus = ref<'saved' | 'syncing' | 'offline' | 'error'>('saved')
 
+  const { publish } = useRealtimeSync()
+
   // Backwards compatible computed refs
   const activeWorkspace = computed(() => workspaces.value.find(w => w.id === activeWorkspaceId.value))
 
@@ -191,6 +193,25 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
+  const reloadFromServer = async () => {
+    try {
+      const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
+      if (serverWorkspaces && serverWorkspaces.length > 0) {
+        // Prevent unnecessary full reactivity resets if nothing changed, or just overwrite?
+        // Overwriting entirely can interrupt dragging/typing if active workspace changes.
+        // For a simple implementation, just overwrite workspaces list but maintain active id.
+        workspaces.value = serverWorkspaces
+        if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
+          activeWorkspaceId.value = serverWorkspaces[0].id
+        }
+        localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
+        localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+      }
+    } catch (e) {
+      console.error('Failed to reload from server:', e)
+    }
+  }
+
   // Debounce state
   let syncTimeout: any = null
   let retryInterval: any = null
@@ -225,6 +246,7 @@ export const useWidgetStore = defineStore('widgets', () => {
         })
         syncStatus.value = 'saved'
         console.log('Synced to DB successfully.')
+        publish('sync:widgets', { ts: Date.now() })
         if (retryInterval) {
           clearInterval(retryInterval)
           retryInterval = null
@@ -450,6 +472,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     findSafePosition,
     syncStatus,
     reorderWorkspaces,
-    bringToFront
+    bringToFront,
+    reloadFromServer
   }
 })

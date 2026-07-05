@@ -9,8 +9,17 @@ import RightDrawer from './RightDrawer.vue'
 import ArchivePanel from './ArchivePanel.vue'
 import AgentSessionProvider from './AgentSessionProvider.vue'
 import { useConversationStore } from '../stores/conversations'
+import { useWidgetStore } from '../stores/widgets'
+import { useChatStore } from '../stores/chat'
+import { useRealtimeSync } from '../composables/useRealtimeSync'
 
 const conversationStore = useConversationStore()
+const widgetStore = useWidgetStore()
+const chatStore = useChatStore()
+
+useRealtimeSync()
+
+const isExpanded = computed(() => Object.keys(widgetStore.expandedWidgets).length > 0)
 
 onMounted(() => {
   void conversationStore.init()

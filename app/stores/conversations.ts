@@ -15,6 +15,8 @@ export const useConversationStore = defineStore('conversations', () => {
   const isInitialized = ref(false)
   const isInitializing = ref(false)
   
+  const { publish } = useRealtimeSync()
+
   // Anti-stale load guard
   let detailLoadCounter = 0
 
@@ -76,6 +78,18 @@ export const useConversationStore = defineStore('conversations', () => {
 
     isInitialized.value = true
     isInitializing.value = false
+  }
+
+  async function reloadMetadata() {
+    try {
+      const serverMeta = await $fetch<ConversationMeta[]>('/api/chat')
+      if (serverMeta) {
+        metaList.value = serverMeta
+        localStorage.setItem('bubbles-meta-conversations', JSON.stringify(serverMeta))
+      }
+    } catch (e) {
+      console.error('Failed to reload chat metadata from DB:', e)
+    }
   }
 
   async function loadActiveDetail(id: string) {
@@ -146,6 +160,7 @@ export const useConversationStore = defineStore('conversations', () => {
           method: 'POST',
           body: { ...meta, ...detail }
         })
+        publish('sync:conversation', { id: meta.id, action: 'upsert', ts: Date.now() })
       } catch (e) {
         console.error('Failed to sync chat to DB:', e)
       }
@@ -211,6 +226,7 @@ export const useConversationStore = defineStore('conversations', () => {
 
     try {
       await $fetch(`/api/chat/${id}`, { method: 'DELETE' })
+      publish('sync:conversation', { id, action: 'delete', ts: Date.now() })
     } catch (e) {
       console.error('Failed to delete chat from DB:', e)
     }
@@ -325,6 +341,7 @@ export const useConversationStore = defineStore('conversations', () => {
     ensureConversation,
     selectConversation,
     flushSync,
+    reloadMetadata,
     updateFromAgentSnapshot,
     updateSession
   }

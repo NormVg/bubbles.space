@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     experimental: { websocket: true }
   },
   runtimeConfig: {
+    ablyApiKey: process.env.ABLY_API_KEY || '',
     public: {
       appLocked: process.env.APP_LOCKED === 'true',
       whitelistedEmails: process.env.WHITELISTED_EMAILS || ''

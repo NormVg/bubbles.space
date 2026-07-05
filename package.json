@@ -16,6 +16,7 @@
     "@thenormvg/web-have-sounds": "^1.0.1",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "^14.3.0",
+    "ably": "^2.23.0",
     "ai-sdk-ollama": "^4.0.0",
     "better-auth": "^1.6.23",
     "cheerio": "^1.2.0",
