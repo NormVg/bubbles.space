@@ -217,31 +217,34 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function deleteConversation(id: string) {
-    // Cancel any pending sync timers — do NOT flush, just discard
+    // 1. Synchronously clear timers and discard pending syncs
     if (syncTimeouts.has(id)) {
       clearTimeout(syncTimeouts.get(id))
       syncTimeouts.delete(id)
     }
     pendingSyncs.delete(id)
-
-    try {
-      await $fetch(`/api/chat/${id}`, { method: 'DELETE' })
-      publish('sync:conversation', { id, action: 'delete', ts: Date.now() })
-    } catch (e) {
-      console.error('Failed to delete chat from DB:', e)
-    }
     
+    // 2. Optimistically update local state BEFORE network requests!
+    // This prevents AgentSessionProvider from recreating it during unmount or background throttles.
     localStorage.removeItem(`bubbles-conv-${id}`)
     metaList.value = metaList.value.filter((c: ConversationMeta) => c.id !== id)
     localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
 
     if (metaList.value.length === 0) {
-      await createConversation()
-      return
+      // Don't await createConversation, just trigger it so the UI responds instantly
+      void createConversation()
+    } else if (activeConversationId.value === id) {
+      // Don't await selectConversation
+      void selectConversation(metaList.value[0]?.id ?? '')
     }
 
-    if (activeConversationId.value === id) {
-      await selectConversation(metaList.value[0]?.id ?? '')
+    // 3. Perform network delete in the background
+    try {
+      await $fetch(`/api/chat/${id}`, { method: 'DELETE' })
+      publish('sync:conversation', { id, action: 'delete', ts: Date.now() })
+    } catch (e) {
+      console.error('Failed to delete chat from DB:', e)
+      // Optional: rollback on failure, but for delete it's usually fine to just log
     }
   }
 
