@@ -51,7 +51,9 @@ watch(() => widgetStore.widgets, (newWidgets) => {
 })
 
 // Workspace Switch Transition
+let transitionId = 0
 watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
+  const currentTransition = ++transitionId
   isSwitchingWorkspaces.value = true
   
   if (oldId) {
@@ -72,8 +74,12 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
   
   await animOut.finished
   
+  if (currentTransition !== transitionId) return // Cancel if a newer transition started
+  
   displayedWidgets.value = widgetStore.widgets
   await nextTick() // Wait for Vue to render new widgets
+  
+  if (currentTransition !== transitionId) return
   
   // 2. Load new coordinates
   const newWs = widgetStore.workspaces.find(w => w.id === newId)
@@ -91,6 +97,7 @@ watch(() => widgetStore.activeWorkspaceId, async (newId, oldId) => {
   ], { duration: 350, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' })
   
   animIn.onfinish = () => {
+    if (currentTransition !== transitionId) return
     // Reset WAAPI overrides so normal panning works again
     animIn.cancel()
     if (canvasWorldEl.value) {

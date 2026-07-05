@@ -55,7 +55,13 @@ export function useRealtimeSync() {
       if (widgetSyncTimeout) clearTimeout(widgetSyncTimeout)
       widgetSyncTimeout = setTimeout(() => {
         const widgetStore = useWidgetStore()
-        void widgetStore.reloadFromServer('ably-widgets')
+        // If we have unsaved local changes, ignore remote sync to prevent wiping user's active work.
+        // Last-write-wins: our impending push will overwrite the server anyway.
+        if (!widgetStore.isSyncPending) {
+          void widgetStore.reloadFromServer('ably-widgets')
+        } else {
+          console.log('[Ably] Ignored remote sync because we have local unsaved changes.')
+        }
       }, 500)
     })
 

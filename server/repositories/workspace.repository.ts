@@ -1,4 +1,4 @@
-import { eq, sql, asc } from 'drizzle-orm';
+import { eq, sql, asc, and, notInArray, inArray } from 'drizzle-orm';
 import { db } from '../db';
 import { workspace, widget } from '../db/schema';
 
@@ -84,6 +84,36 @@ export class WorkspaceRepository {
       
       // Upsert widgets
       await this.upsertWidgets(tx, widgetsData);
+
+      // Delete widgets that are no longer in the payload
+      const incomingWorkspaceIds = workspacesData.map(w => w.id);
+      const incomingWidgetIds = widgetsData.map(w => w.id);
+
+      if (incomingWorkspaceIds.length > 0) {
+        if (incomingWidgetIds.length > 0) {
+          await tx.delete(widget).where(
+            and(
+              inArray(widget.workspaceId, incomingWorkspaceIds),
+              notInArray(widget.id, incomingWidgetIds)
+            )
+          );
+        } else {
+          await tx.delete(widget).where(
+            inArray(widget.workspaceId, incomingWorkspaceIds)
+          );
+        }
+
+        // Delete workspaces that are no longer in the payload
+        await tx.delete(workspace).where(
+          and(
+            eq(workspace.userId, userId),
+            notInArray(workspace.id, incomingWorkspaceIds)
+          )
+        );
+      } else {
+        // If empty payload, delete all workspaces for this user (cascades to widgets)
+        await tx.delete(workspace).where(eq(workspace.userId, userId));
+      }
     });
   }
 }

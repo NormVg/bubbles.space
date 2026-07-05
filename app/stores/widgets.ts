@@ -176,6 +176,7 @@ export const useWidgetStore = defineStore('widgets', () => {
         const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
         
         if (serverWorkspaces && serverWorkspaces.length > 0) {
+          isReloadingFromServer = true
           // DB has data, it becomes the source of truth
           workspaces.value = serverWorkspaces
           if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
@@ -184,6 +185,10 @@ export const useWidgetStore = defineStore('widgets', () => {
           // Update local storage immediately to match DB
           localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
           localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
+          
+          setTimeout(() => {
+            isReloadingFromServer = false
+          }, 150)
         } else if (hasLocalData || workspaces.value.length > 0) {
           // DB is empty, but we have local/legacy data. Push it to DB.
           await syncToDB(true)
@@ -289,7 +294,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 
   // Watch for changes to auto-sync
   watch([workspaces, activeWorkspaceId], () => {
-    if (isReloadingFromServer) return
+    if (isReloadingFromServer || isInitializing.value) return
     syncToDB()
   }, { deep: true })
 
