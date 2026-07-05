@@ -641,16 +641,6 @@
             "type": "string",
             "description": "The search query."
           },
-          "type": {
-            "description": "The type of search to perform. Defaults to 'video'.",
-            "type": "string",
-            "enum": [
-              "video",
-              "channel",
-              "playlist",
-              "all"
-            ]
-          },
           "limit": {
             "description": "The maximum number of results to return. Defaults to 5.",
             "type": "number",
