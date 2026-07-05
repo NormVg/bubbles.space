@@ -83,7 +83,7 @@ const emit = defineEmits<{
 }
 
 .context-pill-leave-active {
-  position: absolute;
+  /* Removed position: absolute to prevent it from instantly jumping out of the flex container */
 }
 
 .context-label {
