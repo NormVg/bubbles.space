@@ -29,7 +29,7 @@ onMounted(() => {
 <template>
   <div class="hud-overlay">
     <ClientOnly>
-      <AgentSessionProvider v-if="conversationStore.isInitialized" :key="conversationStore.activeConversationId" />
+      <AgentSessionProvider v-if="conversationStore.isInitialized" :key="`${conversationStore.activeConversationId}-${conversationStore.agentSessionKey}`" />
     </ClientOnly>
 
     <!-- Bulletproof SVG Mask using viewport units to guarantee sizing regardless of SVG wrapper dimensions -->

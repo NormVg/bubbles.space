@@ -94,7 +94,23 @@ export const useChatSubmit = (
     
     optimisticUserMessage.value = '' // Clear right before sending
     setTimeout(() => scrollToBottom(true), 50)
-    await agent.send({ message: finalMessage })
+    
+    try {
+      await agent.send({ message: finalMessage })
+      
+      // If agent enters error state immediately (eve framework catches internal errors), restore message
+      if (agent.status?.value === 'error') {
+        optimisticUserMessage.value = text
+      }
+    } catch (err: any) {
+      console.error('Failed to send message:', err)
+      optimisticUserMessage.value = text
+
+      // If the agent framework got permanently stuck from a previous cancelled request, force it to remount
+      if (err?.message?.includes('already processing a turn')) {
+        conversationStore.forceReloadAgent()
+      }
+    }
   }
 
   return { handleSubmit }

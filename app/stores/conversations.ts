@@ -15,6 +15,9 @@ export const useConversationStore = defineStore('conversations', () => {
   const isInitialized = ref(false)
   const isInitializing = ref(false)
   
+  // A key to force AgentSessionProvider to remount if the agent gets permanently stuck
+  const agentSessionKey = ref(0)
+  
   const { publish } = useRealtimeSync()
 
   // Anti-stale load guard
@@ -216,6 +219,10 @@ export const useConversationStore = defineStore('conversations', () => {
     }
   }
 
+  function forceReloadAgent() {
+    agentSessionKey.value++
+  }
+
   async function deleteConversation(id: string) {
     // 1. Synchronously clear timers and discard pending syncs
     if (syncTimeouts.has(id)) {
@@ -335,6 +342,7 @@ export const useConversationStore = defineStore('conversations', () => {
     isInitialized,
     activeConversation: activeConversationMeta, // Kept for backwards compatibility
     activeConversationId,
+    agentSessionKey,
     conversations: metaList, // Kept for backwards compatibility
     activeDetail,
     activeConversationEvents,
@@ -344,6 +352,7 @@ export const useConversationStore = defineStore('conversations', () => {
     ensureConversation,
     selectConversation,
     flushSync,
+    forceReloadAgent,
     reloadMetadata,
     updateFromAgentSnapshot,
     updateSession
