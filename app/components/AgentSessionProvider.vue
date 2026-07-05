@@ -63,21 +63,44 @@ const agent = useEveAgent({
 
 const unregister = setActiveAppAgent(agent)
 
+let throttleTimeout: any = null
+let lastRun = 0
+
+const runSnapshotUpdate = () => {
+  if (!conversationId.value) return
+  void conversationStore.updateFromAgentSnapshot(conversationId.value, {
+    events: agent.events.value,
+    messages: agent.data.value.messages,
+    session: agent.session.value
+  })
+}
+
 watch(
   [() => agent.events.value.length, () => agent.data.value.messages.length, agent.session],
   () => {
-    if (!conversationId.value) return
-
-    void conversationStore.updateFromAgentSnapshot(conversationId.value, {
-      events: agent.events.value,
-      messages: agent.data.value.messages,
-      session: agent.session.value
-    })
+    const now = Date.now()
+    if (now - lastRun > 500) {
+      lastRun = now
+      runSnapshotUpdate()
+    } else {
+      if (throttleTimeout) clearTimeout(throttleTimeout)
+      throttleTimeout = setTimeout(() => {
+        lastRun = Date.now()
+        runSnapshotUpdate()
+      }, 500)
+    }
   },
   { deep: true }
 )
 
-onBeforeUnmount(unregister)
+onBeforeUnmount(() => {
+  if (throttleTimeout) clearTimeout(throttleTimeout)
+  runSnapshotUpdate()
+  if (conversationId.value) {
+    conversationStore.flushSync(conversationId.value)
+  }
+  unregister()
+})
 </script>
 
 <template>

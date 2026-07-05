@@ -15,6 +15,9 @@ export const useConversationStore = defineStore('conversations', () => {
   const activeDetail = shallowRef<ConversationDetail | null>(null)
   const isInitialized = ref(false)
   const isInitializing = ref(false)
+  
+  // Anti-stale load guard
+  let detailLoadCounter = 0
 
   // Getters
   const sortedConversations = computed(() => [...metaList.value])
@@ -79,6 +82,8 @@ export const useConversationStore = defineStore('conversations', () => {
   async function loadActiveDetail(id: string) {
     if (!id) return
     
+    const currentLoadId = ++detailLoadCounter
+    
     // 1. Instant Local Load
     const localDetailStr = localStorage.getItem(`bubbles-conv-${id}`)
     if (localDetailStr) {
@@ -89,6 +94,10 @@ export const useConversationStore = defineStore('conversations', () => {
     // 2. Background DB Sync
     try {
       const serverDetail = await $fetch<ConversationDetail & ConversationMeta>(`/api/chat/${id}`)
+      if (currentLoadId !== detailLoadCounter) {
+        // A newer load has superseded this response. Discard it.
+        return
+      }
       if (serverDetail) {
         activeDetail.value = serverDetail
         activeConversationId.value = id
@@ -106,17 +115,33 @@ export const useConversationStore = defineStore('conversations', () => {
     }
   })
 
-  // Debounced Sync Engine
-  let syncTimeout: any = null
+  // Debounced Sync Engine (Per Conversation)
+  const syncTimeouts = new Map<string, any>()
+  const pendingSyncs = new Map<string, () => Promise<void>>()
+
+  function flushSync(id: string) {
+    if (syncTimeouts.has(id)) {
+      clearTimeout(syncTimeouts.get(id))
+      syncTimeouts.delete(id)
+    }
+    const syncFn = pendingSyncs.get(id)
+    if (syncFn) {
+      pendingSyncs.delete(id)
+      void syncFn()
+    }
+  }
 
   async function syncChatToDB(meta: ConversationMeta, detail: ConversationDetail) {
     // 1. Instant Local Save
     localStorage.setItem(`bubbles-conv-${meta.id}`, JSON.stringify(detail))
     localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
 
-    // 2. Debounced DB Save
-    if (syncTimeout) clearTimeout(syncTimeout)
-    syncTimeout = setTimeout(async () => {
+    // 2. Debounced DB Save per conversation
+    if (syncTimeouts.has(meta.id)) {
+      clearTimeout(syncTimeouts.get(meta.id))
+    }
+    
+    const syncFn = async () => {
       try {
         await $fetch('/api/chat', {
           method: 'POST',
@@ -125,7 +150,15 @@ export const useConversationStore = defineStore('conversations', () => {
       } catch (e) {
         console.error('Failed to sync chat to DB:', e)
       }
-    }, 2000)
+    }
+    
+    pendingSyncs.set(meta.id, syncFn)
+
+    syncTimeouts.set(meta.id, setTimeout(() => {
+      syncTimeouts.delete(meta.id)
+      pendingSyncs.delete(meta.id)
+      void syncFn()
+    }, 2000))
   }
 
   // Actions
@@ -161,6 +194,9 @@ export const useConversationStore = defineStore('conversations', () => {
   }
 
   async function selectConversation(id: string) {
+    if (activeConversationId.value && activeConversationId.value !== id) {
+      flushSync(activeConversationId.value)
+    }
     if (metaList.value.some((c: ConversationMeta) => c.id === id)) {
       await loadActiveDetail(id)
     }
@@ -282,6 +318,7 @@ export const useConversationStore = defineStore('conversations', () => {
     deleteConversation,
     ensureConversation,
     selectConversation,
+    flushSync,
     updateFromAgentSnapshot,
     updateSession
   }

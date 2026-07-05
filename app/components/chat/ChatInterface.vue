@@ -55,7 +55,7 @@
             </div>
 
             <!-- Status Loader -->
-            <div v-if="agent.status.value === 'submitted' || agent.status.value === 'streaming'" class="ai-message-wrapper thinking-loader-wrapper">
+            <div v-if="!isFetchingMemory && (agent.status.value === 'submitted' || agent.status.value === 'streaming')" class="ai-message-wrapper thinking-loader-wrapper">
               <div class="thinking-content">
                 <AILoader :size="16" :color="modeColor" :mode="currentMode" />
                 <span class="thinking-text" :style="{ color: modeColor }">{{ statusText }}</span>
