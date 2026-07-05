@@ -8,7 +8,7 @@ export default defineTool({
     width: z.number().describe("The width of the widget in pixels (e.g. 300 to 600)."),
     height: z.number().describe("The height of the widget in pixels (e.g. 200 to 500)."),
     title: z.string().describe("A short title for the widget."),
-    data: z.record(z.any()).describe("The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For graph: { graphType: 'line', labels: [...], datasets: [...] }. For image: { images: ['url1'] }. For pdf: { url: 'https://...pdf' }. For video: { url: 'https://youtube.com/watch?v=...' }. For drawio: { xml: '<mxGraphModel>...</mxGraphModel>' }")
+    data: z.record(z.any()).describe("The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For graph: { graphType: 'line', labels: [...], datasets: [...] }. For image: { images: ['url1'] }. For pdf: { url: 'https://...pdf' }. For video: { url: 'https://youtube.com/watch?v=...' }. For drawio: { xml: '<mxGraphModel>...</mxGraphModel>' } OR { mermaid: 'graph TD\\n A-->B' } to seed it with Mermaid.")
   }),
   async execute(input) {
     // We return a strictly formatted action payload.

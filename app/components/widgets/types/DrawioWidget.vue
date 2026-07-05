@@ -5,6 +5,7 @@ import { useWidgetStore } from '../../../stores/widgets'
 const props = defineProps<{
   data: {
     xml?: string // The raw XML of the draw.io diagram
+    mermaid?: string // Optional mermaid string to seed the diagram
   }
   isEditing?: boolean
   id: string
@@ -36,17 +37,29 @@ const handleMessage = (event: MessageEvent) => {
     if (msg.event === 'init') {
       isLoading.value = false
       // Load the diagram data when draw.io is ready
-      iframeRef.value?.contentWindow?.postMessage(JSON.stringify({
-        action: 'load',
-        xml: props.data.xml || '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>',
-        autosave: 1, // Enable autosave so we get real-time updates
-        title: 'Canvas Drawing'
-      }), '*')
+      // If the AI seeded the widget with Mermaid, we use the descriptor format
+      if (props.data.mermaid) {
+        iframeRef.value?.contentWindow?.postMessage(JSON.stringify({
+          action: 'load',
+          descriptor: { format: 'mermaid', data: props.data.mermaid, wrap: true },
+          autosave: 1, // Enable autosave so we get real-time updates
+          title: 'Canvas Drawing'
+        }), '*')
+      } else {
+        iframeRef.value?.contentWindow?.postMessage(JSON.stringify({
+          action: 'load',
+          xml: props.data.xml || '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>',
+          autosave: 1, // Enable autosave so we get real-time updates
+          title: 'Canvas Drawing'
+        }), '*')
+      }
     } 
     else if (msg.event === 'autosave' || msg.event === 'save') {
       // Save the XML back to our store
+      // Note: Even if it was seeded with Mermaid, autosave returns raw draw.io XML
+      // We will overwrite the data object to only have xml going forward.
       if (msg.xml) {
-        emit('save', { ...props.data, xml: msg.xml })
+        emit('save', { xml: msg.xml })
       }
     }
   } catch (e) {

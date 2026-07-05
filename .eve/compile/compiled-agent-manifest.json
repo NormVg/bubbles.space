@@ -174,7 +174,7 @@
               "type": "string"
             },
             "additionalProperties": {},
-            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For graph: { graphType: 'line', labels: [...], datasets: [...] }. For image: { images: ['url1'] }. For pdf: { url: 'https://...pdf' }. For video: { url: 'https://youtube.com/watch?v=...' }. For drawio: { xml: '<mxGraphModel>...</mxGraphModel>' }"
+            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For graph: { graphType: 'line', labels: [...], datasets: [...] }. For image: { images: ['url1'] }. For pdf: { url: 'https://...pdf' }. For video: { url: 'https://youtube.com/watch?v=...' }. For drawio: { xml: '<mxGraphModel>...</mxGraphModel>' } OR { mermaid: 'graph TD\\n A-->B' } to seed it with Mermaid."
           }
         },
         "required": [
