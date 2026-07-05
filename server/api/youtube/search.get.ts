@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 const searchSchema = z.object({
   q: z.string().min(1),
-  type: z.enum(['video', 'channel', 'playlist', 'all']).default('video'),
+  type: z.enum(['video', 'channel', 'playlist', 'all']).default('all'),
   safeSearch: z.boolean().default(false).or(z.string().transform(v => v === 'true')),
   limit: z.number().max(50).default(20).or(z.string().transform(v => parseInt(v, 10)))
 })
