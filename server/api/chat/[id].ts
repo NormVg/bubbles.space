@@ -1,5 +1,8 @@
 import { auth } from '../../utils/auth';
 import { ChatService } from '../../services/chat.service';
+import { Redis } from '@upstash/redis';
+
+let redis: Redis | null = null;
 
 export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({
@@ -17,12 +20,32 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Missing conversation ID' });
   }
 
+  const config = useRuntimeConfig();
+  if (config.upstashRedisRestUrl && config.upstashRedisRestToken && !redis) {
+    redis = new Redis({
+      url: config.upstashRedisRestUrl,
+      token: config.upstashRedisRestToken,
+    });
+  }
+
   if (event.method === 'GET') {
     try {
+      if (redis) {
+        const cached = await redis.get(`user:${userId}:chat:${conversationId}`);
+        if (cached) {
+          return typeof cached === 'string' ? JSON.parse(cached) : cached;
+        }
+      }
+
       const data = await ChatService.getDetail(userId, conversationId);
       if (!data) {
         throw createError({ statusCode: 404, statusMessage: 'Conversation not found' });
       }
+
+      if (redis) {
+        event.waitUntil(redis.set(`user:${userId}:chat:${conversationId}`, JSON.stringify(data), { ex: 86400 }));
+      }
+
       return data;
     } catch (error: any) {
       if (error.statusCode === 404) throw error;
@@ -33,6 +56,12 @@ export default defineEventHandler(async (event) => {
 
   if (event.method === 'DELETE') {
     try {
+      if (redis) {
+        // Delete this chat from cache, and invalidate the metadata list
+        await redis.del(`user:${userId}:chat:${conversationId}`);
+        await redis.del(`user:${userId}:chats`);
+      }
+      
       await ChatService.deleteConversation(userId, conversationId);
       return { success: true };
     } catch (error: any) {
