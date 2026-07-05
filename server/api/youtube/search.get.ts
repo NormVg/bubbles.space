@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
           thumbnail: { url: item.image },
           channel: { name: item.subCountLabel + ' subs' }
         };
-      } else if (item.type === 'playlist') {
+      } else if (item.type === 'list') {
         return {
           type: 'playlist',
           id: item.listId,

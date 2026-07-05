@@ -140,11 +140,6 @@
     },
     {
       "sourceKind": "module",
-      "logicalPath": "tools/youtube_playlist.ts",
-      "sourceId": "tools/youtube_playlist.ts"
-    },
-    {
-      "sourceKind": "module",
       "logicalPath": "tools/youtube_search.ts",
       "sourceId": "tools/youtube_search.ts"
     }
