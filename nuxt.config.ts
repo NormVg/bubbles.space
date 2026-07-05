@@ -16,6 +16,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     ablyApiKey: process.env.ABLY_API_KEY || '',
+    upstashRedisRestUrl: process.env.UPSTASH_REDIS_REST_URL || '',
+    upstashRedisRestToken: process.env.UPSTASH_REDIS_REST_TOKEN || '',
     public: {
       appLocked: process.env.APP_LOCKED === 'true',
       whitelistedEmails: process.env.WHITELISTED_EMAILS || ''
