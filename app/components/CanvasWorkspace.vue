@@ -398,10 +398,6 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     :style="{ cursor, pointerEvents: widgetStore.isInitializing ? 'none' : 'auto' }"
     @mousedown="startPan"
   >
-    <!-- Initial Server Sync Overlay -->
-    <div v-if="widgetStore.isInitializing" class="init-overlay">
-      <div class="loader-ring"></div>
-    </div>
     <!-- Edge visual feedback when hitting boundaries -->
     <div ref="edgeGlowTop" class="edge-glow top" style="opacity: 0"></div>
     <div ref="edgeGlowBottom" class="edge-glow bottom" style="opacity: 0"></div>

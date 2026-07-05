@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import CanvasWorkspace from '~/components/CanvasWorkspace.vue'
 import HudOverlay from '~/components/HudOverlay.vue'
 import SplashScreen from '~/components/SplashScreen.vue'
 import { useUIStore } from '~/stores/ui'
+import { useWidgetStore } from '~/stores/widgets'
 
 const uiStore = useUIStore()
-const isAppReady = ref(false)
-
-onMounted(() => {
-  // Simulate app initialization and loading assets
-  setTimeout(() => {
-    isAppReady.value = true
-  }, 2000)
-})
+const widgetStore = useWidgetStore()
+const isAppReady = computed(() => !widgetStore.isInitializing)
 </script>
 
 <template>
