@@ -190,7 +190,7 @@ function toggleExpand() {
     <!-- Dynamic Slot Area (Above the tabs) -->
     <div class="dynamic-slot-wrapper" ref="slotWrapperRef" style="display: none; height: 0; overflow: hidden;">
       <div class="dynamic-slot-inner" ref="slotInnerRef">
-        <VoiceResponseView v-if="hasDynamicContent" />
+        <VoiceResponseView />
       </div>
     </div>
 
