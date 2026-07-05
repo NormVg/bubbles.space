@@ -149,7 +149,8 @@
               "mermaid",
               "timer",
               "graph",
-              "image"
+              "image",
+              "pdf"
             ],
             "description": "The type of widget to create."
           },
@@ -171,7 +172,7 @@
               "type": "string"
             },
             "additionalProperties": {},
-            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }. For image: { images: ['url1', 'url2'] }"
+            "description": "The content of the widget. For markdown: { content: '...' }. For mermaid: { chart: '...' }. For timer: { duration: 300 } (duration is in seconds). For graph: { graphType: 'line' | 'bar' | 'pie', labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: [{ label: 'Sales', values: [100, 200, 150, 300] }] }. For image: { images: ['url1', 'url2'] }. For pdf: { url: 'https://example.com/document.pdf' }"
           }
         },
         "required": [
