@@ -20,12 +20,11 @@ const iframeRef = ref<HTMLIFrameElement | null>(null)
 const isLoading = ref(true)
 
 // Configure draw.io embed URL
+// Configure draw.io embed URL
 // proto=json: JSON protocol for postMessage
-// modified=0: Handle modified state internally
-// keepmodified=0: Don't keep modified state after save
+// ui=dark: Forces the dark theme matching our app
 // libraries=1: Enable shape libraries
-// ui=min: Minimal UI (optional, we'll use default dark/light mode depending on theme)
-const drawioUrl = 'https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&saveAndExit=0&noSaveBtn=1&noExitBtn=1'
+const drawioUrl = 'https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&saveAndExit=0&noSaveBtn=1&noExitBtn=1&ui=dark'
 
 const handleMessage = (event: MessageEvent) => {
   // Ensure the message is from our iframe
@@ -125,7 +124,6 @@ onUnmounted(() => {
   height: 100%;
   border: none;
   display: block;
-  background: white; /* Draw.io handles its own dark mode via config, but defaults to white canvas */
 }
 
 /* 
