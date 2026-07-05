@@ -686,6 +686,18 @@ const handleCopy = async (text: string, isUser: boolean) => {
   letter-spacing: 0.2px;
 }
 
+/* ─── Transitions ─────────────────────────────────────────────── */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 @media (max-width: 760px) {
   .session-browser {
     padding: 16px 0 16px 0;
