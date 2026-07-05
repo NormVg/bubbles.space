@@ -18,7 +18,7 @@ export const useChatStore = defineStore('chat', () => {
   function addWidgetContext(ctx: WidgetContext) {
     // Prevent duplicates
     if (pendingWidgetContexts.value.some(c => c.id === ctx.id)) return
-    pendingWidgetContexts.value.push(ctx)
+    pendingWidgetContexts.value = [...pendingWidgetContexts.value, ctx]
   }
 
   function removeWidgetContext(id: string) {
