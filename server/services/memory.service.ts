@@ -29,7 +29,7 @@ async function generateEmbedding(text: string): Promise<number[] | null> {
         encodingFormat: "float"
       }
     });
-    const result = embedding.data[0].embedding;
+    const result = (embedding as any).data[0].embedding;
     
     if (embeddingCache.size >= MAX_CACHE_SIZE) {
       const firstKey = embeddingCache.keys().next().value;
@@ -192,10 +192,9 @@ export class MemoryService {
         embedding,
       }).returning();
 
-      return withDecay(inserted);
+      return inserted ? withDecay(inserted) : null;
     }
 
-    // First version at this path
     const newTitle = data.title || normalizedPath.split('/').pop() || 'Untitled';
     const newContent = data.content ?? '';
     const contentToEmbed = `Title: ${newTitle}\nPath: ${normalizedPath}\nContent: ${newContent}`;
@@ -218,7 +217,7 @@ export class MemoryService {
       embedding,
     }).returning();
 
-    return withDecay(inserted);
+    return inserted ? withDecay(inserted) : null;
   }
 
   // ─── Read ───────────────────────────────────────────────────────────
@@ -463,10 +462,11 @@ export class MemoryService {
       if (mem.type === 'directory') continue;
       if (mem.state !== 'active') continue;
 
-      const parts = mem.path.split('/');
+      const parts = mem.path.split('/').filter(Boolean);
       let current = tree;
       for (let i = 0; i < parts.length; i++) {
         const part = parts[i];
+        if (!part) continue;
         if (i === parts.length - 1) {
           current[part] = { _file: true, id: mem.id, version: mem.version };
         } else {
@@ -482,16 +482,19 @@ export class MemoryService {
       const keys = Object.keys(node).filter(k => !k.startsWith('_')).sort();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
+        if (!key) continue;
+        const child = node[key];
+        if (!child) continue;
         const isLast = i === keys.length - 1;
         const pointer = isLast ? '└── ' : '├── ';
-        const isFile = !!node[key]._file;
+        const isFile = !!child._file;
 
         if (isFile) {
-          const ver = node[key].version > 1 ? ` (v${node[key].version})` : '';
+          const ver = child.version > 1 ? ` (v${child.version})` : '';
           output += `${prefix}${pointer}${key}${ver}\n`;
         } else {
           output += `${prefix}${pointer}${key}/\n`;
-          printNode(node[key], prefix + (isLast ? '    ' : '│   '));
+          printNode(child, prefix + (isLast ? '    ' : '│   '));
         }
       }
     };

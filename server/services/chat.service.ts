@@ -1,4 +1,4 @@
-import { ChatRepository, NewConversationRecord } from '../repositories/chat.repository';
+import { ChatRepository, type NewConversationRecord } from '../repositories/chat.repository';
 
 export class ChatService {
   static async getMetadataList(userId: string) {

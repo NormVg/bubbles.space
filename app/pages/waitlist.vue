@@ -4,7 +4,9 @@ import { ref } from 'vue'
 import BubblesAvatar from '~/components/BubblesAvatar.vue'
 
 const isLoading = ref(false)
-const { data: session } = authClient.useSession()
+const sessionStore = authClient.useSession()
+const session = computed(() => sessionStore.value?.data?.session)
+const user = computed(() => sessionStore.value?.data?.user)
 
 async function signOut() {
   isLoading.value = true
@@ -31,7 +33,7 @@ async function signOut() {
         
         <p class="sub-text">
           Thank you for registering! We have secured your spot.<br>
-          We will notify you at <ClientOnly><strong class="email-highlight">{{ session?.user?.email }}</strong></ClientOnly> when access is granted.
+          We will notify you at <ClientOnly><strong class="email-highlight">{{ user?.email }}</strong></ClientOnly> when access is granted.
         </p>
       </div>
     </div>

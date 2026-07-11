@@ -38,7 +38,7 @@ const embedUrl = computed(() => {
     // Handle normal videos
     let videoId = ''
     if (currentUrl.value.includes('youtu.be/')) {
-      videoId = currentUrl.value.split('youtu.be/')[1].split('?')[0]
+      videoId = currentUrl.value.split('youtu.be/')[1]?.split('?')[0] || ''
     } else if (currentUrl.value.includes('youtube.com/watch')) {
       videoId = urlObj.searchParams.get('v') || ''
     } else if (currentUrl.value.includes('youtube.com/embed/')) {

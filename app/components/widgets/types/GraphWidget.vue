@@ -128,13 +128,13 @@ const generatePath = (values: number[]) => {
 
 const generateSmoothPath = (values: number[]) => {
   if (values.length < 2) return generatePath(values)
-  let d = `M ${getX(0, values.length)},${getY(values[0])}`
+  let d = `M ${getX(0, values.length)},${getY(values[0]!)}`
   
   for (let i = 0; i < values.length - 1; i++) {
     const x0 = getX(i, values.length)
-    const y0 = getY(values[i])
+    const y0 = getY(values[i]!)
     const x1 = getX(i + 1, values.length)
-    const y1 = getY(values[i + 1])
+    const y1 = getY(values[i + 1]!)
     
     // Bezier control points for smooth curve
     const cpX = (x0 + x1) / 2
@@ -165,7 +165,7 @@ const pieSlices = computed(() => {
   const defaultColors = ['#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1']
   
   for (let i = 0; i < ds.values.length; i++) {
-    const val = Math.max(0, ds.values[i])
+    const val = Math.max(0, ds.values[i]!)
     if (val === 0) continue
     
     const sliceAngle = (val / total) * 2 * Math.PI

@@ -138,7 +138,7 @@ watch(() => props.isEditing, (editing) => {
 
           <img 
             v-show="!imageFailures[currentIndex]"
-            :src="getImageUrl(imageList[currentIndex], currentIndex)" 
+            :src="getImageUrl(imageList[currentIndex] || '', currentIndex)" 
             :class="['main-image', props.data.objectFit || 'cover', { 'is-loading': imageLoading[currentIndex] }]" 
             alt="Widget Image" 
             referrerpolicy="no-referrer"

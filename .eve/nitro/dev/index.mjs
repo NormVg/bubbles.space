@@ -4,8 +4,8 @@ import { dirname as __eveDirname } from "node:path";
 const __filename = __eveFileURLToPath(import.meta.url);
 const __dirname = __eveDirname(__filename);
 import { createRequire } from "node:module";
-import * as h3 from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.9_srvx@0.11.21_/node_modules/h3/dist/_entries/node.mjs";
-import { H3, H3Core, HTTPError, defineHandler, getRequestURL, toRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.9_srvx@0.11.21_/node_modules/h3/dist/_entries/node.mjs";
+import * as h3 from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.9_srvx@0.11.16_/node_modules/h3/dist/_entries/node.mjs";
+import { H3, H3Core, HTTPError, defineHandler, getRequestURL, toRequest } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/h3@2.0.1-rc.22_crossws@0.4.9_srvx@0.11.16_/node_modules/h3/dist/_entries/node.mjs";
 import { HookableCore } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/hookable@6.1.1/node_modules/hookable/dist/index.mjs";
 import { decodePath, joinURL, withLeadingSlash, withoutTrailingSlash } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/nitro@3.0.260610-beta_@upstash+redis@1.38.0_chokidar@5.0.0_dotenv@17.4.2_drizzle-orm@0._73eddedd10d3c29db71ec06356801225/node_modules/nitro/dist/node_modules/ufo/dist/index.mjs";
 import { FastResponse } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/srvx@0.11.21/node_modules/srvx/dist/adapters/node.mjs";
@@ -24,11 +24,11 @@ import { defineAgent, defineDynamic } from "file:///Users/vishnu_mac/Desktop/roo
 import { createOllama } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/ai-sdk-ollama@4.0.0_ai@7.0.4_zod@4.4.3__zod@4.4.3/node_modules/ai-sdk-ollama/dist/index.js";
 import { eveChannel } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.22.5_@upstash+redis@1.38.0_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizz_2bc249181c497f59146cd959a0024479/node_modules/eve/dist/src/public/channels/eve.js";
 import { localDev } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.22.5_@upstash+redis@1.38.0_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizz_2bc249181c497f59146cd959a0024479/node_modules/eve/dist/src/public/channels/auth.js";
-import { betterAuth } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/better-auth@1.6.23_drizzle-kit@0.31.10_drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@_8e77b6362c5d1e1242d3c0a6e102a63a/node_modules/better-auth/dist/index.mjs";
-import { drizzleAdapter } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/better-auth@1.6.23_drizzle-kit@0.31.10_drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@_8e77b6362c5d1e1242d3c0a6e102a63a/node_modules/better-auth/dist/adapters/drizzle-adapter/index.mjs";
+import { betterAuth } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/better-auth@1.6.23_drizzle-kit@0.31.10_drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@_a6f028c9bd97408292ef56f5513bdc01/node_modules/better-auth/dist/index.mjs";
+import { drizzleAdapter } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/better-auth@1.6.23_drizzle-kit@0.31.10_drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@_a6f028c9bd97408292ef56f5513bdc01/node_modules/better-auth/dist/adapters/drizzle-adapter/index.mjs";
 import { drizzle } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@0.29.2_pg@8.22.0_postgres@3.4.9_sqlite3@5.1.7/node_modules/drizzle-orm/postgres-js/index.js";
 import postgres from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/postgres@3.4.9/node_modules/postgres/src/index.js";
-import { boolean, halfvec, index, integer, jsonb, pgTable, real, text, timestamp } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@0.29.2_pg@8.22.0_postgres@3.4.9_sqlite3@5.1.7/node_modules/drizzle-orm/pg-core/index.js";
+import { boolean, customType, halfvec, index, integer, jsonb, pgTable, real, text, timestamp } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@0.29.2_pg@8.22.0_postgres@3.4.9_sqlite3@5.1.7/node_modules/drizzle-orm/pg-core/index.js";
 import { eq, sql } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/drizzle-orm@0.45.2_@upstash+redis@1.38.0_kysely@0.29.2_pg@8.22.0_postgres@3.4.9_sqlite3@5.1.7/node_modules/drizzle-orm/index.js";
 import { defineDynamic as defineDynamic$1, defineInstructions } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.22.5_@upstash+redis@1.38.0_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizz_2bc249181c497f59146cd959a0024479/node_modules/eve/dist/src/public/instructions/index.js";
 import { defineTool } from "file:///Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/node_modules/.pnpm/eve@0.22.5_@upstash+redis@1.38.0_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizz_2bc249181c497f59146cd959a0024479/node_modules/eve/dist/src/public/tools/index.js";
@@ -201,7 +201,7 @@ registerStepFunction("__builtin_response_json", __builtin_response_json);
 registerStepFunction("__builtin_response_text", __builtin_response_text);
 registerStepFunction("__builtin_set_attributes", __builtin_set_attributes);
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/agent.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/agent.ts
 var agent_exports = /* @__PURE__ */ __exportAll({ default: () => agent_default });
 const ollama = createOllama({
 	apiKey: process.env.OLLAMA_API_KEY,
@@ -224,10 +224,12 @@ var agent_default = defineAgent({
 	build: { externalDependencies: ["yt-search", "cheerio"] }
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/server/db/schema.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/server/db/schema.ts
 var schema_exports = /* @__PURE__ */ __exportAll({
 	account: () => account,
+	bytea: () => bytea,
 	conversation: () => conversation,
+	crdtSyncState: () => crdtSyncState,
 	memory: () => memory,
 	session: () => session,
 	user: () => user,
@@ -235,7 +237,7 @@ var schema_exports = /* @__PURE__ */ __exportAll({
 	widget: () => widget,
 	workspace: () => workspace
 });
-var user, session, account, verification, workspace, widget, conversation, memory;
+var user, session, account, verification, workspace, bytea, crdtSyncState, widget, conversation, memory;
 var init_schema = __esmMin((() => {
 	user = pgTable("user", {
 		id: text("id").primaryKey(),
@@ -292,6 +294,14 @@ var init_schema = __esmMin((() => {
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull()
 	});
+	bytea = customType({ dataType() {
+		return "bytea";
+	} });
+	crdtSyncState = pgTable("crdt_sync_state", {
+		userId: text("user_id").primaryKey().references(() => user.id, { onDelete: "cascade" }),
+		state: bytea("state").notNull(),
+		updatedAt: timestamp("updated_at").defaultNow().notNull()
+	});
 	widget = pgTable("widget", {
 		id: text("id").primaryKey(),
 		workspaceId: text("workspace_id").notNull().references(() => workspace.id, { onDelete: "cascade" }),
@@ -342,7 +352,7 @@ var init_schema = __esmMin((() => {
 	}, (table) => ({ embeddingIndex: index("embedding_idx").using("hnsw", sql`${table.embedding} halfvec_cosine_ops`) }));
 }));
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/channels/eve.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/channels/eve.ts
 var eve_exports = /* @__PURE__ */ __exportAll({ default: () => eve_default });
 init_schema();
 /**
@@ -402,13 +412,13 @@ function betterAuthSession() {
 }
 var eve_default = eveChannel({ auth: [betterAuthSession(), localDev()] });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/instructions/time.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/instructions/time.ts
 var time_exports = /* @__PURE__ */ __exportAll({ default: () => time_default });
 var time_default = defineDynamic$1({ events: { "turn.started": (_event, _ctx) => {
 	return defineInstructions({ markdown: `Current Date and Time Context: ${(/* @__PURE__ */ new Date()).toLocaleString()}` });
 } } });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/ask_question.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/ask_question.ts
 var ask_question_exports = /* @__PURE__ */ __exportAll({ default: () => ask_question_default });
 var ask_question_default = defineTool({
 	description: "Ask the user a clarifying question or a choice mid-turn and park until they answer.",
@@ -435,7 +445,7 @@ var ask_question_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/canvas_add_widget.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/canvas_add_widget.ts
 var canvas_add_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_add_widget_default });
 var canvas_add_widget_default = defineTool({
 	description: "Add a new widget to the user's spatial canvas. Use this when you want to create a sticky note, markdown document, or mermaid diagram for the user to see.",
@@ -468,14 +478,14 @@ var canvas_add_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/server/db/index.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/server/db/index.ts
 init_schema();
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error("DATABASE_URL is not set");
 const client = postgres(connectionString, { prepare: false });
 const db = drizzle(client, { schema: schema_exports });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/canvas_read_widget.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/canvas_read_widget.ts
 var canvas_read_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_read_widget_default });
 init_schema();
 var canvas_read_widget_default = defineTool({
@@ -497,7 +507,7 @@ var canvas_read_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/canvas_remove_widget.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/canvas_remove_widget.ts
 var canvas_remove_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_remove_widget_default });
 var canvas_remove_widget_default = defineTool({
 	description: "Remove/delete an existing widget from the user's canvas.",
@@ -510,7 +520,7 @@ var canvas_remove_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/canvas_update_widget.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/canvas_update_widget.ts
 var canvas_update_widget_exports = /* @__PURE__ */ __exportAll({ default: () => canvas_update_widget_default });
 var canvas_update_widget_default = defineTool({
 	description: "Update an existing widget on the user's canvas. Use this to modify its content or move it around.",
@@ -531,7 +541,7 @@ var canvas_update_widget_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/lib/utils.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/lib/utils.ts
 function getBaseUrl() {
 	if (process.env.NUXT_PUBLIC_SITE_URL) return process.env.NUXT_PUBLIC_SITE_URL;
 	if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
@@ -539,7 +549,7 @@ function getBaseUrl() {
 	return "http://localhost:3000";
 }
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/get_app_stats.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/get_app_stats.ts
 var get_app_stats_exports = /* @__PURE__ */ __exportAll({ default: () => get_app_stats_default });
 var get_app_stats_default = defineTool({
 	description: "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
@@ -569,7 +579,7 @@ var get_app_stats_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/get_weather.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/get_weather.ts
 var get_weather_exports = /* @__PURE__ */ __exportAll({ default: () => get_weather_default });
 var get_weather_default = defineTool({
 	description: "Get the current weather and daily forecast for a given latitude and longitude.",
@@ -611,14 +621,14 @@ var get_weather_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/lib/auth.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/lib/auth.ts
 function requireUserId(ctx) {
 	const caller = ctx.session.auth.current;
 	if (!caller || !caller.principalId) throw new Error("Authentication required. The user is not logged in or the session has expired.");
 	return caller.principalId;
 }
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_at.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_at.ts
 var memory_at_exports = /* @__PURE__ */ __exportAll({ default: () => memory_at_default });
 var memory_at_default = defineTool({
 	description: "Query memories at a specific point in time. Returns facts that were considered true (valid) at the given timestamp. Useful for answering 'what did we know about X on date Y?'",
@@ -640,7 +650,7 @@ var memory_at_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_get.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_get.ts
 var memory_get_exports = /* @__PURE__ */ __exportAll({ default: () => memory_get_default });
 var memory_get_default = defineTool({
 	description: "Get a specific memory by its ID or virtual path.",
@@ -660,7 +670,7 @@ var memory_get_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_list.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_list.ts
 var memory_list_exports = /* @__PURE__ */ __exportAll({ default: () => memory_list_default });
 var memory_list_default = defineTool({
 	description: "List all memories stored in the vault.",
@@ -677,7 +687,7 @@ var memory_list_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_query.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_query.ts
 var memory_query_exports = /* @__PURE__ */ __exportAll({ default: () => memory_query_default });
 var memory_query_default = defineTool({
 	description: "Search for memories using fuzzy matching on title, content, and metadata.",
@@ -704,7 +714,7 @@ var memory_query_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_reinforce.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_reinforce.ts
 var memory_reinforce_exports = /* @__PURE__ */ __exportAll({ default: () => memory_reinforce_default });
 var memory_reinforce_default = defineTool({
 	description: "Reinforce a memory by increasing its access count and updating its last accessed timestamp.",
@@ -724,7 +734,7 @@ var memory_reinforce_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_semantic_search.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_semantic_search.ts
 var memory_semantic_search_exports = /* @__PURE__ */ __exportAll({ default: () => memory_semantic_search_default });
 var memory_semantic_search_default = defineTool({
 	description: "Perform a deep semantic search (Vector/NLP) over the user's memories. Use this if the pre-fetched semantic context wasn't enough to answer the user's question. This understands conceptual similarity rather than exact keyword matches.",
@@ -744,7 +754,7 @@ var memory_semantic_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_store.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_store.ts
 var memory_store_exports = /* @__PURE__ */ __exportAll({ default: () => memory_store_default });
 var memory_store_default = defineTool({
 	description: "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
@@ -783,7 +793,7 @@ var memory_store_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_timeline.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_timeline.ts
 var memory_timeline_exports = /* @__PURE__ */ __exportAll({ default: () => memory_timeline_default });
 var memory_timeline_default = defineTool({
 	description: "Get the full version history (timeline) of a memory at a given path. Shows all versions from newest to oldest, including when each version was valid and what replaced it.",
@@ -802,7 +812,7 @@ var memory_timeline_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/memory_tree.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/memory_tree.ts
 var memory_tree_exports = /* @__PURE__ */ __exportAll({ default: () => memory_tree_default });
 var memory_tree_default = defineTool({
 	description: "Get an ASCII tree representation of the memory folder structure.",
@@ -819,7 +829,7 @@ var memory_tree_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/unsplash_search.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/unsplash_search.ts
 var unsplash_search_exports = /* @__PURE__ */ __exportAll({ default: () => unsplash_search_default });
 var unsplash_search_default = defineTool({
 	description: "Search for high-quality images on Unsplash by a keyword or query. Returns a list of image URLs. Useful for populating image gallery widgets.",
@@ -846,7 +856,7 @@ var unsplash_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/web_search.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/web_search.ts
 var web_search_exports = /* @__PURE__ */ __exportAll({ default: () => web_search_default });
 var web_search_default = defineTool({
 	description: "Search the web using Ollama API to find real-time information, news, or facts. Use this tool when you need up-to-date knowledge.",
@@ -895,7 +905,7 @@ var web_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/wikipedia_search.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/wikipedia_search.ts
 var wikipedia_search_exports = /* @__PURE__ */ __exportAll({ default: () => wikipedia_search_default });
 var wikipedia_search_default = defineTool({
 	description: "Search Wikipedia to find encyclopedic facts, history, and background information about a topic.",
@@ -936,7 +946,7 @@ var wikipedia_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent/tools/youtube_search.ts
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent/tools/youtube_search.ts
 var youtube_search_exports = /* @__PURE__ */ __exportAll({ default: () => youtube_search_default });
 var youtube_search_default = defineTool({
 	description: "Search YouTube for videos, channels, or playlists without needing an API key.",
@@ -961,7 +971,7 @@ var youtube_search_default = defineTool({
 	}
 });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/.eve/compile/compiled-artifacts-bootstrap.mjs
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/.eve/compile/compiled-artifacts-bootstrap.mjs
 installEveWorkflowQueueNamespace("bubbles-space");
 const moduleMap = Object.freeze({ "nodes": Object.freeze({ "__root__": Object.freeze({ "modules": Object.freeze({
 	"agent.ts": agent_exports,
@@ -1017,8 +1027,8 @@ const metadata = {
 	"version": 5
 };
 const manifest = {
-	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/agent",
-	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source",
+	"agentRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/agent",
+	"appRoot": "/Users/vishnu_mac/Desktop/room/tao.hq/bubbles.space/.eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source",
 	"channels": [
 		{
 			"kind": "channel",
@@ -1599,7 +1609,7 @@ function installCompiledArtifactsPlugin() {}
 async function __eveInstallCompiledArtifactsStep() {
 	return null;
 }
-registerStepFunction("step//./.eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
+registerStepFunction("step//./.eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/.eve/compile/compiled-artifacts-bootstrap//__eveInstallCompiledArtifactsStep", __eveInstallCompiledArtifactsStep);
 //#endregion
 //#region node_modules/.pnpm/eve@0.22.5_@upstash+redis@1.38.0_ai@7.0.4_zod@4.4.3__chokidar@5.0.0_dotenv@17.4.2_drizz_2bc249181c497f59146cd959a0024479/node_modules/eve/dist/src/internal/package-name.js
 const EVE_PACKAGE_NAME = `eve`;
@@ -119352,7 +119362,7 @@ const workflowCode = Buffer.from([
 ].join(""), "base64").toString("utf8");
 const POST = workflowEntrypoint(workflowCode, { namespace: "eve627562626c65732d7370616365" });
 //#endregion
-//#region .eve/dev-runtime/snapshots/mrgwgpiv-df6c45a8-637c-4fae-9400-b8c3fe354da2/source/.eve/compile/compiled-artifacts-workflow-world.mjs
+//#region .eve/dev-runtime/snapshots/mrgx53kv-20fe999e-b5b9-4a3e-9654-ce7650f3dfce/source/.eve/compile/compiled-artifacts-workflow-world.mjs
 const workflowWorld = await createWorldFromModule(workflowWorldModule);
 validateWorkflowWorld({
 	packageName: void 0,

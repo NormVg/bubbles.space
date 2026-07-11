@@ -34,7 +34,7 @@ const renderChart = async () => {
       securityLevel: 'loose',
       background: 'transparent',
       fontFamily: 'inherit'
-    })
+    } as any)
     
     // Generate unique ID for this render
     const id = `mermaid-chart-${Math.random().toString(36).substr(2, 9)}`

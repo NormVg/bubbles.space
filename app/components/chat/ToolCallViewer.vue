@@ -121,7 +121,7 @@ const inputPreview = computed(() => {
   if (props.part.input === undefined || props.part.input === null) return ''
   
   try {
-    const input = props.part.input
+    const input = props.part.input as Record<string, any>
     const tool = props.part.toolName
     
     // Custom formatting for known tools

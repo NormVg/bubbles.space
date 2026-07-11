@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
-import { shallowRef, computed, watch, ref } from 'vue'
+import { shallowRef, computed, ref } from 'vue'
+import * as Y from 'yjs'
 import { authClient } from '../utils/auth-client'
+import { yWorkspaces, yWidgets, initLocalSync } from '../utils/yjs'
 
 export interface Widget {
   id: string
@@ -13,6 +15,9 @@ export interface Widget {
   data: Record<string, any>
   zIndex?: number
   updatedAt?: number
+  // Added properties since we flattened it
+  workspaceId?: string
+  isArchived?: boolean
 }
 
 export interface Workspace {
@@ -33,184 +38,162 @@ export const useWidgetStore = defineStore('widgets', () => {
   const activeWorkspaceId = ref<string>('main')
   const isInitializing = ref(true)
   
-  // 'saved': All data pushed to DB
-  // 'syncing': Currently pushing to DB
-  // 'offline': Push failed, waiting for connection
-  // 'error': Unrecoverable error
+  // Handled by Worker now, but keep state for UI
   const syncStatus = ref<'saved' | 'syncing' | 'offline' | 'error'>('saved')
   const isSyncPending = ref(false)
 
-  const { publish } = useRealtimeSync()
-
   // Backwards compatible computed refs
   const activeWorkspace = computed(() => workspaces.value.find(w => w.id === activeWorkspaceId.value))
+  
+  // UI State (Not synced to CRDT)
+  const expandedWidgets = ref<Set<string>>(new Set())
 
-  const widgets = computed({
-    get: () => activeWorkspace.value?.widgets || [],
-    set: (newWidgets) => {
-      const idx = workspaces.value.findIndex(w => w.id === activeWorkspaceId.value)
-      if (idx !== -1) {
-        const newWorkspaces = [...workspaces.value]
-        newWorkspaces[idx] = { ...newWorkspaces[idx], widgets: newWidgets }
-        workspaces.value = newWorkspaces
+  const toggleWidgetExpanded = (widgetId: string) => {
+    if (expandedWidgets.value.has(widgetId)) {
+      expandedWidgets.value.delete(widgetId)
+    } else {
+      expandedWidgets.value.add(widgetId)
+    }
+  }
+
+  const widgets = computed(() => activeWorkspace.value?.widgets || [])
+  const archivedWidgets = computed(() => activeWorkspace.value?.archivedWidgets || [])
+
+  // Rebuild the deeply nested workspaces array from the flat Yjs maps
+  const buildNestedWorkspaces = () => {
+    const wsMap = yWorkspaces.toJSON() as Record<string, Omit<Workspace, 'widgets' | 'archivedWidgets'>>
+    const wMap = yWidgets.toJSON() as Record<string, Widget>
+    
+    // Group widgets by workspace
+    const wsWidgets: Record<string, Widget[]> = {}
+    const wsArchived: Record<string, Widget[]> = {}
+    
+    Object.values(wMap).forEach(w => {
+      const wId = w.workspaceId
+      if (!wId) return
+      if (w.isArchived) {
+        if (!wsArchived[wId]) wsArchived[wId] = []
+        wsArchived[wId].push(w)
+      } else {
+        if (!wsWidgets[wId]) wsWidgets[wId] = []
+        wsWidgets[wId].push(w)
+      }
+    })
+
+    const newWorkspaces: Workspace[] = Object.values(wsMap).map(ws => {
+      return {
+        ...ws,
+        widgets: wsWidgets[ws.id] || [],
+        archivedWidgets: wsArchived[ws.id] || []
+      }
+    })
+    
+    newWorkspaces.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+    workspaces.value = newWorkspaces
+    
+    // Validate active workspace
+    if (!workspaces.value.some(w => w.id === activeWorkspaceId.value) && workspaces.value.length > 0) {
+      const first = workspaces.value[0]
+      if (first) {
+        activeWorkspaceId.value = first.id
       }
     }
-  })
+  }
 
-  const archivedWidgets = computed({
-    get: () => activeWorkspace.value?.archivedWidgets || [],
-    set: (newArchived) => {
-      const idx = workspaces.value.findIndex(w => w.id === activeWorkspaceId.value)
-      if (idx !== -1) {
-        const newWorkspaces = [...workspaces.value]
-        newWorkspaces[idx] = { ...newWorkspaces[idx], archivedWidgets: newArchived }
-        workspaces.value = newWorkspaces
-      }
-    }
-  })
+  // Bind Yjs observers
+  yWorkspaces.observe(() => buildNestedWorkspaces())
+  yWidgets.observe(() => buildNestedWorkspaces())
 
   const createWorkspace = (label: string) => {
     const id = crypto.randomUUID()
-    workspaces.value = [...workspaces.value, {
+    yWorkspaces.set(id, {
       id,
       label,
-      widgets: [],
-      archivedWidgets: [],
       canvasState: { x: 0, y: 0, scale: 1 },
-      sortOrder: workspaces.value.length
-    }]
+      sortOrder: yWorkspaces.size
+    })
     activeWorkspaceId.value = id
     return id
   }
 
   const deleteWorkspace = (id: string) => {
-    if (id === 'main') return // Cannot delete the default main workspace
-    if (workspaces.value.length <= 1) return // Prevent deleting last workspace
-    workspaces.value = workspaces.value.filter(w => w.id !== id)
-    if (activeWorkspaceId.value === id) {
-      activeWorkspaceId.value = workspaces.value[0].id
+    if (id === 'main') return 
+    if (yWorkspaces.size <= 1) return 
+    yWorkspaces.delete(id)
+    
+    // Clean up orphaned widgets
+    for (const [wId, w] of yWidgets.entries()) {
+      if ((w as any).workspaceId === id) {
+        yWidgets.delete(wId)
+      }
     }
   }
 
   const renameWorkspace = (id: string, newLabel: string) => {
     if (!newLabel.trim()) return
-    const idx = workspaces.value.findIndex(w => w.id === id)
-    if (idx !== -1) {
-      const newWorkspaces = [...workspaces.value]
-      newWorkspaces[idx] = { ...newWorkspaces[idx], label: newLabel.trim() }
-      workspaces.value = newWorkspaces
+    const ws = yWorkspaces.get(id)
+    if (ws) {
+      yWorkspaces.set(id, { ...ws, label: newLabel.trim() })
     }
   }
 
   const switchWorkspace = (id: string) => {
-    if (workspaces.value.some(w => w.id === id)) {
+    if (yWorkspaces.has(id)) {
       activeWorkspaceId.value = id
     }
   }
 
   const saveCanvasState = (x: number, y: number, scale: number, id?: string) => {
     const targetId = id || activeWorkspaceId.value
-    const idx = workspaces.value.findIndex(w => w.id === targetId)
-    if (idx !== -1) {
-      const newWorkspaces = [...workspaces.value]
-      newWorkspaces[idx] = { ...newWorkspaces[idx], canvasState: { x, y, scale } }
-      workspaces.value = newWorkspaces
+    const ws = yWorkspaces.get(targetId)
+    if (ws) {
+      yWorkspaces.set(targetId, { ...ws, canvasState: { x, y, scale } })
     }
   }
 
-  // Load from LocalStorage instantly, then reconcile with DB
   const init = async () => {
     try {
       isInitializing.value = true
       
-      // 0. Fetch user session to prevent cross-user data leakage on same browser
       const { data: session } = await authClient.getSession()
       const currentUserId = session?.user?.id
+      if (!currentUserId) return
       
-      // 1. Instant Local Load
-      const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
-      const savedActiveId = localStorage.getItem('bubbles_active_workspace')
-      const savedUserId = localStorage.getItem('bubbles_last_user_id')
+      // Load IndexedDB state locally into Yjs
+      await initLocalSync(currentUserId)
       
-      let hasLocalData = false
-      // Only use local storage if the user matches, or if we have no current user (edge case)
-      if (savedWorkspaces && (!currentUserId || savedUserId === currentUserId)) {
-        const parsed = JSON.parse(savedWorkspaces)
-        if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-          workspaces.value = parsed
-          if (savedActiveId && workspaces.value.some(w => w.id === savedActiveId)) {
-            activeWorkspaceId.value = savedActiveId
-          } else {
-            activeWorkspaceId.value = workspaces.value[0].id
-          }
-          hasLocalData = true
-        }
-      }
-      
-      if (currentUserId && savedUserId !== currentUserId) {
-        // Clear old user's data from this browser
-        localStorage.removeItem('bubbles_workspaces')
-        localStorage.removeItem('bubbles_active_workspace')
-      }
-      
-      if (!hasLocalData) {
-        // Fallback for brand new users or legacy migration
-        const legacyWidgets = localStorage.getItem('bubbles_canvas_widgets')
-        const legacyArchived = localStorage.getItem('bubbles_archived_widgets')
-        
-        const mainWorkspace: Workspace = {
+      // If empty (new user), bootstrap Main
+      if (yWorkspaces.size === 0) {
+        yWorkspaces.set('main', {
           id: 'main',
           label: 'Main',
-          widgets: legacyWidgets ? JSON.parse(legacyWidgets) : [],
-          archivedWidgets: legacyArchived ? JSON.parse(legacyArchived) : [],
           canvasState: { x: 0, y: 0, scale: 1 },
           sortOrder: 0
-        }
-        
-        if (!legacyWidgets) {
-          mainWorkspace.widgets.push({
-            id: crypto.randomUUID(),
-            type: 'markdown',
-            x: 1000,
-            y: 720,
-            width: 320,
-            height: 240,
-            zIndex: 0,
-            title: 'Welcome to Canvas',
-            data: { content: '### Hello!\nThis is a spatial workspace. You can drag widgets around, and Bubbles can create new ones for you!' }
-          })
-        }
-        
-        workspaces.value = [mainWorkspace]
-        activeWorkspaceId.value = 'main'
+        })
       }
+      
+      buildNestedWorkspaces()
 
-      // 2. Background DB Sync
+      // Dynamically import base64 utility (it's safe here since we are in async method)
+      const { bytesToBase64, base64ToBytes } = await import('../utils/base64')
+      
+      const stateVector = bytesToBase64(Y.encodeStateVector(ydoc))
+      const update = bytesToBase64(Y.encodeStateAsUpdate(ydoc))
+      
       try {
-        const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
+        const responseData = await $fetch<{ update: string }>('/api/crdt/sync', { 
+          method: 'POST', 
+          body: { stateVector, update } 
+        })
         
-        if (serverWorkspaces && serverWorkspaces.length > 0) {
-          isReloadingFromServer = true
-          // DB has data, it becomes the source of truth
-          workspaces.value = serverWorkspaces
-          if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
-            activeWorkspaceId.value = serverWorkspaces[0].id
-          }
-          // Update local storage immediately to match DB
-          localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
-          localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
-          if (currentUserId) localStorage.setItem('bubbles_last_user_id', currentUserId)
-          
-          setTimeout(() => {
-            isReloadingFromServer = false
-          }, 150)
-        } else if (hasLocalData || workspaces.value.length > 0) {
-          // DB is empty, but we have local/legacy data. Push it to DB.
-          await syncToDB(true)
+        if (responseData && responseData.update) {
+            const serverUpdate = base64ToBytes(responseData.update)
+            Y.applyUpdate(ydoc, serverUpdate, 'server')
         }
-      } catch (dbErr) {
-        console.error('Failed to sync with DB, staying in offline mode:', dbErr)
+      } catch (err) {
+        console.error('CRDT Sync endpoint failed. Working offline-first.', err)
       }
+      
     } catch (e) {
       console.error('Failed to load workspaces', e)
     } finally {
@@ -218,113 +201,11 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
-  let isReloadingFromServer = false
-
-  const reloadFromServer = async (source = 'unknown') => {
-    console.log(`[Widgets] reloadFromServer triggered by: ${source}`)
-    try {
-      const serverWorkspaces = await $fetch<Workspace[]>('/api/sync')
-      if (serverWorkspaces && serverWorkspaces.length > 0) {
-        isReloadingFromServer = true
-        workspaces.value = serverWorkspaces
-        if (!serverWorkspaces.some(w => w.id === activeWorkspaceId.value)) {
-          activeWorkspaceId.value = serverWorkspaces[0].id
-        }
-        localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
-        localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
-        
-        // Use setTimeout to absolutely guarantee the Vue deep watcher 
-        // (which runs asynchronously) finishes before we reset the flag.
-        setTimeout(() => {
-          isReloadingFromServer = false
-        }, 150)
-      }
-    } catch (e) {
-      console.error('Failed to reload from server:', e)
-    }
-  }
-
-  // Debounce state
-  let syncTimeout: any = null
-  let retryInterval: any = null
-
-  let localSyncTimeout: any = null
-
-  // Save to LocalStorage non-blocking, debounce save to DB
-  const syncToDB = async (force = false) => {
-    // 1. Non-blocking Local Save (prevents UI hitching on deep watch triggers)
-    if (localSyncTimeout) clearTimeout(localSyncTimeout)
-    localSyncTimeout = setTimeout(async () => {
-      const { data: session } = await authClient.getSession()
-      const currentUserId = session?.user?.id
-      
-      const saveLocally = () => {
-        localStorage.setItem('bubbles_workspaces', JSON.stringify(workspaces.value))
-        localStorage.setItem('bubbles_active_workspace', activeWorkspaceId.value)
-        if (currentUserId) localStorage.setItem('bubbles_last_user_id', currentUserId)
-      }
-      
-      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-        requestIdleCallback(saveLocally)
-      } else {
-        saveLocally()
-      }
-    }, 100)
-
-    // 2. Debounced DB Save
-    if (syncTimeout) clearTimeout(syncTimeout)
-    isSyncPending.value = true
-    
-    const pushToDB = async () => {
-      syncStatus.value = 'syncing'
-      try {
-        await $fetch('/api/sync', {
-          method: 'POST',
-          body: workspaces.value
-        })
-        syncStatus.value = 'saved'
-        isSyncPending.value = false
-        console.log('Synced to DB successfully.')
-        publish('sync:widgets', { ts: Date.now() })
-        if (retryInterval) {
-          clearInterval(retryInterval)
-          retryInterval = null
-        }
-      } catch (e) {
-        console.error('Failed to push to DB (offline):', e)
-        syncStatus.value = 'offline'
-        
-        // Exponential backoff or simple polling for retry
-        if (!retryInterval) {
-          retryInterval = setInterval(() => {
-            if (navigator.onLine) {
-              pushToDB()
-            }
-          }, 5000)
-        }
-      }
-    }
-
-    if (force) {
-      await pushToDB()
-    } else {
-      syncTimeout = setTimeout(pushToDB, 2000)
-    }
-  }
-
-  // Watch for changes to auto-sync
-  watch([workspaces, activeWorkspaceId], () => {
-    if (isReloadingFromServer || isInitializing.value) return
-    syncToDB()
-  }, { deep: true })
-
-  // Auto-layout / Collision detection
   const findSafePosition = (startX: number, startY: number, width: number, height: number, ignoreId?: string) => {
     const padding = 24
     const canvasWidth = 2560
     const canvasHeight = 1440
     
-    // Initial clamping to boundaries
     let currentX = Math.max(0, Math.min(startX, canvasWidth - width))
     let currentY = Math.max(0, Math.min(startY, canvasHeight - height))
     
@@ -341,18 +222,15 @@ export const useWidgetStore = defineStore('widgets', () => {
         
         if (overlapX && overlapY) {
           hasCollision = true
-          // Push down to avoid overlap
           currentY = w.y + w.height + padding
           break
         }
       }
       
-      // If pushing down pushed it off canvas, try wrapping to next column
       if (currentY + height > canvasHeight) {
         currentY = 0
         currentX += width + padding
       }
-      // If pushing right pushed it off canvas, just clamp it back (it will overlap but stay in bounds)
       if (currentX + width > canvasWidth) {
          currentX = canvasWidth - width
          currentY = Math.max(0, Math.min(currentY, canvasHeight - height))
@@ -366,128 +244,79 @@ export const useWidgetStore = defineStore('widgets', () => {
 
   const addWidget = (widget: Omit<Widget, 'id'> & { id?: string }) => {
     const id = widget.id || crypto.randomUUID()
-    
-    // Idempotency guard: skip if this widget ID already exists in ANY workspace
-    const existsAnywhere = workspaces.value.some(ws => ws.widgets.some(w => w.id === id))
-    if (existsAnywhere) return
+    if (yWidgets.has(id)) return
     
     const { x, y } = findSafePosition(widget.x, widget.y, widget.width, widget.height)
     
-    widgets.value = [...widgets.value, {
+    yWidgets.set(id, {
       ...widget,
       id,
-      x,
-      y,
+      x, y,
+      workspaceId: activeWorkspaceId.value,
+      isArchived: false,
       zIndex: getTopZIndex() + 1,
       updatedAt: Date.now()
-    }]
+    })
   }
 
   const updateWidget = (id: string, updates: Partial<Widget>) => {
-    const idx = widgets.value.findIndex(w => w.id === id)
-    if (idx !== -1) {
-      const widget = widgets.value[idx]
-      
+    const widget = yWidgets.get(id)
+    if (widget) {
       let newX = updates.x ?? widget.x
       let newY = updates.y ?? widget.y
       
-      // Clamp basic movement coordinates immediately
       const w = updates.width || widget.width
       const h = updates.height || widget.height
       newX = Math.max(0, Math.min(newX, 2560 - w))
       newY = Math.max(0, Math.min(newY, 1440 - h))
       
-      // If position or size changed, ensure it's placed safely (on drop)
       if (updates.x !== undefined || updates.y !== undefined || updates.width !== undefined || updates.height !== undefined) {
          const safePos = findSafePosition(newX, newY, w, h, id)
          newX = safePos.x
          newY = safePos.y
       }
 
-      const newWidgets = [...widgets.value]
-      newWidgets[idx] = { ...widget, ...updates, x: newX, y: newY, updatedAt: Date.now() }
-      widgets.value = newWidgets
+      yWidgets.set(id, { ...widget, ...updates, x: newX, y: newY, updatedAt: Date.now() })
     }
   }
 
   const removeWidget = (id: string) => {
-    widgets.value = widgets.value.filter(w => w.id !== id)
+    yWidgets.delete(id)
   }
 
   const archiveWidget = (id: string) => {
-    const idx = widgets.value.findIndex(w => w.id === id)
-    if (idx !== -1) {
-      const widgetToArchive = widgets.value[idx]
-      // Add to archived list
-      archivedWidgets.value = [...archivedWidgets.value, widgetToArchive]
-      // Remove from canvas
-      removeWidget(id)
-    }
+    const w = yWidgets.get(id)
+    if (w) yWidgets.set(id, { ...w, isArchived: true, updatedAt: Date.now() })
   }
 
   const restoreWidget = (id: string) => {
-    const idx = archivedWidgets.value.findIndex(w => w.id === id)
-    if (idx !== -1) {
-      const widgetToRestore = archivedWidgets.value[idx]
-      
-      // Remove from archive
-      archivedWidgets.value = archivedWidgets.value.filter(w => w.id !== id)
-      
-      // Re-add to canvas (this will automatically find a safe position if needed)
-      addWidget(widgetToRestore)
-    }
+    const w = yWidgets.get(id)
+    if (w) yWidgets.set(id, { ...w, isArchived: false, updatedAt: Date.now() })
   }
 
   const permanentlyDeleteArchivedWidget = (id: string) => {
-    archivedWidgets.value = archivedWidgets.value.filter(w => w.id !== id)
+    yWidgets.delete(id)
   }
 
   const moveWidgetToWorkspace = (widgetId: string, targetWorkspaceId: string) => {
-    const sourceWs = activeWorkspace.value
-    if (!sourceWs) return
-    
-    const widgetIndex = sourceWs.widgets.findIndex(w => w.id === widgetId)
-    if (widgetIndex === -1) return
-    
-    const newWorkspaces = [...workspaces.value]
-    
-    const sourceIdx = newWorkspaces.findIndex(w => w.id === sourceWs.id)
-    const targetIdx = newWorkspaces.findIndex(w => w.id === targetWorkspaceId)
-    if (sourceIdx === -1 || targetIdx === -1) return
-    
-    const widgetToMove = newWorkspaces[sourceIdx].widgets[widgetIndex]
-    
-    const newSourceWidgets = [...newWorkspaces[sourceIdx].widgets]
-    newSourceWidgets.splice(widgetIndex, 1)
-    newWorkspaces[sourceIdx] = { ...newWorkspaces[sourceIdx], widgets: newSourceWidgets }
-    
-    const newTargetWidgets = [...newWorkspaces[targetIdx].widgets, widgetToMove]
-    newWorkspaces[targetIdx] = { ...newWorkspaces[targetIdx], widgets: newTargetWidgets }
-    
-    workspaces.value = newWorkspaces
+    const w = yWidgets.get(widgetId)
+    if (w && yWorkspaces.has(targetWorkspaceId)) {
+      yWidgets.set(widgetId, { ...w, workspaceId: targetWorkspaceId, updatedAt: Date.now() })
+    }
   }
 
   const autoArrangeWidgets = () => {
     if (widgets.value.length === 0) return
-    
-    // Sort widgets generally top-to-bottom, left-to-right
     const sortedWidgets = [...widgets.value].sort((a, b) => {
       if (Math.abs(a.y - b.y) < 100) return a.x - b.x
       return a.y - b.y
     })
     
     const padding = 40
-    const maxGridWidth = 1800 // Tighter cluster for the center
-    
-    let currentX = 0
-    let currentY = 0
-    let rowMaxHeight = 0
-    
-    // Store relative coords temporarily
+    const maxGridWidth = 1800
+    let currentX = 0, currentY = 0, rowMaxHeight = 0
     const layout = new Map<string, { x: number, y: number }>()
-    
-    let boundingWidth = 0
-    let boundingHeight = 0
+    let boundingWidth = 0, boundingHeight = 0
     
     for (const widget of sortedWidgets) {
       if (currentX > 0 && currentX + widget.width > maxGridWidth) {
@@ -495,62 +324,45 @@ export const useWidgetStore = defineStore('widgets', () => {
         currentY += rowMaxHeight + padding
         rowMaxHeight = 0
       }
-      
       layout.set(widget.id, { x: currentX, y: currentY })
-      
       currentX += widget.width + padding
       rowMaxHeight = Math.max(rowMaxHeight, widget.height)
-      
       boundingWidth = Math.max(boundingWidth, currentX - padding)
       boundingHeight = Math.max(boundingHeight, currentY + widget.height)
     }
     
-    // Calculate centering offset based on 2560x1440 canvas
-    const canvasW = 2560
-    const canvasH = 1440
+    const canvasW = 2560, canvasH = 1440
     const offsetX = Math.max(0, (canvasW - boundingWidth) / 2)
     const offsetY = Math.max(0, (canvasH - boundingHeight) / 2)
     
-    const newWidgets = [...widgets.value]
-    
-    for (let i = 0; i < newWidgets.length; i++) {
-      const widget = newWidgets[i]
-      const pos = layout.get(widget.id)
+    for (const w of sortedWidgets) {
+      const pos = layout.get(w.id)
       if (pos) {
-        newWidgets[i] = {
-          ...widget,
-          x: pos.x + offsetX,
-          y: pos.y + offsetY,
-          updatedAt: Date.now()
+        const ew = yWidgets.get(w.id)
+        if (ew) {
+          yWidgets.set(w.id, { ...ew, x: pos.x + offsetX, y: pos.y + offsetY, updatedAt: Date.now() })
         }
       }
     }
-    
-    widgets.value = newWidgets
   }
 
   const reorderWorkspaces = (oldIndex: number, newIndex: number) => {
     if (oldIndex === newIndex) return
     const newWorkspaces = [...workspaces.value]
     const [movedItem] = newWorkspaces.splice(oldIndex, 1)
+    if (!movedItem) return
     newWorkspaces.splice(newIndex, 0, movedItem)
     
-    // Update sortOrder for all to ensure sequence is maintained
     newWorkspaces.forEach((ws, idx) => {
-      ws.sortOrder = idx
+      const yws = yWorkspaces.get(ws.id)
+      if (yws) yWorkspaces.set(ws.id, { ...yws, sortOrder: idx })
     })
-    
-    workspaces.value = newWorkspaces
   }
 
-  const getTopZIndex = () => {
-    return widgets.value.reduce((max, w) => Math.max(max, w.zIndex || 0), 0)
-  }
+  const getTopZIndex = () => widgets.value.reduce((max, w) => Math.max(max, w.zIndex || 0), 0)
+  const bringToFront = (id: string) => updateWidget(id, { zIndex: getTopZIndex() + 1 })
 
-  const bringToFront = (id: string) => {
-    const topZ = getTopZIndex()
-    updateWidget(id, { zIndex: topZ + 1 })
-  }
+  const reloadFromServer = async () => { }
 
   return {
     workspaces,
@@ -578,6 +390,8 @@ export const useWidgetStore = defineStore('widgets', () => {
     bringToFront,
     reloadFromServer,
     isInitializing,
-    isSyncPending
+    isSyncPending,
+    expandedWidgets,
+    toggleWidgetExpanded
   }
 })

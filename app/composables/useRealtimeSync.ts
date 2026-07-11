@@ -1,20 +1,24 @@
-import * as Ably from 'ably'
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, watch } from 'vue'
 import { authClient } from '~/utils/auth-client'
+import { ydoc } from '~/utils/yjs'
+import * as Y from 'yjs'
+import { useConversationStore } from '~/stores/conversations'
 
-let globalClient: Ably.Realtime | null = null
-let channel: Ably.RealtimeChannel | null = null
+let worker: Worker | null = null
 const localInstanceId = crypto.randomUUID()
 let isInitializingAbly = false
+let initComplete = false
 
 export function useRealtimeSync() {
   const authState = authClient.useSession()
 
   // If already initialized, return the publisher
-  if (globalClient) {
+  if (initComplete) {
     return {
       publish: (event: string, data: any) => {
-        if (channel) channel.publish(event, { ...data, senderId: localInstanceId })
+        if (event === 'sync:conversation') {
+          worker?.postMessage({ type: 'PUBLISH_CONVERSATION', payload: data })
+        }
       }
     }
   }
@@ -36,75 +40,58 @@ export function useRealtimeSync() {
     if (!authState.value.data?.user?.id) return
     const userId = authState.value.data.user.id
 
-    globalClient = new Ably.Realtime({
-      authUrl: '/api/ably-token'
-    })
-
-    channel = globalClient.channels.get(`user:${userId}`)
-
-    // Handle widget syncs
-    let widgetSyncTimeout: any = null
-    channel.subscribe('sync:widgets', (msg) => {
-      // Ignore our own events
-      console.log(`[Ably] Received message sender: ${msg.data?.senderId}, local: ${localInstanceId}`);
-      if (msg.data?.senderId === localInstanceId) return
+    if (!worker && import.meta.client) {
+      worker = new Worker(new URL('../workers/sync.worker.ts', import.meta.url), { type: 'module' })
       
-      console.log('Received remote widget sync', msg.data)
-      
-      // Debounce re-fetch to avoid spamming the DB
-      if (widgetSyncTimeout) clearTimeout(widgetSyncTimeout)
-      widgetSyncTimeout = setTimeout(() => {
-        const widgetStore = useWidgetStore()
-        // If we have unsaved local changes, ignore remote sync to prevent wiping user's active work.
-        // Last-write-wins: our impending push will overwrite the server anyway.
-        if (!widgetStore.isSyncPending) {
-          void widgetStore.reloadFromServer('ably-widgets')
-        } else {
-          console.log('[Ably] Ignored remote sync because we have local unsaved changes.')
-        }
-      }, 500)
-    })
-
-    // Handle conversation syncs
-    let conversationSyncTimeout: any = null
-    channel.subscribe('sync:conversation', (msg) => {
-      if (msg.data?.senderId === localInstanceId) return
-      console.log('Received remote conversation sync', msg.data)
-      
-      const data = msg.data as { id: string, action: 'upsert' | 'delete' }
-      const conversationStore = useConversationStore()
-      
-      if (data.action === 'delete') {
-        if (conversationStore.activeConversationId === data.id) {
-           void conversationStore.ensureConversation() // Will redirect to a valid conversation
-        } else {
-           void conversationStore.reloadMetadata()
-        }
-      } else {
-        if (conversationStore.activeConversationId === data.id) {
-          void conversationStore.reloadMetadata()
-          void conversationStore.selectConversation(data.id)
-        } else {
-          void conversationStore.reloadMetadata()
+      worker.onmessage = (event) => {
+        const { type, payload } = event.data
+        if (type === 'REMOTE_UPDATE') {
+           Y.applyUpdate(ydoc, payload.update, 'worker')
+        } else if (type === 'CONVERSATION_SYNC') {
+           const conversationStore = useConversationStore()
+           if (payload.action === 'delete') {
+              if (conversationStore.activeConversationId === payload.id) {
+                 void conversationStore.ensureConversation()
+              } else {
+                 void conversationStore.reloadMetadata()
+              }
+           } else {
+              if (conversationStore.activeConversationId === payload.id) {
+                 void conversationStore.reloadMetadata()
+                 void conversationStore.selectConversation(payload.id)
+              } else {
+                 void conversationStore.reloadMetadata()
+              }
+           }
         }
       }
-    })
-    
+
+      ydoc.on('update', (update, origin) => {
+         // Prevent echo: don't send updates that originated from the worker or local DB
+         if (origin !== 'worker' && origin !== 'idb') {
+            worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
+         }
+      })
+
+      const tokenUrl = window.location.origin + '/api/ably-token'
+      worker.postMessage({
+         type: 'INIT',
+         payload: { userId, instanceId: localInstanceId, tokenUrl }
+      })
+    }
+
     // Safety net: Tab focus re-fetch
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         console.log('Tab focused, re-syncing from DB...')
         const conversationStore = useConversationStore()
-        const widgetStore = useWidgetStore()
         void conversationStore.reloadMetadata()
         if (conversationStore.activeConversationId) {
           void conversationStore.selectConversation(conversationStore.activeConversationId)
         }
         
-        // Prevent snapping back if we have local unsaved changes waiting to push
-        if (!widgetStore.isSyncPending) {
-          void widgetStore.reloadFromServer('visibility-change')
-        }
+        // Actually, we should trigger a CRDT full-sync here to catch up on anything missed while sleeping
+        // We can do this in Phase 3/4 via a REST call to POST /api/crdt/sync
       }
     }
     window.addEventListener('visibilitychange', handleVisibility)
@@ -112,17 +99,21 @@ export function useRealtimeSync() {
     onBeforeUnmount(() => {
       window.removeEventListener('visibilitychange', handleVisibility)
     })
+    
+    initComplete = true
   }
   
   onMounted(() => {
-    if (!globalClient && !isInitializingAbly) {
+    if (!initComplete && !isInitializingAbly) {
       void init()
     }
   })
 
   return {
     publish: (event: string, data: any) => {
-      if (channel) channel.publish(event, { ...data, senderId: localInstanceId })
+      if (event === 'sync:conversation') {
+        worker?.postMessage({ type: 'PUBLISH_CONVERSATION', payload: data })
+      }
     }
   }
 }

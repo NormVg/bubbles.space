@@ -242,13 +242,15 @@ async function saveUserSettings() {
   isSaving.value = true
   try {
     await authClient.updateUser({
+      // @ts-ignore - custom fields added by plugins
       systemPrompt: editSystemPrompt.value,
+      // @ts-ignore
       aboutMe: editAboutMe.value,
       // @ts-ignore
       preferredModel: editPreferredModel.value,
       // @ts-ignore
       reasoningEffort: editReasoningEffort.value
-    })
+    } as any)
   } catch (error) {
     console.error('Failed to save settings:', error)
   } finally {

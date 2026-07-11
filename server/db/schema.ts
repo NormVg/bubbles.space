@@ -62,6 +62,20 @@ export const workspace = pgTable("workspace", {
 	updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
+import { customType } from "drizzle-orm/pg-core";
+
+export const bytea = customType<{ data: Uint8Array }>({
+  dataType() {
+    return "bytea";
+  },
+});
+
+export const crdtSyncState = pgTable("crdt_sync_state", {
+  userId: text("user_id").primaryKey().references(() => user.id, { onDelete: 'cascade' }),
+  state: bytea("state").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
 export const widget = pgTable("widget", {
 	id: text("id").primaryKey(),
 	workspaceId: text("workspace_id").notNull().references(() => workspace.id, { onDelete: 'cascade' }),

@@ -1,5 +1,6 @@
 import { type Ref } from 'vue'
 import { authClient } from '~/utils/auth-client'
+import { useConversationStore } from '~/stores/conversations'
 
 export const useChatSubmit = (
   agent: any,
@@ -11,6 +12,7 @@ export const useChatSubmit = (
   const appStore = useAppStore()
   const widgetStore = useWidgetStore()
   const chatStore = useChatStore()
+  const conversationStore = useConversationStore()
 
   const handleSubmit = async (text: string) => {
     let finalMessage = text

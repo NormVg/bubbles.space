@@ -50,7 +50,7 @@ const groupedMemories = computed(() => {
   for (const mem of props.memories) {
     if (mem.type === 'directory') continue
     const parts = mem.path.split('/')
-    const folder = parts.length > 1 ? parts[0] : '_root'
+    const folder = (parts.length > 1 && parts[0]) ? parts[0] : '_root'
     if (!groups[folder]) groups[folder] = []
     groups[folder].push(mem)
   }
@@ -60,9 +60,9 @@ const groupedMemories = computed(() => {
 const sortedFolders = computed(() => {
   const order = DIRS.map(d => d.path)
   const all = Object.keys(groupedMemories.value)
-  const predefined = all.filter(k => order.includes(k)).sort((a, b) => order.indexOf(a) - order.indexOf(b))
-  const dynamic = all.filter(k => k !== '_root' && !order.includes(k)).sort()
-  const root = all.includes('_root') && groupedMemories.value['_root'].length > 0 ? ['_root'] : []
+  const predefined = all.filter(k => order.includes(k as any)).sort((a, b) => order.indexOf(a as any) - order.indexOf(b as any))
+  const dynamic = all.filter(k => k !== '_root' && !order.includes(k as any)).sort()
+  const root = all.includes('_root') && (groupedMemories.value['_root']?.length || 0) > 0 ? ['_root'] : []
   return [...predefined, ...dynamic, ...root]
 })
 
@@ -105,7 +105,7 @@ const totalCount = computed(() => props.memories.filter(m => m.type !== 'directo
         <!-- Folder row -->
         <button
           class="folder-row"
-          :class="{ 'is-empty': groupedMemories[folder].length === 0 }"
+          :class="{ 'is-empty': !groupedMemories[folder] || groupedMemories[folder]?.length === 0 }"
           @click="toggleFolder(folder)"
           :aria-expanded="expandedFolders.has(folder)"
         >
@@ -121,14 +121,14 @@ const totalCount = computed(() => props.memories.filter(m => m.type !== 'directo
           <span class="folder-name">{{ getDirLabel(folder) }}</span>
           <span
             class="folder-badge"
-            v-if="groupedMemories[folder].length > 0"
-          >{{ groupedMemories[folder].length }}</span>
+            v-if="groupedMemories[folder] && groupedMemories[folder]?.length"
+          >{{ groupedMemories[folder]?.length }}</span>
         </button>
 
         <!-- Files -->
         <Transition name="expand">
           <div
-            v-if="expandedFolders.has(folder) && groupedMemories[folder].length > 0"
+            v-if="expandedFolders.has(folder) && groupedMemories[folder] && groupedMemories[folder]?.length"
             class="file-list"
           >
             <button
