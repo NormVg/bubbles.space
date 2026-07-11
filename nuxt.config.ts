@@ -6,21 +6,21 @@ export default defineNuxtConfig({
   css: ['~/assets/base.css'],
   app: {
     head: {
-      title: 'Bubbles.space — Your Persistent AI Workspace',
+      title: 'Bubbles.space — Your Persistent AI Assistant',
       meta: [
-        { name: 'description', content: 'Bubbles.space is a persistent AI workspace that\'s always open, always in sync, and helps you think, build, and get things done in the AI era.' },
-        { name: 'keywords', content: 'AI workspace, spatial canvas, persistent workspace, AI assistant, productivity, Bubbles, Bubbles.space, visual thinking' },
+        { name: 'description', content: 'Bubbles.space is a persistent AI assistant that\'s always open, always in sync, and helps you think, build, and get things done in the AI era.' },
+        { name: 'keywords', content: 'AI assistant, spatial canvas, persistent assistant, productivity, Bubbles, Bubbles.space, visual thinking' },
         { name: 'author', content: 'Tao HQ' },
         { name: 'theme-color', content: '#ffffff' },
         { property: 'og:type', content: 'website' },
-        { property: 'og:title', content: 'Bubbles.space — Your Persistent AI Workspace' },
-        { property: 'og:description', content: 'Stop managing apps. Open one space, stay there, and let AI help you get things done. That\'s Bubbles.space.' },
+        { property: 'og:title', content: 'Bubbles.space — Your Persistent AI Assistant' },
+        { property: 'og:description', content: 'Stop managing apps. Open one space, stay there, and let your AI assistant help you get things done. That\'s Bubbles.space.' },
         { property: 'og:image', content: 'https://bubbles.taohq.org/og.png' },
         { property: 'og:url', content: 'https://bubbles.taohq.org' },
         { property: 'og:site_name', content: 'Bubbles.space' },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: 'Bubbles.space — Your Persistent AI Workspace' },
-        { name: 'twitter:description', content: 'Bubbles.space is an always-on AI workspace that remembers, syncs, and helps you get things done—like having your own Jarvis for the AI era.' },
+        { name: 'twitter:title', content: 'Bubbles.space — Your Persistent AI Assistant' },
+        { name: 'twitter:description', content: 'Bubbles.space is an always-on AI assistant that remembers, syncs, and helps you get things done—like having your own Jarvis for the AI era.' },
         { name: 'twitter:image', content: 'https://bubbles.taohq.org/og.png' },
         { name: 'twitter:creator', content: '@taohq' }
       ],
