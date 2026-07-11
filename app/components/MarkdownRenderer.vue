@@ -19,7 +19,7 @@ const isDark = useDark()
 <template>
   <div class="markdown-wrapper" v-memo="[content, isDone, isDark]">
     <ClientOnly>
-      <MarkdownRender 
+      <MarkdownRender
         class="custom-md-renderer"
         :content="content"
         :final="isDone"
@@ -46,7 +46,7 @@ const isDark = useDark()
 /* Custom overrides to match our UI design */
 .custom-md-renderer :deep(.markdown-renderer),
 .custom-md-renderer :deep(.markdown-renderer *) {
-  /* Disable content-visibility and contain because they create a paint containment context 
+  /* Disable content-visibility and contain because they create a paint containment context
      that clips absolutely positioned dropdown menus (like the code block header menu) */
   content-visibility: visible !important;
   contain: none !important;
@@ -86,3 +86,4 @@ const isDark = useDark()
   margin-bottom: 0;
 }
 </style>
+

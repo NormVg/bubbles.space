@@ -43,6 +43,13 @@
       "when": 1783187184119,
       "tag": "0005_hesitant_rocket_raccoon",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783797447376,
+      "tag": "0006_gigantic_hedge_knight",
+      "breakpoints": true
     }
   ]
 }
