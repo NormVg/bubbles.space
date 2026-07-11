@@ -58,10 +58,19 @@ async function run() {
     DO $$ BEGIN
       ALTER TABLE "memory" ADD COLUMN "version" integer DEFAULT 1 NOT NULL;
     EXCEPTION WHEN duplicate_column THEN null; END $$;
+
+    -- Update User table for Agent Engine
+    DO $$ BEGIN
+      ALTER TABLE "user" ADD COLUMN "preferred_model" text;
+    EXCEPTION WHEN duplicate_column THEN null; END $$;
+
+    DO $$ BEGIN
+      ALTER TABLE "user" ADD COLUMN "reasoning_effort" text;
+    EXCEPTION WHEN duplicate_column THEN null; END $$;
   `;
 
   await sql.unsafe(addColumns);
-  console.log("✓ Temporal columns ensured.");
+  console.log("✓ Temporal and User schema columns ensured.");
 
   // Step 3: Drop the old unique index that conflicts with versioning
   // (multiple records at the same path are now valid — old versions have valid_to set)
