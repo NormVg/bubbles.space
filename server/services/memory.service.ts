@@ -79,10 +79,13 @@ function computeEffectiveConfidence(mem: MemorySelect): number {
 }
 
 /**
- * Attach effectiveConfidence to a memory record.
+ * Attach effectiveConfidence to a memory record and strip the embedding array.
+ * We strip the embedding because returning 1024-float arrays to the agent 
+ * wastes massive amounts of LLM context window tokens.
  */
-function withDecay<T extends MemorySelect>(mem: T): T & { effectiveConfidence: number } {
-  return { ...mem, effectiveConfidence: computeEffectiveConfidence(mem) };
+function withDecay(mem: MemorySelect): Omit<MemorySelect, 'embedding'> & { effectiveConfidence: number } {
+  const { embedding, ...rest } = mem;
+  return { ...rest, effectiveConfidence: computeEffectiveConfidence(mem) };
 }
 
 export class MemoryService {
