@@ -138,25 +138,38 @@
             <div v-if="activeTab === 'soul'" class="setting-group file-editor-group">
               <div class="editor-header">
                 <div class="editor-info">
-                  <h3>Agent Persona</h3>
+                  <h3 class="gradient-text"><LucideSparkles :size="16" class="inline-icon"/> Agent Persona</h3>
                   <p class="desc">Define how Bubbles thinks, speaks, and behaves. This acts as the core instruction set injected into every conversation.</p>
                 </div>
-                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
-                  <LucideCheck v-if="!isSaving" :size="14" />
-                  <LucideLoader v-else :size="14" class="spin-icon" />
-                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
-                </button>
               </div>
-              <div class="editor-window">
-                <div class="editor-tab">
-                  <LucideFileText :size="12" class="tab-icon"/>
-                  <span>soul.md</span>
+              <div class="editor-window-premium">
+                <div class="editor-topbar">
+                  <div class="mac-controls">
+                    <span class="mac-dot close"></span>
+                    <span class="mac-dot min"></span>
+                    <span class="mac-dot max"></span>
+                  </div>
+                  <div class="editor-tab-active">
+                    <LucideFileCode :size="13" class="tab-icon"/>
+                    soul.md
+                  </div>
+                  <div class="editor-actions">
+                    <button class="editor-save-action" @click="saveUserSettings" :disabled="isSaving" :class="{ 'saving': isSaving }">
+                      <LucideSave v-if="!isSaving" :size="13" />
+                      <LucideLoader v-else :size="13" class="spin-icon" />
+                      {{ isSaving ? 'Saving...' : 'Save File' }}
+                    </button>
+                  </div>
                 </div>
-                <textarea 
-                  v-model="editSystemPrompt"
-                  class="editor-textarea" 
-                  placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
-                ></textarea>
+                <div class="editor-body">
+                  <div class="editor-gutter"></div>
+                  <textarea 
+                    v-model="editSystemPrompt"
+                    class="editor-textarea-premium" 
+                    placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
+                    spellcheck="false"
+                  ></textarea>
+                </div>
               </div>
             </div>
 
@@ -164,25 +177,38 @@
             <div v-if="activeTab === 'user'" class="setting-group file-editor-group">
               <div class="editor-header">
                 <div class="editor-info">
-                  <h3>User Profile</h3>
+                  <h3 class="gradient-text"><LucideUser :size="16" class="inline-icon"/> User Profile</h3>
                   <p class="desc">Tell Bubbles about yourself. This context helps it give you more relevant, personalized, and accurate answers.</p>
                 </div>
-                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
-                  <LucideCheck v-if="!isSaving" :size="14" />
-                  <LucideLoader v-else :size="14" class="spin-icon" />
-                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
-                </button>
               </div>
-              <div class="editor-window">
-                <div class="editor-tab">
-                  <LucideFileText :size="12" class="tab-icon"/>
-                  <span>user.md</span>
+              <div class="editor-window-premium">
+                <div class="editor-topbar">
+                  <div class="mac-controls">
+                    <span class="mac-dot close"></span>
+                    <span class="mac-dot min"></span>
+                    <span class="mac-dot max"></span>
+                  </div>
+                  <div class="editor-tab-active">
+                    <LucideFileJson :size="13" class="tab-icon"/>
+                    user.md
+                  </div>
+                  <div class="editor-actions">
+                    <button class="editor-save-action" @click="saveUserSettings" :disabled="isSaving" :class="{ 'saving': isSaving }">
+                      <LucideSave v-if="!isSaving" :size="13" />
+                      <LucideLoader v-else :size="13" class="spin-icon" />
+                      {{ isSaving ? 'Saving...' : 'Save File' }}
+                    </button>
+                  </div>
                 </div>
-                <textarea 
-                  v-model="editAboutMe"
-                  class="editor-textarea" 
-                  placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
-                ></textarea>
+                <div class="editor-body">
+                  <div class="editor-gutter"></div>
+                  <textarea 
+                    v-model="editAboutMe"
+                    class="editor-textarea-premium" 
+                    placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
+                    spellcheck="false"
+                  ></textarea>
+                </div>
               </div>
             </div>
 
@@ -850,50 +876,170 @@ const colorMode = useColorMode({
   to { transform: rotate(360deg); }
 }
 
-.editor-window {
-  background: var(--bg-base);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+/* ─── Premium Editor Window ──────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inline-icon {
+  color: var(--accent);
+  -webkit-text-fill-color: initial;
+}
+
+.editor-window-premium {
+  background: #0D0D0D; /* Deep editor background */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  min-height: 340px;
 }
 
-.editor-tab {
+/* Force light theme to also use a dark editor for "premium" contrast, or adapt */
+:root[class~="light"] .editor-window-premium {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.editor-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root[class~="light"] .editor-topbar {
+  background: #F8F9FA;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.mac-controls {
+  display: flex;
+  gap: 6px;
+  width: 60px; /* Balance spacing */
+}
+
+.mac-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.mac-dot.close { background: #FF5F56; }
+.mac-dot.min { background: #FFBD2E; }
+.mac-dot.max { background: #27C93F; }
+
+.editor-tab-active {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 14px;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-.tab-icon {
+:root[class~="light"] .editor-tab-active {
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-subtle);
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  width: 60px; /* Balance spacing */
+}
+
+.editor-save-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
   color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.editor-textarea {
+.editor-save-action:hover:not(:disabled) {
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+}
+
+.editor-save-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editor-save-action.saving {
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+
+.editor-body {
+  display: flex;
+  flex-grow: 1;
+  position: relative;
+}
+
+.editor-gutter {
+  width: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root[class~="light"] .editor-gutter {
+  background: #F8F9FA;
+  border-right: 1px solid var(--border-subtle);
+}
+
+.editor-textarea-premium {
   flex-grow: 1;
   background: transparent;
   border: none;
-  color: var(--text-primary);
-  padding: 16px;
-  font-family: var(--font-mono);
+  color: #E2E8F0;
+  padding: 16px 20px;
+  font-family: 'JetBrains Mono', var(--font-mono);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
   resize: none;
   outline: none;
   min-height: 250px;
+  white-space: pre-wrap;
+  tab-size: 2;
 }
 
-.editor-textarea:focus {
-  /* Subtle inner glow on focus */
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+:root[class~="light"] .editor-textarea-premium {
+  color: #1E293B;
+}
+
+.editor-textarea-premium::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+:root[class~="light"] .editor-textarea-premium::placeholder {
+  color: rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
