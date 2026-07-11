@@ -66,11 +66,34 @@ export function useRealtimeSync() {
         }
       }
 
+      let updateBuffer: Uint8Array[] = []
+      let syncTimeout: any = null
+
       ydoc.on('update', (update, origin) => {
          // Prevent echo: don't send updates that originated from the worker or local DB
-         if (origin !== 'worker' && origin !== 'idb') {
-            worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
+         import('~/utils/yjs').then(({ idbProvider }) => {
+           if (origin !== 'worker' && origin !== 'server' && origin !== idbProvider) {
+              worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
+              
+              // Buffer updates to sync with cloud DB
+              updateBuffer.push(update)
+            clearTimeout(syncTimeout)
+            syncTimeout = setTimeout(async () => {
+               if (updateBuffer.length === 0) return
+               const merged = Y.mergeUpdates(updateBuffer)
+               updateBuffer = []
+               try {
+                  const { bytesToBase64 } = await import('~/utils/base64')
+                  await $fetch('/api/crdt/sync', { 
+                     method: 'POST', 
+                     body: { update: bytesToBase64(merged) } 
+                  })
+               } catch (e) {
+                  console.error('Failed to sync to cloud:', e)
+               }
+            }, 3000)
          }
+         })
       })
 
       const tokenUrl = window.location.origin + '/api/ably-token'

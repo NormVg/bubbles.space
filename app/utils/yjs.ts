@@ -9,7 +9,7 @@ export const ydoc = new Y.Doc()
 export const yWidgets = ydoc.getMap<any>('widgets')
 export const yWorkspaces = ydoc.getMap<any>('workspaces')
 
-let idbProvider: IndexeddbPersistence | null = null
+export let idbProvider: IndexeddbPersistence | null = null
 
 /**
  * Initializes the local IndexedDB persistence for the Yjs document.
