@@ -25,8 +25,9 @@ export const useChatSubmit = (
       ? `Location: ${appStore.location.city || 'Unknown City'}, ${appStore.location.region || 'Unknown Region'} (Lat: ${appStore.location.latitude}, Lon: ${appStore.location.longitude})` 
       : 'Location: Unknown'
 
-    // Inject user's Soul and Identity with a fresh fetch to ensure reliability
-    const { data: sessionData } = await authClient.getSession()
+    // Inject user's Soul and Identity with existing session data to ensure reliability
+    const sessionRef = authClient.useSession()
+    const sessionData = sessionRef.value
     
     // Fetch semantic memory (RAG)
     let semanticCtx = '';
@@ -66,7 +67,7 @@ export const useChatSubmit = (
       soulCtx, 
       identityCtx,
       semanticCtx,
-      `System Info (Hidden): UserID="${sessionData?.user?.id || ''}"`
+      sessionData?.user?.id ? `System Info (Hidden): UserID="${sessionData.user.id}"` : ''
     ].filter(Boolean)
       
     const systemBlock = `<system_context>\n${systemParts.join('\n')}\n</system_context>`

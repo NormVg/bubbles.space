@@ -26,7 +26,10 @@ export default defineTool({
       body: JSON.stringify({ path, title, content, source, metadata }),
     });
 
-    if (!response.ok) throw new Error('Failed to store memory');
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to store memory: ${response.status} - ${text}`);
+    }
     const result = await response.json();
 
     if (result._duplicate) {

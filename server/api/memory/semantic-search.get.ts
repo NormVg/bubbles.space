@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
 
   if (internalSecret === 'eve-bubbles-secret') {
     userId = getHeader(event, 'x-user-id') || '';
+    userId = userId.replace(/^["']|["']$/g, '').trim();
   } else {
     const session = await auth.api.getSession({
       headers: event.headers

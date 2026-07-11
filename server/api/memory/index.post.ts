@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   const internalSecret = getHeader(event, 'x-internal-secret');
   if (internalSecret === 'eve-bubbles-secret') {
     userId = getHeader(event, 'x-user-id') || '';
+    userId = userId.replace(/^["']|["']$/g, '').trim(); // Strip quotes if model hallucinates them
   } else {
     const session = await auth.api.getSession({ headers: event.headers });
     userId = session?.user?.id || '';
@@ -41,6 +42,7 @@ export default defineEventHandler(async (event) => {
     });
     return mem;
   } catch (err: any) {
-    throw createError({ statusCode: 500, statusMessage: err.message });
+    console.error('API Error in memory/index.post.ts:', err);
+    throw createError({ statusCode: 500, statusMessage: err.message || 'Internal Server Error' });
   }
 });
