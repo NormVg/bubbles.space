@@ -172,28 +172,12 @@
                   <span class="desc">e.g. ollama:llama3 or leave blank for default</span>
                 </div>
                 <div class="model-input-wrapper">
-                  <div class="input-group">
-                    <input 
-                      type="text" 
-                      v-model="editPreferredModel" 
-                      list="ollama-models"
-                      class="premium-input"
-                      placeholder="Default (gemma4:31b-cloud)"
-                    />
-                    <button class="refresh-icon-btn" @click="fetchModels" :disabled="isFetchingModels" title="Refresh local models">
-                      <LucideRefreshCw :size="14" :class="{ 'spin-icon': isFetchingModels }" />
-                    </button>
-                  </div>
-                  
-                  <datalist id="ollama-models">
-                    <option v-for="m in availableModels" :key="m.name" :value="`ollama:${m.name}`">
-                      {{ m.name }}
-                    </option>
-                  </datalist>
-                  
-                  <div v-if="isFetchingModels && availableModels.length === 0" class="fetching-models-text">
-                    <LucideLoader :size="12" class="spin-icon" /> Fetching models...
-                  </div>
+                  <input 
+                    type="text" 
+                    v-model="editPreferredModel" 
+                    class="premium-input"
+                    placeholder="e.g. ollama:llama3 or gemma4:31b-cloud"
+                  />
                 </div>
               </div>
             </div>
@@ -231,31 +215,6 @@ const editAboutMe = ref('')
 const editPreferredModel = ref('')
 const editReasoningEffort = ref('high')
 const isSaving = ref(false)
-
-const availableModels = ref<any[]>([])
-const isFetchingModels = ref(false)
-
-async function fetchModels() {
-  isFetchingModels.value = true
-  try {
-    const res = await fetch('/api/ollama/models')
-    const data = await res.json()
-    if (data.success) {
-      availableModels.value = data.models
-    }
-  } catch (error) {
-    console.error('Failed to fetch models', error)
-  } finally {
-    isFetchingModels.value = false
-  }
-}
-
-// Fetch models when the settings modal opens
-watch(() => uiStore.isSettingsOpen, (isOpen) => {
-  if (isOpen && availableModels.value.length === 0) {
-    fetchModels()
-  }
-})
 
 // Sync form when session loads
 watch(() => session.value?.data, (data) => {

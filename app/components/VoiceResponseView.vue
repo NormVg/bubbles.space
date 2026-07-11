@@ -30,6 +30,7 @@ const latestAiMessage = computed(() => {
 type GroupedPart = 
   | { type: 'text', text: string }
   | { type: 'tool-group', tools: import('eve/vue').EveDynamicToolPart[] }
+  | { type: 'reasoning', reasoning: string }
 
 const getGroupedParts = (message: EveMessage) => {
   const groups: GroupedPart[] = []
@@ -47,6 +48,9 @@ const getGroupedParts = (message: EveMessage) => {
       if (part.text) {
         groups.push({ type: 'text', text: part.text })
       }
+    } else if ((part as any).type === 'reasoning') {
+      currentToolGroup = null
+      groups.push({ type: 'reasoning', reasoning: (part as any).reasoning || (part as any).text || '' })
     }
   }
   return groups
@@ -107,10 +111,14 @@ const voiceStatusLabel = computed(() => {
     </div>
 
     <div v-if="latestAiMessage && voiceAgent.voiceSessionActive.value && eveAgent.status.value !== 'submitted' && !voiceAgent.isListening.value && !voiceAgent.isProcessingVoice.value" class="voice-response-content">
-      <template v-for="(group, i) in getGroupedParts(latestAiMessage)" :key="i">
-        <MarkdownRenderer v-if="group.type === 'text'" :content="group.text" :isDone="eveAgent.status.value !== 'streaming'" />
-        <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
-      </template>
+        <template v-for="(group, i) in getGroupedParts(latestAiMessage)" :key="i">
+          <details v-if="group.type === 'reasoning' && group.reasoning" class="reasoning-block">
+            <summary>Thought Process</summary>
+            <div class="reasoning-content">{{ group.reasoning }}</div>
+          </details>
+          <MarkdownRenderer v-else-if="group.type === 'text'" :content="group.text" :isDone="eveAgent.status.value !== 'streaming'" />
+          <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
+        </template>
     </div>
   </div>
 </template>
