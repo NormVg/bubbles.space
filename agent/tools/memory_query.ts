@@ -1,17 +1,15 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { getBaseUrl } from "../lib/utils";
+import { requireUserId } from "../lib/auth";
 
 export default defineTool({
   description: "Search for memories using fuzzy matching on title, content, and metadata.",
   inputSchema: z.object({
-    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context. If not found, output 'MISSING'."),
     queries: z.array(z.string()).describe("An array of search queries. Provide multiple broad keywords to search for different concepts simultaneously."),
   }),
-  async execute({ userId, queries }) {
-    if (!userId || userId === 'MISSING' || userId === 'undefined') {
-      return "Error: Cannot access memory because the UserID is missing from the system context. The user might not be logged in or the session is still loading.";
-    }
+  async execute({ queries }, ctx) {
+    const userId = requireUserId(ctx);
     if (!queries || queries.length === 0) return [];
     
     // Fetch all queries in parallel
@@ -26,7 +24,7 @@ export default defineTool({
     
     // Flatten and deduplicate by memory id
     const allMemories = resultsArray.flat();
-    const uniqueMemories = Array.from(new Map(allMemories.map(m => [m.id, m])).values());
+    const uniqueMemories = Array.from(new Map(allMemories.map((m: any) => [m.id, m])).values());
     
     // Sort by importance and update time, just like the backend does
     uniqueMemories.sort((a: any, b: any) => {

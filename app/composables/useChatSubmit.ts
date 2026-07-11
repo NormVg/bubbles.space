@@ -67,7 +67,6 @@ export const useChatSubmit = (
       soulCtx, 
       identityCtx,
       semanticCtx,
-      sessionData?.user?.id ? `System Info (Hidden): UserID="${sessionData.user.id}"` : ''
     ].filter(Boolean)
       
     const systemBlock = `<system_context>\n${systemParts.join('\n')}\n</system_context>`

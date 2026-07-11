@@ -1,18 +1,16 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { getBaseUrl } from "../lib/utils";
+import { requireUserId } from "../lib/auth";
 
 export default defineTool({
   description: "Query memories at a specific point in time. Returns facts that were considered true (valid) at the given timestamp. Useful for answering 'what did we know about X on date Y?'",
   inputSchema: z.object({
-    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context. If not found, output 'MISSING'."),
     query: z.string().describe("The search query"),
     asOf: z.string().describe("ISO 8601 timestamp for the point in time (e.g., '2026-01-15T00:00:00Z')"),
   }),
-  async execute({ userId, query, asOf }) {
-    if (!userId || userId === 'MISSING' || userId === 'undefined') {
-      return "Error: Cannot access memory because the UserID is missing from the system context. The user might not be logged in or the session is still loading.";
-    }
+  async execute({ query, asOf }, ctx) {
+    const userId = requireUserId(ctx);
 
     const url = `${getBaseUrl()}/api/memory/at?q=${encodeURIComponent(query)}&asOf=${encodeURIComponent(asOf)}`;
     const response = await fetch(url, {
