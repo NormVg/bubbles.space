@@ -35,6 +35,8 @@ export default defineAgent({
       }
     }
   }),
+  // Required when using a fallback model that doesn't have known Gateway metadata
+  modelContextWindowTokens: 128000,
   // Default reasoning effort if not overridden dynamically
   reasoning: "high",
   build: {
