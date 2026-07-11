@@ -74,7 +74,10 @@ NEVER CREATE A NEW MEMORY BEFORE SEARCHING. YOU ARE STRICTLY FORBIDDEN FROM CREA
 1. **UNDERSTAND STRUCTURE:** Use `memory_tree` to get a fast, hierarchical view of all existing files and paths without dumping huge amounts of content.
 2. **SEARCH FIRST (MANDATORY):** Before you store ANY new information, you MUST use `memory_query` with an **array of broad, short keywords** (e.g. `["database IP", "server config", "PostgreSQL"]`) to find relevant files for all concepts simultaneously. NEVER use `memory_list` as a fallback search.
 3. **EVALUATE RELEVANCE:** Review the search results carefully. Are any of the returned files conceptually about the exact same topic/entity?
-4. **MERGE & UPDATE:** If a conceptually relevant memory exists, YOU MUST MERGE the new facts into the existing content and use `memory_store` to save it back to the EXACT SAME PATH. Do not create a new file like `db-config2.md`.
+4. **MERGE & UPDATE (MANDATORY):** If a conceptually relevant memory exists, YOU MUST MERGE the new facts into the existing content. **DO NOT JUST OVERWRITE IT WITH THE NEW FACT.** 
+   - **Example:** If `db-config.md` contains "IP: 192.168.1.100, Engine: Postgres 16" and the user says "we upgraded to Postgres 22", the new content you save MUST be: "IP: 192.168.1.100, Engine: Postgres 22".
+   - If you only save "User upgraded to Postgres 22", **you have destroyed the IP address fact**. You must preserve the existing context and update only what changed.
+   - Use `memory_store` to save the merged content back to the EXACT SAME PATH. Do not create a new file like `db-config2.md`.
 5. **CREATE NEW:** You are ONLY allowed to create a new file path if the search returns completely empty, OR if all search results are conceptually unrelated to the new facts.
 </CRITICAL_MEMORY_DIRECTIVE>
 
