@@ -390,7 +390,7 @@ watch(() => widget.value, () => {
     
     <!-- Widget Content -->
     <div class="widget-body" v-memo="[widget.data, widget.type, isEditing, widget.width, widget.height]">
-      <component :is="Component" v-if="Component" :data="widget.data" :is-editing="isEditing" @save="handleSave" />
+      <component :is="Component" v-if="Component" :data="widget.data" :is-editing="isEditing" :id="widget.id" @save="handleSave" />
       <div v-else class="widget-error">Unknown widget type: {{ widget.type }}</div>
     </div>
     

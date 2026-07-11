@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, watch } from 'vue'
+import { watch } from 'vue'
 import { authClient } from '~/utils/auth-client'
 import { ydoc } from '~/utils/yjs'
 import * as Y from 'yjs'
@@ -96,18 +96,14 @@ export function useRealtimeSync() {
     }
     window.addEventListener('visibilitychange', handleVisibility)
 
-    onBeforeUnmount(() => {
-      window.removeEventListener('visibilitychange', handleVisibility)
-    })
+    // We don't remove this event listener since the app stays alive and this is a singleton pattern
     
     initComplete = true
   }
   
-  onMounted(() => {
-    if (!initComplete && !isInitializingAbly) {
-      void init()
-    }
-  })
+  if (import.meta.client && !initComplete && !isInitializingAbly) {
+    void init()
+  }
 
   return {
     publish: (event: string, data: any) => {
