@@ -18,16 +18,11 @@ export default defineAgent({
         // Read user preferences
         const prefs = ctx.session?.auth?.initiator?.attributes;
         const userPreferredModel = prefs?.preferredModel as string | undefined;
-        const reasoningEffort = prefs?.reasoningEffort as string | undefined;
         
         if (userPreferredModel) {
           return {
             model: userPreferredModel,
-            modelOptions: {
-              // We pass the reasoning effort down to the provider options
-              // The AI SDK will apply this to models that support it
-              providerOptions: reasoningEffort ? { reasoning: reasoningEffort } : {}
-            }
+            modelOptions: {}
           };
         }
         
@@ -37,8 +32,7 @@ export default defineAgent({
   }),
   // Required when using a fallback model that doesn't have known Gateway metadata
   modelContextWindowTokens: 128000,
-  // Default reasoning effort if not overridden dynamically
-  reasoning: "high",
+  reasoning: "medium",
   build: {
     // yt-search dynamically requires cheerio at runtime.
     externalDependencies: ['yt-search', 'cheerio'],

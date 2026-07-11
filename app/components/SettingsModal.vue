@@ -2,10 +2,6 @@
   <Transition name="modal">
     <div v-if="uiStore.isSettingsOpen" class="settings-modal-overlay" @click.self="uiStore.closeSettings">
       <div class="settings-modal-content">
-        <button class="close-btn" @click="uiStore.closeSettings">
-          <LucideX :size="18" />
-        </button>
-        
         <div class="modal-body">
           <div class="settings-sidebar">
             <h2 class="sidebar-title">Settings</h2>
@@ -16,19 +12,16 @@
             <div class="sidebar-divider"></div>
             <span class="sidebar-label">Agent Engine</span>
             <button class="nav-btn" :class="{ active: activeTab === 'engine' }" @click="activeTab = 'engine'">
-              <LucideCpu :size="14" />
               Model Settings
             </button>
             
             <div class="sidebar-divider"></div>
             <span class="sidebar-label">Personalization</span>
             <button class="nav-btn" :class="{ active: activeTab === 'soul' }" @click="activeTab = 'soul'">
-              <LucideSparkles :size="14" />
-              Agent Persona
+              Bubbles
             </button>
             <button class="nav-btn" :class="{ active: activeTab === 'user' }" @click="activeTab = 'user'">
-              <LucideUser :size="14" />
-              User Profile
+              User
             </button>
           </div>
           <div class="settings-main">
@@ -134,96 +127,43 @@
               </div>
             </div>
 
-            <!-- SOUL.MD TAB -->
-            <div v-if="activeTab === 'soul'" class="setting-group file-editor-group">
+            <!-- BUBBLES TAB -->
+            <div v-if="activeTab === 'soul'" class="setting-group">
               <div class="editor-header">
                 <div class="editor-info">
-                  <h3 class="gradient-text"><LucideSparkles :size="16" class="inline-icon"/> Agent Persona</h3>
+                  <h3>Bubbles</h3>
                   <p class="desc">Define how Bubbles thinks, speaks, and behaves. This acts as the core instruction set injected into every conversation.</p>
                 </div>
               </div>
-              <div class="editor-window-premium">
-                <div class="editor-topbar">
-                  <div class="mac-controls">
-                    <span class="mac-dot close"></span>
-                    <span class="mac-dot min"></span>
-                    <span class="mac-dot max"></span>
-                  </div>
-                  <div class="editor-tab-active">
-                    <LucideFileCode :size="13" class="tab-icon"/>
-                    soul.md
-                  </div>
-                  <div class="editor-actions">
-                    <button class="editor-save-action" @click="saveUserSettings" :disabled="isSaving" :class="{ 'saving': isSaving }">
-                      <LucideSave v-if="!isSaving" :size="13" />
-                      <LucideLoader v-else :size="13" class="spin-icon" />
-                      {{ isSaving ? 'Saving...' : 'Save File' }}
-                    </button>
-                  </div>
-                </div>
-                <div class="editor-body">
-                  <div class="editor-gutter"></div>
-                  <textarea 
-                    v-model="editSystemPrompt"
-                    class="editor-textarea-premium" 
-                    placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
-                    spellcheck="false"
-                  ></textarea>
-                </div>
-              </div>
+              <textarea 
+                v-model="editSystemPrompt"
+                class="settings-textarea large-textarea" 
+                placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
+              ></textarea>
             </div>
 
-            <!-- USER.MD TAB -->
-            <div v-if="activeTab === 'user'" class="setting-group file-editor-group">
+            <!-- USER TAB -->
+            <div v-if="activeTab === 'user'" class="setting-group">
               <div class="editor-header">
                 <div class="editor-info">
-                  <h3 class="gradient-text"><LucideUser :size="16" class="inline-icon"/> User Profile</h3>
+                  <h3>User</h3>
                   <p class="desc">Tell Bubbles about yourself. This context helps it give you more relevant, personalized, and accurate answers.</p>
                 </div>
               </div>
-              <div class="editor-window-premium">
-                <div class="editor-topbar">
-                  <div class="mac-controls">
-                    <span class="mac-dot close"></span>
-                    <span class="mac-dot min"></span>
-                    <span class="mac-dot max"></span>
-                  </div>
-                  <div class="editor-tab-active">
-                    <LucideFileJson :size="13" class="tab-icon"/>
-                    user.md
-                  </div>
-                  <div class="editor-actions">
-                    <button class="editor-save-action" @click="saveUserSettings" :disabled="isSaving" :class="{ 'saving': isSaving }">
-                      <LucideSave v-if="!isSaving" :size="13" />
-                      <LucideLoader v-else :size="13" class="spin-icon" />
-                      {{ isSaving ? 'Saving...' : 'Save File' }}
-                    </button>
-                  </div>
-                </div>
-                <div class="editor-body">
-                  <div class="editor-gutter"></div>
-                  <textarea 
-                    v-model="editAboutMe"
-                    class="editor-textarea-premium" 
-                    placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
-                    spellcheck="false"
-                  ></textarea>
-                </div>
-              </div>
+              <textarea 
+                v-model="editAboutMe"
+                class="settings-textarea large-textarea" 
+                placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
+              ></textarea>
             </div>
 
             <!-- AGENT ENGINE TAB -->
-            <div v-if="activeTab === 'engine'" class="setting-group file-editor-group">
+            <div v-if="activeTab === 'engine'" class="setting-group">
               <div class="editor-header">
                 <div class="editor-info">
                   <h3>Model Settings</h3>
-                  <p class="desc">Configure the AI engine that powers Bubbles. Select your preferred local model and reasoning depth.</p>
+                  <p class="desc">Configure the AI engine that powers Bubbles. Select your preferred local model.</p>
                 </div>
-                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
-                  <LucideCheck v-if="!isSaving" :size="14" />
-                  <LucideLoader v-else :size="14" class="spin-icon" />
-                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
-                </button>
               </div>
 
               <div class="setting-item">
@@ -232,7 +172,12 @@
                   <span class="desc">Select the Ollama model for conversation</span>
                 </div>
                 <div class="model-select-wrapper">
-                  <div v-if="isFetchingModels" class="fetching-models">
+                  <div class="model-select-header">
+                    <button class="refresh-btn" @click="fetchModels" :disabled="isFetchingModels" title="Refresh Models">
+                      <LucideRefreshCw :size="14" :class="{ 'spin-icon': isFetchingModels }" />
+                    </button>
+                  </div>
+                  <div v-if="isFetchingModels && availableModels.length === 0" class="fetching-models">
                     <LucideLoader :size="14" class="spin-icon" /> Loading models...
                   </div>
                   <select v-else v-model="editPreferredModel" class="premium-select">
@@ -243,21 +188,18 @@
                   </select>
                 </div>
               </div>
-
-              <div class="setting-item">
-                <div class="setting-info">
-                  <label>Reasoning Effort</label>
-                  <span class="desc">How deeply should the model think?</span>
-                </div>
-                <div class="theme-switcher">
-                  <button class="theme-btn" :class="{ active: editReasoningEffort === 'low' }" @click="editReasoningEffort = 'low'">Low</button>
-                  <button class="theme-btn" :class="{ active: !editReasoningEffort || editReasoningEffort === 'high' }" @click="editReasoningEffort = 'high'">High</button>
-                  <button class="theme-btn" :class="{ active: editReasoningEffort === 'xhigh' }" @click="editReasoningEffort = 'xhigh'">Max</button>
-                </div>
-              </div>
             </div>
 
           </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="secondary-btn" @click="uiStore.closeSettings">Close</button>
+          <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving" v-if="['engine', 'soul', 'user'].includes(activeTab)">
+            <LucideCheck v-if="!isSaving" :size="14" />
+            <LucideLoader v-else :size="14" class="spin-icon" />
+            {{ isSaving ? 'Saved' : 'Save Changes' }}
+          </button>
         </div>
       </div>
     </div>
@@ -398,24 +340,30 @@ const colorMode = useColorMode({
   position: relative;
 }
 
-.close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
+/* ─── Modal Footer ──────────────────────────────────────── */
+.modal-footer {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  z-index: 10;
+  padding: 16px 24px;
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border-subtle);
+  gap: 12px;
 }
 
-.close-btn:hover {
+.secondary-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
   background: var(--hover-bg);
   color: var(--text-primary);
 }
@@ -765,6 +713,12 @@ const colorMode = useColorMode({
   height: 100%;
 }
 
+.large-textarea {
+  min-height: 250px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .editor-header {
   display: flex;
   justify-content: space-between;
@@ -876,170 +830,45 @@ const colorMode = useColorMode({
   to { transform: rotate(360deg); }
 }
 
-/* ─── Premium Editor Window ──────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.inline-icon {
-  color: var(--accent);
-  -webkit-text-fill-color: initial;
-}
-
-.editor-window-premium {
-  background: #0D0D0D; /* Deep editor background */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+.editor-window {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  min-height: 340px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Force light theme to also use a dark editor for "premium" contrast, or adapt */
-:root[class~="light"] .editor-window-premium {
-  background: #FFFFFF;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-.editor-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-:root[class~="light"] .editor-topbar {
-  background: #F8F9FA;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.mac-controls {
-  display: flex;
-  gap: 6px;
-  width: 60px; /* Balance spacing */
-}
-
-.mac-dot {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-}
-
-.mac-dot.close { background: #FF5F56; }
-.mac-dot.min { background: #FFBD2E; }
-.mac-dot.max { background: #27C93F; }
-
-.editor-tab-active {
+.editor-tab {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 6px 14px;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-:root[class~="light"] .editor-tab-active {
-  background: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  border: 1px solid var(--border-subtle);
-}
-
-.editor-actions {
-  display: flex;
-  justify-content: flex-end;
-  width: 60px; /* Balance spacing */
-}
-
-.editor-save-action {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid rgba(var(--accent-rgb), 0.3);
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.editor-save-action:hover:not(:disabled) {
-  background: rgba(var(--accent-rgb), 0.1);
-  border-color: var(--accent);
-}
-
-.editor-save-action:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.editor-save-action.saving {
   color: var(--text-secondary);
-  border-color: var(--border-subtle);
 }
-
-.editor-body {
-  display: flex;
-  flex-grow: 1;
-  position: relative;
-}
-
-.editor-gutter {
-  width: 40px;
-  background: rgba(255, 255, 255, 0.02);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-:root[class~="light"] .editor-gutter {
-  background: #F8F9FA;
-  border-right: 1px solid var(--border-subtle);
-}
-
-.editor-textarea-premium {
+.editor-textarea {
   flex-grow: 1;
   background: transparent;
   border: none;
-  color: #E2E8F0;
-  padding: 16px 20px;
-  font-family: 'JetBrains Mono', var(--font-mono);
+  color: var(--text-primary);
+  padding: 16px;
+  font-family: var(--font-mono);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.6;
   resize: none;
   outline: none;
   min-height: 250px;
-  white-space: pre-wrap;
-  tab-size: 2;
 }
 
-:root[class~="light"] .editor-textarea-premium {
-  color: #1E293B;
-}
-
-.editor-textarea-premium::placeholder {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-:root[class~="light"] .editor-textarea-premium::placeholder {
-  color: rgba(0, 0, 0, 0.3);
+.editor-textarea:focus {
+  /* Subtle inner glow on focus */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
