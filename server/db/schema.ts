@@ -10,6 +10,8 @@ export const user = pgTable("user", {
 	image: text('image'),
 	systemPrompt: text('system_prompt'),
 	aboutMe: text('about_me'),
+	preferredModel: text('preferred_model'),
+	reasoningEffort: text('reasoning_effort'),
 	createdAt: timestamp('created_at').notNull(),
 	updatedAt: timestamp('updated_at').notNull()
 });

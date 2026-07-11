@@ -15,31 +15,30 @@ export default defineAgent({
     fallback: ollama("gemma4:31b-cloud"),
     events: {
       "session.started": (_event, ctx) => {
-        // Read the user's preferred model from their session auth attributes
-        const userPreferredModel = ctx.session?.auth?.initiator?.attributes?.preferredModel as string | undefined;
+        // Read user preferences
+        const prefs = ctx.session?.auth?.initiator?.attributes;
+        const userPreferredModel = prefs?.preferredModel as string | undefined;
+        const reasoningEffort = prefs?.reasoningEffort as string | undefined;
         
         if (userPreferredModel) {
-          // If a preference exists, route to it dynamically and optionally set context window
           return {
-            model: userPreferredModel
+            model: userPreferredModel,
+            modelOptions: {
+              // We pass the reasoning effort down to the provider options
+              // The AI SDK will apply this to models that support it
+              providerOptions: reasoningEffort ? { reasoning: reasoningEffort } : {}
+            }
           };
         }
         
-        // Return null to drop back to the fallback model
         return null;
       }
     }
   }),
-  // Pass the context window tokens for the fallback model
-  modelOptions: {
-    // Other options can go here
-  },
-  // Set reasoning effort to high
+  // Default reasoning effort if not overridden dynamically
   reasoning: "high",
   build: {
     // yt-search dynamically requires cheerio at runtime.
-    // Eve's compiler can't trace dynamic requires, so we list them here
-    // to keep them external and trace them into the Vercel output.
     externalDependencies: ['yt-search', 'cheerio'],
   },
 });

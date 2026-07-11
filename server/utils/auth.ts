@@ -27,6 +27,12 @@ export const auth = betterAuth({
       aboutMe: {
         type: "string",
       },
+      preferredModel: {
+        type: "string",
+      },
+      reasoningEffort: {
+        type: "string",
+      },
     },
   },
 });

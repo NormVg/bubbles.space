@@ -14,14 +14,21 @@
             <button class="nav-btn" :class="{ active: activeTab === 'account' }" @click="activeTab = 'account'">Account</button>
             
             <div class="sidebar-divider"></div>
-            <span class="sidebar-label">Personalization</span>
-            <button class="nav-btn nav-btn-file" :class="{ active: activeTab === 'soul' }" @click="activeTab = 'soul'">
-              <LucideSparkles :size="14" />
-              soul.md
+            <span class="sidebar-label">Agent Engine</span>
+            <button class="nav-btn" :class="{ active: activeTab === 'engine' }" @click="activeTab = 'engine'">
+              <LucideCpu :size="14" />
+              Model Settings
             </button>
-            <button class="nav-btn nav-btn-file" :class="{ active: activeTab === 'user' }" @click="activeTab = 'user'">
+            
+            <div class="sidebar-divider"></div>
+            <span class="sidebar-label">Personalization</span>
+            <button class="nav-btn" :class="{ active: activeTab === 'soul' }" @click="activeTab = 'soul'">
+              <LucideSparkles :size="14" />
+              Agent Persona
+            </button>
+            <button class="nav-btn" :class="{ active: activeTab === 'user' }" @click="activeTab = 'user'">
               <LucideUser :size="14" />
-              user.md
+              User Profile
             </button>
           </div>
           <div class="settings-main">
@@ -128,41 +135,100 @@
             </div>
 
             <!-- SOUL.MD TAB -->
-            <div v-if="activeTab === 'soul'" class="setting-group">
-              <div class="file-header">
-                <div class="file-name">
-                  <LucideSparkles :size="14" class="file-icon" />
-                  <span>soul.md</span>
+            <div v-if="activeTab === 'soul'" class="setting-group file-editor-group">
+              <div class="editor-header">
+                <div class="editor-info">
+                  <h3>Agent Persona</h3>
+                  <p class="desc">Define how Bubbles thinks, speaks, and behaves. This acts as the core instruction set injected into every conversation.</p>
                 </div>
-                <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
-                  {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
+                  <LucideCheck v-if="!isSaving" :size="14" />
+                  <LucideLoader v-else :size="14" class="spin-icon" />
+                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
                 </button>
               </div>
-              <p class="file-desc">Define how Bubbles thinks, speaks, and behaves. This is injected as context into every conversation.</p>
-              <textarea 
-                v-model="editSystemPrompt"
-                class="settings-textarea file-textarea" 
-                placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
-              ></textarea>
+              <div class="editor-window">
+                <div class="editor-tab">
+                  <LucideFileText :size="12" class="tab-icon"/>
+                  <span>soul.md</span>
+                </div>
+                <textarea 
+                  v-model="editSystemPrompt"
+                  class="editor-textarea" 
+                  placeholder="e.g. You are concise and direct. You prefer functional code over OOP. Never use emojis. Always explain trade-offs..."
+                ></textarea>
+              </div>
             </div>
 
             <!-- USER.MD TAB -->
-            <div v-if="activeTab === 'user'" class="setting-group">
-              <div class="file-header">
-                <div class="file-name">
-                  <LucideUser :size="14" class="file-icon" />
-                  <span>user.md</span>
+            <div v-if="activeTab === 'user'" class="setting-group file-editor-group">
+              <div class="editor-header">
+                <div class="editor-info">
+                  <h3>User Profile</h3>
+                  <p class="desc">Tell Bubbles about yourself. This context helps it give you more relevant, personalized, and accurate answers.</p>
                 </div>
-                <button class="save-btn" @click="saveUserSettings" :disabled="isSaving">
-                  {{ isSaving ? 'SAVING...' : 'SAVE' }}
+                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
+                  <LucideCheck v-if="!isSaving" :size="14" />
+                  <LucideLoader v-else :size="14" class="spin-icon" />
+                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
                 </button>
               </div>
-              <p class="file-desc">Tell Bubbles about yourself. This context helps it give you more relevant and personalized answers.</p>
-              <textarea 
-                v-model="editAboutMe"
-                class="settings-textarea file-textarea" 
-                placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
-              ></textarea>
+              <div class="editor-window">
+                <div class="editor-tab">
+                  <LucideFileText :size="12" class="tab-icon"/>
+                  <span>user.md</span>
+                </div>
+                <textarea 
+                  v-model="editAboutMe"
+                  class="editor-textarea" 
+                  placeholder="e.g. I'm a frontend developer working with Vue and Nuxt. I prefer dark mode and minimal UI. I'm based in India..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- AGENT ENGINE TAB -->
+            <div v-if="activeTab === 'engine'" class="setting-group file-editor-group">
+              <div class="editor-header">
+                <div class="editor-info">
+                  <h3>Model Settings</h3>
+                  <p class="desc">Configure the AI engine that powers Bubbles. Select your preferred local model and reasoning depth.</p>
+                </div>
+                <button class="primary-save-btn" @click="saveUserSettings" :disabled="isSaving">
+                  <LucideCheck v-if="!isSaving" :size="14" />
+                  <LucideLoader v-else :size="14" class="spin-icon" />
+                  {{ isSaving ? 'Saving...' : 'Save Changes' }}
+                </button>
+              </div>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <label>Preferred Model</label>
+                  <span class="desc">Select the Ollama model for conversation</span>
+                </div>
+                <div class="model-select-wrapper">
+                  <div v-if="isFetchingModels" class="fetching-models">
+                    <LucideLoader :size="14" class="spin-icon" /> Loading models...
+                  </div>
+                  <select v-else v-model="editPreferredModel" class="premium-select">
+                    <option value="">Default (gemma4:31b-cloud)</option>
+                    <option v-for="m in availableModels" :key="m.name" :value="`ollama:${m.name}`">
+                      {{ m.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <label>Reasoning Effort</label>
+                  <span class="desc">How deeply should the model think?</span>
+                </div>
+                <div class="theme-switcher">
+                  <button class="theme-btn" :class="{ active: editReasoningEffort === 'low' }" @click="editReasoningEffort = 'low'">Low</button>
+                  <button class="theme-btn" :class="{ active: !editReasoningEffort || editReasoningEffort === 'high' }" @click="editReasoningEffort = 'high'">High</button>
+                  <button class="theme-btn" :class="{ active: editReasoningEffort === 'xhigh' }" @click="editReasoningEffort = 'xhigh'">Max</button>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -186,7 +252,34 @@ const session = authClient.useSession()
 
 const editSystemPrompt = ref('')
 const editAboutMe = ref('')
+const editPreferredModel = ref('')
+const editReasoningEffort = ref('high')
 const isSaving = ref(false)
+
+const availableModels = ref<any[]>([])
+const isFetchingModels = ref(false)
+
+async function fetchModels() {
+  isFetchingModels.value = true
+  try {
+    const res = await fetch('/api/ollama/models')
+    const data = await res.json()
+    if (data.success) {
+      availableModels.value = data.models
+    }
+  } catch (error) {
+    console.error('Failed to fetch models', error)
+  } finally {
+    isFetchingModels.value = false
+  }
+}
+
+// Fetch models when the settings modal opens
+watch(() => uiStore.isSettingsOpen, (isOpen) => {
+  if (isOpen && availableModels.value.length === 0) {
+    fetchModels()
+  }
+})
 
 // Sync form when session loads
 watch(() => session.value?.data, (data) => {
@@ -202,6 +295,11 @@ watch(() => session.value?.data, (data) => {
     }
     
     editAboutMe.value = aboutText
+    
+    // @ts-ignore
+    editPreferredModel.value = data.user.preferredModel || ''
+    // @ts-ignore
+    editReasoningEffort.value = data.user.reasoningEffort || 'high'
   }
 }, { immediate: true })
 
@@ -210,7 +308,11 @@ async function saveUserSettings() {
   try {
     await authClient.updateUser({
       systemPrompt: editSystemPrompt.value,
-      aboutMe: editAboutMe.value
+      aboutMe: editAboutMe.value,
+      // @ts-ignore
+      preferredModel: editPreferredModel.value,
+      // @ts-ignore
+      reasoningEffort: editReasoningEffort.value
     })
   } catch (error) {
     console.error('Failed to save settings:', error)
@@ -630,65 +732,168 @@ const colorMode = useColorMode({
   border-color: var(--accent);
 }
 
-/* ─── File Tabs (soul.md / user.md) ──────────────────────── */
-.file-header {
+/* ─── File Editor Tabs (soul.md / user.md) ──────────────── */
+.file-editor-group {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-subtle);
+  flex-direction: column;
+  height: 100%;
 }
 
-.file-name {
+.editor-header {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 600;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.editor-info {
+  max-width: 400px;
+}
+
+.editor-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
-.file-icon {
-  color: var(--text-secondary);
-}
-
-.file-desc {
+.editor-info .desc {
+  margin: 0;
   font-size: 13px;
   color: var(--text-secondary);
-  margin-bottom: 24px;
   line-height: 1.5;
 }
 
-.file-textarea {
-  height: 240px;
-  font-family: var(--font-mono);
-  background: var(--bg-base);
-  border: 1px solid var(--border-subtle);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+/* ─── Model Settings UI ──────────────────────────────────────── */
+.model-select-wrapper {
+  margin-top: 12px;
+  width: 240px;
 }
 
-.save-btn {
+.fetching-models {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  background: var(--bg-soft);
+  border-radius: 6px;
+  border: 1px dashed var(--border-subtle);
+}
+
+.premium-select {
+  width: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  appearance: none; /* Removes native dropdown arrow */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  outline: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.premium-select:hover {
+  background-color: var(--hover-bg);
+}
+
+.premium-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.15);
+}
+
+.premium-select option {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+.primary-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   background: var(--text-primary);
   color: var(--bg-base);
   border: none;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 1px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
 }
 
-.save-btn:disabled {
-  opacity: 0.5;
+.primary-save-btn:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.save-btn:hover:not(:disabled) {
-  opacity: 0.8;
+.primary-save-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.editor-window {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.tab-icon {
+  color: var(--accent);
+}
+
+.editor-textarea {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  min-height: 250px;
+}
+
+.editor-textarea:focus {
+  /* Subtle inner glow on focus */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
 /* ─── Modal Animations ──────────────────────────────────────── */
