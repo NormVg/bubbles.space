@@ -162,48 +162,7 @@ export const useWidgetStore = defineStore('widgets', () => {
       // Load IndexedDB state locally into Yjs
       await initLocalSync(currentUserId)
       
-      const savedWorkspaces = localStorage.getItem('bubbles_workspaces')
-      const savedUserId = localStorage.getItem('bubbles_last_user_id')
-      const hasMigrated = localStorage.getItem('bubbles_crdt_migrated')
-      
-      // Migrate old data if present and not yet migrated
-      if (!hasMigrated && savedWorkspaces && (!currentUserId || savedUserId === currentUserId)) {
-        try {
-          const parsed = JSON.parse(savedWorkspaces)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            // Clear the dummy 'main' workspace if it was just auto-created
-            if (yWorkspaces.size === 1 && yWorkspaces.has('main')) {
-              yWorkspaces.delete('main')
-            }
-            
-            for (const ws of parsed) {
-              yWorkspaces.set(ws.id, {
-                id: ws.id,
-                label: ws.label,
-                canvasState: ws.canvasState || { x: 0, y: 0, scale: 1 },
-                sortOrder: ws.sortOrder || 0
-              })
-              
-              // Migrate widgets
-              if (ws.widgets && Array.isArray(ws.widgets)) {
-                for (const w of ws.widgets) {
-                  yWidgets.set(w.id, { ...w, workspaceId: ws.id, isArchived: false })
-                }
-              }
-              if (ws.archivedWidgets && Array.isArray(ws.archivedWidgets)) {
-                for (const w of ws.archivedWidgets) {
-                  yWidgets.set(w.id, { ...w, workspaceId: ws.id, isArchived: true })
-                }
-              }
-            }
-            localStorage.setItem('bubbles_crdt_migrated', 'true')
-          }
-        } catch (e) {
-          console.error('Migration from local storage failed', e)
-        }
-      }
-      
-      // If still empty after migration attempt, bootstrap Main
+      // If empty (new user), bootstrap Main
       if (yWorkspaces.size === 0) {
         yWorkspaces.set('main', {
           id: 'main',
