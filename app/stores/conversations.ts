@@ -117,7 +117,11 @@ export const useConversationStore = defineStore('conversations', () => {
       if (serverDetail) {
         activeDetail.value = serverDetail
         activeConversationId.value = id
-        localStorage.setItem(`bubbles-conv-${id}`, JSON.stringify(serverDetail))
+        try {
+          localStorage.setItem(`bubbles-conv-${id}`, JSON.stringify(serverDetail))
+        } catch (storageError) {
+          console.warn('Could not save conversation to localStorage (quota exceeded)', storageError)
+        }
       }
     } catch (e) {
       console.error('Failed to fetch chat details from DB:', e)

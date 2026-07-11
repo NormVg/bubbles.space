@@ -467,6 +467,68 @@ export const useWidgetStore = defineStore('widgets', () => {
     workspaces.value = newWorkspaces
   }
 
+  const autoArrangeWidgets = () => {
+    if (widgets.value.length === 0) return
+    
+    // Sort widgets generally top-to-bottom, left-to-right
+    const sortedWidgets = [...widgets.value].sort((a, b) => {
+      if (Math.abs(a.y - b.y) < 100) return a.x - b.x
+      return a.y - b.y
+    })
+    
+    const padding = 40
+    const maxGridWidth = 1800 // Tighter cluster for the center
+    
+    let currentX = 0
+    let currentY = 0
+    let rowMaxHeight = 0
+    
+    // Store relative coords temporarily
+    const layout = new Map<string, { x: number, y: number }>()
+    
+    let boundingWidth = 0
+    let boundingHeight = 0
+    
+    for (const widget of sortedWidgets) {
+      if (currentX > 0 && currentX + widget.width > maxGridWidth) {
+        currentX = 0
+        currentY += rowMaxHeight + padding
+        rowMaxHeight = 0
+      }
+      
+      layout.set(widget.id, { x: currentX, y: currentY })
+      
+      currentX += widget.width + padding
+      rowMaxHeight = Math.max(rowMaxHeight, widget.height)
+      
+      boundingWidth = Math.max(boundingWidth, currentX - padding)
+      boundingHeight = Math.max(boundingHeight, currentY + widget.height)
+    }
+    
+    // Calculate centering offset based on 2560x1440 canvas
+    const canvasW = 2560
+    const canvasH = 1440
+    const offsetX = Math.max(0, (canvasW - boundingWidth) / 2)
+    const offsetY = Math.max(0, (canvasH - boundingHeight) / 2)
+    
+    const newWidgets = [...widgets.value]
+    
+    for (let i = 0; i < newWidgets.length; i++) {
+      const widget = newWidgets[i]
+      const pos = layout.get(widget.id)
+      if (pos) {
+        newWidgets[i] = {
+          ...widget,
+          x: pos.x + offsetX,
+          y: pos.y + offsetY,
+          updatedAt: Date.now()
+        }
+      }
+    }
+    
+    widgets.value = newWidgets
+  }
+
   const reorderWorkspaces = (oldIndex: number, newIndex: number) => {
     if (oldIndex === newIndex) return
     const newWorkspaces = [...workspaces.value]
@@ -512,6 +574,7 @@ export const useWidgetStore = defineStore('widgets', () => {
     findSafePosition,
     syncStatus,
     reorderWorkspaces,
+    autoArrangeWidgets,
     bringToFront,
     reloadFromServer,
     isInitializing,

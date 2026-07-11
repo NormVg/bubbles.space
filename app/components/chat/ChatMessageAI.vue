@@ -2,10 +2,7 @@
   <div class="ai-message-wrapper">
     <div class="ai-message">
       <template v-for="(group, i) in groupedParts" :key="i">
-        <details v-if="group.type === 'reasoning' && group.reasoning" class="reasoning-block">
-          <summary>Thought Process</summary>
-          <div class="reasoning-content">{{ group.reasoning }}</div>
-        </details>
+        <ReasoningViewer v-if="group.type === 'reasoning'" :content="group.reasoning" :isProcessing="group.isProcessing" />
         <MarkdownRenderer v-else-if="group.type === 'text'" :content="group.text" :isDone="isDone" />
         <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
       </template>
@@ -29,6 +26,7 @@ import type { EveMessage, EveDynamicToolPart } from 'eve/vue'
 
 import MarkdownRenderer from '../MarkdownRenderer.vue'
 import ToolCallGroup from './ToolCallGroup.vue'
+import ReasoningViewer from './ReasoningViewer.vue'
 
 const props = defineProps<{
   message: EveMessage
@@ -43,7 +41,7 @@ const emit = defineEmits<{
 type GroupedPart = 
   | { type: 'text', text: string }
   | { type: 'tool-group', tools: EveDynamicToolPart[] }
-  | { type: 'reasoning', reasoning: string }
+  | { type: 'reasoning', reasoning: string, isProcessing: boolean }
 
 const groupedParts = computed(() => {
   const groups: GroupedPart[] = []
@@ -61,7 +59,11 @@ const groupedParts = computed(() => {
       groups.push({ type: 'text', text: part.text })
     } else if ((part as any).type === 'reasoning') {
       currentToolGroup = null
-      groups.push({ type: 'reasoning', reasoning: (part as any).reasoning || (part as any).text || '' })
+      groups.push({ 
+        type: 'reasoning', 
+        reasoning: (part as any).text || '',
+        isProcessing: (part as any).state === 'streaming'
+      })
     }
   }
   return groups
@@ -116,40 +118,4 @@ const groupedParts = computed(() => {
   color: var(--text-primary);
 }
 
-/* ─── Reasoning Block ──────────────────────────────────────── */
-.reasoning-block {
-  margin-bottom: 12px;
-  background: var(--bg-soft);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.reasoning-block summary {
-  padding: 8px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  cursor: pointer;
-  user-select: none;
-  background: var(--bg-soft);
-}
-
-.reasoning-block summary:hover {
-  background: var(--hover-bg);
-  color: var(--text-primary);
-}
-
-.reasoning-content {
-  padding: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  border-top: 1px solid var(--border-subtle);
-  white-space: pre-wrap;
-  max-height: 300px;
-  overflow-y: auto;
-}
 </style>

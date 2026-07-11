@@ -4,6 +4,7 @@ import type { EveMessage } from 'eve/vue'
 import AILoader from './AILoader.vue'
 import MarkdownRenderer from './MarkdownRenderer.vue'
 import ToolCallGroup from './chat/ToolCallGroup.vue'
+import ReasoningViewer from './chat/ReasoningViewer.vue'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
 import { useChatStore } from '../stores/chat'
@@ -30,7 +31,7 @@ const latestAiMessage = computed(() => {
 type GroupedPart = 
   | { type: 'text', text: string }
   | { type: 'tool-group', tools: import('eve/vue').EveDynamicToolPart[] }
-  | { type: 'reasoning', reasoning: string }
+  | { type: 'reasoning', reasoning: string, isProcessing: boolean }
 
 const getGroupedParts = (message: EveMessage) => {
   const groups: GroupedPart[] = []
@@ -50,7 +51,11 @@ const getGroupedParts = (message: EveMessage) => {
       }
     } else if ((part as any).type === 'reasoning') {
       currentToolGroup = null
-      groups.push({ type: 'reasoning', reasoning: (part as any).reasoning || (part as any).text || '' })
+      groups.push({ 
+        type: 'reasoning', 
+        reasoning: (part as any).text || '',
+        isProcessing: (part as any).state === 'streaming'
+      })
     }
   }
   return groups
@@ -112,10 +117,7 @@ const voiceStatusLabel = computed(() => {
 
     <div v-if="latestAiMessage && voiceAgent.voiceSessionActive.value && eveAgent.status.value !== 'submitted' && !voiceAgent.isListening.value && !voiceAgent.isProcessingVoice.value" class="voice-response-content">
         <template v-for="(group, i) in getGroupedParts(latestAiMessage)" :key="i">
-          <details v-if="group.type === 'reasoning' && group.reasoning" class="reasoning-block">
-            <summary>Thought Process</summary>
-            <div class="reasoning-content">{{ group.reasoning }}</div>
-          </details>
+          <ReasoningViewer v-if="group.type === 'reasoning'" :content="group.reasoning" :isProcessing="eveAgent.status.value === 'streaming'" />
           <MarkdownRenderer v-else-if="group.type === 'text'" :content="group.text" :isDone="eveAgent.status.value !== 'streaming'" />
           <ToolCallGroup v-else-if="group.type === 'tool-group'" :tools="group.tools" />
         </template>

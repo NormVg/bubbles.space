@@ -107,7 +107,7 @@ watch(() => props.isEditing, (editing) => {
   <div class="video-widget">
     <div v-if="isEditing" class="edit-mode">
       <div class="edit-header">
-        <LucideYoutube :size="16" class="yt-icon" />
+        <LucideVideo :size="16" class="yt-icon" />
         <span>YouTube & Video Embed</span>
       </div>
       

@@ -12,9 +12,9 @@
     },
     "manifest": {
       "path": ".eve/discovery/agent-discovery-manifest.json",
-      "sha256": "6c3c9ffdda571fc423ad3886376319f70b8735c4bc08719204f5113c6e1c5719"
+      "sha256": "fb3f6d286b2003afc3b7b564ae16f028b7ee3fffae84d0a2c5a98a001322f6c0"
     },
-    "sourceGraphHash": "75e6f5139f8ade95ff7344c6d58ef670fae3d29090ade831526b5b0092738b7e",
+    "sourceGraphHash": "ca3ea8d78bbec5365e3969642be740fb53804058faf4d1a69469b45ed6442a64",
     "summary": {
       "errors": 0,
       "warnings": 0
@@ -22,7 +22,7 @@
   },
   "generator": {
     "name": "eve",
-    "version": "0.16.2"
+    "version": "0.22.5"
   },
   "kind": "eve-compile-metadata",
   "status": "ready",

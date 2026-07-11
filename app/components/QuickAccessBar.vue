@@ -54,8 +54,8 @@
       <button 
         class="qa-btn archive-btn" 
         :class="{ active: uiStore.isArchiveOpen }"
-        title="Archive" 
-        @click="uiStore.toggleArchive"
+        title="Archive (Double click to Auto-Arrange)" 
+        @click="handleArchiveClick"
       >
         <LucideArchive class="icon" :size="16" :stroke-width="1.5" />
       </button>
@@ -75,10 +75,12 @@ import { computed } from 'vue'
 import { useUIStore } from '../stores/ui'
 import { useVoiceAgent } from '../composables/useVoiceAgent'
 import { useAppAgent } from '../composables/useAppAgent'
+import { useWidgetStore } from '../stores/widgets'
 
 const uiStore = useUIStore()
 const voiceAgent = useVoiceAgent()
 const eveAgent = useAppAgent()
+const widgetStore = useWidgetStore()
 
 const voiceState = computed(() => {
   if (voiceAgent.isListening.value) return 'listening'
@@ -89,6 +91,21 @@ const voiceState = computed(() => {
   }
   return 'idle'
 })
+
+let archiveClickTimeout: any = null
+
+const handleArchiveClick = () => {
+  if (archiveClickTimeout) {
+    clearTimeout(archiveClickTimeout)
+    archiveClickTimeout = null
+    widgetStore.autoArrangeWidgets()
+  } else {
+    archiveClickTimeout = setTimeout(() => {
+      uiStore.toggleArchive()
+      archiveClickTimeout = null
+    }, 250)
+  }
+}
 
 const toggleVoice = async () => {
   if (voiceAgent.isListening.value) {
