@@ -27,7 +27,7 @@ export const useChatSubmit = (
 
     // Inject user's Soul and Identity with existing session data to ensure reliability
     const sessionRef = authClient.useSession()
-    const sessionData = sessionRef.value
+    const sessionData = sessionRef.value?.data
     
     // Fetch semantic memory (RAG)
     let semanticCtx = '';

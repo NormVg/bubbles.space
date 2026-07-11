@@ -5,11 +5,13 @@ import { getBaseUrl } from "../lib/utils";
 export default defineTool({
   description: "Search for memories using fuzzy matching on title, content, and metadata.",
   inputSchema: z.object({
-    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context. If not found, output 'MISSING'."),
     queries: z.array(z.string()).describe("An array of search queries. Provide multiple broad keywords to search for different concepts simultaneously."),
   }),
   async execute({ userId, queries }) {
-    if (!userId) throw new Error("userId is required");
+    if (!userId || userId === 'MISSING' || userId === 'undefined') {
+      return "Error: Cannot access memory because the UserID is missing from the system context. The user might not be logged in or the session is still loading.";
+    }
     if (!queries || queries.length === 0) return [];
     
     // Fetch all queries in parallel

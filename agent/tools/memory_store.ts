@@ -5,7 +5,7 @@ import { getBaseUrl } from "../lib/utils";
 export default defineTool({
   description: "Store a memory in the vault. Auto-evolution: if a memory at the same path already exists, the old one is closed (preserved as history) and the new one becomes the current truth. Exact duplicate content is silently skipped.",
   inputSchema: z.object({
-    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context."),
+    userId: z.string().describe("Extract this exactly from 'System Info (Hidden): UserID=\"...\"' in the system context. If not found, output 'MISSING'."),
     path: z.string().describe("Virtual path within the memory vault (e.g., 'identity/editor.md', 'semantic/tech-stack.md'). Must start with one of: working/, episodic/, semantic/, procedural/, identity/, hot/, archive/, system/"),
     title: z.string().describe("Human-readable title for the memory"),
     content: z.string().describe("The Markdown content of the memory"),
@@ -13,7 +13,9 @@ export default defineTool({
     metadata: z.record(z.any()).optional().describe("Optional metadata such as aliases, tags, or relations"),
   }),
   async execute({ userId, path, title, content, source, metadata }) {
-    if (!userId) throw new Error("userId is required");
+    if (!userId || userId === 'MISSING' || userId === 'undefined') {
+      return "Error: Cannot access memory because the UserID is missing from the system context. The user might not be logged in or the session is still loading.";
+    }
 
     const url = `${getBaseUrl()}/api/memory`;
     const response = await fetch(url, {
