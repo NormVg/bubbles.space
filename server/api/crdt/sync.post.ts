@@ -1,7 +1,7 @@
 import { auth } from '../../utils/auth'
 import { db } from '../../db'
 import { crdtSyncState, workspace, widget } from '../../db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import * as Y from 'yjs'
 
 export default defineEventHandler(async (event) => {
@@ -127,5 +127,3 @@ async function syncSQLTables(userId: string, ydoc: Y.Doc) {
       })
   }
 }
-
-import { sql } from 'drizzle-orm'

@@ -77,21 +77,32 @@ export function useRealtimeSync() {
               
               // Buffer updates to sync with cloud DB
               updateBuffer.push(update)
-            clearTimeout(syncTimeout)
-            syncTimeout = setTimeout(async () => {
-               if (updateBuffer.length === 0) return
-               const merged = Y.mergeUpdates(updateBuffer)
-               updateBuffer = []
-               try {
-                  const { bytesToBase64 } = await import('~/utils/base64')
-                  await $fetch('/api/crdt/sync', { 
-                     method: 'POST', 
-                     body: { update: bytesToBase64(merged) } 
-                  })
-               } catch (e) {
-                  console.error('Failed to sync to cloud:', e)
-               }
-            }, 3000)
+              
+            import('~/stores/widgets').then(({ useWidgetStore }) => {
+               const widgetStore = useWidgetStore()
+               widgetStore.syncStatus = 'syncing'
+               widgetStore.isSyncPending = true
+               
+               clearTimeout(syncTimeout)
+               syncTimeout = setTimeout(async () => {
+                  if (updateBuffer.length === 0) return
+                  const merged = Y.mergeUpdates(updateBuffer)
+                  updateBuffer = []
+                  try {
+                     const { bytesToBase64 } = await import('~/utils/base64')
+                     await $fetch('/api/crdt/sync', { 
+                        method: 'POST', 
+                        body: { update: bytesToBase64(merged) } 
+                     })
+                     widgetStore.syncStatus = 'saved'
+                     widgetStore.isSyncPending = false
+                  } catch (e) {
+                     console.error('Failed to sync to cloud:', e)
+                     widgetStore.syncStatus = 'error'
+                     widgetStore.isSyncPending = false
+                  }
+               }, 3000)
+            })
          }
          })
       })
