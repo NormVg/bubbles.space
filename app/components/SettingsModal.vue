@@ -162,30 +162,38 @@
               <div class="editor-header">
                 <div class="editor-info">
                   <h3>Model Settings</h3>
-                  <p class="desc">Configure the AI engine that powers Bubbles. Select your preferred local model.</p>
+                  <p class="desc">Configure the AI engine that powers Bubbles. Select a model or type a custom one.</p>
                 </div>
               </div>
 
               <div class="setting-item">
                 <div class="setting-info">
                   <label>Preferred Model</label>
-                  <span class="desc">Select the Ollama model for conversation</span>
+                  <span class="desc">e.g. ollama:llama3 or leave blank for default</span>
                 </div>
-                <div class="model-select-wrapper">
-                  <div class="model-select-header">
-                    <button class="refresh-btn" @click="fetchModels" :disabled="isFetchingModels" title="Refresh Models">
+                <div class="model-input-wrapper">
+                  <div class="input-group">
+                    <input 
+                      type="text" 
+                      v-model="editPreferredModel" 
+                      list="ollama-models"
+                      class="premium-input"
+                      placeholder="Default (gemma4:31b-cloud)"
+                    />
+                    <button class="refresh-icon-btn" @click="fetchModels" :disabled="isFetchingModels" title="Refresh local models">
                       <LucideRefreshCw :size="14" :class="{ 'spin-icon': isFetchingModels }" />
                     </button>
                   </div>
-                  <div v-if="isFetchingModels && availableModels.length === 0" class="fetching-models">
-                    <LucideLoader :size="14" class="spin-icon" /> Loading models...
-                  </div>
-                  <select v-else v-model="editPreferredModel" class="premium-select">
-                    <option value="">Default (gemma4:31b-cloud)</option>
+                  
+                  <datalist id="ollama-models">
                     <option v-for="m in availableModels" :key="m.name" :value="`ollama:${m.name}`">
                       {{ m.name }}
                     </option>
-                  </select>
+                  </datalist>
+                  
+                  <div v-if="isFetchingModels && availableModels.length === 0" class="fetching-models-text">
+                    <LucideLoader :size="12" class="spin-icon" /> Fetching models...
+                  </div>
                 </div>
               </div>
             </div>
@@ -745,25 +753,22 @@ const colorMode = useColorMode({
 }
 
 /* ─── Model Settings UI ──────────────────────────────────────── */
-.model-select-wrapper {
+.model-input-wrapper {
   margin-top: 12px;
-  width: 240px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.fetching-models {
+.input-group {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  color: var(--text-muted);
-  padding: 8px 12px;
-  background: var(--bg-soft);
-  border-radius: 6px;
-  border: 1px dashed var(--border-subtle);
 }
 
-.premium-select {
-  width: 100%;
+.premium-input {
+  flex: 1;
   background: var(--bg-soft);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
@@ -771,29 +776,43 @@ const colorMode = useColorMode({
   border-radius: 8px;
   font-size: 13px;
   font-family: var(--font-sans);
-  appearance: none; /* Removes native dropdown arrow */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: right 12px center;
   outline: none;
   transition: all 0.2s ease;
-  cursor: pointer;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-.premium-select:hover {
-  background-color: var(--hover-bg);
-}
-
-.premium-select:focus {
+.premium-input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.15);
 }
 
-.premium-select option {
-  background: var(--bg-base);
+.refresh-icon-btn {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.refresh-icon-btn:hover {
   color: var(--text-primary);
-  padding: 8px;
+  border-color: var(--border);
+  background: var(--hover-bg);
+}
+
+.fetching-models-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
 .primary-save-btn {
@@ -830,28 +849,6 @@ const colorMode = useColorMode({
   to { transform: rotate(360deg); }
 }
 
-.editor-window {
-  background: var(--bg-base);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.editor-tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--bg-soft);
-  border-bottom: 1px solid var(--border-subtle);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-secondary);
-}
 .editor-textarea {
   flex-grow: 1;
   background: transparent;
