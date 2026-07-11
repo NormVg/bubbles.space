@@ -1,6 +1,19 @@
 import postgres from 'postgres';
+import fs from 'node:fs';
+
+// Node 20.6+ native environment loading
+try {
+  if (fs.existsSync('.env')) {
+    process.loadEnvFile('.env');
+  }
+} catch (e) {
+  // Ignore
+}
 
 async function run() {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not set. Please set it in your .env file or environment variables.");
+  }
   const sql = postgres(process.env.DATABASE_URL);
   
   // Step 1: Create the table if it doesn't exist (initial install)
