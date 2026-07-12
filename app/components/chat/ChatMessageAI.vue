@@ -56,6 +56,13 @@ const groupedParts = computed(() => {
       currentToolGroup.push(part as EveDynamicToolPart)
     } else if (part.type === 'text') {
       currentToolGroup = null
+      
+      // Filter out stray JSON artifacts (common when LLMs hallucinate extra closing braces after tool calls)
+      const cleanText = part.text.trim()
+      if (cleanText === '}' || cleanText === '```') {
+         continue
+      }
+      
       groups.push({ type: 'text', text: part.text })
     } else if ((part as any).type === 'reasoning') {
       currentToolGroup = null
