@@ -44,11 +44,9 @@ const toggleExpand = () => {
   expanded.value = !expanded.value
 }
 
-// Auto-expand if it starts processing
+// Auto-expand/collapse based on processing state
 watch(() => props.isProcessing, (newVal) => {
-  if (newVal) {
-    expanded.value = true
-  }
+  expanded.value = newVal
 })
 
 // Auto-scroll when content changes
