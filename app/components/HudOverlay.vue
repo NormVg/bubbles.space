@@ -32,19 +32,6 @@ onMounted(() => {
       <AgentSessionProvider v-if="conversationStore.isInitialized" :key="`${conversationStore.activeConversationId}-${conversationStore.agentSessionKey}`" />
     </ClientOnly>
 
-    <!-- Bulletproof SVG Mask using viewport units to guarantee sizing regardless of SVG wrapper dimensions -->
-    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
-      <defs>
-        <mask id="hud-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100vw" height="100vh">
-          <rect class="mask-outer" />
-          <rect class="mask-inner" />
-        </mask>
-      </defs>
-    </svg>
-
-    <!-- Single 10px frame border with rounded inner/outer corners -->
-    <div class="hud-frame" />
-    
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
       <BubblesAvatar :interactive="true" />
@@ -73,22 +60,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.mask-outer {
-  x: 0;
-  y: 0;
-  width: 100vw;
-  height: 100vh;
-  fill: white;
-}
 
-.mask-inner {
-  x: 10px;
-  y: 10px;
-  width: calc(100vw - 20px);
-  height: calc(100vh - 20px);
-  rx: 16px;
-  fill: black;
-}
 
 .hud-overlay {
   position: absolute;
@@ -104,21 +76,7 @@ onMounted(() => {
   filter: var(--hud-shadow);
 }
 
-.hud-frame {
-  position: absolute;
-  inset: 0;
-  
-  /* Distinct, premium dark glass that contrasts with the canvas */
-  background: var(--glass-bg);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  pointer-events: none;
-  z-index: 10;
-  
-  /* SVG Mask provides perfect cross-browser support */
-  mask: url(#hud-mask);
-  -webkit-mask: url(#hud-mask);
-}
+
 
 .hud-avatar-wrapper {
   position: absolute;
