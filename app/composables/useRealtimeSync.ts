@@ -1,8 +1,10 @@
 import { watch } from 'vue'
 import { authClient } from '~/utils/auth-client'
-import { ydoc } from '~/utils/yjs'
+import { ydoc, idbProvider } from '~/utils/yjs'
 import * as Y from 'yjs'
 import { useConversationStore } from '~/stores/conversations'
+import { useWidgetStore } from '~/stores/widgets'
+import { bytesToBase64 } from '~/utils/base64'
 
 let worker: Worker | null = null
 const localInstanceId = crypto.randomUUID()
@@ -71,40 +73,35 @@ export function useRealtimeSync() {
 
       ydoc.on('update', (update, origin) => {
          // Prevent echo: don't send updates that originated from the worker or local DB
-         import('~/utils/yjs').then(({ idbProvider }) => {
-           if (origin !== 'worker' && origin !== 'server' && origin !== idbProvider) {
-              worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
-              
-              // Buffer updates to sync with cloud DB
-              updateBuffer.push(update)
-              
-            import('~/stores/widgets').then(({ useWidgetStore }) => {
-               const widgetStore = useWidgetStore()
-               widgetStore.syncStatus = 'syncing'
-               widgetStore.isSyncPending = true
-               
-               clearTimeout(syncTimeout)
-               syncTimeout = setTimeout(async () => {
-                  if (updateBuffer.length === 0) return
-                  const merged = Y.mergeUpdates(updateBuffer)
-                  updateBuffer = []
-                  try {
-                     const { bytesToBase64 } = await import('~/utils/base64')
-                     await $fetch('/api/crdt/sync', { 
-                        method: 'POST', 
-                        body: { update: bytesToBase64(merged) } 
-                     })
-                     widgetStore.syncStatus = 'saved'
-                     widgetStore.isSyncPending = false
-                  } catch (e) {
-                     console.error('Failed to sync to cloud:', e)
-                     widgetStore.syncStatus = 'error'
-                     widgetStore.isSyncPending = false
-                  }
-               }, 3000)
-            })
+         if (origin !== 'worker' && origin !== 'server' && origin !== idbProvider) {
+            worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
+            
+            // Buffer updates to sync with cloud DB
+            updateBuffer.push(update)
+            
+            const widgetStore = useWidgetStore()
+            widgetStore.syncStatus = 'syncing'
+            widgetStore.isSyncPending = true
+            
+            clearTimeout(syncTimeout)
+            syncTimeout = setTimeout(async () => {
+               if (updateBuffer.length === 0) return
+               const merged = Y.mergeUpdates(updateBuffer)
+               updateBuffer = []
+               try {
+                  await $fetch('/api/crdt/sync', { 
+                     method: 'POST', 
+                     body: { update: bytesToBase64(merged) } 
+                  })
+                  widgetStore.syncStatus = 'saved'
+                  widgetStore.isSyncPending = false
+               } catch (e) {
+                  console.error('Failed to sync to cloud:', e)
+                  widgetStore.syncStatus = 'error'
+                  widgetStore.isSyncPending = false
+               }
+            }, 3000)
          }
-         })
       })
 
       const tokenUrl = window.location.origin + '/api/ably-token'
