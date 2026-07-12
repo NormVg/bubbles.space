@@ -70,11 +70,26 @@ export function useRealtimeSync() {
 
       let updateBuffer: Uint8Array[] = []
       let syncTimeout: any = null
+      
+      let ablyBuffer: Uint8Array[] = []
+      let ablyTimeout: any = null
 
       ydoc.on('update', (update, origin) => {
          // Prevent echo: don't send updates that originated from the worker or local DB
          if (origin !== 'worker' && origin !== 'server' && origin !== idbProvider) {
-            worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update } })
+            
+            // Buffer updates for Ably Realtime (Throttle to 50ms / 20fps)
+            ablyBuffer.push(update)
+            if (!ablyTimeout) {
+               ablyTimeout = setTimeout(() => {
+                  if (ablyBuffer.length > 0) {
+                     const mergedAbly = Y.mergeUpdates(ablyBuffer)
+                     worker?.postMessage({ type: 'LOCAL_UPDATE', payload: { update: mergedAbly } })
+                     ablyBuffer = []
+                  }
+                  ablyTimeout = null
+               }, 50)
+            }
             
             // Buffer updates to sync with cloud DB
             updateBuffer.push(update)
