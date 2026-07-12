@@ -42,8 +42,10 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // 5. Compute what the client is missing
-  const serverUpdateForClient = Y.encodeStateAsUpdate(ydoc, clientVector)
+  // 5. Compute what the client is missing (only if they provided their state vector)
+  const serverUpdateForClient = clientVector.length > 0 
+    ? Y.encodeStateAsUpdate(ydoc, clientVector) 
+    : new Uint8Array(0)
 
   // 6. Save back to DB if client changed something
   if (clientUpdate.length > 0) {
