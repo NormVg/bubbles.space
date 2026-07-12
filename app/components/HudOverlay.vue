@@ -32,6 +32,19 @@ onMounted(() => {
       <AgentSessionProvider v-if="conversationStore.isInitialized" :key="`${conversationStore.activeConversationId}-${conversationStore.agentSessionKey}`" />
     </ClientOnly>
 
+    <!-- Bulletproof SVG Mask using percentages to guarantee sizing on window resize -->
+    <svg width="100%" height="100%" style="position: absolute; pointer-events: none; top:0; left:0;">
+      <defs>
+        <mask id="hud-mask">
+          <rect x="0" y="0" width="100%" height="100%" fill="white" />
+          <rect x="10" y="10" width="calc(100% - 20px)" height="calc(100% - 20px)" rx="16" fill="black" />
+        </mask>
+      </defs>
+    </svg>
+
+    <!-- Single 10px frame border with rounded inner/outer corners -->
+    <div class="hud-frame" />
+    
     <!-- Top Left: Avatar -->
     <div class="hud-avatar-wrapper">
       <BubblesAvatar :interactive="true" />
@@ -74,6 +87,22 @@ onMounted(() => {
   
   /* Massive drop shadow to separate HUD from Canvas */
   filter: var(--hud-shadow);
+}
+
+.hud-frame {
+  position: absolute;
+  inset: 0;
+  
+  /* Distinct, premium dark glass that contrasts with the canvas */
+  background: var(--glass-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: none;
+  z-index: 10;
+  
+  /* SVG Mask provides perfect cross-browser support */
+  mask: url(#hud-mask);
+  -webkit-mask: url(#hud-mask);
 }
 
 
