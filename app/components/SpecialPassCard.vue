@@ -178,19 +178,19 @@ html.light .pass-inner {
   border-color: rgba(0, 0, 0, 0.08);
 }
 
-/* ── Sponsor premium elevation: layered box shadow ── */
+/* ── Sponsor premium elevation: layered box shadow with gold tint ── */
 .sponsor {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 2px 8px rgba(255, 255, 255, 0.02),
-    0 8px 40px rgba(255, 255, 255, 0.03);
+    0 0 0 1px hsla(38, 80%, 50%, 0.08),
+    0 2px 8px hsla(38, 90%, 55%, 0.04),
+    0 8px 40px hsla(38, 85%, 50%, 0.06);
 }
 
 html.light .sponsor {
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    0 8px 40px rgba(0, 0, 0, 0.06);
+    0 0 0 1px hsla(38, 80%, 50%, 0.15),
+    0 2px 8px hsla(38, 90%, 55%, 0.08),
+    0 8px 40px hsla(38, 85%, 50%, 0.12);
 }
 
 /* ── Rows ── */
