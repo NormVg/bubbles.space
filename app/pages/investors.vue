@@ -180,7 +180,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Early API partnerships.
 * Access to ecosystem and platform strategy discussions.
 
-[ -> Discuss Angel Investment ](mailto:founders@tao.hq)
+[ -> Discuss Angel Investment ](mailto:thenormvg.work@gmail.com)
 
 ---
 
