@@ -27,6 +27,13 @@ const personas = [
     headline: 'World-building without limits.',
     description: 'Keep your character sheets, plot outlines, and draft chapters arranged visually. Because Bubbles has persistent memory, the AI remembers your lore and character voices across every session.',
     features: ['Semantic memory', 'Brainstorming nodes', 'Non-linear drafting']
+  },
+  {
+    id: 'humans',
+    title: 'For Humans',
+    headline: 'Think at the speed of thought.',
+    description: 'You don’t have to be a specialist to need a better way to think. Whether you are planning a trip, managing life admin, or just dumping brain clutter, the spatial canvas helps you untangle the chaos of everyday life.',
+    features: ['Visual brain dumps', 'Side-by-side comparisons', 'Infinite flexibility']
   }
 ]
 
@@ -131,6 +138,21 @@ const activePersona = ref(personas[0])
                 <div class="mock-line-sm w-full"></div>
                 <div class="mock-line-sm w-half typing-cursor"></div>
               </div>
+            </div>
+
+            <!-- Humans Visual -->
+            <div v-else-if="activePersona.id === 'humans'" class="vis-humans">
+              <div class="human-core">
+                 <div class="core-pulse"></div>
+              </div>
+              <svg class="mock-line" viewBox="0 0 200 200">
+                <path d="M 100 100 L 50 50" class="path-anim-fast" />
+                <path d="M 100 100 L 150 60" class="path-anim-fast delay" />
+                <path d="M 100 100 L 120 150" class="path-anim-fast" />
+              </svg>
+              <div class="mock-node thought t1"></div>
+              <div class="mock-node thought t2"></div>
+              <div class="mock-node thought t3"></div>
             </div>
 
           </div>
@@ -403,6 +425,15 @@ html.light .b-text { background: rgba(0,0,0,0.2); }
 .mock-title { width: 60%; height: 4px; background: var(--text-primary); margin-bottom: 4px; border-radius: 2px; }
 .typing-cursor { position: relative; }
 .typing-cursor::after { content: ''; position: absolute; right: -6px; top: -2px; width: 2px; height: 6px; background: var(--text-primary); animation: blink 1s step-end infinite; }
+
+/* ── Vis 4: Humans ── */
+.human-core { position: absolute; top: 85px; left: 85px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--text-primary); display: flex; align-items: center; justify-content: center; z-index: 2;}
+.core-pulse { width: 14px; height: 14px; background: var(--text-primary); border-radius: 50%; animation: pulse-glow 2s infinite alternate; }
+.thought { border-radius: 50%; background: rgba(255,255,255,0.05); padding: 0;}
+html.light .thought { background: rgba(0,0,0,0.05); }
+.t1 { width: 40px; height: 40px; top: 30px; left: 30px; animation: float 3s infinite ease-in-out; }
+.t2 { width: 50px; height: 50px; top: 35px; left: 125px; animation: float 4s infinite ease-in-out reverse; }
+.t3 { width: 30px; height: 30px; top: 135px; left: 105px; animation: float 3.5s infinite ease-in-out; }
 
 @keyframes float { 50% { transform: translateY(-4px); } }
 @keyframes pulse-glow { 100% { box-shadow: 0 0 16px var(--accent); transform: scale(1.1); } }
