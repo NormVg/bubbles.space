@@ -85,8 +85,9 @@ function handleMouseLeave() {
 <style scoped>
 .landing-features {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 280px);
+  gap: 16px;
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
@@ -97,19 +98,41 @@ function handleMouseLeave() {
 /* Base Node Styling */
 .feature-node {
   position: relative;
-  width: 100%;
-  height: 380px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.0) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0; /* Sharp corners */
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s ease;
+}
+
+.feature-node:hover {
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 html.light .feature-node {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.0) 100%);
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+html.light .feature-node:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Bento Placements */
+.feature-node:nth-child(1) {
+  grid-column: span 8;
+  grid-row: span 2;
+}
+
+.feature-node:nth-child(2) {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+
+.feature-node:nth-child(3) {
+  grid-column: span 4;
+  grid-row: span 1;
 }
 
 .node-visualization {
@@ -119,7 +142,7 @@ html.light .feature-node {
   align-items: center;
   justify-content: center;
   z-index: 1;
-  padding-bottom: 40px; /* Shift visual up slightly to make room for text */
+  padding-bottom: 40px;
 }
 
 .node-content {
@@ -128,6 +151,7 @@ html.light .feature-node {
   padding: 60px 32px 32px;
   background: linear-gradient(to top, rgba(24, 23, 28, 0.95) 0%, rgba(24, 23, 28, 0) 100%);
   z-index: 2;
+  text-align: left;
 }
 
 html.light .node-content {
@@ -139,7 +163,7 @@ html.light .node-content {
   font-weight: 500;
   color: var(--text-primary);
   margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
 
 .node-content p {
@@ -147,6 +171,20 @@ html.light .node-content {
   line-height: 1.6;
   color: var(--text-secondary);
   margin: 0;
+}
+
+@media (max-width: 900px) {
+  .landing-features {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .feature-node:nth-child(1),
+  .feature-node:nth-child(2),
+  .feature-node:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 380px;
+  }
 }
 
 /* ─── 1. Spatial Canvas Vis ─── */
