@@ -1,0 +1,21 @@
+# Bubbles.space LLM Data
+
+## Overview
+Bubbles.space is an infinite-canvas AI workspace designed for deep thinkers and professionals. It provides a persistent, spatial canvas where you can interact with multiple specialized AI models simultaneously, maintaining context over time.
+
+## Key Features
+- **Infinite Canvas:** A spatial interface where users can organize notes, tasks, images, and AI chats without losing context.
+- **Persistent Memory:** AI models remember previous conversations and user preferences.
+- **Multiple Models:** Access to Claude 3.5 Sonnet, GPT-4o, and other top-tier models in one unified workspace.
+- **Real-time Collaboration:** (Coming soon) Multiplayer workspaces for teams.
+
+## Pricing
+- Base Plan: $9/month
+- Pro Plan: $29/month
+- Max Plan: $79/month
+- Team Plan: $149/month
+
+## Official Links
+- Main Application: https://bubbles.taohq.org
+- Pricing: https://bubbles.taohq.org/pricing
+- Founders/Sponsors: https://bubbles.taohq.org/investors

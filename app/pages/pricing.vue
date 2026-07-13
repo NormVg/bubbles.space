@@ -65,6 +65,15 @@ const tiers = [
     highlight: false
   }
 ]
+
+useSeoMeta({
+  title: 'Pricing - Bubbles',
+  description: 'Simple, transparent pricing for your persistent AI workspace. Compare the Base, Pro, Max, and Team plans.',
+  ogTitle: 'Pricing - Bubbles',
+  ogDescription: 'Simple, transparent pricing for your persistent AI workspace. Compare the Base, Pro, Max, and Team plans.',
+  twitterTitle: 'Pricing - Bubbles',
+  twitterDescription: 'Simple, transparent pricing for your persistent AI workspace. Compare the Base, Pro, Max, and Team plans.',
+})
 </script>
 
 <template>

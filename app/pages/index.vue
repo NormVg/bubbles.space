@@ -39,6 +39,8 @@ async function loginWithGoogle() {
     </div>
     
     <div class="landing-footer">
+      <NuxtLink to="/pricing">Pricing</NuxtLink>
+      <span class="divider">•</span>
       <NuxtLink to="/investors">Investors & Sponsors</NuxtLink>
       <span class="divider">•</span>
       <NuxtLink to="/terms">Terms</NuxtLink>
