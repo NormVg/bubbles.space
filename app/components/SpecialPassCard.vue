@@ -104,15 +104,15 @@ html.light .border-glow-beam {
   );
 }
 
-/* Sponsor: slightly brighter beam */
+/* Sponsor: golden beam */
 .sponsor .border-glow-beam {
   background: conic-gradient(
     from 0deg,
     transparent 0%,
     transparent 60%,
-    rgba(255, 255, 255, 0.08) 70%,
-    rgba(255, 255, 255, 0.20) 76%,
-    rgba(255, 255, 255, 0.08) 82%,
+    hsla(38, 60%, 50%, 0.08) 70%,
+    hsla(38, 70%, 55%, 0.22) 76%,
+    hsla(38, 60%, 50%, 0.08) 82%,
     transparent 90%,
     transparent 100%
   );
