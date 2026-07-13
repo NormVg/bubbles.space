@@ -24,13 +24,24 @@ function handleMouseLeave() {
     
     <!-- Spatial Canvas Feature -->
     <div class="feature-node" @mousemove="e => handleMouseMove(e, 1)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization">
-        <div class="mini-canvas" :style="{ transform: activeCard === 1 ? `translate(${mouseX * -10}px, ${mouseY * -10}px)` : 'translate(0, 0)' }">
-          <div class="grid-bg"></div>
-          <div class="mini-node node-1"></div>
-          <div class="mini-node node-2"></div>
-          <div class="mini-node node-3"></div>
-          <div class="connection-line"></div>
+      <div class="node-visualization" :style="{ transform: activeCard === 1 ? `translate(${mouseX * -10}px, ${mouseY * -10}px)` : 'translate(0, 0)' }">
+        <div class="mock-canvas scale-up">
+          <div class="mock-node pdf-n1">
+            <div class="mock-line-sm w-half"></div>
+            <div class="mock-line-sm w-full"></div>
+            <div class="mock-line-sm w-full"></div>
+          </div>
+          <div class="mock-node pdf-n2">
+            <div class="mock-line-sm w-full"></div>
+            <div class="mock-line-sm w-half"></div>
+          </div>
+          <svg class="mock-line" viewBox="0 0 200 200">
+            <path d="M 60 40 C 120 40, 100 130, 160 130" class="path-anim" />
+            <path d="M 60 160 C 120 160, 100 130, 160 130" class="path-anim delay" />
+          </svg>
+          <div class="mock-node synth-n3">
+            <div class="pulse-orb"></div>
+          </div>
         </div>
       </div>
       <div class="node-content">
@@ -41,14 +52,23 @@ function handleMouseLeave() {
 
     <!-- Semantic Memory Feature -->
     <div class="feature-node" @mousemove="e => handleMouseMove(e, 2)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization">
-        <div class="memory-core" :style="{ transform: activeCard === 2 ? `translate(${mouseX * 10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
-          <div class="core-orb"></div>
-          <div class="ring ring-1"></div>
-          <div class="ring ring-2"></div>
-          <div class="particle p-1"></div>
-          <div class="particle p-2"></div>
-          <div class="particle p-3"></div>
+      <div class="node-visualization" :style="{ transform: activeCard === 2 ? `translate(${mouseX * 10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
+        <div class="mock-canvas">
+          <div class="mock-node outline-n1">
+            <div class="bullet-list">
+              <div class="bullet"></div><div class="b-text"></div>
+              <div class="bullet"></div><div class="b-text"></div>
+            </div>
+          </div>
+          <svg class="mock-line" viewBox="0 0 200 200">
+            <path d="M 70 70 C 100 70, 100 120, 130 120" class="path-anim" />
+          </svg>
+          <div class="mock-node draft-n2">
+            <div class="mock-title"></div>
+            <div class="mock-line-sm w-full"></div>
+            <div class="mock-line-sm w-full"></div>
+            <div class="mock-line-sm w-half typing-cursor"></div>
+          </div>
         </div>
       </div>
       <div class="node-content">
@@ -59,18 +79,23 @@ function handleMouseLeave() {
 
     <!-- Multi-Model Feature -->
     <div class="feature-node" @mousemove="e => handleMouseMove(e, 3)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization">
-        <div class="model-cluster" :style="{ transform: activeCard === 3 ? `translate(${mouseX * -10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
-          <div class="model-orb llama">
-            <div class="pulse-ring"></div>
+      <div class="node-visualization" :style="{ transform: activeCard === 3 ? `translate(${mouseX * -10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
+        <div class="mock-canvas">
+          <div class="mock-node term-n1">
+            <div class="term-header"></div>
+            <div class="typewriter">
+              <div class="code-line c1"></div>
+              <div class="code-line c2"></div>
+              <div class="code-line c3"></div>
+            </div>
           </div>
-          <div class="model-orb mistral">
-            <div class="pulse-ring delay-1"></div>
-          </div>
-          <div class="model-orb claude">
-            <div class="pulse-ring delay-2"></div>
-          </div>
-          <div class="sync-beam"></div>
+          <svg class="mock-line" viewBox="0 0 200 200">
+            <path d="M 90 100 L 140 100" class="path-anim-fast" />
+            <path d="M 140 100 L 140 50 L 160 50" class="path-anim-fast delay" />
+            <path d="M 140 100 L 140 150 L 160 150" class="path-anim-fast delay" />
+          </svg>
+          <div class="mock-node diag-n2"></div>
+          <div class="mock-node diag-n3"></div>
         </div>
       </div>
       <div class="node-content">
@@ -87,48 +112,51 @@ function handleMouseLeave() {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(2, 280px);
-  gap: 16px;
+  gap: 0;
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0;
   perspective: 1000px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+html.light .landing-features {
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
 }
 
 /* Base Node Styling */
 .feature-node {
   position: relative;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0; /* Sharp corners */
+  border-radius: 0; /* Sharp corners inside the gapless grid */
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.3s ease;
-}
-
-.feature-node:hover {
-  border-color: rgba(255, 255, 255, 0.15);
 }
 
 html.light .feature-node {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.06);
-}
-html.light .feature-node:hover {
-  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.01);
 }
 
-/* Bento Placements */
+/* Bento Placements & Internal Borders */
 .feature-node:nth-child(1) {
   grid-column: span 8;
   grid-row: span 2;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
+html.light .feature-node:nth-child(1) { border-right-color: rgba(0,0,0,0.08); }
 
 .feature-node:nth-child(2) {
   grid-column: span 4;
   grid-row: span 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
+html.light .feature-node:nth-child(2) { border-bottom-color: rgba(0,0,0,0.08); }
 
 .feature-node:nth-child(3) {
   grid-column: span 4;
@@ -143,6 +171,7 @@ html.light .feature-node:hover {
   justify-content: center;
   z-index: 1;
   padding-bottom: 40px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .node-content {
@@ -184,119 +213,39 @@ html.light .node-content {
     grid-column: span 1;
     grid-row: span 1;
     height: 380px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
+  html.light .feature-node:nth-child(1),
+  html.light .feature-node:nth-child(2),
+  html.light .feature-node:nth-child(3) {
+    border-bottom-color: rgba(0,0,0,0.08);
+  }
+  .feature-node:nth-child(3) { border-bottom: none; }
 }
 
-/* ─── 1. Spatial Canvas Vis ─── */
-.mini-canvas {
-  width: 150%;
-  height: 150%;
+/* ─── Mock Canvas Assets ─── */
+.mock-canvas {
+  width: 200px;
+  height: 200px;
   position: relative;
-  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1); /* Parallax ease */
+}
+.scale-up {
+  transform: scale(1.3);
 }
 
-.grid-bg {
+.mock-node {
   position: absolute;
-  inset: 0;
-  background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
-  background-size: 20px 20px;
-  background-position: center;
-  opacity: 0.5;
-  animation: pan-grid 20s linear infinite;
-}
-
-@keyframes pan-grid {
-  from { background-position: 0 0; }
-  to { background-position: -40px -40px; }
-}
-
-.mini-node {
-  position: absolute;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
+  background: var(--bg-base);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
   transition: all 0.3s ease;
 }
-
-.node-1 { width: 60px; height: 40px; top: 40%; left: 30%; animation: float-1 4s ease-in-out infinite; }
-.node-2 { width: 80px; height: 50px; top: 20%; left: 55%; animation: float-2 5s ease-in-out infinite reverse; }
-.node-3 { width: 40px; height: 40px; top: 60%; left: 65%; animation: float-3 4.5s ease-in-out infinite; }
-
-.connection-line {
-  position: absolute;
-  top: 45%; left: 35%;
-  width: 80px; height: 2px;
-  background: linear-gradient(90deg, var(--text-muted), transparent);
-  transform: rotate(-15deg);
-  opacity: 0.5;
-  animation: pulse-line 2s ease-in-out infinite alternate;
-}
-
-/* ─── 2. Semantic Memory Vis ─── */
-.memory-core {
-  position: relative;
-  width: 100px; height: 100px;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
-}
-
-.core-orb {
-  width: 24px; height: 24px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 20px var(--accent);
-  animation: core-pulse 2s ease-in-out infinite alternate;
-  z-index: 2;
-}
-
-.ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  opacity: 0.2;
-}
-
-.ring-1 { width: 60px; height: 60px; animation: spin 10s linear infinite; border-style: dashed; }
-.ring-2 { width: 100px; height: 100px; animation: spin 15s linear infinite reverse; }
-
-.particle {
-  position: absolute;
-  width: 4px; height: 4px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent);
-}
-
-.p-1 { animation: orbit-1 4s linear infinite; }
-.p-2 { animation: orbit-2 5s linear infinite; }
-.p-3 { animation: orbit-3 3.5s linear infinite; }
-
-/* ─── 3. Multi-Model Vis ─── */
-.model-cluster {
-  position: relative;
-  width: 120px; height: 120px;
-  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
-}
-
-.model-orb {
-  position: absolute;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: var(--bg-elevated);
-  border: 2px solid var(--text-secondary);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2;
-}
-
-.model-orb.llama { top: 20px; left: 50%; transform: translateX(-50%); border-color: #3b82f6; }
-.model-orb.mistral { bottom: 20px; left: 20px; border-color: #f59e0b; }
-.model-orb.claude { bottom: 20px; right: 20px; border-color: #10b981; }
-
-.pulse-ring {
-  position: absolute;
-  width: 100%; height: 100%;
-  border-radius: 50%;
   border: 1px solid inherit;
   animation: expand-fade 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
