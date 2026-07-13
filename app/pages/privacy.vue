@@ -1,3 +1,10 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Privacy Policy - Bubbles',
+  description: 'Privacy Policy for Bubbles.space',
+})
+</script>
+
 <template>
   <div class="legal-page">
     <div class="legal-container">

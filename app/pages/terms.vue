@@ -1,3 +1,10 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Terms of Service - Bubbles',
+  description: 'Terms of Service for Bubbles.space',
+})
+</script>
+
 <template>
   <div class="legal-page">
     <div class="legal-container">
