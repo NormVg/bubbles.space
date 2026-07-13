@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
-const containerRef = ref<HTMLElement | null>(null)
+const activeCard = ref<number | null>(null)
 const mouseX = ref(0)
 const mouseY = ref(0)
 
-function handleMouseMove(e: MouseEvent) {
-  if (!containerRef.value) return
-  const rect = containerRef.value.getBoundingClientRect()
-  // Calculate relative mouse position (-1 to 1) for parallax
+function handleMouseMove(e: MouseEvent, cardIndex: number) {
+  activeCard.value = cardIndex
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
   mouseX.value = ((e.clientX - rect.left) / rect.width) * 2 - 1
   mouseY.value = ((e.clientY - rect.top) / rect.height) * 2 - 1
+}
+
+function handleMouseLeave() {
+  activeCard.value = null
+  mouseX.value = 0
+  mouseY.value = 0
 }
 </script>
 
 <template>
-  <section class="landing-features" ref="containerRef" @mousemove="handleMouseMove">
+  <section class="landing-features">
     
     <!-- Spatial Canvas Feature -->
-    <div class="feature-node">
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 1)" @mouseleave="handleMouseLeave">
       <div class="node-visualization">
-        <div class="mini-canvas" :style="{ transform: `translate(${mouseX * -10}px, ${mouseY * -10}px)` }">
+        <div class="mini-canvas" :style="{ transform: activeCard === 1 ? `translate(${mouseX * -10}px, ${mouseY * -10}px)` : 'translate(0, 0)' }">
           <div class="grid-bg"></div>
           <div class="mini-node node-1"></div>
           <div class="mini-node node-2"></div>
@@ -35,9 +40,9 @@ function handleMouseMove(e: MouseEvent) {
     </div>
 
     <!-- Semantic Memory Feature -->
-    <div class="feature-node">
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 2)" @mouseleave="handleMouseLeave">
       <div class="node-visualization">
-        <div class="memory-core" :style="{ transform: `translate(${mouseX * 5}px, ${mouseY * 5}px)` }">
+        <div class="memory-core" :style="{ transform: activeCard === 2 ? `translate(${mouseX * 10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
           <div class="core-orb"></div>
           <div class="ring ring-1"></div>
           <div class="ring ring-2"></div>
@@ -53,9 +58,9 @@ function handleMouseMove(e: MouseEvent) {
     </div>
 
     <!-- Multi-Model Feature -->
-    <div class="feature-node">
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 3)" @mouseleave="handleMouseLeave">
       <div class="node-visualization">
-        <div class="model-cluster" :style="{ transform: `translate(${mouseX * -5}px, ${mouseY * 5}px)` }">
+        <div class="model-cluster" :style="{ transform: activeCard === 3 ? `translate(${mouseX * -10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
           <div class="model-orb llama">
             <div class="pulse-ring"></div>
           </div>
@@ -90,52 +95,56 @@ function handleMouseMove(e: MouseEvent) {
 
 /* Base Node Styling */
 .feature-node {
-  background: var(--widget-bg);
-  border: 1px solid var(--widget-border);
-  border-radius: var(--radius-xl);
+  position: relative;
+  height: 380px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.0) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 32px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--widget-shadow);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
-.node-content {
-  padding: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-html.light .node-content {
-  border-top-color: rgba(0, 0, 0, 0.04);
-}
-
-.node-content h3 {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-primary);
-  margin: 0 0 8px 0;
-}
-
-.node-content p {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin: 0;
+html.light .feature-node {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.0) 100%);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
 }
 
 .node-visualization {
-  height: 240px;
-  position: relative;
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding-bottom: 40px; /* Shift visual up slightly to make room for text */
 }
 
-html.light .node-visualization {
-  background: rgba(0, 0, 0, 0.02);
+.node-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 60px 32px 32px;
+  background: linear-gradient(to top, rgba(24, 23, 28, 0.95) 0%, rgba(24, 23, 28, 0) 100%);
+  z-index: 2;
+}
+
+html.light .node-content {
+  background: linear-gradient(to top, rgba(228, 228, 231, 0.95) 0%, rgba(228, 228, 231, 0) 100%);
+}
+
+.node-content h3 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.node-content p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 /* ─── 1. Spatial Canvas Vis ─── */
