@@ -167,12 +167,14 @@ html.light .sponsor .border-base {
   flex-direction: column;
   justify-content: space-between;
   background: var(--bg-base, #0A0A0A);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: default;
   user-select: none;
 }
 
 html.light .pass-inner {
   background: var(--bg-base, #FFFFFF);
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 /* ── Sponsor premium elevation: layered box shadow ── */
