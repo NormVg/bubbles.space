@@ -370,4 +370,30 @@ html.light .buy-button {
   background: var(--text-primary);
   color: var(--bg-base);
 }
+
+/* Pass Card Section */
+.pass-card-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.upgrade-hint {
+  margin: 0;
+}
+
+.upgrade-link {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 200ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.upgrade-link:hover {
+  color: var(--text-primary);
+}
 </style>

@@ -7,26 +7,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const passConfig = computed(() => {
-  if (props.passType === 'sponsor') {
-    return {
-      label: 'SPONSOR',
-      tagline: 'EARLY BACKER',
-      tier: 'II',
-      accentHsl: '213, 80%, 58%',
-      glowColor: 'hsla(213, 80%, 58%, 0.12)',
-      borderGradient: 'linear-gradient(135deg, hsl(213, 80%, 60%), hsl(240, 60%, 55%), hsl(213, 80%, 45%))',
-    }
-  }
-  return {
-    label: 'FOUNDER',
-    tagline: 'FOUNDING MEMBER',
-    tier: 'I',
-    accentHsl: '152, 68%, 44%',
-    glowColor: 'hsla(152, 68%, 44%, 0.12)',
-    borderGradient: 'linear-gradient(135deg, hsl(152, 68%, 50%), hsl(170, 60%, 40%), hsl(152, 68%, 36%))',
-  }
-})
+const isFounder = computed(() => props.passType === 'founder_pass')
 
 const initials = computed(() => {
   const parts = props.userName.trim().split(/\s+/)
@@ -36,45 +17,33 @@ const initials = computed(() => {
 </script>
 
 <template>
-  <div
-    class="pass-card"
-    :class="passType"
-    :style="{
-      '--accent-hsl': passConfig.accentHsl,
-      '--glow-color': passConfig.glowColor,
-    }"
-  >
-    <!-- Subtle noise texture -->
-    <div class="pass-noise" aria-hidden="true" />
+  <div class="pass-card" :class="passType">
+    <!-- Shimmer line on hover -->
+    <div class="shimmer" aria-hidden="true" />
 
-    <!-- Ambient glow -->
-    <div class="pass-glow" aria-hidden="true" />
-
-    <!-- Top row: branding + tier -->
-    <div class="pass-header">
-      <div class="pass-brand">
-        <span class="brand-dot" />
-        <span class="brand-name">BUBBLES</span>
-      </div>
-      <span class="pass-tier">{{ passConfig.tier }}</span>
+    <!-- Top: brand mark -->
+    <div class="pass-row pass-top">
+      <span class="brand-mark">BUBBLES</span>
+      <span class="pass-tier">{{ isFounder ? 'TIER I' : 'TIER II' }}</span>
     </div>
 
-    <!-- Center: pass label -->
-    <div class="pass-body">
-      <span class="pass-tagline">{{ passConfig.tagline }}</span>
-      <h3 class="pass-label">{{ passConfig.label }}'S PASS</h3>
+    <!-- Center: pass identity -->
+    <div class="pass-center">
+      <span class="pass-type-label">{{ isFounder ? 'FOUNDING MEMBER' : 'EARLY BACKER' }}</span>
+      <div class="pass-divider" />
+      <h3 class="pass-name">{{ isFounder ? "FOUNDER'S PASS" : "SPONSOR'S PASS" }}</h3>
     </div>
 
-    <!-- Bottom: user info -->
-    <div class="pass-footer">
-      <div class="user-info">
-        <div class="user-initials">{{ initials }}</div>
-        <div class="user-details">
-          <span class="user-name">{{ userName }}</span>
-          <span class="user-email">{{ userEmail }}</span>
-        </div>
+    <!-- Bottom: holder info -->
+    <div class="pass-row pass-bottom">
+      <div class="holder">
+        <span class="holder-label">HOLDER</span>
+        <span class="holder-name">{{ userName }}</span>
       </div>
-      <div class="pass-number">#{{ passType === 'sponsor' ? 'S' : 'F' }}001</div>
+      <div class="holder-id">
+        <span class="holder-label">ID</span>
+        <span class="holder-name">{{ isFounder ? '#F' : '#S' }}001</span>
+      </div>
     </div>
   </div>
 </template>
@@ -83,244 +52,123 @@ const initials = computed(() => {
 .pass-card {
   position: relative;
   width: 100%;
-  max-width: 400px;
-  aspect-ratio: 1.586 / 1; /* credit card ratio */
-  border-radius: 12px;
+  max-width: 420px;
+  aspect-ratio: 1.6 / 1;
+  border-radius: 0;
   overflow: hidden;
-  padding: 24px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   cursor: default;
   user-select: none;
 
-  /* Premium surface */
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%),
-    #141414;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.50),
-    0 8px 32px rgba(0, 0, 0, 0.35);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
-  /* Stagger entrance animations */
-  animation: card-enter 600ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  opacity: 0;
+  transition: border-color 300ms cubic-bezier(0.19, 1, 0.22, 1);
 
   contain: layout style;
 }
 
 html.light .pass-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%),
-    #F7F7F6;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    0 8px 32px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
-/* Hover lift */
 .pass-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.60),
-    0 20px 64px rgba(0, 0, 0, 0.40);
-  transition: transform 200ms cubic-bezier(0.19, 1, 0.22, 1),
-              box-shadow 200ms cubic-bezier(0.19, 1, 0.22, 1);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 html.light .pass-card:hover {
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.12),
-    0 20px 64px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
-/* Noise overlay */
-.pass-noise {
+/* ── Shimmer line ── */
+.shimmer {
   position: absolute;
-  inset: 0;
-  opacity: 0.03;
-  mix-blend-mode: overlay;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 100%
+  );
   pointer-events: none;
-  border-radius: inherit;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 128px 128px;
-}
-
-/* Ambient glow — different per tier */
-.pass-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
   opacity: 0;
-  transition: opacity 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 200ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.pass-card:hover .pass-glow {
+html.light .shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.04) 40%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 60%,
+    transparent 100%
+  );
+}
+
+.pass-card:hover .shimmer {
   opacity: 1;
+  animation: shimmer-slide 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-.founder_pass .pass-glow {
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 85%, hsla(152, 68%, 44%, 0.10) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 85% 20%, hsla(170, 60%, 40%, 0.06) 0%, transparent 60%);
+@keyframes shimmer-slide {
+  from { left: -60%; }
+  to { left: 120%; }
 }
 
-.sponsor .pass-glow {
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 85%, hsla(213, 80%, 58%, 0.10) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 85% 20%, hsla(240, 60%, 55%, 0.06) 0%, transparent 60%);
+/* ── Founder accent: very subtle warm emerald bottom-left glow ── */
+.founder_pass::before {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(ellipse at center, hsla(152, 50%, 40%, 0.04) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-/* ── Header ── */
-.pass-header {
+/* ── Sponsor accent: very subtle cool blue bottom-left glow ── */
+.sponsor::before {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(ellipse at center, hsla(213, 70%, 50%, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Rows ── */
+.pass-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   z-index: 1;
-  animation: fade-slide-in 400ms 100ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  opacity: 0;
 }
 
-.pass-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.pass-top {
+  animation: row-enter 500ms 80ms cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 
-.brand-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background: hsl(var(--accent-hsl));
-  box-shadow: 0 0 8px hsla(var(--accent-hsl), 0.4);
-  animation: dot-pulse 3s ease-in-out infinite;
+.pass-bottom {
+  animation: row-enter 500ms 250ms cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 
-.brand-name {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  color: var(--text-secondary);
-}
-
-.pass-tier {
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Body ── */
-.pass-body {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  position: relative;
-  z-index: 1;
-  animation: fade-slide-in 400ms 200ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  opacity: 0;
-}
-
-.pass-tagline {
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  color: hsl(var(--accent-hsl));
-  text-transform: uppercase;
-}
-
-.pass-label {
-  font-size: 20px;
-  font-weight: 300;
-  letter-spacing: 4px;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-html.light .pass-label {
-  font-weight: 400;
-}
-
-/* ── Footer ── */
-.pass-footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-  animation: fade-slide-in 400ms 300ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  opacity: 0;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-initials {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  color: hsl(var(--accent-hsl));
-  background: hsla(var(--accent-hsl), 0.10);
-  border: 1px solid hsla(var(--accent-hsl), 0.15);
-  flex-shrink: 0;
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.user-name {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--text-primary);
-}
-
-.user-email {
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 0.5px;
-}
-
-.pass-number {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Animations ── */
-@keyframes card-enter {
+@keyframes row-enter {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes fade-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -328,20 +176,113 @@ html.light .pass-label {
   }
 }
 
-@keyframes dot-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+/* ── Brand ── */
+.brand-mark {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+}
+
+.pass-tier {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Center ── */
+.pass-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+  animation: center-enter 600ms 150ms cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes center-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pass-type-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.pass-divider {
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html.light .pass-divider {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.pass-name {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+html.light .pass-name {
+  font-weight: 400;
+}
+
+/* ── Holder ── */
+.holder,
+.holder-id {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.holder-id {
+  text-align: right;
+}
+
+.holder-label {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.holder-name {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
 }
 
 /* ── Responsive ── */
 @media (max-width: 480px) {
   .pass-card {
-    padding: 20px;
+    padding: 24px;
+    aspect-ratio: auto;
+    min-height: 200px;
   }
 
-  .pass-label {
+  .pass-name {
     font-size: 17px;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
   }
 }
 </style>
