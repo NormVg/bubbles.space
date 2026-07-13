@@ -23,24 +23,33 @@ function handleMouseLeave() {
   <section class="landing-features">
     
     <!-- Spatial Canvas Feature -->
-    <div class="feature-node" @mousemove="e => handleMouseMove(e, 1)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization" :style="{ transform: activeCard === 1 ? `translate(${mouseX * -10}px, ${mouseY * -10}px)` : 'translate(0, 0)' }">
-        <div class="mock-canvas scale-up">
-          <div class="mock-node pdf-n1">
-            <div class="mock-line-sm w-half"></div>
-            <div class="mock-line-sm w-full"></div>
-            <div class="mock-line-sm w-full"></div>
-          </div>
-          <div class="mock-node pdf-n2">
-            <div class="mock-line-sm w-full"></div>
-            <div class="mock-line-sm w-half"></div>
-          </div>
-          <svg class="mock-line" viewBox="0 0 200 200">
-            <path d="M 60 40 C 120 40, 100 130, 160 130" class="path-anim" />
-            <path d="M 60 160 C 120 160, 100 130, 160 130" class="path-anim delay" />
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 1)" @mouseleave="handleMouseLeave" :class="{ 'is-active': activeCard === 1 }">
+      <div class="node-visualization spatial-vis" :style="{ transform: activeCard === 1 ? `translate(${mouseX * -15}px, ${mouseY * -15}px)` : 'translate(0, 0)' }">
+        <div class="spatial-grid"></div>
+        <div class="spatial-wrapper">
+          <svg class="spatial-lines" viewBox="0 0 400 400">
+            <path d="M 120 180 C 180 180, 200 240, 220 240" class="flow-line" />
+            <path d="M 140 300 C 180 300, 200 240, 220 240" class="flow-line delay-1" />
+            <path d="M 220 240 C 280 240, 300 160, 320 160" class="flow-line delay-2" />
           </svg>
-          <div class="mock-node synth-n3">
-            <div class="pulse-orb"></div>
+          
+          <div class="sp-node n-text">
+            <div class="mock-line-sm w-half"></div>
+            <div class="mock-line-sm w-full"></div>
+            <div class="mock-line-sm w-full"></div>
+          </div>
+          <div class="sp-node n-image">
+            <div class="mock-img"></div>
+            <div class="mock-line-sm w-full"></div>
+          </div>
+          <div class="sp-node n-core">
+            <div class="core-pulse"></div>
+          </div>
+          <div class="sp-node n-code">
+            <div class="code-dot"></div>
+            <div class="code-dot c-green"></div>
+            <div class="mock-line-sm code-l"></div>
+            <div class="mock-line-sm code-l indented"></div>
           </div>
         </div>
       </div>
@@ -51,23 +60,27 @@ function handleMouseLeave() {
     </div>
 
     <!-- Semantic Memory Feature -->
-    <div class="feature-node" @mousemove="e => handleMouseMove(e, 2)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization" :style="{ transform: activeCard === 2 ? `translate(${mouseX * 10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
-        <div class="mock-canvas">
-          <div class="mock-node outline-n1">
-            <div class="bullet-list">
-              <div class="bullet"></div><div class="b-text"></div>
-              <div class="bullet"></div><div class="b-text"></div>
-            </div>
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 2)" @mouseleave="handleMouseLeave" :class="{ 'is-active': activeCard === 2 }">
+      <div class="node-visualization memory-vis">
+        <div class="memory-wrapper">
+          <div class="mem-core">
+            <div class="mem-ring r1"></div>
+            <div class="mem-ring r2"></div>
+            <div class="mem-center"></div>
           </div>
-          <svg class="mock-line" viewBox="0 0 200 200">
-            <path d="M 70 70 C 100 70, 100 120, 130 120" class="path-anim" />
+          
+          <svg class="mem-lines" viewBox="0 0 200 200">
+            <path d="M 100 160 C 100 120, 100 80, 100 60" class="mem-flow" />
           </svg>
-          <div class="mock-node draft-n2">
-            <div class="mock-title"></div>
-            <div class="mock-line-sm w-full"></div>
-            <div class="mock-line-sm w-full"></div>
-            <div class="mock-line-sm w-half typing-cursor"></div>
+          
+          <div class="mem-particles">
+             <div class="m-particle p1"></div>
+             <div class="m-particle p2"></div>
+             <div class="m-particle p3"></div>
+          </div>
+
+          <div class="mem-input">
+            <div class="mock-line-sm mem-type typing-fx"></div>
           </div>
         </div>
       </div>
@@ -78,29 +91,44 @@ function handleMouseLeave() {
     </div>
 
     <!-- Multi-Model Feature -->
-    <div class="feature-node" @mousemove="e => handleMouseMove(e, 3)" @mouseleave="handleMouseLeave">
-      <div class="node-visualization" :style="{ transform: activeCard === 3 ? `translate(${mouseX * -10}px, ${mouseY * 10}px)` : 'translate(0, 0)' }">
-        <div class="mock-canvas">
-          <div class="mock-node term-n1">
-            <div class="term-header"></div>
-            <div class="typewriter">
-              <div class="code-line c1"></div>
-              <div class="code-line c2"></div>
-              <div class="code-line c3"></div>
+    <div class="feature-node" @mousemove="e => handleMouseMove(e, 3)" @mouseleave="handleMouseLeave" :class="{ 'is-active': activeCard === 3 }">
+      <div class="node-visualization model-vis">
+        <div class="model-wrapper">
+          <div class="mod-prompt">
+            <div class="mod-dot"></div>
+            <div class="mock-line-sm w-full"></div>
+          </div>
+          
+          <svg class="mod-lines" viewBox="0 0 200 200">
+            <path d="M 60 100 C 90 100, 100 25, 130 25" class="mod-flow" />
+            <path d="M 60 100 C 90 100, 100 75, 130 75" class="mod-flow" />
+            <path d="M 60 100 C 90 100, 100 125, 130 125" class="mod-flow" />
+            <path d="M 60 100 C 90 100, 100 175, 130 175" class="mod-flow" />
+          </svg>
+
+          <div class="mod-nodes">
+            <div class="m-node qwen">
+              <span class="m-label">Qwen</span>
+              <div class="m-out"><div class="mock-line-sm"></div></div>
+            </div>
+            <div class="m-node glm">
+              <span class="m-label">GLM</span>
+              <div class="m-out"><div class="mock-line-sm w-half"></div></div>
+            </div>
+            <div class="m-node minimax">
+              <span class="m-label">MiniMax</span>
+              <div class="m-out"><div class="mock-line-sm"></div></div>
+            </div>
+            <div class="m-node gemma">
+              <span class="m-label">Gemma</span>
+              <div class="m-out"><div class="mock-line-sm w-half"></div></div>
             </div>
           </div>
-          <svg class="mock-line" viewBox="0 0 200 200">
-            <path d="M 90 100 L 140 100" class="path-anim-fast" />
-            <path d="M 140 100 L 140 50 L 160 50" class="path-anim-fast delay" />
-            <path d="M 140 100 L 140 150 L 160 150" class="path-anim-fast delay" />
-          </svg>
-          <div class="mock-node diag-n2"></div>
-          <div class="mock-node diag-n3"></div>
         </div>
       </div>
       <div class="node-content">
         <h3>Multi-Model</h3>
-        <p>Llama 3, Mistral, and other leading open-source models working side-by-side.</p>
+        <p>Qwen, GLM, MiniMax, Gemma and other leading models working side-by-side.</p>
       </div>
     </div>
 
@@ -224,77 +252,156 @@ html.light .node-content {
   .feature-node:nth-child(3) { border-bottom: none; }
 }
 
-/* ─── Mock Canvas Assets ─── */
-.mock-canvas {
-  width: 200px;
-  height: 200px;
+/* ─── 1. Custom Spatial Canvas ─── */
+.spatial-vis { perspective: 800px; }
+.spatial-grid {
+  position: absolute;
+  inset: -100%;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 40px 40px;
+  transform: rotateX(60deg) translateY(-100px) translateZ(-200px);
+  opacity: 0.5;
+}
+html.light .spatial-grid { background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 0); }
+.spatial-wrapper {
+  width: 400px; height: 400px;
   position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.scale-up {
-  transform: scale(1.3);
-}
-
-.mock-node {
+.sp-node {
   position: absolute;
   background: var(--bg-base);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  gap: 4px;
-  transition: all 0.3s ease;
+  gap: 6px;
+  transition: all 0.4s ease;
 }
-html.light .mock-node {
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+html.light .sp-node { border-color: rgba(0, 0, 0, 0.1); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05); }
+
+.n-text { width: 80px; top: 130px; left: 80px; transform: translateZ(20px); }
+.n-image { width: 100px; top: 250px; left: 100px; transform: translateZ(40px); }
+.n-core { width: 32px; height: 32px; top: 220px; left: 220px; border-radius: 50%; padding: 0; align-items: center; justify-content: center; border-color: var(--accent); transform: translateZ(60px); }
+.n-code { width: 90px; top: 120px; left: 260px; transform: translateZ(30px); }
+
+.mock-img { width: 100%; height: 40px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+.code-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); position: absolute; top: 8px; }
+.code-dot.c-green { left: 20px; background: var(--success); }
+.code-l { margin-top: 14px; }
+.indented { margin-left: 8px; width: 60%; }
+
+.core-pulse { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent); animation: pulse 2s infinite alternate; }
+
+.spatial-lines { position: absolute; inset: 0; width: 100%; height: 100%; transform: translateZ(10px); }
+.flow-line { fill: none; stroke: rgba(255, 255, 255, 0.2); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 6 12; animation: flow 2s linear infinite; }
+html.light .flow-line { stroke: rgba(0,0,0,0.2); }
+.delay-1 { animation-delay: 0.5s; }
+.delay-2 { animation-delay: 1s; }
+
+.is-active .n-text { transform: translateZ(40px) scale(1.05); border-color: rgba(255,255,255,0.3); }
+.is-active .n-image { transform: translateZ(60px) scale(1.05); border-color: rgba(255,255,255,0.3); }
+.is-active .n-code { transform: translateZ(50px) scale(1.05); border-color: rgba(255,255,255,0.3); }
+.is-active .flow-line { stroke: var(--accent); animation: flow 1s linear infinite; }
+
+/* ─── 2. Custom Semantic Memory ─── */
+.memory-wrapper { width: 200px; height: 200px; position: relative; }
+.mem-core {
+  position: absolute; top: 40px; left: 80px;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
 }
+.mem-center { width: 16px; height: 16px; background: var(--text-primary); border-radius: 50%; box-shadow: 0 0 20px var(--text-primary); transition: all 0.3s ease; }
+.mem-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px dashed rgba(255,255,255,0.3);
+  animation: spin 10s linear infinite;
+}
+html.light .mem-ring { border-color: rgba(0,0,0,0.3); }
+.r1 { width: 50px; height: 50px; }
+.r2 { width: 80px; height: 80px; animation-direction: reverse; animation-duration: 15s; }
+
+.mem-input {
+  position: absolute; bottom: 30px; left: 40px;
+  width: 120px; height: 32px;
+  background: var(--bg-base); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+  display: flex; align-items: center; padding: 0 12px;
+}
+html.light .mem-input { border-color: rgba(0,0,0,0.1); }
+.mem-type { width: 0; background: var(--text-primary); height: 4px; border-radius: 2px; }
+
+.mem-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mem-flow { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 2; stroke-dasharray: 4 4; }
+html.light .mem-flow { stroke: rgba(0,0,0,0.1); }
+
+.mem-particles { position: absolute; inset: 0; }
+.m-particle { position: absolute; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; opacity: 0; }
+.p1 { bottom: 60px; left: 100px; }
+.p2 { bottom: 80px; left: 90px; }
+.p3 { bottom: 100px; left: 110px; }
+
+.is-active .mem-type { animation: typing 2s steps(20) infinite; }
+.is-active .mem-center { transform: scale(1.3); box-shadow: 0 0 30px var(--accent); background: var(--accent); }
+.is-active .mem-ring { border-color: var(--accent); animation-duration: 4s; }
+.is-active .mem-flow { stroke: var(--accent); animation: flow 1s linear infinite; }
+.is-active .p1 { animation: float-up 1.5s ease-in infinite; }
+.is-active .p2 { animation: float-up 1.5s ease-in infinite 0.5s; }
+.is-active .p3 { animation: float-up 1.5s ease-in infinite 1s; }
+
+/* ─── 3. Custom Multi-Model ─── */
+.model-wrapper { width: 200px; height: 200px; position: relative; }
+.mod-prompt {
+  position: absolute; top: 85px; left: 20px;
+  width: 50px; height: 30px;
+  background: var(--bg-base); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+  display: flex; align-items: center; padding: 0 8px; gap: 6px;
+}
+html.light .mod-prompt { border-color: rgba(0,0,0,0.1); }
+.mod-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); }
+
+.mod-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mod-flow { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 2; stroke-linecap: round; }
+html.light .mod-flow { stroke: rgba(0,0,0,0.1); }
+
+.mod-nodes { position: absolute; inset: 0; }
+.m-node {
+  position: absolute; left: 130px;
+  display: flex; align-items: center; gap: 8px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.m-label { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
+.m-out { width: 40px; height: 24px; background: var(--bg-base); border: 1px solid; border-radius: 4px; display: flex; align-items: center; padding: 0 6px; }
+
+.qwen { top: 13px; }
+.qwen .m-out { border-color: #3B82F6; }
+.glm { top: 63px; }
+.glm .m-out { border-color: #F59E0B; }
+.minimax { top: 113px; }
+.minimax .m-out { border-color: #10B981; }
+.gemma { top: 163px; }
+.gemma .m-out { border-color: #8B5CF6; }
+
+.is-active .mod-flow { stroke-dasharray: 6 12; animation: flow 1s linear infinite; }
+.is-active .m-label { opacity: 1; transform: translateX(0); }
+.is-active .qwen { transform: scale(1.1) translateX(5px); }
+.is-active .glm { transform: scale(1.1) translateX(5px); transition-delay: 0.1s; }
+.is-active .minimax { transform: scale(1.1) translateX(5px); transition-delay: 0.2s; }
+.is-active .gemma { transform: scale(1.1) translateX(5px); transition-delay: 0.3s; }
+.is-active .m-out .mock-line-sm { animation: type 1s steps(5) infinite; }
+
+/* ─── Global Keyframes ─── */
+@keyframes flow { to { stroke-dashoffset: -24; } }
+@keyframes pulse { 100% { transform: scale(1.3); opacity: 0.8; } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes typing { 0% { width: 0; } 50%, 100% { width: 80%; } }
+@keyframes type { 0% { width: 0; opacity: 1; } 50%, 100% { opacity: 1; } }
+@keyframes float-up { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-40px) scale(0.5); opacity: 0; } }
 
 .mock-line-sm { height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; }
 html.light .mock-line-sm { background: rgba(0,0,0,0.2); }
 .w-full { width: 100%; }
 .w-half { width: 50%; }
-
-.mock-line { position: absolute; inset: 0; width: 100%; height: 100%; }
-.mock-line path { fill: none; stroke: rgba(255, 255, 255, 0.15); stroke-width: 1.5; stroke-linecap: round; }
-html.light .mock-line path { stroke: rgba(0, 0, 0, 0.15); }
-.path-anim { stroke-dasharray: 4 8; animation: flow-line 2s linear infinite; }
-.path-anim-fast { stroke-dasharray: 4 8; animation: flow-line 1s linear infinite; }
-.delay { animation-delay: 1s; }
-
-@keyframes flow-line { to { stroke-dashoffset: -24; } }
-@keyframes float { 50% { transform: translateY(-4px); } }
-@keyframes pulse-glow { 100% { box-shadow: 0 0 16px var(--accent); transform: scale(1.1); } }
-@keyframes blink { 50% { opacity: 0; } }
-@keyframes type { 0% { width: 0; opacity: 1; } 50%, 100% { opacity: 1; } }
-
-/* Spatial Canvas */
-.pdf-n1 { width: 50px; height: 60px; top: 10px; left: 10px; animation: float 4s ease-in-out infinite; }
-.pdf-n2 { width: 50px; height: 60px; top: 130px; left: 10px; animation: float 5s ease-in-out infinite reverse; }
-.synth-n3 { width: 40px; height: 40px; top: 110px; left: 140px; border-radius: 50%; padding: 0; align-items: center; justify-content: center; border-color: var(--accent); }
-.pulse-orb { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; animation: pulse-glow 2s infinite alternate; }
-
-/* Semantic Memory */
-.outline-n1 { width: 60px; height: 70px; top: 35px; left: 10px; }
-.bullet-list { display: grid; grid-template-columns: 8px 1fr; gap: 4px; align-items: center; margin-top: 4px; }
-.bullet { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.b-text { height: 2px; background: rgba(255,255,255,0.2); width: 100%; }
-html.light .b-text { background: rgba(0,0,0,0.2); }
-.draft-n2 { width: 70px; height: 90px; top: 75px; left: 120px; }
-.mock-title { width: 60%; height: 4px; background: var(--text-primary); margin-bottom: 4px; border-radius: 2px; }
-.typing-cursor { position: relative; }
-.typing-cursor::after { content: ''; position: absolute; right: -6px; top: -2px; width: 2px; height: 6px; background: var(--text-primary); animation: blink 1s step-end infinite; }
-
-/* Multi-Model */
-.term-n1 { width: 80px; height: 70px; top: 65px; left: 10px; background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.2); padding: 0; overflow: hidden;}
-html.light .term-n1 { background: rgba(0,0,0,0.8); }
-.term-header { height: 12px; background: rgba(255,255,255,0.1); width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.typewriter { padding: 6px; display: flex; flex-direction: column; gap: 4px; }
-.code-line { height: 2px; background: var(--success); border-radius: 2px; }
-.c1 { width: 80%; animation: type 3s steps(10) infinite; }
-.c2 { width: 60%; animation: type 3s steps(10) infinite 1s; opacity: 0; animation-fill-mode: forwards; }
-.c3 { width: 90%; background: var(--danger); animation: type 3s steps(10) infinite 2s; opacity: 0; animation-fill-mode: forwards; }
-.diag-n2 { width: 40px; height: 30px; top: 35px; left: 150px; background: var(--bg-muted); }
-.diag-n3 { width: 40px; height: 30px; top: 135px; left: 150px; background: var(--bg-muted); }
 </style>
