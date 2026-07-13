@@ -241,8 +241,15 @@ html.light .loader-track {
 
 .marketing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 40px;
+}
+
+.feature-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .feature-card h3 {
@@ -257,6 +264,13 @@ html.light .loader-track {
   line-height: 1.6;
   color: var(--text-secondary);
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .marketing-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
 }
 
 .manifesto-cta-section {
