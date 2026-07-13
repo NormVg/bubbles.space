@@ -17,135 +17,155 @@ const initials = computed(() => {
 </script>
 
 <template>
-  <div class="pass-card" :class="passType">
-    <!-- Shimmer line on hover -->
-    <div class="shimmer" aria-hidden="true" />
-
-    <!-- Top: brand mark -->
-    <div class="pass-row pass-top">
-      <span class="brand-mark">BUBBLES</span>
-      <span class="pass-tier">{{ isFounder ? 'TIER I' : 'TIER II' }}</span>
+  <div class="pass-wrapper" :class="passType">
+    <!-- Rotating border glow -->
+    <div class="border-glow" aria-hidden="true">
+      <div class="border-glow-beam" />
     </div>
 
-    <!-- Center: pass identity -->
-    <div class="pass-center">
-      <span class="pass-type-label">{{ isFounder ? 'FOUNDING MEMBER' : 'EARLY BACKER' }}</span>
-      <div class="pass-divider" />
-      <h3 class="pass-name">{{ isFounder ? "FOUNDER'S PASS" : "SPONSOR'S PASS" }}</h3>
-    </div>
+    <!-- Static faint border underneath -->
+    <div class="border-base" aria-hidden="true" />
 
-    <!-- Bottom: holder info -->
-    <div class="pass-row pass-bottom">
-      <div class="holder">
-        <span class="holder-label">HOLDER</span>
-        <span class="holder-name">{{ userName }}</span>
+    <!-- Card content -->
+    <div class="pass-inner">
+      <!-- Top: brand mark -->
+      <div class="pass-row pass-top">
+        <div class="brand-group">
+          <span class="brand-dot" />
+          <span class="brand-mark">BUBBLES</span>
+        </div>
+        <span class="pass-tier">{{ isFounder ? 'TIER I' : 'TIER II' }}</span>
       </div>
-      <div class="holder-id">
-        <span class="holder-label">ID</span>
-        <span class="holder-name">{{ isFounder ? '#F' : '#S' }}001</span>
+
+      <!-- Center: pass identity -->
+      <div class="pass-center">
+        <span class="pass-type-label">{{ isFounder ? 'FOUNDING MEMBER' : 'EARLY BACKER · SPONSOR' }}</span>
+        <div class="pass-divider" />
+        <h3 class="pass-name">{{ isFounder ? "FOUNDER'S PASS" : "SPONSOR'S PASS" }}</h3>
+        <span class="pass-status">VERIFIED · 2026</span>
+      </div>
+
+      <!-- Bottom: holder info -->
+      <div class="pass-row pass-bottom">
+        <div class="holder">
+          <span class="holder-label">HOLDER</span>
+          <span class="holder-name">{{ userName }}</span>
+        </div>
+        <div class="holder-id">
+          <span class="holder-label">PASS</span>
+          <span class="holder-name">{{ isFounder ? '#F' : '#S' }}001</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.pass-card {
+/* ── Wrapper: positions the border glow behind the card ── */
+.pass-wrapper {
   position: relative;
   width: 100%;
   max-width: 420px;
-  aspect-ratio: 1.6 / 1;
-  border-radius: 0;
+  contain: layout style;
+}
+
+/* ── Rotating border glow ── */
+.border-glow {
+  position: absolute;
+  inset: -1px;
   overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.border-glow-beam {
+  position: absolute;
+  inset: -50%;
+  animation: border-rotate 6s linear infinite;
+}
+
+/* Founder: subtle emerald sweep */
+.founder_pass .border-glow-beam {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 60%,
+    hsla(152, 60%, 45%, 0.25) 72%,
+    hsla(152, 60%, 45%, 0.45) 78%,
+    hsla(170, 50%, 40%, 0.25) 84%,
+    transparent 92%,
+    transparent 100%
+  );
+}
+
+/* Sponsor: richer dual-tone blue-violet sweep with more presence */
+.sponsor .border-glow-beam {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 50%,
+    hsla(220, 70%, 55%, 0.3) 60%,
+    hsla(250, 60%, 60%, 0.55) 70%,
+    hsla(280, 50%, 55%, 0.55) 78%,
+    hsla(220, 70%, 55%, 0.3) 86%,
+    transparent 94%,
+    transparent 100%
+  );
+}
+
+@keyframes border-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Static faint border base ── */
+.border-base {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  z-index: 1;
+}
+
+html.light .border-base {
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Sponsor gets a slightly more visible base border */
+.sponsor .border-base {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.light .sponsor .border-base {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ── Inner card content ── */
+.pass-inner {
+  position: relative;
+  z-index: 2;
+  aspect-ratio: 1.6 / 1;
   padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: var(--bg-base, #0A0A0A);
   cursor: default;
   user-select: none;
-
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  transition: border-color 300ms cubic-bezier(0.19, 1, 0.22, 1);
-
-  contain: layout style;
 }
 
-html.light .pass-card {
-  border-color: rgba(0, 0, 0, 0.06);
+html.light .pass-inner {
+  background: var(--bg-base, #FFFFFF);
 }
 
-.pass-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-html.light .pass-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-/* ── Shimmer line ── */
-.shimmer {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 40%,
-    rgba(255, 255, 255, 0.14) 50%,
-    rgba(255, 255, 255, 0.08) 60%,
-    transparent 100%
-  );
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 200ms cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-html.light .shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.04) 40%,
-    rgba(0, 0, 0, 0.08) 50%,
-    rgba(0, 0, 0, 0.04) 60%,
-    transparent 100%
-  );
-}
-
-.pass-card:hover .shimmer {
-  opacity: 1;
-  animation: shimmer-slide 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-}
-
-@keyframes shimmer-slide {
-  from { left: -60%; }
-  to { left: 120%; }
-}
-
-/* ── Founder accent: very subtle warm emerald bottom-left glow ── */
-.founder_pass::before {
+/* Sponsor: very subtle inner ambient glow */
+.sponsor .pass-inner::after {
   content: '';
   position: absolute;
-  bottom: -20%;
-  left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(ellipse at center, hsla(152, 50%, 40%, 0.04) 0%, transparent 70%);
+  inset: 0;
   pointer-events: none;
-}
-
-/* ── Sponsor accent: very subtle cool blue bottom-left glow ── */
-.sponsor::before {
-  content: '';
-  position: absolute;
-  bottom: -20%;
-  left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(ellipse at center, hsla(213, 70%, 50%, 0.04) 0%, transparent 70%);
-  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 100%, hsla(250, 50%, 55%, 0.03) 0%, transparent 60%);
 }
 
 /* ── Rows ── */
@@ -162,21 +182,43 @@ html.light .shimmer {
 }
 
 .pass-bottom {
-  animation: row-enter 500ms 250ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation: row-enter 500ms 300ms cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 
 @keyframes row-enter {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Brand ── */
+/* ── Brand group ── */
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  animation: dot-breathe 3s ease-in-out infinite;
+}
+
+.founder_pass .brand-dot {
+  background: hsl(152, 60%, 45%);
+  box-shadow: 0 0 6px hsla(152, 60%, 45%, 0.4);
+}
+
+.sponsor .brand-dot {
+  background: hsl(250, 55%, 62%);
+  box-shadow: 0 0 8px hsla(250, 55%, 62%, 0.5);
+}
+
+@keyframes dot-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 .brand-mark {
   font-size: 10px;
   font-weight: 400;
@@ -197,39 +239,52 @@ html.light .shimmer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   position: relative;
   z-index: 1;
-  animation: center-enter 600ms 150ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation: center-enter 600ms 180ms cubic-bezier(0.19, 1, 0.22, 1) both;
 }
 
 @keyframes center-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .pass-type-label {
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 3px;
-  color: var(--text-muted);
   text-transform: uppercase;
+}
+
+.founder_pass .pass-type-label {
+  color: var(--text-muted);
+}
+
+.sponsor .pass-type-label {
+  color: hsla(250, 45%, 65%, 0.7);
 }
 
 .pass-divider {
   width: 24px;
   height: 1px;
+  margin: 4px 0;
+}
+
+.founder_pass .pass-divider {
   background: rgba(255, 255, 255, 0.08);
 }
 
-html.light .pass-divider {
+.sponsor .pass-divider {
+  background: hsla(250, 45%, 60%, 0.15);
+}
+
+html.light .founder_pass .pass-divider {
   background: rgba(0, 0, 0, 0.08);
+}
+
+html.light .sponsor .pass-divider {
+  background: hsla(250, 45%, 50%, 0.12);
 }
 
 .pass-name {
@@ -243,6 +298,26 @@ html.light .pass-divider {
 
 html.light .pass-name {
   font-weight: 400;
+}
+
+/* Sponsor name gets a subtle glow */
+.sponsor .pass-name {
+  text-shadow: 0 0 24px hsla(250, 50%, 60%, 0.08);
+}
+
+.pass-status {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  margin-top: 4px;
+}
+
+.founder_pass .pass-status {
+  color: hsla(152, 40%, 50%, 0.5);
+}
+
+.sponsor .pass-status {
+  color: hsla(250, 45%, 65%, 0.5);
 }
 
 /* ── Holder ── */
@@ -274,7 +349,7 @@ html.light .pass-name {
 
 /* ── Responsive ── */
 @media (max-width: 480px) {
-  .pass-card {
+  .pass-inner {
     padding: 24px;
     aspect-ratio: auto;
     min-height: 200px;
