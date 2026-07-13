@@ -2,11 +2,23 @@
 import { authClient } from '~/utils/auth-client'
 import { ref } from 'vue'
 import BubblesAvatar from '~/components/BubblesAvatar.vue'
+import SpecialPassCard from '~/components/SpecialPassCard.vue'
 
 const isLoading = ref(false)
 const sessionStore = authClient.useSession()
 const session = computed(() => sessionStore.value?.data?.session)
 const user = computed(() => sessionStore.value?.data?.user)
+
+const specialPass = ref<string | null>(null)
+
+onMounted(async () => {
+  try {
+    const data = await $fetch<{ specialPass: string | null }>('/api/user/pass')
+    specialPass.value = data.specialPass
+  } catch {
+    // User might not be fully authenticated yet, or endpoint error — silently ignore
+  }
+})
 
 async function signOut() {
   isLoading.value = true
@@ -39,7 +51,22 @@ async function signOut() {
     </div>
 
     <div class="scroll-content">
-      <div class="founders-section">
+      <!-- Show the pass card if user has one -->
+      <ClientOnly>
+        <div v-if="specialPass && user" class="pass-card-section">
+          <SpecialPassCard
+            :passType="(specialPass as 'founder_pass' | 'sponsor')"
+            :userName="user.name || 'Bubbles User'"
+            :userEmail="user.email"
+          />
+          <p v-if="specialPass === 'founder_pass'" class="upgrade-hint">
+            <NuxtLink to="/api/checkout/sponsor" class="upgrade-link">Upgrade to Sponsor →</NuxtLink>
+          </p>
+        </div>
+      </ClientOnly>
+
+      <!-- Show purchase CTA only if no pass -->
+      <div v-if="!specialPass" class="founders-section">
         <div class="founders-header">
           <div class="founders-badge">[ EARLY ADOPTER ]</div>
           <h2>Unlock Instant Access</h2>
@@ -52,7 +79,7 @@ async function signOut() {
           <li><span class="bullet">•</span> <NuxtLink to="/investors" class="manifesto-link">Read full manifesto</NuxtLink></li>
         </ul>
 
-        <a href="#" class="buy-button">GET FOUNDER'S PASS — $49</a>
+        <a href="/api/checkout/founder-pass" class="buy-button">GET FOUNDER'S PASS — $100</a>
       </div>
       
       
