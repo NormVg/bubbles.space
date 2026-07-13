@@ -22,7 +22,7 @@ async function loginWithGoogle() {
     <div class="hero-section">
       <div class="landing-content">
         <div class="avatar-wrapper">
-          <AgentAvatar :state="avatarState" />
+          <BubblesAvatar :interactive="true" :trackCursor="true" />
         </div>
         
         <div class="logo-wrapper">
@@ -73,7 +73,7 @@ async function loginWithGoogle() {
         <NuxtLink to="/terms">Terms</NuxtLink>
         <NuxtLink to="/privacy">Privacy</NuxtLink>
       </div>
-      <p class="copyright">© 2026 Tao HQ. All rights reserved.</p>
+      <p class="copyright">© 2026 TheAlphaOnes. All rights reserved.</p>
     </footer>
   </div>
 </template>
