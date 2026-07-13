@@ -187,7 +187,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 # COMPANY SNAPSHOT
 
 **Company:** Bubbles
-**Stage:** Pre-Seed
+**Stage:** Bootstrapped
 **Category:** Personal AI & Agentic Computing
 **Vision:** Build the personal operating system for the AI era.
 **Approach:** Ecosystem of agent-first applications powered by a shared intelligence layer.
@@ -216,7 +216,7 @@ const toc = computed(() => {
 // Parse markdown just enough for TOC navigation and links
 const parsedManifesto = computed(() => {
   let parsed = manifestoContent
-  
+
   // 1. TOC Headings (H2)
   for (const item of toc.value) {
     const regex = new RegExp(`^# ${item.title}$`, 'gm')
@@ -240,7 +240,7 @@ const scrollTo = (id: string) => {
 <template>
   <div class="legal-page">
     <div class="layout-container">
-      
+
       <!-- Sidebar TOC -->
       <aside class="sidebar">
         <NuxtLink to="/" class="back-link">

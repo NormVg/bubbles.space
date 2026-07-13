@@ -126,7 +126,9 @@ const tiers = [
 
 <style scoped>
 .pricing-page {
-  min-height: 100vh;
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
   width: 100%;
   padding: 120px 24px 80px;
   display: flex;
