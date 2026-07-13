@@ -44,7 +44,7 @@ async function loginWithGoogle() {
     <section class="marketing-section">
       <div class="marketing-grid">
         <div class="feature-card">
-          <h3>Infinite Canvas</h3>
+          <h3>Spatial Canvas</h3>
           <p>Spread your thoughts out spatially. No more scrolling up to find context.</p>
         </div>
         <div class="feature-card">
@@ -53,7 +53,7 @@ async function loginWithGoogle() {
         </div>
         <div class="feature-card">
           <h3>Multi-Model</h3>
-          <p>GPT-4o, Claude 3.5, and more, working side-by-side in one space.</p>
+          <p>Llama 3, Mistral, and other leading open-source models working side-by-side.</p>
         </div>
       </div>
       <div class="manifesto-cta-section">

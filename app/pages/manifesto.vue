@@ -33,7 +33,7 @@ useSeoMeta({
           <p>If you tell an assistant your company's brand voice on Monday, you shouldn't have to remind it on Friday. Bubbles uses semantic memory to remember who you are, what you care about, and the context of your projects across every session and every canvas.</p>
 
           <h2>A Workspace, Not a Chatbot.</h2>
-          <p>We are building an environment where AI models act as collaborators in a shared physical space. Where you can ask Claude to analyze a PDF in one corner, while GPT-4 drafts an email based on that analysis in another.</p>
+          <p>We are building an environment where AI models act as collaborators in a shared physical space. Where you can ask Llama 3 to analyze a PDF in one corner, while Mistral drafts an email based on that analysis in another.</p>
 
           <p class="conclusion">Welcome to the spatial era of computing. Welcome to Bubbles.</p>
         </section>

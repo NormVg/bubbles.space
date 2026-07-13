@@ -6,7 +6,7 @@ Stop managing apps. Open one space, stay there, and let AI help you get things d
 
 ## 🌟 Core Features
 
-- **Infinite Spatial Canvas**: An interactive, zoomable, and pan-able workspace to organize your thoughts and data visually.
+- **Spatial Canvas**: An interactive, zoomable, and pan-able workspace to organize your thoughts and data visually.
 - **Dynamic Widget System**: A modular widget ecosystem running directly on the canvas, including:
   - 📊 **Graph Widget**: Data visualization (Line, Bar, Pie charts) with a built-in JSON editor.
   - 🧜‍♂️ **Mermaid Widget**: Real-time rendering of complex flowcharts and diagrams using Mermaid syntax.

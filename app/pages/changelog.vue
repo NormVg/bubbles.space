@@ -12,7 +12,7 @@ const releases = [
     content: `
       <ul>
         <li><strong>Persistent Memory Architecture:</strong> Bubbles now remembers context across different workspaces automatically.</li>
-        <li><strong>Multi-Model Canvas:</strong> Added support for querying GPT-4o and Claude 3.5 Sonnet side-by-side.</li>
+        <li><strong>Multi-Model Canvas:</strong> Added support for querying Llama 3 and other leading open-source models side-by-side.</li>
         <li><strong>Dodo Payments Integration:</strong> Founder and Sponsor passes are now live.</li>
         <li>New landing page and manifesto.</li>
       </ul>
@@ -24,7 +24,7 @@ const releases = [
     title: 'Private Beta Begins',
     content: `
       <ul>
-        <li>Initial release of the infinite canvas.</li>
+        <li>Initial release of the spatial canvas.</li>
         <li>Basic text nodes and relationships.</li>
         <li>Google OAuth authentication.</li>
       </ul>

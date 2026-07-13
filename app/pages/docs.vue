@@ -44,12 +44,12 @@ function scrollTo(id: string) {
       <main class="docs-content">
         <header class="docs-header">
           <h1>Help & Documentation</h1>
-          <p class="subtitle">Master your infinite workspace.</p>
+          <p class="subtitle">Master your spatial workspace.</p>
         </header>
 
         <section id="getting-started" class="content-section">
           <h2>Getting Started</h2>
-          <p>Bubbles is a persistent, infinite canvas designed for deep thinking. Unlike traditional chat interfaces, Bubbles allows you to lay out your thoughts, documents, and conversations spatially.</p>
+          <p>Bubbles is a persistent, spatial canvas designed for deep thinking. Unlike traditional chat interfaces, Bubbles allows you to lay out your thoughts, documents, and conversations visually.</p>
           <div class="tip-box">
             <strong>Pro Tip:</strong> Double-click anywhere on the blank canvas to instantly open a new AI chat node.
           </div>

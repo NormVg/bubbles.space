@@ -11,7 +11,7 @@ const personas = [
     id: 'research',
     title: 'For Researchers',
     headline: 'Map out complex papers and ideas.',
-    description: 'Stop losing track of context across dozens of browser tabs. Drag PDFs directly onto the canvas, ask Claude to extract key findings, and use GPT-4o to synthesize the results—all in one visual workspace.',
+    description: 'Stop losing track of context across dozens of browser tabs. Drag PDFs directly onto the canvas, ask Llama 3 to extract key findings, and use Mistral to synthesize the results—all in one visual workspace.',
     features: ['PDF parsing', 'Multi-model synthesis', 'Spatial organization']
   },
   {
