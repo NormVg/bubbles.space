@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({ headers: event.headers });
 
   if (!session?.user) {
-    return sendRedirect(event, '/investors?error=login_required', 302);
+    return sendRedirect(event, '/?redirect=sponsor', 302);
   }
 
   const dbUser = await db.query.user.findFirst({
