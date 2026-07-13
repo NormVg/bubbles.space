@@ -345,4 +345,3 @@ html.light .pass-label {
   }
 }
 </style>
-</script>
