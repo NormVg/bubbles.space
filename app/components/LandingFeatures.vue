@@ -87,6 +87,7 @@ function handleMouseLeave() {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  width: 100%;
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 24px;
@@ -96,6 +97,7 @@ function handleMouseLeave() {
 /* Base Node Styling */
 .feature-node {
   position: relative;
+  width: 100%;
   height: 380px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.0) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);

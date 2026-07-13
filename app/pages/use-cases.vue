@@ -96,7 +96,7 @@ const activePersona = ref(personas[0])
             </div>
 
             <!-- Developers Visual -->
-            <div v-else-if="activePersona.id === 'developers'" class="vis-dev">
+            <div v-else-if="activePersona.id === 'development'" class="vis-dev">
               <div class="mock-node term-n1">
                 <div class="term-header"></div>
                 <div class="typewriter">
@@ -115,7 +115,7 @@ const activePersona = ref(personas[0])
             </div>
 
             <!-- Writers Visual -->
-            <div v-else-if="activePersona.id === 'writers'" class="vis-write">
+            <div v-else-if="activePersona.id === 'writing'" class="vis-write">
               <div class="mock-node outline-n1">
                 <div class="bullet-list">
                   <div class="bullet"></div><div class="b-text"></div>
