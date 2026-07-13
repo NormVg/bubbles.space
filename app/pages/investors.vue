@@ -152,14 +152,14 @@ We are currently accepting a limited number of early backers to accelerate produ
 
 ---
 
-### [1] Founder's Pass / Supporter ($50)
+### [1] Founder's Pass / Supporter ($100)
 
 * Instant access to the private beta.
 * Lifetime Pro Status (no subscriptions).
 * Access to the private developer group.
 * Early access to ecosystem applications.
 
-[ -> Fund & Get Founder's Pass ](#)
+[ -> Fund & Get Founder's Pass ](/api/checkout/founder-pass)
 
 ### [2] Early Backer / Sponsor ($500+)
 
@@ -169,7 +169,7 @@ We are currently accepting a limited number of early backers to accelerate produ
 * Lifetime supporter recognition.
 * Name/Logo on "Sponsors" Wall.
 
-[ -> Fund & Become a Sponsor ](#)
+[ -> Fund & Become a Sponsor ](/api/checkout/sponsor)
 
 ### [3] Angel Investor (Custom)
 
