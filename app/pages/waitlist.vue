@@ -60,7 +60,7 @@ async function signOut() {
             :userEmail="user.email"
           />
           <p v-if="specialPass === 'founder_pass'" class="upgrade-hint">
-            <NuxtLink to="/api/checkout/sponsor" class="upgrade-link">Upgrade to Sponsor →</NuxtLink>
+            <a href="/api/checkout/sponsor" class="upgrade-link">Upgrade to Sponsor →</a>
           </p>
         </div>
       </ClientOnly>
