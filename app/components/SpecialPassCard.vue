@@ -109,11 +109,12 @@ html.light .border-glow-beam {
   background: conic-gradient(
     from 0deg,
     transparent 0%,
-    transparent 60%,
-    hsla(38, 60%, 50%, 0.08) 70%,
-    hsla(38, 70%, 55%, 0.22) 76%,
-    hsla(38, 60%, 50%, 0.08) 82%,
-    transparent 90%,
+    transparent 55%,
+    hsla(40, 80%, 50%, 0.15) 64%,
+    hsla(38, 90%, 55%, 0.45) 74%,
+    hsla(35, 85%, 50%, 0.45) 80%,
+    hsla(40, 80%, 50%, 0.15) 88%,
+    transparent 95%,
     transparent 100%
   );
 }
