@@ -7,12 +7,10 @@ useSeoMeta({
 
 <template>
   <div class="legal-page">
+    <MarketingNav />
     <div class="legal-container">
       <div class="legal-header">
-        <NuxtLink to="/" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back to Bubbles
-        </NuxtLink>
+
         <h1>Privacy Policy</h1>
         <p class="last-updated">Last Updated: July 2026</p>
       </div>

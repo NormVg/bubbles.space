@@ -44,10 +44,7 @@ const activePersona = ref(personas[0])
   <div class="usecases-page">
     <MarketingNav />
     <div class="usecases-container">
-      <NuxtLink to="/" class="back-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Back
-      </NuxtLink>
+
       
       <header class="usecases-header">
         <h1>How people use Bubbles.</h1>

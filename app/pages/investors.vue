@@ -239,14 +239,12 @@ const scrollTo = (id: string) => {
 
 <template>
   <div class="legal-page">
+    <MarketingNav />
     <div class="layout-container">
 
       <!-- Sidebar TOC -->
       <aside class="sidebar">
-        <NuxtLink to="/" class="back-link">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back to Bubbles
-        </NuxtLink>
+
         <div class="toc-title">INDEX</div>
         <ul class="toc-list">
           <li v-for="item in toc" :key="item.id">
