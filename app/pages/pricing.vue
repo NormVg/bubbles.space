@@ -78,6 +78,10 @@ useSeoMeta({
 
 <template>
   <div class="pricing-page">
+    <MarketingNav />
+    <NuxtLink to="/" class="back-link">
+      <span class="back-icon">←</span> Back to Home
+    </NuxtLink>
     <div class="pricing-header">
       <h1 class="page-title">PRICING</h1>
       <p class="page-subtitle">Simple, transparent pricing for persistent intelligence.</p>

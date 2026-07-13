@@ -20,6 +20,7 @@ function scrollTo(id: string) {
 
 <template>
   <div class="docs-page">
+    <MarketingNav />
     <div class="docs-container">
       
       <aside class="docs-sidebar">
