@@ -43,23 +43,7 @@ async function loginWithGoogle() {
       </div>
     </div>
     <section class="marketing-section">
-      <div class="marketing-grid">
-        <div class="feature-card">
-          <div class="feature-icon spatial-icon"></div>
-          <h3>Spatial Canvas</h3>
-          <p>Spread your thoughts out spatially. No more scrolling up to find context.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon memory-icon"></div>
-          <h3>Semantic Memory</h3>
-          <p>The AI remembers you across sessions. Build a brain, not just a chat.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon model-icon"></div>
-          <h3>Multi-Model</h3>
-          <p>Llama 3, Mistral, and other leading open-source models working side-by-side.</p>
-        </div>
-      </div>
+      <LandingFeatures />
       <div class="manifesto-cta-section">
         <p class="manifesto-teaser">We are moving away from linear chat.</p>
         <NuxtLink to="/manifesto" class="btn-outline">READ OUR MANIFESTO</NuxtLink>
@@ -243,133 +227,10 @@ html.light .loader-track {
   gap: 120px;
 }
 
-.marketing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-.feature-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 40px 32px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.0) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-html.light .feature-card {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.0) 100%);
-  border-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
-}
-
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-html.light .feature-card::before {
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
-}
-
-.feature-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: rgba(255, 255, 255, 0.12);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-}
-
-html.light .feature-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.01) 100%);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.06);
-}
-
-.feature-card:hover::before {
-  opacity: 1;
-}
-
-/* Abstract Icons for premium feel */
-.feature-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  margin-bottom: 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-html.light .feature-icon {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-.spatial-icon::after {
-  content: '';
-  position: absolute;
-  width: 40%;
-  height: 40%;
-  border-radius: 4px;
-  border: 2px solid var(--text-primary);
-  transform: rotate(45deg);
-}
-
-.memory-icon::after {
-  content: '';
-  position: absolute;
-  width: 30%;
-  height: 30%;
-  border-radius: 50%;
-  background: var(--text-primary);
-  box-shadow: 0 0 20px var(--text-primary);
-}
-
-.model-icon::after, .model-icon::before {
-  content: '';
-  position: absolute;
-  width: 20%;
-  height: 20%;
-  border-radius: 50%;
-  border: 2px solid var(--text-primary);
-}
-.model-icon::after { transform: translateX(-12px); }
-.model-icon::before { transform: translateX(12px); }
-
-.feature-card h3 {
-  font-size: 18px;
-  font-weight: 500;
-  margin: 0 0 12px 0;
-  color: var(--text-primary);
-}
-
-.feature-card p {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
 @media (max-width: 768px) {
   .marketing-section {
     padding: 80px 24px;
     gap: 80px;
-  }
-  .marketing-grid {
-    grid-template-columns: 1fr;
   }
 }
 
