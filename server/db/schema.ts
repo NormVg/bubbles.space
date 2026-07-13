@@ -12,6 +12,7 @@ export const user = pgTable("user", {
 	aboutMe: text('about_me'),
 	preferredModel: text('preferred_model'),
 	reasoningEffort: text('reasoning_effort'),
+	specialPass: text('special_pass'),
 	createdAt: timestamp('created_at').notNull(),
 	updatedAt: timestamp('updated_at').notNull()
 });
