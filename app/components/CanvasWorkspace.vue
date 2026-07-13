@@ -388,6 +388,72 @@ onUnmounted(() => {
   }
 })
 
+const isDraggingFile = ref(false)
+
+function handleDragOver(e: DragEvent) {
+  isDraggingFile.value = true
+}
+
+function handleDragLeave(e: DragEvent) {
+  isDraggingFile.value = false
+}
+
+async function handleDrop(e: DragEvent) {
+  isDraggingFile.value = false
+  if (!e.dataTransfer?.files.length) return
+
+  const rect = viewportEl.value?.getBoundingClientRect()
+  if (!rect) return
+  
+  const viewX = e.clientX - rect.left
+  const viewY = e.clientY - rect.top
+  
+  const canvasX = (viewX - currentOffsetX) / currentScale
+  const canvasY = (viewY - currentOffsetY) / currentScale
+
+  const formData = new FormData()
+  Array.from(e.dataTransfer.files).forEach(file => {
+    formData.append('files', file)
+  })
+
+  try {
+    const res = await $fetch<{ files: {url: string, mimeType: string, originalName: string}[] }>('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+    
+    let currentSpawnX = canvasX
+    let currentSpawnY = canvasY
+
+    for (const file of res.files) {
+      const mime = file.mimeType || ''
+      let type = 'markdown'
+      
+      if (mime === 'application/pdf') {
+        type = 'pdf'
+      } else if (mime.startsWith('image/')) {
+        type = 'image'
+      } else if (mime.startsWith('video/')) {
+        type = 'video'
+      }
+
+      widgetStore.addWidget({
+        type,
+        x: currentSpawnX,
+        y: currentSpawnY,
+        width: 400,
+        height: type === 'image' ? 400 : 300,
+        data: type === 'markdown' ? { text: `[${file.originalName}](${file.url})` } : { url: file.url }
+      })
+      
+      currentSpawnX += 40
+      currentSpawnY += 40
+    }
+  } catch (err) {
+    console.error('File upload failed', err)
+  }
+}
+
 const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
 </script>
 
@@ -395,8 +461,12 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   <div
     ref="viewportEl"
     class="canvas-viewport"
+    :class="{ 'is-dragging-file': isDraggingFile }"
     :style="{ cursor, pointerEvents: widgetStore.isInitializing ? 'none' : 'auto' }"
     @mousedown="startPan"
+    @dragover.prevent="handleDragOver"
+    @dragleave.prevent="handleDragLeave"
+    @drop.prevent="handleDrop"
   >
     <!-- Edge visual feedback when hitting boundaries -->
     <div ref="edgeGlowTop" class="edge-glow top" style="opacity: 0"></div>
@@ -437,6 +507,19 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   overflow: hidden;
   user-select: none;
   background: var(--bg-base);
+  transition: box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.canvas-viewport.is-dragging-file {
+  box-shadow: inset 0 0 0 4px var(--accent);
+}
+.canvas-viewport.is-dragging-file::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--accent-rgb), 0.05);
+  pointer-events: none;
+  z-index: 10000;
 }
 
 .init-overlay {
