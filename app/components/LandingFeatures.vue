@@ -246,46 +246,55 @@ html.light .node-content {
   gap: 4px;
   transition: all 0.3s ease;
 }
-  border: 1px solid inherit;
-  animation: expand-fade 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+html.light .mock-node {
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.delay-1 { animation-delay: 0.6s; }
-.delay-2 { animation-delay: 1.2s; }
+.mock-line-sm { height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; }
+html.light .mock-line-sm { background: rgba(0,0,0,0.2); }
+.w-full { width: 100%; }
+.w-half { width: 50%; }
 
-.sync-beam {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 60px; height: 60px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  animation: core-pulse 2s ease-in-out infinite alternate;
-}
+.mock-line { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mock-line path { fill: none; stroke: rgba(255, 255, 255, 0.15); stroke-width: 1.5; stroke-linecap: round; }
+html.light .mock-line path { stroke: rgba(0, 0, 0, 0.15); }
+.path-anim { stroke-dasharray: 4 8; animation: flow-line 2s linear infinite; }
+.path-anim-fast { stroke-dasharray: 4 8; animation: flow-line 1s linear infinite; }
+.delay { animation-delay: 1s; }
 
-/* ─── Keyframes ─── */
-@keyframes float-1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-@keyframes float-2 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-@keyframes float-3 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@keyframes pulse-line { 0% { opacity: 0.2; } 100% { opacity: 0.8; } }
-@keyframes core-pulse { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-@keyframes expand-fade { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(3); opacity: 0; } }
-@keyframes orbit-1 { 
-  0% { transform: rotate(0deg) translateX(40px) rotate(0deg); } 
-  100% { transform: rotate(360deg) translateX(40px) rotate(-360deg); } 
-}
-@keyframes orbit-2 { 
-  0% { transform: rotate(120deg) translateX(50px) rotate(-120deg); } 
-  100% { transform: rotate(480deg) translateX(50px) rotate(-480deg); } 
-}
-@keyframes orbit-3 { 
-  0% { transform: rotate(240deg) translateX(30px) rotate(-240deg); } 
-  100% { transform: rotate(600deg) translateX(30px) rotate(-600deg); } 
-}
+@keyframes flow-line { to { stroke-dashoffset: -24; } }
+@keyframes float { 50% { transform: translateY(-4px); } }
+@keyframes pulse-glow { 100% { box-shadow: 0 0 16px var(--accent); transform: scale(1.1); } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes type { 0% { width: 0; opacity: 1; } 50%, 100% { opacity: 1; } }
 
-@media (max-width: 768px) {
-  .landing-features {
-    grid-template-columns: 1fr;
-  }
-}
+/* Spatial Canvas */
+.pdf-n1 { width: 50px; height: 60px; top: 10px; left: 10px; animation: float 4s ease-in-out infinite; }
+.pdf-n2 { width: 50px; height: 60px; top: 130px; left: 10px; animation: float 5s ease-in-out infinite reverse; }
+.synth-n3 { width: 40px; height: 40px; top: 110px; left: 140px; border-radius: 50%; padding: 0; align-items: center; justify-content: center; border-color: var(--accent); }
+.pulse-orb { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; animation: pulse-glow 2s infinite alternate; }
+
+/* Semantic Memory */
+.outline-n1 { width: 60px; height: 70px; top: 35px; left: 10px; }
+.bullet-list { display: grid; grid-template-columns: 8px 1fr; gap: 4px; align-items: center; margin-top: 4px; }
+.bullet { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.b-text { height: 2px; background: rgba(255,255,255,0.2); width: 100%; }
+html.light .b-text { background: rgba(0,0,0,0.2); }
+.draft-n2 { width: 70px; height: 90px; top: 75px; left: 120px; }
+.mock-title { width: 60%; height: 4px; background: var(--text-primary); margin-bottom: 4px; border-radius: 2px; }
+.typing-cursor { position: relative; }
+.typing-cursor::after { content: ''; position: absolute; right: -6px; top: -2px; width: 2px; height: 6px; background: var(--text-primary); animation: blink 1s step-end infinite; }
+
+/* Multi-Model */
+.term-n1 { width: 80px; height: 70px; top: 65px; left: 10px; background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.2); padding: 0; overflow: hidden;}
+html.light .term-n1 { background: rgba(0,0,0,0.8); }
+.term-header { height: 12px; background: rgba(255,255,255,0.1); width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.typewriter { padding: 6px; display: flex; flex-direction: column; gap: 4px; }
+.code-line { height: 2px; background: var(--success); border-radius: 2px; }
+.c1 { width: 80%; animation: type 3s steps(10) infinite; }
+.c2 { width: 60%; animation: type 3s steps(10) infinite 1s; opacity: 0; animation-fill-mode: forwards; }
+.c3 { width: 90%; background: var(--danger); animation: type 3s steps(10) infinite 2s; opacity: 0; animation-fill-mode: forwards; }
+.diag-n2 { width: 40px; height: 30px; top: 35px; left: 150px; background: var(--bg-muted); }
+.diag-n3 { width: 40px; height: 30px; top: 135px; left: 150px; background: var(--bg-muted); }
 </style>
