@@ -100,7 +100,7 @@ function handleMouseLeave() {
       </div>
       <div class="node-content">
         <h3>Multi-Model</h3>
-        <p>Qwen, GLM, MiniMax, Gemma and other leading models working side-by-side.</p>
+        <p>Llama 3, Mistral, and other leading open-source models working side-by-side.</p>
       </div>
     </div>
 
