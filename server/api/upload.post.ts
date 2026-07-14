@@ -1,11 +1,19 @@
-import { defineEventHandler, createError, readMultipartFormData } from 'h3'
+import { defineEventHandler, createError } from 'h3'
 import { mkdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 
 export default defineEventHandler(async (event) => {
-  const formData = await readMultipartFormData(event)
-  if (!formData || formData.length === 0) {
+  let formData: FormData
+  try {
+    formData = await event.request.formData()
+  } catch (err) {
+    console.error('Form data parsing error:', err)
+    throw createError({ statusCode: 400, statusMessage: 'Failed to parse upload data' })
+  }
+
+  const files = formData.getAll('files') as File[]
+  if (!files || files.length === 0) {
     throw createError({ statusCode: 400, statusMessage: 'No files uploaded' })
   }
 
@@ -19,19 +27,20 @@ export default defineEventHandler(async (event) => {
     console.error('Failed to create upload dir', err)
   }
 
-  for (const field of formData) {
-    if (field.filename) {
+  for (const file of files) {
+    if (file.name) {
       // Create a unique filename
-      const ext = field.filename.split('.').pop()
+      const ext = file.name.split('.').pop()
       const uniqueFilename = `${randomUUID()}.${ext}`
       const filePath = join(uploadDir, uniqueFilename)
       
-      await writeFile(filePath, field.data)
+      const buffer = Buffer.from(await file.arrayBuffer())
+      await writeFile(filePath, buffer)
       
       uploadedFiles.push({
-        originalName: field.filename,
+        originalName: file.name,
         url: `/uploads/${uniqueFilename}`,
-        mimeType: field.type
+        mimeType: file.type
       })
     }
   }
