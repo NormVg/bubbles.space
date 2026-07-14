@@ -24,11 +24,14 @@ const graphData = computed(() => {
     data.datasets = [{ values: [], color: 'var(--accent)' }] // Fallback to prevent crash
   } else {
     dataError.value = false
-    // Ensure every dataset has a values array
-    data.datasets = data.datasets.map((ds: any) => ({
-      ...ds,
-      values: Array.isArray(ds.values) ? ds.values : []
-    }))
+    // Ensure every dataset has a values array (support Chart.js style 'data' array too)
+    data.datasets = data.datasets.map((ds: any) => {
+      const arr = Array.isArray(ds.values) ? ds.values : Array.isArray(ds.data) ? ds.data : []
+      return {
+        ...ds,
+        values: arr.map(Number) // ensure they are numbers
+      }
+    })
   }
 
   if (!data.labels || !Array.isArray(data.labels)) {
