@@ -3,6 +3,8 @@ import { ref, watch, onMounted, computed } from 'vue'
 
 const props = defineProps<{
   data: {
+    files?: Array<{ url: string, filename?: string, mimeType?: string }>
+    // legacy support for single file
     url?: string
     filename?: string
     mimeType?: string
@@ -30,13 +32,20 @@ watch(() => props.isEditing, (editing) => {
   }
 })
 
-// Extract extension to show in UI
-const extension = computed(() => {
-  const name = props.data.filename || props.data.url || ''
-  const parts = name.split('.')
-  return parts.length > 1 ? parts[parts.length - 1].toUpperCase() : 'FILE'
+const filesList = computed(() => {
+  if (props.data.files && props.data.files.length > 0) {
+    return props.data.files
+  }
+  if (props.data.url) {
+    return [{ url: props.data.url, filename: props.data.filename, mimeType: props.data.mimeType }]
+  }
+  return []
 })
 
+function getExtension(name: string = '') {
+  const parts = name.split('.')
+  return parts.length > 1 ? parts[parts.length - 1].toUpperCase() : 'FILE'
+}
 </script>
 
 <template>
@@ -65,26 +74,28 @@ const extension = computed(() => {
     </div>
     
     <div v-else class="file-container">
-      <div v-if="!data.url" class="empty-state">
+      <div v-if="filesList.length === 0" class="empty-state">
         <LucideFileQuestion :size="32" class="empty-icon" />
-        <p>No File Attached</p>
+        <p>No Files Attached</p>
       </div>
 
-      <div v-else class="file-card">
-        <div class="file-icon-box">
-          <span class="file-ext">{{ extension }}</span>
+      <div v-else class="file-list">
+        <div v-for="(file, idx) in filesList" :key="idx" class="file-card">
+          <div class="file-icon-box">
+            <span class="file-ext">{{ getExtension(file.filename || file.url) }}</span>
+          </div>
+          
+          <div class="file-info">
+            <h3 class="filename" :title="file.filename || 'Unknown File'">
+              {{ file.filename || 'Unknown File' }}
+            </h3>
+            <p class="file-meta">{{ getExtension(file.filename || file.url) }} Document</p>
+          </div>
+          
+          <a :href="file.url" download target="_blank" rel="noopener noreferrer" class="download-btn" @click.stop title="Download">
+            <LucideDownload :size="18" />
+          </a>
         </div>
-        
-        <div class="file-info">
-          <h3 class="filename" :title="data.filename || 'Unknown File'">
-            {{ data.filename || 'Unknown File' }}
-          </h3>
-          <p class="file-meta">{{ extension }} Document</p>
-        </div>
-        
-        <a :href="data.url" download target="_blank" rel="noopener noreferrer" class="download-btn" @click.stop title="Download">
-          <LucideDownload :size="18" />
-        </a>
       </div>
     </div>
   </div>
@@ -143,17 +154,26 @@ label {
 .file-container {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
+  flex-direction: column;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 }
 
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   color: var(--text-muted);
+  height: 100%;
 }
 .empty-icon {
   opacity: 0.5;

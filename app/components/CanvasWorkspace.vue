@@ -427,13 +427,17 @@ async function handleDrop(e: DragEvent) {
     let currentSpawnY = canvasY
 
     const images = []
-    const otherFiles = []
+    const specialFiles = []
+    const genericFiles = []
 
     for (const file of res.files) {
-      if ((file.mimeType || '').startsWith('image/')) {
+      const mime = file.mimeType || ''
+      if (mime.startsWith('image/')) {
         images.push(file)
+      } else if (mime === 'application/pdf' || mime.startsWith('video/') || mime.startsWith('text/')) {
+        specialFiles.push(file)
       } else {
-        otherFiles.push(file)
+        genericFiles.push(file)
       }
     }
 
@@ -450,9 +454,9 @@ async function handleDrop(e: DragEvent) {
       currentSpawnY += 40
     }
 
-    for (const file of otherFiles) {
+    for (const file of specialFiles) {
       const mime = file.mimeType || ''
-      let type = 'file' // Default to generic file widget
+      let type = 'file'
       let content = `[${file.originalName}](${file.url})`
       
       if (mime === 'application/pdf') {
@@ -475,15 +479,30 @@ async function handleDrop(e: DragEvent) {
         type,
         x: currentSpawnX,
         y: currentSpawnY,
-        width: type === 'file' ? 250 : 400,
-        height: type === 'file' ? 80 : 300,
-        data: type === 'markdown' 
-          ? { content } 
-          : type === 'file'
-            ? { url: file.url, filename: file.originalName, mimeType: file.mimeType }
-            : { url: file.url }
+        width: 400,
+        height: 300,
+        data: type === 'markdown' ? { content } : { url: file.url }
       })
       
+      currentSpawnX += 40
+      currentSpawnY += 40
+    }
+
+    if (genericFiles.length > 0) {
+      widgetStore.addWidget({
+        type: 'file',
+        x: currentSpawnX,
+        y: currentSpawnY,
+        width: 300,
+        height: Math.min(genericFiles.length * 80 + 32, 400),
+        data: {
+          files: genericFiles.map(f => ({
+            url: f.url,
+            filename: f.originalName,
+            mimeType: f.mimeType
+          }))
+        }
+      })
       currentSpawnX += 40
       currentSpawnY += 40
     }
