@@ -1,5 +1,6 @@
 import { defineEventHandler, createError, readFormData } from 'h3'
 import { Client, Storage, ID } from 'node-appwrite'
+import { InputFile } from 'node-appwrite/file'
 import { auth } from '../utils/auth'
 import { db } from '../db'
 import { userFile } from '../db/schema'
@@ -45,7 +46,9 @@ export default defineEventHandler(async (event) => {
   for (const file of files) {
     if (file.name) {
       try {
-        const res = await storage.createFile(bucketId, ID.unique(), file)
+        const buffer = Buffer.from(await file.arrayBuffer())
+        const inputFile = InputFile.fromBuffer(buffer, file.name)
+        const res = await storage.createFile(bucketId, ID.unique(), inputFile)
 
         // Construct view URL
         const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`

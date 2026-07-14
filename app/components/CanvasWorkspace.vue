@@ -728,8 +728,8 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
 /* ── Upload Manager Overlay ── */
 .upload-manager {
   position: absolute;
-  bottom: 32px;
-  right: 32px;
+  bottom: 48px;
+  right: 96px;
   width: 320px;
   background: var(--bg-surface);
   border: 0.5px solid var(--border-strong);
