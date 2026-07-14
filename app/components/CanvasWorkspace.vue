@@ -564,70 +564,33 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   position: absolute;
   inset: 0;
   z-index: 99999;
-  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, rgba(10, 10, 10, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 .drop-content {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  animation: float-drop 4s ease-in-out infinite;
-}
-.drop-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 160px;
-  height: 160px;
-  background: var(--accent);
-  border-radius: 50%;
-  transform: translate(-50%, -20px);
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: pulse-aura 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  z-index: 1;
+  gap: 16px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 48px 64px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 .drop-icon-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 28px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: var(--accent);
-  z-index: 2;
 }
 .drop-text {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  font-size: 20px;
+  font-weight: 500;
   margin: 0;
-  color: white;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-@keyframes float-drop {
-  0%, 100% { transform: translateY(-10px); }
-  50% { transform: translateY(10px); }
-}
-@keyframes pulse-aura {
-  0%, 100% { transform: translate(-50%, -20px) scale(1); opacity: 0.3; }
-  50% { transform: translate(-50%, -20px) scale(1.3); opacity: 0.6; }
+  color: var(--text-primary);
 }
 
 .canvas-viewport.is-dragging-file {
