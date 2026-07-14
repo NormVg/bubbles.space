@@ -100,23 +100,57 @@ const getImageUrl = (url: string, index: number) => {
 }
 
 // Editing
-const editUrls = ref(imageList.value.join('\n'))
+const editUrls = ref<string[]>([])
 
 watch(() => props.isEditing, (editing) => {
   if (editing) {
-    editUrls.value = imageList.value.join('\n')
+    editUrls.value = [...imageList.value]
+    if (editUrls.value.length === 0) {
+      editUrls.value.push('')
+    }
   } else {
     // Save
-    const urls = editUrls.value.split('\n').map(u => u.trim()).filter(Boolean)
+    const urls = editUrls.value.map(u => u.trim()).filter(Boolean)
     emit('save', { ...props.data, images: urls.length > 0 ? urls : undefined, url: undefined })
   }
 })
+
+function addImage() {
+  editUrls.value.push('')
+}
+
+function removeImage(index: number) {
+  editUrls.value.splice(index, 1)
+}
 </script>
 
 <template>
   <div class="image-widget" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
     <div v-if="isEditing" class="edit-mode">
-      <textarea v-model="editUrls" placeholder="Enter image URLs (one per line)"></textarea>
+      <div class="edit-header">
+        <LucideImage :size="16" />
+        <span>Image Sources</span>
+        <button class="add-btn" @click="addImage" title="Add Image">
+          <LucidePlus :size="16" />
+        </button>
+      </div>
+      
+      <div class="edit-files-list">
+        <div v-for="(url, idx) in editUrls" :key="idx" class="edit-file-item">
+          <div class="edit-file-inputs">
+            <input 
+              v-model="editUrls[idx]" 
+              type="text" 
+              placeholder="Image URL (https://...)"
+              class="url-input"
+              @keydown.enter.stop
+            />
+          </div>
+          <button class="remove-btn" @click="removeImage(idx)" title="Remove Image">
+            <LucideX :size="16" />
+          </button>
+        </div>
+      </div>
     </div>
     
     <div v-else class="image-container">
@@ -201,27 +235,78 @@ watch(() => props.isEditing, (editing) => {
   width: 100%;
   height: 100%;
   padding: 16px;
-  background: var(--glass-bg);
+  background: var(--bg-overlay);
   backdrop-filter: blur(12px);
+  overflow-y: auto;
 }
 
-.edit-mode textarea {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--glass-border);
+.edit-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.add-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+}
+.add-btn:hover { background: rgba(59, 130, 246, 0.1); }
+
+.edit-files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-file-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--bg-base);
   padding: 12px;
   border-radius: 8px;
-  font-size: 13px;
-  resize: none;
-  font-family: monospace;
+  border: 1px solid var(--border-color);
 }
 
-html.light .edit-mode textarea {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+.edit-file-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+}
+.remove-btn:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+.url-input {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-color);
   color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+}
+.url-input:focus {
+  border-color: var(--accent);
 }
 
 .image-container {
