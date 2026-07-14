@@ -130,3 +130,13 @@ export const memory = pgTable('memory', {
 }, (table) => ({
   embeddingIndex: index('embedding_idx').using('hnsw', sql`${table.embedding} halfvec_cosine_ops`)
 }));
+
+export const userFile = pgTable('user_file', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  appwriteFileId: text('appwrite_file_id').notNull(),
+  originalName: text('original_name').notNull(),
+  mimeType: text('mime_type').notNull().default(''),
+  url: text('url').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});

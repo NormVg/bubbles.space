@@ -1,7 +1,17 @@
 import { defineEventHandler, createError, readFormData } from 'h3'
 import { Client, Storage, ID } from 'node-appwrite'
+import { auth } from '../utils/auth'
+import { db } from '../db'
+import { userFile } from '../db/schema'
 
 export default defineEventHandler(async (event) => {
+  // Auth check
+  const session = await auth.api.getSession({ headers: event.headers })
+  if (!session?.user) {
+    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  }
+  const userId = session.user.id
+
   let formData: FormData
   try {
     formData = await readFormData(event)
@@ -35,16 +45,24 @@ export default defineEventHandler(async (event) => {
   for (const file of files) {
     if (file.name) {
       try {
-        const res = await storage.createFile(
-          bucketId,
-          ID.unique(),
-          file
-        )
+        const res = await storage.createFile(bucketId, ID.unique(), file)
 
         // Construct view URL
         const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
+        const fileId = res.$id
+
+        // Persist to database
+        await db.insert(userFile).values({
+          id: crypto.randomUUID(),
+          userId,
+          appwriteFileId: fileId,
+          originalName: file.name,
+          mimeType: file.type || 'application/octet-stream',
+          url: fileUrl,
+        })
 
         uploadedFiles.push({
+          appwriteFileId: fileId,
           originalName: file.name,
           url: fileUrl,
           mimeType: file.type

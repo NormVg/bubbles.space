@@ -2,7 +2,9 @@
 import { ref, onMounted } from 'vue'
 import MemoryTree from '~/components/memory/MemoryTree.vue'
 import MemoryViewer from '~/components/memory/MemoryViewer.vue'
+import FileLibrary from '~/components/memory/FileLibrary.vue'
 
+const currentView = ref<'knowledge' | 'files'>('knowledge')
 const memories = ref<any[]>([])
 const selectedMemory = ref<any | null>(null)
 const isLoading = ref(true)
@@ -95,20 +97,42 @@ onMounted(() => {
     </template>
     
     <template v-else>
-      <!-- Sidebar -->
-      <MemoryTree 
-        :memories="memories" 
-        :selected-id="selectedMemory?.id ?? null"
-        @select="handleSelect"
-      />
+      <div class="sidebar-wrapper">
+        <div class="view-switcher">
+          <button 
+            :class="{ active: currentView === 'knowledge' }" 
+            @click="currentView = 'knowledge'"
+          >
+            <LucideBrain :size="16" />
+            Knowledge Base
+          </button>
+          <button 
+            :class="{ active: currentView === 'files' }" 
+            @click="currentView = 'files'"
+          >
+            <LucideFolderOpen :size="16" />
+            File Library
+          </button>
+        </div>
+        
+        <!-- Sidebar -->
+        <MemoryTree 
+          v-show="currentView === 'knowledge'"
+          :memories="memories" 
+          :selected-id="selectedMemory?.id ?? null"
+          @select="handleSelect"
+        />
+      </div>
 
       <!-- Main panel -->
       <div class="memory-main">
         <MemoryViewer 
+          v-if="currentView === 'knowledge'"
           :memory="selectedMemory"
           @save="handleSave"
           @delete="handleDelete"
         />
+        <FileLibrary v-else-if="currentView === 'files'" />
       </div>
     </template>
   </div>
@@ -134,6 +158,50 @@ onMounted(() => {
 }
 
 /* ─── Skeleton Loading ──────────────── */
+.sidebar-wrapper {
+  width: 256px;
+  min-width: 256px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.view-switcher {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.view-switcher button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.view-switcher button:hover {
+  background: var(--bg-soft);
+  color: var(--text-primary);
+}
+
+.view-switcher button.active {
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+}
+
 .sidebar {
   width: 256px;
   min-width: 256px;

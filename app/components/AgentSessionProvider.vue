@@ -7,7 +7,10 @@ import { useWidgetStore } from '../stores/widgets'
 import { authClient } from '~/utils/auth-client'
 
 const conversationStore = useConversationStore()
-const conversationId = conversationStore.activeConversationId
+// IMPORTANT: Read .value here since we need the string ID at mount time.
+// AgentSessionProvider is remounted via :key whenever activeConversationId changes,
+// so this plain string will always be fresh on each mount.
+const conversationId = conversationStore.activeConversationId.value
 const widgetStore = useWidgetStore()
 
 const agent = useEveAgent({
@@ -110,6 +113,18 @@ const agent = useEveAgent({
       })
       if (!data.value) return `Failed to store knowledge.`
       return `Successfully stored knowledge at ${args.path}`
+    },
+    list_my_files: async () => {
+      try {
+        const res = await $fetch<{ files: any[] }>('/api/files')
+        if (!res.files || res.files.length === 0) {
+          return 'You have no files uploaded to your library yet.'
+        }
+        const list = res.files.map(f => `- ${f.originalName} (${f.mimeType}) — ${f.url}`).join('\n')
+        return `Your uploaded files:\n${list}`
+      } catch (e) {
+        return 'Failed to fetch your file library.'
+      }
     },
     update_user_settings: async ({ systemPrompt, aboutMe, name }: { systemPrompt?: string; aboutMe?: string; name?: string }) => {
       try {
