@@ -618,7 +618,7 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     <Transition name="slide-down">
       <div v-if="uploadManagerVisible" class="upload-manager-wrapper">
         <button class="um-chip" @click="isUploadManagerExpanded = !isUploadManagerExpanded">
-          <LucideCloudUpload :size="16" class="um-chip-icon" :class="{ 'is-uploading': hasActiveUploads }" />
+          <LucideUpload :size="16" class="um-chip-icon" :class="{ 'is-uploading': hasActiveUploads }" />
           <span class="um-chip-text" v-if="!isUploadManagerExpanded || !hasActiveUploads">
             {{ activeUploads.filter(u => u.status === 'success').length }} / {{ activeUploads.length }}
           </span>

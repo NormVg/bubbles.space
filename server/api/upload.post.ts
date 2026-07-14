@@ -45,13 +45,14 @@ export default defineEventHandler(async (event) => {
 
   for (const file of files) {
     if (file.name) {
-      const buffer = Buffer.from(await file.arrayBuffer())
-      const inputFile = InputFile.fromBuffer(buffer, file.name)
-      const res = await storage.createFile(bucketId, ID.unique(), inputFile)
+      try {
+        const buffer = Buffer.from(await file.arrayBuffer())
+        const inputFile = InputFile.fromBuffer(buffer, file.name)
+        const res = await storage.createFile(bucketId, ID.unique(), inputFile)
 
-      // Construct view URL
-      const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
-      const fileId = res.$id
+        // Construct view URL
+        const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
+        const fileId = res.$id
 
         // Persist to database
         await db.insert(userFile).values({
@@ -69,6 +70,15 @@ export default defineEventHandler(async (event) => {
           url: fileUrl,
           mimeType: file.type
         })
+      } catch (err: any) {
+        console.error('Appwrite Upload Error:', {
+          message: err.message,
+          code: err.code,
+          type: err.type,
+          response: err.response
+        })
+        throw createError({ statusCode: 500, statusMessage: `Appwrite Error: ${err.message}` })
+      }
     }
   }
 
