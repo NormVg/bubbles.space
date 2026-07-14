@@ -195,8 +195,8 @@ export const useConversationStore = defineStore('conversations', () => {
 
   async function syncChatToDB(meta: ConversationMeta, detail: ConversationDetail) {
     // 1. Instant Local Save
-    localStorage.setItem(`bubbles-conv-${meta.id}`, JSON.stringify(detail))
-    localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
+    safeLocalSet(`bubbles-conv-${meta.id}`, JSON.stringify(detail))
+    safeLocalSet('bubbles-meta-conversations', JSON.stringify(metaList.value))
 
     // 2. Debounced DB Save per conversation
     if (syncTimeouts.has(meta.id)) {
@@ -281,7 +281,7 @@ export const useConversationStore = defineStore('conversations', () => {
     // This prevents AgentSessionProvider from recreating it during unmount or background throttles.
     localStorage.removeItem(`bubbles-conv-${id}`)
     metaList.value = metaList.value.filter((c: ConversationMeta) => c.id !== id)
-    localStorage.setItem('bubbles-meta-conversations', JSON.stringify(metaList.value))
+    safeLocalSet('bubbles-meta-conversations', JSON.stringify(metaList.value))
 
     if (metaList.value.length === 0) {
       // Don't await createConversation, just trigger it so the UI responds instantly
