@@ -452,7 +452,7 @@ async function handleDrop(e: DragEvent) {
 
     for (const file of otherFiles) {
       const mime = file.mimeType || ''
-      let type = 'markdown'
+      let type = 'file' // Default to generic file widget
       let content = `[${file.originalName}](${file.url})`
       
       if (mime === 'application/pdf') {
@@ -460,6 +460,7 @@ async function handleDrop(e: DragEvent) {
       } else if (mime.startsWith('video/')) {
         type = 'video'
       } else if (mime.startsWith('text/')) {
+        type = 'markdown'
         const originalFile = filesArray.find(f => f.name === file.originalName)
         if (originalFile) {
           try {
@@ -474,9 +475,13 @@ async function handleDrop(e: DragEvent) {
         type,
         x: currentSpawnX,
         y: currentSpawnY,
-        width: 400,
-        height: 300,
-        data: type === 'markdown' ? { content } : { url: file.url }
+        width: type === 'file' ? 250 : 400,
+        height: type === 'file' ? 120 : 300,
+        data: type === 'markdown' 
+          ? { content } 
+          : type === 'file'
+            ? { url: file.url, filename: file.originalName, mimeType: file.mimeType }
+            : { url: file.url }
       })
       
       currentSpawnX += 40
@@ -501,6 +506,16 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
     @dragleave.prevent="handleDragLeave"
     @drop.prevent="handleDrop"
   >
+    <!-- Massive Drop Overlay -->
+    <Transition name="fade">
+      <div v-if="isDraggingFile" class="drop-overlay">
+        <div class="drop-content">
+          <LucideUploadCloud :size="80" class="drop-icon" />
+          <h2 class="drop-text">Drop files to add to workspace</h2>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Edge visual feedback when hitting boundaries -->
     <div ref="edgeGlowTop" class="edge-glow top" style="opacity: 0"></div>
     <div ref="edgeGlowBottom" class="edge-glow bottom" style="opacity: 0"></div>
@@ -541,6 +556,43 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   user-select: none;
   background: var(--bg-base);
   transition: box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.drop-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(var(--bg-base-rgb), 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  color: var(--accent);
+  background: var(--bg-overlay);
+  padding: 48px 64px;
+  border-radius: 24px;
+  border: 2px dashed var(--accent);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+  transform: translateY(-20px);
+  animation: float-drop 2s ease-in-out infinite;
+}
+.drop-text {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+@keyframes float-drop {
+  0%, 100% { transform: translateY(-10px); }
+  50% { transform: translateY(0); }
 }
 
 .canvas-viewport.is-dragging-file {

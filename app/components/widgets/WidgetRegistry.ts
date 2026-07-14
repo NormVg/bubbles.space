@@ -9,4 +9,5 @@ export const WidgetRegistry: Record<string, any> = {
   pdf: defineAsyncComponent(() => import('./types/PdfWidget.vue')),
   video: defineAsyncComponent(() => import('./types/VideoWidget.vue')),
   drawio: defineAsyncComponent(() => import('./types/DrawioWidget.vue')),
+  file: defineAsyncComponent(() => import('./types/FileWidget.vue')),
 }
