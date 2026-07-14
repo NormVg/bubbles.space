@@ -26,7 +26,17 @@ const graphData = computed(() => {
     dataError.value = false
     // Ensure every dataset has a values array (support Chart.js style 'data' array too)
     data.datasets = data.datasets.map((ds: any) => {
-      const arr = Array.isArray(ds.values) ? ds.values : Array.isArray(ds.data) ? ds.data : []
+      let arr = []
+      if (Array.isArray(ds.data) && ds.data.length > 0) {
+        arr = ds.data
+      } else if (Array.isArray(ds.values) && ds.values.length > 0) {
+        arr = ds.values
+      } else if (Array.isArray(ds.data)) {
+        arr = ds.data
+      } else if (Array.isArray(ds.values)) {
+        arr = ds.values
+      }
+      
       return {
         ...ds,
         values: arr.map(Number) // ensure they are numbers
