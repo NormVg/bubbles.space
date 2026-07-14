@@ -389,6 +389,8 @@ onUnmounted(() => {
 })
 
 const isDraggingFile = ref(false)
+const isUploading = ref(false)
+const uploadError = ref<string | null>(null)
 
 function handleDragOver(e: DragEvent) {
   isDraggingFile.value = true
@@ -416,6 +418,9 @@ async function handleDrop(e: DragEvent) {
   filesArray.forEach(file => {
     formData.append('files', file)
   })
+
+  isUploading.value = true
+  uploadError.value = null
 
   try {
     const res = await $fetch<{ files: {url: string, mimeType: string, originalName: string}[] }>('/api/upload', {
@@ -506,8 +511,16 @@ async function handleDrop(e: DragEvent) {
       currentSpawnX += 40
       currentSpawnY += 40
     }
-  } catch (err) {
-    console.error('File upload failed', err)
+
+  } catch (err: any) {
+    console.error('Failed to upload files', err)
+    uploadError.value = err?.data?.statusMessage || err?.message || 'Failed to upload files. Please try again.'
+    // Auto clear error after 5 seconds
+    setTimeout(() => {
+      if (uploadError.value) uploadError.value = null
+    }, 5000)
+  } finally {
+    isUploading.value = false
   }
 }
 
@@ -533,6 +546,25 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
             <LucideUploadCloud :size="48" class="drop-icon" />
           </div>
           <h2 class="drop-text">Drop files to add to workspace</h2>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Uploading / Error Overlay -->
+    <Transition name="fade">
+      <div v-if="isUploading || uploadError" class="upload-overlay">
+        <div class="upload-content" :class="{ 'is-error': !!uploadError }">
+          <template v-if="isUploading">
+            <LucideLoader2 :size="32" class="spin-icon" />
+            <span class="upload-text">Uploading files to Appwrite...</span>
+          </template>
+          <template v-else-if="uploadError">
+            <LucideAlertCircle :size="32" class="error-icon" />
+            <div class="error-text-container">
+              <span class="upload-text">Upload Failed</span>
+              <span class="error-subtext">{{ uploadError }}</span>
+            </div>
+          </template>
         </div>
       </div>
     </Transition>
@@ -618,10 +650,66 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
 .canvas-viewport.is-dragging-file::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: rgba(var(--accent-rgb), 0.05);
+  inset: 12px;
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
   pointer-events: none;
-  z-index: 10000;
+  z-index: 99998;
+}
+
+/* ── Uploading Overlay ── */
+.upload-overlay {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  pointer-events: none;
+}
+.upload-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 12px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+}
+.upload-content.is-error {
+  background: rgba(255, 60, 60, 0.1);
+  border-color: rgba(255, 60, 60, 0.3);
+}
+.spin-icon {
+  animation: spin 1s linear infinite;
+  color: var(--accent);
+}
+.error-icon {
+  color: #ff4d4f;
+}
+.upload-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+.error-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.error-subtext {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }
 
 .init-overlay {
