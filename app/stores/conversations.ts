@@ -7,7 +7,7 @@ import type { ConversationMeta, ConversationDetail } from '../../shared/types/co
 
 export const useConversationStore = defineStore('conversations', () => {
   // Use useLocalStorage just to persist the active ID, as it is very small
-  const activeConversationId = useLocalStorage<string>('bubbles-active-conversation-id', '')
+  const activeConversationId = useLocalStorage<string>('bubbles-active-conversation-id', '', { listenToStorageChanges: false })
   
   // State
   const metaList = shallowRef<ConversationMeta[]>([])

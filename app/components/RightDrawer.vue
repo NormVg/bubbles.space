@@ -46,7 +46,7 @@ function clampDrawerWidth(width: number) {
 }
 
 // This handles the persistent saved value
-const drawerWidth = useLocalStorage('bubbles-chat-width-v3', typeof window !== 'undefined' ? window.innerWidth * 0.5 : 760)
+const drawerWidth = useLocalStorage('bubbles-chat-width-v3', typeof window !== 'undefined' ? window.innerWidth * 0.5 : 760, { listenToStorageChanges: false })
 
 // This handles the visual width, preventing 60fps local storage writes (lag)
 const currentWidth = ref(clampDrawerWidth(drawerWidth.value))
