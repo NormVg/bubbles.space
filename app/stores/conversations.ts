@@ -23,6 +23,35 @@ export const useConversationStore = defineStore('conversations', () => {
   // Anti-stale load guard
   let detailLoadCounter = 0
 
+  /**
+   * Safe localStorage write that handles quota exceeded by evicting
+   * old conversation caches (largest first) to make room.
+   */
+  function safeLocalSet(key: string, value: string): void {
+    try {
+      localStorage.setItem(key, value)
+    } catch {
+      // Quota exceeded — evict old conversation detail caches
+      const keysToEvict: { key: string, size: number }[] = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        if (k && k.startsWith('bubbles-conv-')) {
+          keysToEvict.push({ key: k, size: localStorage.getItem(k)?.length ?? 0 })
+        }
+      }
+      // Evict largest first
+      keysToEvict.sort((a, b) => b.size - a.size)
+      for (const item of keysToEvict.slice(0, 3)) {
+        localStorage.removeItem(item.key)
+      }
+      try {
+        localStorage.setItem(key, value)
+      } catch {
+        // Still failing — silently give up on caching
+      }
+    }
+  }
+
   // Getters
   const sortedConversations = computed(() => [...metaList.value])
   const activeConversationMeta = computed(() =>
@@ -53,7 +82,7 @@ export const useConversationStore = defineStore('conversations', () => {
         
         if (serverMeta && serverMeta.length > 0) {
           metaList.value = serverMeta
-          localStorage.setItem('bubbles-meta-conversations', JSON.stringify(serverMeta))
+          safeLocalSet('bubbles-meta-conversations', JSON.stringify(serverMeta))
         } else if (hasLocalData) {
           // DB is empty but we have local data. Push legacy chats to DB.
           for (const meta of metaList.value) {
@@ -88,7 +117,7 @@ export const useConversationStore = defineStore('conversations', () => {
       const serverMeta = await $fetch<ConversationMeta[]>('/api/chat')
       if (serverMeta) {
         metaList.value = serverMeta
-        localStorage.setItem('bubbles-meta-conversations', JSON.stringify(serverMeta))
+        safeLocalSet('bubbles-meta-conversations', JSON.stringify(serverMeta))
       }
     } catch (e) {
       console.error('Failed to reload chat metadata from DB:', e)
@@ -117,14 +146,13 @@ export const useConversationStore = defineStore('conversations', () => {
       if (serverDetail) {
         activeDetail.value = serverDetail
         activeConversationId.value = id
-        try {
-          localStorage.setItem(`bubbles-conv-${id}`, JSON.stringify(serverDetail))
-        } catch (storageError) {
-          console.warn('Could not save conversation to localStorage (quota exceeded)', storageError)
-        }
+        safeLocalSet(`bubbles-conv-${id}`, JSON.stringify(serverDetail))
       }
     } catch (e) {
-      console.error('Failed to fetch chat details from DB:', e)
+      // Network/DB is down — silently use local cache
+      if (!activeDetail.value) {
+        console.warn('DB unreachable and no local cache for conversation', id)
+      }
     }
   }
 
@@ -355,6 +383,7 @@ export const useConversationStore = defineStore('conversations', () => {
     deleteConversation,
     ensureConversation,
     selectConversation,
+    loadActiveDetail,
     flushSync,
     forceReloadAgent,
     reloadMetadata,

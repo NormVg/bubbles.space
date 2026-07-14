@@ -10,6 +10,8 @@ let worker: Worker | null = null
 const localInstanceId = crypto.randomUUID()
 let isInitializingAbly = false
 let initComplete = false
+let lastSyncTimestamp = 0
+const SYNC_COOLDOWN_MS = 10_000 // Minimum 10s between tab-focus re-syncs
 
 export function useRealtimeSync() {
   const authState = authClient.useSession()
@@ -126,18 +128,22 @@ export function useRealtimeSync() {
       })
     }
 
-    // Safety net: Tab focus re-fetch
+    // Safety net: Tab focus re-fetch (debounced to prevent hammering DB)
+    let visibilityTimeout: any = null
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        console.log('Tab focused, re-syncing from DB...')
-        const conversationStore = useConversationStore()
-        void conversationStore.reloadMetadata()
-        if (conversationStore.activeConversationId) {
-          void conversationStore.selectConversation(conversationStore.activeConversationId)
-        }
+        const now = Date.now()
+        if (now - lastSyncTimestamp < SYNC_COOLDOWN_MS) return
         
-        // Actually, we should trigger a CRDT full-sync here to catch up on anything missed while sleeping
-        // We can do this in Phase 3/4 via a REST call to POST /api/crdt/sync
+        clearTimeout(visibilityTimeout)
+        visibilityTimeout = setTimeout(() => {
+          lastSyncTimestamp = Date.now()
+          const conversationStore = useConversationStore()
+          void conversationStore.reloadMetadata()
+          if (conversationStore.activeConversationId) {
+            void conversationStore.loadActiveDetail(conversationStore.activeConversationId)
+          }
+        }, 500) // 500ms debounce to prevent rapid-fire on fast tab switches
       }
     }
     window.addEventListener('visibilitychange', handleVisibility)
