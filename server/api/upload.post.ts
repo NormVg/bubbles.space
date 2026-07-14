@@ -1,7 +1,5 @@
 import { defineEventHandler, createError, readFormData } from 'h3'
-import { mkdir, writeFile } from 'fs/promises'
-import { join } from 'path'
-import { randomUUID } from 'crypto'
+import { Client, Storage, ID } from 'node-appwrite'
 
 export default defineEventHandler(async (event) => {
   let formData: FormData
@@ -17,31 +15,43 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'No files uploaded' })
   }
 
-  const uploadedFiles = []
-  
-  // Ensure the uploads directory exists
-  const uploadDir = join(process.cwd(), 'public', 'uploads')
-  try {
-    await mkdir(uploadDir, { recursive: true })
-  } catch (err) {
-    console.error('Failed to create upload dir', err)
+  const endpoint = process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1'
+  const projectId = process.env.APPWRITE_PROJECT_ID
+  const apiKey = process.env.APPWRITE_API_KEY
+  const bucketId = process.env.APPWRITE_BUCKET_ID
+
+  if (!projectId || !apiKey || !bucketId) {
+    throw createError({ statusCode: 500, statusMessage: 'Appwrite storage credentials missing' })
   }
+
+  const client = new Client()
+    .setEndpoint(endpoint)
+    .setProject(projectId)
+    .setKey(apiKey)
+
+  const storage = new Storage(client)
+  const uploadedFiles = []
 
   for (const file of files) {
     if (file.name) {
-      // Create a unique filename
-      const ext = file.name.split('.').pop()
-      const uniqueFilename = `${randomUUID()}.${ext}`
-      const filePath = join(uploadDir, uniqueFilename)
-      
-      const buffer = Buffer.from(await file.arrayBuffer())
-      await writeFile(filePath, buffer)
-      
-      uploadedFiles.push({
-        originalName: file.name,
-        url: `/uploads/${uniqueFilename}`,
-        mimeType: file.type
-      })
+      try {
+        const res = await storage.createFile(
+          bucketId,
+          ID.unique(),
+          file
+        )
+
+        // Construct view URL
+        const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
+
+        uploadedFiles.push({
+          originalName: file.name,
+          url: fileUrl,
+          mimeType: file.type
+        })
+      } catch (err) {
+        console.error('Failed to upload file to Appwrite', err)
+      }
     }
   }
 
