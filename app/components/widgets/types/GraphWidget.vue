@@ -24,8 +24,9 @@ const graphData = computed(() => {
     data.datasets = [{ values: [], color: 'var(--accent)' }] // Fallback to prevent crash
   } else {
     dataError.value = false
+    const defaultColors = ['#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1']
     // Ensure every dataset has a values array (support Chart.js style 'data' array too)
-    data.datasets = data.datasets.map((ds: any) => {
+    data.datasets = data.datasets.map((ds: any, i: number) => {
       let arr = []
       if (Array.isArray(ds.data) && ds.data.length > 0) {
         arr = ds.data
@@ -39,7 +40,8 @@ const graphData = computed(() => {
       
       return {
         ...ds,
-        values: arr.map(Number) // ensure they are numbers
+        values: arr.map(Number), // ensure they are numbers
+        color: ds.color || defaultColors[i % defaultColors.length]
       }
     })
   }
@@ -231,6 +233,13 @@ const pieSlices = computed(() => {
     </div>
     
     <div v-else class="graph-display" :class="{ 'is-mounted': isMounted }">
+      <!-- Universal Legend (Line/Bar) -->
+      <div class="html-legend" v-if="graphData.graphType !== 'pie' && graphData.datasets.length > 1">
+        <div class="legend-item" v-for="(ds, i) in graphData.datasets" :key="i">
+          <span class="legend-color" :style="{ backgroundColor: ds.color }"></span>
+          <span class="legend-label">{{ ds.label || `Dataset ${i + 1}` }}</span>
+        </div>
+      </div>
       <!-- Error State -->
       <div v-if="dataError" class="graph-error-state">
         <LucideAlertCircle :size="32" class="error-icon" />
@@ -298,7 +307,7 @@ const pieSlices = computed(() => {
             <path 
               :d="generateSmoothPath(dataset.values)" 
               class="line-path" 
-              :stroke="dataset.color || 'var(--accent)'"
+              :stroke="dataset.color"
               filter="url(#glow)"
             />
             <circle 
@@ -307,7 +316,7 @@ const pieSlices = computed(() => {
               :cy="getY(val)" 
               r="5" 
               class="line-point"
-              :fill="dataset.color || 'var(--accent)'"
+              :fill="dataset.color"
               :style="{ transitionDelay: `${i * 0.05}s` }"
             />
           </template>
@@ -323,7 +332,7 @@ const pieSlices = computed(() => {
               :width="barLayout.barWidth * 0.9" 
               :height="isMounted ? padding.top + innerHeight - getY(val) : 0" 
               class="bar-rect"
-              :fill="dataset.color || 'var(--accent)'"
+              :fill="dataset.color"
               rx="4"
               :style="{ transitionDelay: `${i * 0.05 + dsIndex * 0.1}s` }"
             />
@@ -369,6 +378,37 @@ const pieSlices = computed(() => {
   flex-direction: column;
   gap: 8px;
   height: 100%;
+}
+
+.html-legend {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  z-index: 10;
+  padding: 0 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.legend-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .editor-header {
