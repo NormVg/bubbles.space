@@ -25,30 +25,44 @@ export const useConversationStore = defineStore('conversations', () => {
 
   /**
    * Safe localStorage write that handles quota exceeded by evicting
-   * old conversation caches (largest first) to make room.
+   * the oldest conversation caches first, but never the active one.
    */
   function safeLocalSet(key: string, value: string): void {
     try {
       localStorage.setItem(key, value)
     } catch {
-      // Quota exceeded — evict old conversation detail caches
-      const keysToEvict: { key: string, size: number }[] = []
+      // Quota exceeded — find all cached conversation detail keys
+      const activeKey = `bubbles-conv-${activeConversationId.value}`
+      const cachedKeys: string[] = []
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i)
-        if (k && k.startsWith('bubbles-conv-')) {
-          keysToEvict.push({ key: k, size: localStorage.getItem(k)?.length ?? 0 })
+        if (k && k.startsWith('bubbles-conv-') && k !== activeKey) {
+          cachedKeys.push(k)
         }
       }
-      // Evict largest first
-      keysToEvict.sort((a, b) => b.size - a.size)
-      for (const item of keysToEvict.slice(0, 3)) {
-        localStorage.removeItem(item.key)
+
+      // Sort by meta list order (oldest conversations first).
+      // Keys not found in metaList are evicted first (orphaned caches).
+      const idOrder = new Map(metaList.value.map((m, idx) => [m.id, idx]))
+      cachedKeys.sort((a, b) => {
+        const idA = a.replace('bubbles-conv-', '')
+        const idB = b.replace('bubbles-conv-', '')
+        const orderA = idOrder.get(idA) ?? -1 // orphans get -1 (evicted first)
+        const orderB = idOrder.get(idB) ?? -1
+        return orderA - orderB
+      })
+
+      // Evict oldest until we free enough space (or run out of keys)
+      for (const k of cachedKeys) {
+        localStorage.removeItem(k)
+        try {
+          localStorage.setItem(key, value)
+          return // success
+        } catch {
+          // still not enough, keep evicting
+        }
       }
-      try {
-        localStorage.setItem(key, value)
-      } catch {
-        // Still failing — silently give up on caching
-      }
+      // All evictable keys removed and still failing — silently give up
     }
   }
 
