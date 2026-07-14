@@ -16,21 +16,32 @@ const emit = defineEmits<{
   (e: 'save', data: any): void
 }>()
 
-const editUrl = ref(props.data.url || '')
-const editFilename = ref(props.data.filename || '')
+const editFiles = ref<Array<{ url: string, filename: string, mimeType?: string }>>([])
 
 watch(() => props.isEditing, (editing) => {
   if (editing) {
-    editUrl.value = props.data.url || ''
-    editFilename.value = props.data.filename || ''
+    editFiles.value = JSON.parse(JSON.stringify(filesList.value))
+    if (editFiles.value.length === 0) {
+      editFiles.value.push({ url: '', filename: '' })
+    }
   } else {
     emit('save', { 
       ...props.data, 
-      url: editUrl.value.trim(), 
-      filename: editFilename.value.trim() 
+      files: editFiles.value.filter(f => f.url && f.url.trim()),
+      url: undefined,
+      filename: undefined,
+      mimeType: undefined
     })
   }
 })
+
+function addFile() {
+  editFiles.value.push({ url: '', filename: '' })
+}
+
+function removeFile(index: number) {
+  editFiles.value.splice(index, 1)
+}
 
 const filesList = computed(() => {
   if (props.data.files && props.data.files.length > 0) {
@@ -54,23 +65,34 @@ function getExtension(name: string = '') {
       <div class="edit-header">
         <LucideFile :size="16" />
         <span>File Details</span>
+        <button class="add-btn" @click="addFile" title="Add File">
+          <LucidePlus :size="16" />
+        </button>
       </div>
-      <label>URL</label>
-      <input 
-        v-model="editUrl" 
-        type="text" 
-        placeholder="https://example.com/file.zip"
-        class="url-input"
-        @keydown.enter.stop
-      />
-      <label>Filename (Optional)</label>
-      <input 
-        v-model="editFilename" 
-        type="text" 
-        placeholder="document.pdf"
-        class="url-input"
-        @keydown.enter.stop
-      />
+      
+      <div class="edit-files-list">
+        <div v-for="(file, idx) in editFiles" :key="idx" class="edit-file-item">
+          <div class="edit-file-inputs">
+            <input 
+              v-model="file.url" 
+              type="text" 
+              placeholder="URL (https://...)"
+              class="url-input"
+              @keydown.enter.stop
+            />
+            <input 
+              v-model="file.filename" 
+              type="text" 
+              placeholder="Filename (document.pdf)"
+              class="url-input"
+              @keydown.enter.stop
+            />
+          </div>
+          <button class="remove-btn" @click="removeFile(idx)" title="Remove File">
+            <LucideX :size="16" />
+          </button>
+        </div>
+      </div>
     </div>
     
     <div v-else class="file-container">
@@ -131,14 +153,54 @@ function getExtension(name: string = '') {
   margin-bottom: 8px;
 }
 
-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 4px;
+.add-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+}
+.add-btn:hover { background: rgba(59, 130, 246, 0.1); }
+
+.edit-files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.url-input {
+.edit-file-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
   background: var(--bg-base);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.edit-file-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+}
+.remove-btn:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+.url-input {
+  background: var(--bg-overlay);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 8px 12px;
