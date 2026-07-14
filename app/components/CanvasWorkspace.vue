@@ -425,14 +425,36 @@ async function handleDrop(e: DragEvent) {
     let currentSpawnX = canvasX
     let currentSpawnY = canvasY
 
+    const images = []
+    const otherFiles = []
+
     for (const file of res.files) {
+      if ((file.mimeType || '').startsWith('image/')) {
+        images.push(file)
+      } else {
+        otherFiles.push(file)
+      }
+    }
+
+    if (images.length > 0) {
+      widgetStore.addWidget({
+        type: 'image',
+        x: currentSpawnX,
+        y: currentSpawnY,
+        width: 400,
+        height: 400,
+        data: images.length > 1 ? { images: images.map(img => img.url) } : { url: images[0].url }
+      })
+      currentSpawnX += 40
+      currentSpawnY += 40
+    }
+
+    for (const file of otherFiles) {
       const mime = file.mimeType || ''
       let type = 'markdown'
       
       if (mime === 'application/pdf') {
         type = 'pdf'
-      } else if (mime.startsWith('image/')) {
-        type = 'image'
       } else if (mime.startsWith('video/')) {
         type = 'video'
       }
@@ -442,7 +464,7 @@ async function handleDrop(e: DragEvent) {
         x: currentSpawnX,
         y: currentSpawnY,
         width: 400,
-        height: type === 'image' ? 400 : 300,
+        height: 300,
         data: type === 'markdown' ? { text: `[${file.originalName}](${file.url})` } : { url: file.url }
       })
       
