@@ -91,7 +91,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="skel-body">
-          <div v-for="i in 5" :key="i" class="skel-line w-full" :style="{ width: `${80 + Math.random() * 15}%` }"></div>
+          <div v-for="(w, i) in [85, 92, 78, 88, 81]" :key="i" class="skel-line w-full" :style="{ width: `${w}%` }"></div>
         </div>
       </div>
     </template>
@@ -100,18 +100,20 @@ onMounted(() => {
       <div class="sidebar-wrapper">
         <div class="view-switcher">
           <button 
+            class="view-btn"
             :class="{ active: currentView === 'knowledge' }" 
             @click="currentView = 'knowledge'"
           >
-            <LucideBrain :size="16" />
-            Knowledge Base
+            <LucideBrain :size="14" />
+            Knowledge
           </button>
           <button 
+            class="view-btn"
             :class="{ active: currentView === 'files' }" 
             @click="currentView = 'files'"
           >
-            <LucideFolderOpen :size="16" />
-            File Library
+            <LucideFolderOpen :size="14" />
+            Files
           </button>
         </div>
         
@@ -165,41 +167,51 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
-  background: var(--bg-surface);
+  background: var(--bg-base); /* Match MemoryTree base */
+}
+
+/* Let the inner MemoryTree lose its border/width if inside wrapper */
+.sidebar-wrapper :deep(.sidebar) {
+  width: 100%;
+  min-width: 100%;
+  border-right: none;
 }
 
 .view-switcher {
   display: flex;
-  flex-direction: column;
-  padding: 16px;
+  flex-direction: row;
+  padding: 4px;
+  margin: 20px 16px 4px 16px;
+  background: var(--bg-soft);
+  border-radius: 12px;
   gap: 4px;
-  border-bottom: 1px solid var(--border);
 }
 
-.view-switcher button {
+.view-btn {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 12px;
   background: transparent;
   border: none;
   border-radius: 8px;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.view-switcher button:hover {
-  background: var(--bg-soft);
+.view-btn:hover {
+  color: var(--text-secondary);
+}
+
+.view-btn.active {
+  background: var(--bg-base);
   color: var(--text-primary);
-}
-
-.view-switcher button.active {
-  background: rgba(var(--accent-rgb), 0.1);
-  color: var(--accent);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 0 0 0.5px var(--border);
 }
 
 .sidebar {
