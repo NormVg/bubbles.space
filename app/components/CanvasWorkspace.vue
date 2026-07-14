@@ -411,8 +411,9 @@ async function handleDrop(e: DragEvent) {
   const canvasX = (viewX - currentOffsetX) / currentScale
   const canvasY = (viewY - currentOffsetY) / currentScale
 
+  const filesArray = Array.from(e.dataTransfer.files)
   const formData = new FormData()
-  Array.from(e.dataTransfer.files).forEach(file => {
+  filesArray.forEach(file => {
     formData.append('files', file)
   })
 
@@ -452,11 +453,21 @@ async function handleDrop(e: DragEvent) {
     for (const file of otherFiles) {
       const mime = file.mimeType || ''
       let type = 'markdown'
+      let content = `[${file.originalName}](${file.url})`
       
       if (mime === 'application/pdf') {
         type = 'pdf'
       } else if (mime.startsWith('video/')) {
         type = 'video'
+      } else if (mime.startsWith('text/')) {
+        const originalFile = filesArray.find(f => f.name === file.originalName)
+        if (originalFile) {
+          try {
+            content = await originalFile.text()
+          } catch (e) {
+            console.error('Failed to read text file', e)
+          }
+        }
       }
 
       widgetStore.addWidget({
@@ -465,7 +476,7 @@ async function handleDrop(e: DragEvent) {
         y: currentSpawnY,
         width: 400,
         height: 300,
-        data: type === 'markdown' ? { text: `[${file.originalName}](${file.url})` } : { url: file.url }
+        data: type === 'markdown' ? { content } : { url: file.url }
       })
       
       currentSpawnX += 40
