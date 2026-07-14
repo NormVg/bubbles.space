@@ -71,8 +71,7 @@ const extension = computed(() => {
       </div>
 
       <div v-else class="file-card">
-        <div class="file-icon-wrapper">
-          <LucideFile :size="48" class="file-icon" />
+        <div class="file-icon-box">
           <span class="file-ext">{{ extension }}</span>
         </div>
         
@@ -80,12 +79,11 @@ const extension = computed(() => {
           <h3 class="filename" :title="data.filename || 'Unknown File'">
             {{ data.filename || 'Unknown File' }}
           </h3>
-          <p class="mime" v-if="data.mimeType">{{ data.mimeType }}</p>
+          <p class="file-meta">{{ extension }} Document</p>
         </div>
         
-        <a :href="data.url" download target="_blank" rel="noopener noreferrer" class="download-btn" @click.stop>
-          <LucideDownload :size="16" />
-          <span>Download</span>
+        <a :href="data.url" download target="_blank" rel="noopener noreferrer" class="download-btn" @click.stop title="Download">
+          <LucideDownload :size="18" />
         </a>
       </div>
     </div>
@@ -147,7 +145,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 12px;
 }
 
 .empty-state {
@@ -163,54 +161,69 @@ label {
 
 .file-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
   gap: 16px;
-  text-align: center;
   width: 100%;
   height: 100%;
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.file-icon-wrapper {
-  position: relative;
+.file-icon-box {
+  width: 40px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--accent) 0%, rgba(59, 130, 246, 0.7) 100%);
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent);
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.file-icon-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-bottom-left-radius: 4px;
 }
 
 .file-ext {
-  position: absolute;
-  bottom: 8px;
   font-size: 10px;
   font-weight: 800;
-  background: var(--bg-base);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--text-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  color: white;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
 }
 
 .file-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .filename {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 16px;
 }
 
-.mime {
+.file-meta {
   font-size: 12px;
   color: var(--text-secondary);
   margin: 0;
@@ -219,23 +232,19 @@ label {
 .download-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: var(--accent);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-secondary);
+  background: transparent;
+  border-radius: 8px;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
   transition: all 0.2s ease;
-  margin-top: 8px;
+  flex-shrink: 0;
 }
+
 .download-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0, 0.3);
-  filter: brightness(1.1);
-}
-.download-btn:active {
-  transform: translateY(0);
+  background: var(--bg-overlay);
+  color: var(--text-primary);
 }
 </style>

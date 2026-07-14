@@ -476,7 +476,7 @@ async function handleDrop(e: DragEvent) {
         x: currentSpawnX,
         y: currentSpawnY,
         width: type === 'file' ? 250 : 400,
-        height: type === 'file' ? 120 : 300,
+        height: type === 'file' ? 80 : 300,
         data: type === 'markdown' 
           ? { content } 
           : type === 'file'
