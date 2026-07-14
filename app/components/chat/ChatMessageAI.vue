@@ -69,7 +69,7 @@ const groupedParts = computed(() => {
       groups.push({ 
         type: 'reasoning', 
         reasoning: (part as any).text || '',
-        isProcessing: (part as any).state === 'streaming'
+        isProcessing: !props.isDone
       })
     }
   }
