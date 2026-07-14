@@ -1,4 +1,4 @@
-import { defineEventHandler, createError } from 'h3'
+import { defineEventHandler, createError, readFormData } from 'h3'
 import { mkdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto'
 export default defineEventHandler(async (event) => {
   let formData: FormData
   try {
-    formData = await event.request.formData()
+    formData = await readFormData(event)
   } catch (err) {
     console.error('Form data parsing error:', err)
     throw createError({ statusCode: 400, statusMessage: 'Failed to parse upload data' })
