@@ -403,6 +403,8 @@ interface UploadJob {
 
 const activeUploads = ref<UploadJob[]>([])
 const uploadManagerVisible = computed(() => activeUploads.value.length > 0)
+const isUploadManagerExpanded = ref(false)
+const hasActiveUploads = computed(() => activeUploads.value.some(u => u.status === 'uploading'))
 
 function uploadFileWithProgress(file: File, onProgress: (pct: number) => void): Promise<{ files: any[] }> {
   return new Promise((resolve, reject) => {
@@ -475,6 +477,7 @@ async function handleDrop(e: DragEvent) {
   }))
 
   activeUploads.value.push(...jobs)
+  isUploadManagerExpanded.value = true
 
   await Promise.all(jobs.map(async (job) => {
     try {
@@ -611,29 +614,33 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
       </div>
     </Transition>
 
-    <!-- Floating Upload Manager -->
-    <Transition name="slide-up">
-      <div v-if="uploadManagerVisible" class="upload-manager">
-        <div class="um-header">
-          <LucideCloudUpload :size="16" class="um-icon" />
-          <span>Uploading to Bubbles...</span>
-          <span class="um-count">{{ activeUploads.filter(u => u.status === 'success').length }} / {{ activeUploads.length }}</span>
-        </div>
-        <div class="um-list">
-          <div v-for="job in activeUploads" :key="job.id" class="um-item">
-            <div class="um-item-info">
-              <span class="um-filename" :title="job.file.name">{{ job.file.name }}</span>
-              <span class="um-status" :class="job.status">
-                <template v-if="job.status === 'uploading'">{{ job.progress }}%</template>
-                <template v-else-if="job.status === 'success'">Done</template>
-                <template v-else>Failed</template>
-              </span>
-            </div>
-            <div class="um-progress-bg">
-              <div class="um-progress-fill" :class="job.status" :style="{ width: `${job.progress}%` }"></div>
+    <!-- Floating Upload Manager Chip -->
+    <Transition name="slide-down">
+      <div v-if="uploadManagerVisible" class="upload-manager-wrapper">
+        <button class="um-chip" @click="isUploadManagerExpanded = !isUploadManagerExpanded">
+          <LucideCloudUpload :size="16" class="um-chip-icon" :class="{ 'is-uploading': hasActiveUploads }" />
+          <span class="um-chip-text" v-if="!isUploadManagerExpanded || !hasActiveUploads">
+            {{ activeUploads.filter(u => u.status === 'success').length }} / {{ activeUploads.length }}
+          </span>
+        </button>
+
+        <Transition name="fade">
+          <div v-show="isUploadManagerExpanded" class="um-list">
+            <div v-for="job in activeUploads" :key="job.id" class="um-item">
+              <div class="um-item-info">
+                <span class="um-filename" :title="job.file.name">{{ job.file.name }}</span>
+                <span class="um-status" :class="job.status">
+                  <template v-if="job.status === 'uploading'">{{ job.progress }}%</template>
+                  <template v-else-if="job.status === 'success'">Done</template>
+                  <template v-else>Failed</template>
+                </span>
+              </div>
+              <div class="um-progress-bg">
+                <div class="um-progress-fill" :class="job.status" :style="{ width: `${job.progress}%` }"></div>
+              </div>
             </div>
           </div>
-        </div>
+        </Transition>
       </div>
     </Transition>
 
@@ -725,46 +732,64 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   z-index: 99998;
 }
 
-/* ── Upload Manager Overlay ── */
-.upload-manager {
+/* ── Upload Manager Chip & List ── */
+.upload-manager-wrapper {
   position: absolute;
-  bottom: 48px;
-  right: 96px;
-  width: 320px;
-  background: var(--bg-surface);
-  border: 0.5px solid var(--border-strong);
-  border-radius: 16px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
-  backdrop-filter: blur(24px);
-  z-index: 100000;
+  top: 20px;
+  right: 64px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 100000;
+  pointer-events: auto;
 }
 
-.um-header {
-  padding: 16px;
+.um-chip {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-  font-weight: 600;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 16px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-strong);
   color: var(--text-primary);
-}
-
-.um-icon {
-  color: var(--accent);
-}
-
-.um-count {
-  margin-left: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   font-size: 12px;
-  color: var(--text-muted);
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.um-chip:hover {
+  background: var(--bg-base);
+  border-color: var(--border-hover);
+}
+
+.um-chip-icon {
+  color: var(--text-muted);
+}
+.um-chip-icon.is-uploading {
+  color: #3b82f6; /* Blue 500 */
+  animation: pulse-upload 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pulse-upload {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
 }
 
 .um-list {
+  width: 280px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  backdrop-filter: blur(24px);
   max-height: 280px;
   overflow-y: auto;
   padding: 8px;
@@ -825,14 +850,14 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
 .um-progress-fill.success { background: var(--color-success, #10b981); }
 .um-progress-fill.error { background: var(--color-danger, #ef4444); }
 
-.slide-up-enter-active,
-.slide-up-leave-active {
+.slide-down-enter-active,
+.slide-down-leave-active {
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.slide-up-enter-from,
-.slide-up-leave-to {
+.slide-down-enter-from,
+.slide-down-leave-to {
   opacity: 0;
-  transform: translateY(20px) scale(0.96);
+  transform: translateY(-20px) scale(0.96);
 }
 
 .init-overlay {

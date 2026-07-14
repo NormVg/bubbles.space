@@ -45,14 +45,13 @@ export default defineEventHandler(async (event) => {
 
   for (const file of files) {
     if (file.name) {
-      try {
-        const buffer = Buffer.from(await file.arrayBuffer())
-        const inputFile = InputFile.fromBuffer(buffer, file.name)
-        const res = await storage.createFile(bucketId, ID.unique(), inputFile)
+      const buffer = Buffer.from(await file.arrayBuffer())
+      const inputFile = InputFile.fromBuffer(buffer, file.name)
+      const res = await storage.createFile(bucketId, ID.unique(), inputFile)
 
-        // Construct view URL
-        const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
-        const fileId = res.$id
+      // Construct view URL
+      const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
+      const fileId = res.$id
 
         // Persist to database
         await db.insert(userFile).values({
@@ -70,9 +69,6 @@ export default defineEventHandler(async (event) => {
           url: fileUrl,
           mimeType: file.type
         })
-      } catch (err) {
-        console.error('Failed to upload file to Appwrite', err)
-      }
     }
   }
 
