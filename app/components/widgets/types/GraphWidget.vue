@@ -17,12 +17,22 @@ const graphData = computed(() => {
     graphType: 'line'
   }
   
-  // Basic validation check
   const data = { ...defaultData, ...props.data }
+  
   if (!data.datasets || !Array.isArray(data.datasets) || data.datasets.length === 0) {
     dataError.value = true
+    data.datasets = [{ values: [], color: 'var(--accent)' }] // Fallback to prevent crash
   } else {
     dataError.value = false
+    // Ensure every dataset has a values array
+    data.datasets = data.datasets.map((ds: any) => ({
+      ...ds,
+      values: Array.isArray(ds.values) ? ds.values : []
+    }))
+  }
+
+  if (!data.labels || !Array.isArray(data.labels)) {
+    data.labels = []
   }
   
   return data
