@@ -389,8 +389,58 @@ onUnmounted(() => {
 })
 
 const isDraggingFile = ref(false)
-const isUploading = ref(false)
-const uploadError = ref<string | null>(null)
+
+interface UploadJob {
+  id: string
+  file: File
+  progress: number
+  status: 'uploading' | 'success' | 'error'
+  error?: string
+  result?: { url: string, mimeType: string, originalName: string }
+  canvasX: number
+  canvasY: number
+}
+
+const activeUploads = ref<UploadJob[]>([])
+const uploadManagerVisible = computed(() => activeUploads.value.length > 0)
+
+function uploadFileWithProgress(file: File, onProgress: (pct: number) => void): Promise<{ files: any[] }> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    const formData = new FormData()
+    formData.append('files', file)
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percentComplete = Math.round((event.loaded / event.total) * 100)
+        onProgress(percentComplete)
+      }
+    }
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText))
+        } catch (e) {
+          reject(new Error('Invalid response'))
+        }
+      } else {
+        try {
+          const res = JSON.parse(xhr.responseText)
+          reject(new Error(res.statusMessage || 'Upload failed'))
+        } catch (e) {
+          reject(new Error(`Upload failed with status ${xhr.status}`))
+        }
+      }
+    }
+
+    xhr.onerror = () => reject(new Error('Network error'))
+
+    xhr.open('POST', '/api/upload')
+    xhr.withCredentials = true
+    xhr.send(formData)
+  })
+}
 
 function handleDragOver(e: DragEvent) {
   isDraggingFile.value = true
@@ -414,114 +464,125 @@ async function handleDrop(e: DragEvent) {
   const canvasY = (viewY - currentOffsetY) / currentScale
 
   const filesArray = Array.from(e.dataTransfer.files)
-  const formData = new FormData()
-  filesArray.forEach(file => {
-    formData.append('files', file)
-  })
+  
+  const jobs: UploadJob[] = filesArray.map(f => ({
+    id: crypto.randomUUID(),
+    file: f,
+    progress: 0,
+    status: 'uploading',
+    canvasX,
+    canvasY
+  }))
 
-  isUploading.value = true
-  uploadError.value = null
+  activeUploads.value.push(...jobs)
 
-  try {
-    const res = await $fetch<{ files: {url: string, mimeType: string, originalName: string}[] }>('/api/upload', {
-      method: 'POST',
-      body: formData
+  await Promise.all(jobs.map(async (job) => {
+    try {
+      const res = await uploadFileWithProgress(job.file, (pct) => {
+        job.progress = pct
+      })
+      if (res.files && res.files.length > 0) {
+        job.result = res.files[0]
+        job.status = 'success'
+        job.progress = 100
+      } else {
+        throw new Error('No file returned')
+      }
+    } catch (err: any) {
+      job.status = 'error'
+      job.error = err.message
+      console.error(`Failed to upload ${job.file.name}`, err)
+    }
+  }))
+
+  let currentSpawnX = canvasX
+  let currentSpawnY = canvasY
+
+  const images = []
+  const specialFiles = []
+  const genericFiles = []
+
+  const successfulResults = jobs.filter(j => j.status === 'success' && j.result).map(j => j.result!)
+
+  for (const file of successfulResults) {
+    const mime = file.mimeType || ''
+    if (mime.startsWith('image/')) {
+      images.push(file)
+    } else if (mime === 'application/pdf' || mime.startsWith('video/') || mime.startsWith('text/')) {
+      specialFiles.push(file)
+    } else {
+      genericFiles.push(file)
+    }
+  }
+
+  if (images.length > 0) {
+    widgetStore.addWidget({
+      type: 'image',
+      x: currentSpawnX,
+      y: currentSpawnY,
+      width: 400,
+      height: 400,
+      data: images.length > 1 ? { images: images.map(img => img.url) } : { url: images[0].url }
+    })
+    currentSpawnX += 40
+    currentSpawnY += 40
+  }
+
+  for (const file of specialFiles) {
+    const mime = file.mimeType || ''
+    let type = 'file'
+    let content = `[${file.originalName}](${file.url})`
+    
+    if (mime === 'application/pdf') {
+      type = 'pdf'
+    } else if (mime.startsWith('video/')) {
+      type = 'video'
+    } else if (mime.startsWith('text/')) {
+      type = 'markdown'
+      const originalFile = filesArray.find(f => f.name === file.originalName)
+      if (originalFile) {
+        try {
+          content = await originalFile.text()
+        } catch (e) {
+          console.error('Failed to read text file', e)
+        }
+      }
+    }
+
+    widgetStore.addWidget({
+      type,
+      x: currentSpawnX,
+      y: currentSpawnY,
+      width: 400,
+      height: 300,
+      data: type === 'markdown' ? { content } : { url: file.url }
     })
     
-    let currentSpawnX = canvasX
-    let currentSpawnY = canvasY
-
-    const images = []
-    const specialFiles = []
-    const genericFiles = []
-
-    for (const file of res.files) {
-      const mime = file.mimeType || ''
-      if (mime.startsWith('image/')) {
-        images.push(file)
-      } else if (mime === 'application/pdf' || mime.startsWith('video/') || mime.startsWith('text/')) {
-        specialFiles.push(file)
-      } else {
-        genericFiles.push(file)
-      }
-    }
-
-    if (images.length > 0) {
-      widgetStore.addWidget({
-        type: 'image',
-        x: currentSpawnX,
-        y: currentSpawnY,
-        width: 400,
-        height: 400,
-        data: images.length > 1 ? { images: images.map(img => img.url) } : { url: images[0].url }
-      })
-      currentSpawnX += 40
-      currentSpawnY += 40
-    }
-
-    for (const file of specialFiles) {
-      const mime = file.mimeType || ''
-      let type = 'file'
-      let content = `[${file.originalName}](${file.url})`
-      
-      if (mime === 'application/pdf') {
-        type = 'pdf'
-      } else if (mime.startsWith('video/')) {
-        type = 'video'
-      } else if (mime.startsWith('text/')) {
-        type = 'markdown'
-        const originalFile = filesArray.find(f => f.name === file.originalName)
-        if (originalFile) {
-          try {
-            content = await originalFile.text()
-          } catch (e) {
-            console.error('Failed to read text file', e)
-          }
-        }
-      }
-
-      widgetStore.addWidget({
-        type,
-        x: currentSpawnX,
-        y: currentSpawnY,
-        width: 400,
-        height: 300,
-        data: type === 'markdown' ? { content } : { url: file.url }
-      })
-      
-      currentSpawnX += 40
-      currentSpawnY += 40
-    }
-
-    if (genericFiles.length > 0) {
-      widgetStore.addWidget({
-        type: 'file',
-        x: currentSpawnX,
-        y: currentSpawnY,
-        width: 300,
-        height: Math.min(genericFiles.length * 80 + 32, 400),
-        data: {
-          files: genericFiles.map(f => ({
-            url: f.url,
-            filename: f.originalName,
-            mimeType: f.mimeType
-          }))
-        }
-      })
-      currentSpawnX += 40
-      currentSpawnY += 40
-    }
-
-  } catch (err: any) {
-    console.error('Failed to upload files', err)
-    uploadError.value = err?.data?.statusMessage || err?.message || 'Failed to upload files. Please try again.'
-    // Auto clear error after 5 seconds
-    setTimeout(() => {
-      if (uploadError.value) uploadError.value = null
-    }, 5000)
-  } finally {
-    isUploading.value = false
+    currentSpawnX += 40
+    currentSpawnY += 40
   }
+
+  if (genericFiles.length > 0) {
+    widgetStore.addWidget({
+      type: 'file',
+      x: currentSpawnX,
+      y: currentSpawnY,
+      width: 300,
+      height: Math.min(genericFiles.length * 80 + 32, 400),
+      data: {
+        files: genericFiles.map(f => ({
+          url: f.url,
+          filename: f.originalName,
+          mimeType: f.mimeType
+        }))
+      }
+    })
+  }
+
+  setTimeout(() => {
+    // Clear out only the successful jobs from this batch, keep errors or still-uploading ones
+    activeUploads.value = activeUploads.value.filter(u => !jobs.includes(u) || u.status !== 'success')
+  }, 3000)
 }
 
 const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
@@ -550,21 +611,28 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
       </div>
     </Transition>
 
-    <!-- Uploading / Error Overlay -->
-    <Transition name="fade">
-      <div v-if="isUploading || uploadError" class="upload-overlay">
-        <div class="upload-content" :class="{ 'is-error': !!uploadError }">
-          <template v-if="isUploading">
-            <LucideLoader2 :size="32" class="spin-icon" />
-            <span class="upload-text">Uploading files to Appwrite...</span>
-          </template>
-          <template v-else-if="uploadError">
-            <LucideAlertCircle :size="32" class="error-icon" />
-            <div class="error-text-container">
-              <span class="upload-text">Upload Failed</span>
-              <span class="error-subtext">{{ uploadError }}</span>
+    <!-- Floating Upload Manager -->
+    <Transition name="slide-up">
+      <div v-if="uploadManagerVisible" class="upload-manager">
+        <div class="um-header">
+          <LucideCloudUpload :size="16" class="um-icon" />
+          <span>Uploading to Bubbles...</span>
+          <span class="um-count">{{ activeUploads.filter(u => u.status === 'success').length }} / {{ activeUploads.length }}</span>
+        </div>
+        <div class="um-list">
+          <div v-for="job in activeUploads" :key="job.id" class="um-item">
+            <div class="um-item-info">
+              <span class="um-filename" :title="job.file.name">{{ job.file.name }}</span>
+              <span class="um-status" :class="job.status">
+                <template v-if="job.status === 'uploading'">{{ job.progress }}%</template>
+                <template v-else-if="job.status === 'success'">Done</template>
+                <template v-else>Failed</template>
+              </span>
             </div>
-          </template>
+            <div class="um-progress-bg">
+              <div class="um-progress-fill" :class="job.status" :style="{ width: `${job.progress}%` }"></div>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -657,59 +725,114 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   z-index: 99998;
 }
 
-/* ── Uploading Overlay ── */
-.upload-overlay {
+/* ── Upload Manager Overlay ── */
+.upload-manager {
   position: absolute;
   bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 99999;
-  pointer-events: none;
-}
-.upload-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--bg-overlay);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  padding: 12px 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-primary);
-}
-.upload-content.is-error {
-  background: rgba(255, 60, 60, 0.1);
-  border-color: rgba(255, 60, 60, 0.3);
-}
-.spin-icon {
-  animation: spin 1s linear infinite;
-  color: var(--accent);
-}
-.error-icon {
-  color: #ff4d4f;
-}
-.upload-text {
-  font-size: 14px;
-  font-weight: 500;
-}
-.error-text-container {
+  right: 32px;
+  width: 320px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  backdrop-filter: blur(24px);
+  z-index: 100000;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  overflow: hidden;
 }
-.error-subtext {
+
+.um-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.um-icon {
+  color: var(--accent);
+}
+
+.um-count {
+  margin-left: auto;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 300px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.um-list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.um-list::-webkit-scrollbar { width: 4px; }
+.um-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.um-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.um-item-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.um-filename {
+  color: var(--text-primary);
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 200px;
 }
 
-@keyframes spin {
-  100% { transform: rotate(360deg); }
+.um-status {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.um-status.success { color: var(--color-success, #10b981); }
+.um-status.error { color: var(--color-danger, #ef4444); }
+
+.um-progress-bg {
+  height: 4px;
+  background: var(--bg-muted);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.um-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+.um-progress-fill.success { background: var(--color-success, #10b981); }
+.um-progress-fill.error { background: var(--color-danger, #ef4444); }
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
 }
 
 .init-overlay {
