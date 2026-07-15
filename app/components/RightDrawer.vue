@@ -29,11 +29,26 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useUIStore } from '../stores/ui'
-import { useLocalStorage } from '@vueuse/core'
 import ChatInterface from './chat/ChatInterface.vue'
 
 const uiStore = useUIStore()
 const drawerEl = ref<HTMLElement | null>(null)
+
+const drawerWidth = ref(760)
+
+// Load from localStorage cleanly without VueUse to prevent StorageEvent crash
+if (typeof window !== 'undefined') {
+  const savedWidth = localStorage.getItem('bubbles-chat-width-v3')
+  if (savedWidth) {
+    drawerWidth.value = parseFloat(savedWidth)
+  } else {
+    drawerWidth.value = window.innerWidth * 0.5
+  }
+
+  watch(drawerWidth, (newWidth) => {
+    localStorage.setItem('bubbles-chat-width-v3', newWidth.toString())
+  })
+}
 
 function clampDrawerWidth(width: number) {
   if (typeof window === 'undefined') return width
@@ -44,9 +59,6 @@ function clampDrawerWidth(width: number) {
 
   return Math.max(minimumWidth, Math.min(maximumWidth, width))
 }
-
-// This handles the persistent saved value
-const drawerWidth = useLocalStorage('bubbles-chat-width-v3', typeof window !== 'undefined' ? window.innerWidth * 0.5 : 760, { listenToStorageChanges: false })
 
 // This handles the visual width, preventing 60fps local storage writes (lag)
 const currentWidth = ref(clampDrawerWidth(drawerWidth.value))

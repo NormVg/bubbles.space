@@ -1,13 +1,18 @@
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, watch } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
 import type { EveMessage } from 'eve/vue'
 import type { HandleMessageStreamEvent, SessionState } from 'eve/client'
 import type { ConversationMeta, ConversationDetail } from '../../shared/types/conversation.types'
 
 export const useConversationStore = defineStore('conversations', () => {
-  // Use useLocalStorage just to persist the active ID, as it is very small
-  const activeConversationId = useLocalStorage<string>('bubbles-active-conversation-id', '', { listenToStorageChanges: false })
+  // Use a native ref synced with localStorage to avoid VueUse StorageEvent crashes in certain environments
+  const activeConversationId = ref('')
+  if (typeof window !== 'undefined') {
+    activeConversationId.value = localStorage.getItem('bubbles-active-conversation-id') || ''
+    watch(activeConversationId, (newVal) => {
+      localStorage.setItem('bubbles-active-conversation-id', newVal)
+    })
+  }
   
   // State
   const metaList = shallowRef<ConversationMeta[]>([])

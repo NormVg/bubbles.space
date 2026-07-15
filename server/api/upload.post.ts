@@ -1,6 +1,9 @@
 import { defineEventHandler, createError, readFormData } from 'h3'
 import { Client, Storage, ID, Permission, Role } from 'node-appwrite'
 import { InputFile } from 'node-appwrite/file'
+import { promises as fsPromises } from 'fs'
+import { join } from 'path'
+import os from 'os'
 import { auth } from '../utils/auth'
 import { db } from '../db'
 import { userFile } from '../db/schema'
@@ -47,13 +50,21 @@ export default defineEventHandler(async (event) => {
     if (file.name) {
       try {
         const buffer = Buffer.from(await file.arrayBuffer())
-        const inputFile = InputFile.fromBuffer(buffer, file.name)
-        const res = await storage.createFile(
-          bucketId, 
-          ID.unique(), 
-          inputFile, 
-          [Permission.read(Role.any())]
-        )
+        const tmpPath = join(os.tmpdir(), `${crypto.randomUUID()}-${file.name}`)
+        await fsPromises.writeFile(tmpPath, buffer)
+
+        let res;
+        try {
+          const inputFile = InputFile.fromPath(tmpPath, file.name)
+          res = await storage.createFile(
+            bucketId, 
+            ID.unique(), 
+            inputFile, 
+            [Permission.read(Role.any())]
+          )
+        } finally {
+          await fsPromises.unlink(tmpPath).catch(() => {})
+        }
 
         // Construct view URL
         const fileUrl = `${endpoint}/storage/buckets/${bucketId}/files/${res.$id}/view?project=${projectId}`
