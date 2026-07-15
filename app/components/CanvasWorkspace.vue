@@ -536,7 +536,9 @@ async function handleDrop(e: DragEvent) {
       y: currentSpawnY,
       width: 400,
       height: 400,
-      data: images.length > 1 ? { images: images.map(img => img.url) } : { url: images[0].url }
+      data: images.length > 1 
+        ? { images: images.map(img => ({ url: img.url, appwriteFileId: img.appwriteFileId })) } 
+        : { url: images[0].url, appwriteFileId: images[0].appwriteFileId }
     })
     currentSpawnX += 40
     currentSpawnY += 40
@@ -569,7 +571,9 @@ async function handleDrop(e: DragEvent) {
       y: currentSpawnY,
       width: 400,
       height: 300,
-      data: type === 'markdown' ? { content } : { url: file.url }
+      data: type === 'markdown' 
+        ? { content, appwriteFileId: file.appwriteFileId } 
+        : { url: file.url, appwriteFileId: file.appwriteFileId }
     })
     
     currentSpawnX += 40
@@ -587,7 +591,8 @@ async function handleDrop(e: DragEvent) {
         files: genericFiles.map(f => ({
           url: f.url,
           filename: f.originalName,
-          mimeType: f.mimeType
+          mimeType: f.mimeType,
+          appwriteFileId: f.appwriteFileId
         }))
       }
     })

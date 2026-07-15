@@ -119,14 +119,17 @@ export const useWidgetStore = defineStore('widgets', () => {
   const deleteWorkspace = (id: string) => {
     if (id === 'main') return 
     if (yWorkspaces.size <= 1) return 
+
     yWorkspaces.delete(id)
-    
-    // Clean up orphaned widgets
-    for (const [wId, w] of yWidgets.entries()) {
-      if ((w as any).workspaceId === id) {
+    if (activeWorkspaceId.value === id) {
+      activeWorkspaceId.value = 'main'
+    }
+    yWidgets.forEach((w, wId) => {
+      if (w.workspaceId === id) {
+        cleanupWidgetResources(w)
         yWidgets.delete(wId)
       }
-    }
+    })
   }
 
   const renameWorkspace = (id: string, newLabel: string) => {
@@ -280,7 +283,40 @@ export const useWidgetStore = defineStore('widgets', () => {
     }
   }
 
+  const cleanupWidgetResources = (w: Widget) => {
+    const fileIds: string[] = []
+    
+    if (w.data.images && Array.isArray(w.data.images)) {
+      w.data.images.forEach((img: any) => {
+        if (img.appwriteFileId) fileIds.push(img.appwriteFileId)
+      })
+    }
+    if (w.data.appwriteFileId) {
+      fileIds.push(w.data.appwriteFileId)
+    }
+    if (w.data.files && Array.isArray(w.data.files)) {
+      w.data.files.forEach((f: any) => {
+        if (f.appwriteFileId) fileIds.push(f.appwriteFileId)
+      })
+    }
+    
+    if (fileIds.length > 0) {
+      $fetch('/api/delete-file', {
+        method: 'POST',
+        body: { fileIds }
+      }).catch(err => console.error('Failed to cleanup widget files:', err))
+    }
+
+    if (w.data.memoryId) {
+      $fetch(`/api/memory/${w.data.memoryId}`, {
+        method: 'DELETE'
+      }).catch(err => console.error('Failed to cleanup widget memory:', err))
+    }
+  }
+
   const removeWidget = (id: string) => {
+    const w = yWidgets.get(id)
+    if (w) cleanupWidgetResources(w)
     yWidgets.delete(id)
   }
 
@@ -295,6 +331,8 @@ export const useWidgetStore = defineStore('widgets', () => {
   }
 
   const permanentlyDeleteArchivedWidget = (id: string) => {
+    const w = yWidgets.get(id)
+    if (w) cleanupWidgetResources(w)
     yWidgets.delete(id)
   }
 
