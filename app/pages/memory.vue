@@ -193,7 +193,6 @@ onMounted(() => {
   border-right: none;
 }
 
-.view-switcher {
 .empty-selection {
   display: flex;
   flex-direction: column;
