@@ -284,26 +284,48 @@ export const useWidgetStore = defineStore('widgets', () => {
   }
 
   const cleanupWidgetResources = (w: Widget) => {
-    const fileIds: string[] = []
+    const fileIds: Set<string> = new Set()
     
+    const extractIdFromUrl = (url?: string) => {
+      if (!url) return null
+      const match = url.match(/\/files\/([a-zA-Z0-9_-]+)\/view/)
+      return match ? match[1] : null
+    }
+
     if (w.data.images && Array.isArray(w.data.images)) {
       w.data.images.forEach((img: any) => {
-        if (img.appwriteFileId) fileIds.push(img.appwriteFileId)
-      })
-    }
-    if (w.data.appwriteFileId) {
-      fileIds.push(w.data.appwriteFileId)
-    }
-    if (w.data.files && Array.isArray(w.data.files)) {
-      w.data.files.forEach((f: any) => {
-        if (f.appwriteFileId) fileIds.push(f.appwriteFileId)
+        if (img.appwriteFileId) fileIds.add(img.appwriteFileId)
+        else {
+          const id = extractIdFromUrl(img.url || (typeof img === 'string' ? img : undefined))
+          if (id) fileIds.add(id)
+        }
       })
     }
     
-    if (fileIds.length > 0) {
+    if (w.data.appwriteFileId) {
+      fileIds.add(w.data.appwriteFileId)
+    } else if (w.data.url) {
+      const id = extractIdFromUrl(w.data.url)
+      if (id) fileIds.add(id)
+    } else if (w.data.content && w.type === 'markdown') {
+      const match = w.data.content.match(/\/files\/([a-zA-Z0-9_-]+)\/view/)
+      if (match) fileIds.add(match[1])
+    }
+
+    if (w.data.files && Array.isArray(w.data.files)) {
+      w.data.files.forEach((f: any) => {
+        if (f.appwriteFileId) fileIds.add(f.appwriteFileId)
+        else {
+          const id = extractIdFromUrl(f.url)
+          if (id) fileIds.add(id)
+        }
+      })
+    }
+    
+    if (fileIds.size > 0) {
       $fetch('/api/delete-file', {
         method: 'POST',
-        body: { fileIds }
+        body: { fileIds: Array.from(fileIds) }
       }).catch(err => console.error('Failed to cleanup widget files:', err))
     }
 
