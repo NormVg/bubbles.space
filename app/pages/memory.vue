@@ -2,19 +2,24 @@
 import { ref, onMounted } from 'vue'
 import MemoryTree from '~/components/memory/MemoryTree.vue'
 import MemoryViewer from '~/components/memory/MemoryViewer.vue'
-import FileLibrary from '~/components/memory/FileLibrary.vue'
+import FilePreview from '~/components/memory/FilePreview.vue'
 
-const currentView = ref<'knowledge' | 'files'>('knowledge')
 const memories = ref<any[]>([])
+const appwriteFiles = ref<any[]>([])
 const selectedMemory = ref<any | null>(null)
+const selectedAppwriteFile = ref<any | null>(null)
 const isLoading = ref(true)
 
 async function fetchMemories() {
   try {
-    const res = await $fetch('/api/memory')
-    memories.value = res as any[]
+    const [memRes, filesRes] = await Promise.all([
+      $fetch('/api/memory'),
+      $fetch('/api/files').catch(() => ({ files: [] }))
+    ])
+    memories.value = memRes as any[]
+    appwriteFiles.value = (filesRes as any).files || []
   } catch (err) {
-    console.error('Failed to fetch memories:', err)
+    console.error('Failed to fetch data:', err)
   } finally {
     isLoading.value = false
   }
@@ -52,6 +57,27 @@ async function handleDelete(id: string) {
 
 function handleSelect(memory: any) {
   selectedMemory.value = memory
+  selectedAppwriteFile.value = null
+}
+
+function handleSelectFile(file: any) {
+  selectedAppwriteFile.value = file
+  selectedMemory.value = null
+}
+
+async function handleDeleteFile(fileId: string) {
+  try {
+    await $fetch('/api/delete-file', {
+      method: 'POST',
+      body: { fileIds: [fileId] }
+    })
+    appwriteFiles.value = appwriteFiles.value.filter(f => f.appwriteFileId !== fileId)
+    if (selectedAppwriteFile.value?.appwriteFileId === fileId) {
+      selectedAppwriteFile.value = null
+    }
+  } catch (err) {
+    console.error('Failed to delete file:', err)
+  }
 }
 
 onMounted(() => {
@@ -98,43 +124,33 @@ onMounted(() => {
     
     <template v-else>
       <div class="sidebar-wrapper">
-        <div class="view-switcher">
-          <button 
-            class="view-btn"
-            :class="{ active: currentView === 'knowledge' }" 
-            @click="currentView = 'knowledge'"
-          >
-            <LucideBrain :size="14" />
-            Knowledge
-          </button>
-          <button 
-            class="view-btn"
-            :class="{ active: currentView === 'files' }" 
-            @click="currentView = 'files'"
-          >
-            <LucideFolderOpen :size="14" />
-            Files
-          </button>
-        </div>
-        
         <!-- Sidebar -->
         <MemoryTree 
-          v-show="currentView === 'knowledge'"
           :memories="memories" 
-          :selected-id="selectedMemory?.id ?? null"
+          :files="appwriteFiles"
+          :selected-id="selectedMemory?.id || selectedAppwriteFile?.appwriteFileId || null"
           @select="handleSelect"
+          @select-file="handleSelectFile"
         />
       </div>
 
       <!-- Main panel -->
       <div class="memory-main">
         <MemoryViewer 
-          v-if="currentView === 'knowledge'"
+          v-if="selectedMemory"
           :memory="selectedMemory"
           @save="handleSave"
           @delete="handleDelete"
         />
-        <FileLibrary v-else-if="currentView === 'files'" />
+        <FilePreview
+          v-else-if="selectedAppwriteFile"
+          :file="selectedAppwriteFile"
+          @delete="handleDeleteFile"
+        />
+        <div v-else class="empty-selection">
+          <LucideBrain :size="48" stroke-width="1.5" />
+          <p>Select a memory or file to view</p>
+        </div>
       </div>
     </template>
   </div>
@@ -178,40 +194,17 @@ onMounted(() => {
 }
 
 .view-switcher {
+.empty-selection {
   display: flex;
-  flex-direction: row;
-  padding: 4px;
-  margin: 20px 16px 4px 16px;
-  background: var(--bg-soft);
-  border-radius: 12px;
-  gap: 4px;
-}
-
-.view-btn {
-  flex: 1;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
+  height: 100%;
   color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+  gap: 16px;
 }
-
-.view-btn:hover {
-  color: var(--text-secondary);
-}
-
-.view-btn.active {
-  background: var(--bg-base);
-  color: var(--text-primary);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 0 0 0.5px var(--border);
+.empty-selection p {
+  font-size: 15px;
 }
 
 .sidebar {

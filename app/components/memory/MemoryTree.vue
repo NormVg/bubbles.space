@@ -15,10 +15,11 @@ interface MemoryItem {
 
 const props = defineProps<{
   memories: MemoryItem[]
+  files?: any[]
   selectedId: string | null
 }>()
 
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'select-file'])
 
 const DIRS = [
   { path: 'working',    label: 'Working' },
@@ -32,7 +33,7 @@ const DIRS = [
 ] as const
 
 /** Which folders are expanded */
-const expandedFolders = ref<Set<string>>(new Set(DIRS.map(d => d.path)))
+const expandedFolders = ref<Set<string>>(new Set([...DIRS.map(d => d.path), 'files']))
 
 function toggleFolder(folder: string) {
   if (expandedFolders.value.has(folder)) {
@@ -144,6 +145,42 @@ const totalCount = computed(() => props.memories.filter(m => m.type !== 'directo
               <span class="file-dot" />
               <span class="file-label">{{ getFileName(file.path, folder) }}</span>
               <span v-if="file.version > 1" class="file-version">v{{ file.version }}</span>
+            </button>
+          </div>
+        </Transition>
+      </div>
+
+      <!-- Files folder -->
+      <div v-if="files && files.length" class="folder" role="treeitem">
+        <button
+          class="folder-row"
+          @click="toggleFolder('files')"
+          :aria-expanded="expandedFolders.has('files')"
+        >
+          <svg
+            class="chevron"
+            :class="{ rotated: expandedFolders.has('files') }"
+            width="10" height="10" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+          <span class="folder-name">Files</span>
+          <span class="folder-badge">{{ files.length }}</span>
+        </button>
+
+        <Transition name="expand">
+          <div v-if="expandedFolders.has('files')" class="file-list">
+            <button
+              v-for="f in files"
+              :key="f.id || f.appwriteFileId"
+              class="file-row"
+              :class="{ selected: selectedId === f.appwriteFileId }"
+              @click="emit('select-file', f)"
+            >
+              <span class="file-dot" />
+              <span class="file-label" :title="f.originalName">{{ f.originalName }}</span>
             </button>
           </div>
         </Transition>
