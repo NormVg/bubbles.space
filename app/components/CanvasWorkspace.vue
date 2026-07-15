@@ -467,7 +467,7 @@ async function handleDrop(e: DragEvent) {
 
   const filesArray = Array.from(e.dataTransfer.files)
   
-  const jobs: UploadJob[] = filesArray.map(f => ({
+  const jobs: UploadJob[] = filesArray.map(f => reactive({
     id: crypto.randomUUID(),
     file: f,
     progress: 0,
