@@ -481,9 +481,25 @@ async function handleDrop(e: DragEvent) {
 
   await Promise.all(jobs.map(async (job) => {
     try {
+      let fakeProgressInterval: ReturnType<typeof setInterval> | null = null
+
       const res = await uploadFileWithProgress(job.file, (pct) => {
-        job.progress = pct
+        // Map browser upload to 0-50%
+        const mappedPct = Math.round(pct / 2)
+        if (mappedPct > job.progress) job.progress = mappedPct
+        
+        // Once browser finishes uploading to our server, start simulating server-to-Appwrite progress
+        if (pct >= 100 && !fakeProgressInterval) {
+          fakeProgressInterval = setInterval(() => {
+            if (job.progress < 90) {
+              job.progress += Math.max(1, Math.round((95 - job.progress) * 0.1))
+            }
+          }, 300)
+        }
       })
+
+      if (fakeProgressInterval) clearInterval(fakeProgressInterval)
+
       if (res.files && res.files.length > 0) {
         job.result = res.files[0]
         job.status = 'success'
@@ -845,7 +861,7 @@ const cursor = computed(() => (isPanning.value ? 'grabbing' : 'default'))
   height: 100%;
   background: var(--accent);
   border-radius: 2px;
-  transition: width 0.1s linear;
+  transition: width 0.3s ease-out;
 }
 .um-progress-fill.success { background: var(--color-success, #10b981); }
 .um-progress-fill.error { background: var(--color-danger, #ef4444); }
