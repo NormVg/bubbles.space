@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import { drizzle } from 'drizzle-orm/neon-http'
+import { neon } from '@neondatabase/serverless'
 import * as schema from './schema'
 
 const connectionString = process.env.DATABASE_URL
@@ -7,11 +7,7 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not set')
 }
 
-const client = postgres(connectionString, {
-  prepare: false,
-  ssl: 'require',
-  idle_timeout: 20,
-  connect_timeout: 10,
-  max: 3,
-})
-export const db = drizzle(client, { schema })
+// Use Neon's HTTP driver — works over plain HTTPS (port 443) and bypasses
+// any TCP/SSL/DNS quirks with the postgres.js WebSocket transport.
+const sql = neon(connectionString)
+export const db = drizzle(sql, { schema })
