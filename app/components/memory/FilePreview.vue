@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { LucideFileText, LucideVideo, LucideFile, LucideExternalLink, LucideTrash2 } from 'lucide-vue-next'
+import { LucideFileText, LucideVideo, LucideFile, LucideExternalLink } from 'lucide-vue-next'
 
 const props = defineProps<{
   file: any
 }>()
 
-const emit = defineEmits(['delete'])
 
-function deleteFile() {
-  if (confirm('Are you sure you want to delete this file?')) {
-    emit('delete', props.file.appwriteFileId)
-  }
-}
 </script>
 
 <template>
@@ -26,10 +20,7 @@ function deleteFile() {
           <LucideExternalLink :size="16" />
           Open Original
         </a>
-        <button class="btn danger" @click="deleteFile">
-          <LucideTrash2 :size="16" />
-          Delete
-        </button>
+
       </div>
     </div>
     

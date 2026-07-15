@@ -14,7 +14,7 @@ async function fetchMemories() {
   try {
     const [memRes, filesRes] = await Promise.all([
       $fetch('/api/memory'),
-      $fetch('/api/files').catch(() => ({ files: [] }))
+      $fetch('/api/files')
     ])
     memories.value = memRes as any[]
     appwriteFiles.value = (filesRes as any).files || []
