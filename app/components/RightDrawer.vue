@@ -230,7 +230,7 @@ function endResize() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 20px 32px 16px 32px;
+  padding: 20px 0 16px 0;
   min-width: 0;
 }
 

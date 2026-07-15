@@ -460,7 +460,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
   justify-content: space-between;
   gap: 8px;
   min-height: 40px;
-  padding: 0 32px 0 0;
+  padding: 0 32px 0 32px;
 }
 
 .session-title-control,
@@ -559,7 +559,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
 .session-browser {
   flex-direction: column;
   gap: 12px;
-  padding: 8px 32px 24px 24px;
+  padding: 8px 32px 24px 32px;
 }
 
 .session-browser-heading {
@@ -637,7 +637,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
 
 /* ─── Chat Input Area ────────────────────────────────────────── */
 .chat-input-wrapper {
-  padding: 0 32px 0 0; /* Clear the Quick Access Bar */
+  padding: 0 32px 0 32px; /* Clear the Quick Access Bar */
   width: 100%;
   box-sizing: border-box;
   position: relative;
@@ -653,7 +653,7 @@ const handleCopy = async (text: string, isUser: boolean) => {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 24px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
   z-index: 5;

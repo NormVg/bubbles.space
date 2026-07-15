@@ -530,7 +530,7 @@ export class MemoryService {
     // Render ASCII
     let output = 'memory/\n';
     const printNode = (node: Record<string, any>, prefix: string = '') => {
-      const keys = Object.keys(node).filter(k => !k.startsWith('_')).sort();
+      const keys = Object.keys(node).filter(k => k !== '_file').sort();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         if (!key) continue;
