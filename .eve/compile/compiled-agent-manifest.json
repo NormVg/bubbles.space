@@ -304,6 +304,18 @@
       "sourceKind": "module"
     },
     {
+      "description": "Get a list of all files uploaded by the user to their workspace.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "logicalPath": "tools/file_list.ts",
+      "name": "file_list",
+      "sourceId": "tools/file_list.ts",
+      "sourceKind": "module"
+    },
+    {
       "description": "Get the current health and statistics of the Bubbles server, including memory usage, uptime, and node version.",
       "inputSchema": {
         "$schema": "http://json-schema.org/draft-07/schema#",

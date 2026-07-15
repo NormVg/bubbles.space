@@ -1,6 +1,6 @@
 import { eq, and, like, or, isNull, isNotNull, lte, gt, gte, desc, sql } from 'drizzle-orm';
 import { db } from '../db';
-import { memory, userFile } from '../db/schema';
+import { memory } from '../db/schema';
 import { randomUUID } from 'crypto';
 import { OpenRouter } from '@openrouter/sdk';
 
@@ -247,49 +247,9 @@ export class MemoryService {
         .where(eq(memory.id, mem.id))
         .execute()
         .catch(console.error);
-        
-      return withDecay(mem);
     }
 
-    const isFilePath = idOrPath.startsWith('files/');
-    const fileName = isFilePath ? idOrPath.substring(6) : null;
-    
-    const fileMem = await db.query.userFile.findFirst({
-      where: and(
-        eq(userFile.userId, userId),
-        or(
-          eq(userFile.appwriteFileId, idOrPath),
-          fileName ? eq(userFile.originalName, fileName) : sql`false`
-        )
-      )
-    });
-
-    if (fileMem) {
-      return {
-        id: fileMem.appwriteFileId,
-        userId: fileMem.userId,
-        path: `files/${fileMem.originalName}`,
-        title: fileMem.originalName,
-        type: fileMem.mimeType,
-        content: `[File URL](${fileMem.url})`,
-        metadata: { url: fileMem.url, originalName: fileMem.originalName },
-        importance: 5,
-        confidence: 1,
-        accessCount: 1,
-        state: 'active',
-        embedding: null,
-        validFrom: fileMem.createdAt,
-        validTo: null,
-        supersededBy: null,
-        source: 'upload',
-        version: 1,
-        createdAt: fileMem.createdAt,
-        updatedAt: fileMem.createdAt,
-        lastAccessedAt: new Date()
-      };
-    }
-
-    return null;
+    return mem ? withDecay(mem) : null;
   }
 
   // ─── List ───────────────────────────────────────────────────────────
@@ -489,23 +449,12 @@ export class MemoryService {
       orderBy: (memories, { desc }) => [desc(memories.validFrom)]
     });
 
-    const allFiles = await db.query.userFile.findMany({
-      where: eq(userFile.userId, userId),
-    });
-
     // Build tree structure
     const tree: Record<string, any> = {};
 
     // Ensure predefined dirs appear even when empty
     for (const dir of PREDEFINED_DIRECTORIES) {
       tree[dir.path] = {};
-    }
-
-    if (allFiles.length > 0) {
-      tree['files'] = {};
-      for (const f of allFiles) {
-        tree['files'][f.originalName] = { _file: true, id: f.appwriteFileId, version: 1 };
-      }
     }
 
     // Group active file memories into the tree

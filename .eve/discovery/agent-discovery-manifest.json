@@ -77,6 +77,11 @@
     },
     {
       "sourceKind": "module",
+      "logicalPath": "tools/file_list.ts",
+      "sourceId": "tools/file_list.ts"
+    },
+    {
+      "sourceKind": "module",
       "logicalPath": "tools/get_app_stats.ts",
       "sourceId": "tools/get_app_stats.ts"
     },

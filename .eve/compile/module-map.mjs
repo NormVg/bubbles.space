@@ -8,21 +8,22 @@ import * as module_4 from "../../agent/tools/canvas_add_widget.ts";
 import * as module_5 from "../../agent/tools/canvas_read_widget.ts";
 import * as module_6 from "../../agent/tools/canvas_remove_widget.ts";
 import * as module_7 from "../../agent/tools/canvas_update_widget.ts";
-import * as module_8 from "../../agent/tools/get_app_stats.ts";
-import * as module_9 from "../../agent/tools/get_weather.ts";
-import * as module_10 from "../../agent/tools/memory_at.ts";
-import * as module_11 from "../../agent/tools/memory_get.ts";
-import * as module_12 from "../../agent/tools/memory_list.ts";
-import * as module_13 from "../../agent/tools/memory_query.ts";
-import * as module_14 from "../../agent/tools/memory_reinforce.ts";
-import * as module_15 from "../../agent/tools/memory_semantic_search.ts";
-import * as module_16 from "../../agent/tools/memory_store.ts";
-import * as module_17 from "../../agent/tools/memory_timeline.ts";
-import * as module_18 from "../../agent/tools/memory_tree.ts";
-import * as module_19 from "../../agent/tools/unsplash_search.ts";
-import * as module_20 from "../../agent/tools/web_search.ts";
-import * as module_21 from "../../agent/tools/wikipedia_search.ts";
-import * as module_22 from "../../agent/tools/youtube_search.ts";
+import * as module_8 from "../../agent/tools/file_list.ts";
+import * as module_9 from "../../agent/tools/get_app_stats.ts";
+import * as module_10 from "../../agent/tools/get_weather.ts";
+import * as module_11 from "../../agent/tools/memory_at.ts";
+import * as module_12 from "../../agent/tools/memory_get.ts";
+import * as module_13 from "../../agent/tools/memory_list.ts";
+import * as module_14 from "../../agent/tools/memory_query.ts";
+import * as module_15 from "../../agent/tools/memory_reinforce.ts";
+import * as module_16 from "../../agent/tools/memory_semantic_search.ts";
+import * as module_17 from "../../agent/tools/memory_store.ts";
+import * as module_18 from "../../agent/tools/memory_timeline.ts";
+import * as module_19 from "../../agent/tools/memory_tree.ts";
+import * as module_20 from "../../agent/tools/unsplash_search.ts";
+import * as module_21 from "../../agent/tools/web_search.ts";
+import * as module_22 from "../../agent/tools/wikipedia_search.ts";
+import * as module_23 from "../../agent/tools/youtube_search.ts";
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -36,21 +37,22 @@ export const moduleMap = Object.freeze({
                   "tools/canvas_read_widget.ts": module_5,
                   "tools/canvas_remove_widget.ts": module_6,
                   "tools/canvas_update_widget.ts": module_7,
-                  "tools/get_app_stats.ts": module_8,
-                  "tools/get_weather.ts": module_9,
-                  "tools/memory_at.ts": module_10,
-                  "tools/memory_get.ts": module_11,
-                  "tools/memory_list.ts": module_12,
-                  "tools/memory_query.ts": module_13,
-                  "tools/memory_reinforce.ts": module_14,
-                  "tools/memory_semantic_search.ts": module_15,
-                  "tools/memory_store.ts": module_16,
-                  "tools/memory_timeline.ts": module_17,
-                  "tools/memory_tree.ts": module_18,
-                  "tools/unsplash_search.ts": module_19,
-                  "tools/web_search.ts": module_20,
-                  "tools/wikipedia_search.ts": module_21,
-                  "tools/youtube_search.ts": module_22
+                  "tools/file_list.ts": module_8,
+                  "tools/get_app_stats.ts": module_9,
+                  "tools/get_weather.ts": module_10,
+                  "tools/memory_at.ts": module_11,
+                  "tools/memory_get.ts": module_12,
+                  "tools/memory_list.ts": module_13,
+                  "tools/memory_query.ts": module_14,
+                  "tools/memory_reinforce.ts": module_15,
+                  "tools/memory_semantic_search.ts": module_16,
+                  "tools/memory_store.ts": module_17,
+                  "tools/memory_timeline.ts": module_18,
+                  "tools/memory_tree.ts": module_19,
+                  "tools/unsplash_search.ts": module_20,
+                  "tools/web_search.ts": module_21,
+                  "tools/wikipedia_search.ts": module_22,
+                  "tools/youtube_search.ts": module_23
                 })
             })
     })
