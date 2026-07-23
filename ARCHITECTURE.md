@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-    SO[System Overview] --> CD[Component Diagram]
+    SO[System Overview] --> CD[Frontend Components]
     SO --> DF[Agent Data Flow]
     CD --> ER[Database Schema]
 ```
@@ -14,104 +14,130 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph ClientApp [Client Application - Nuxt 4 / Vue 3]
-        Canvas[Spatial Canvas]
-        ChatUI[Chat Interface]
-        Widgets[Canvas Widgets]
+    subgraph ClientApp [Nuxt Client Application]
+        Canvas[CanvasWorkspace.vue]
+        Chat[ChatInterface.vue]
+        Memory[MemoryTree.vue]
     end
     
-    subgraph ServerAPI [Server - Nitro API]
-        AuthSvc[Auth Service]
-        SyncSvc[Yjs CRDT Sync]
-        AgentGateway[Agent Gateway]
-        BillingSvc[Billing / Dodopayments]
+    subgraph NitroBackend [Nitro Server & APIs]
+        Auth[utils/auth.ts]
+        CRDTSync[Yjs WebSocket Sync]
+        AgentRoute[api/chat/index.post.ts]
+        FileRoute[api/files/index.get.ts]
     end
     
-    subgraph AIAgent [AI Agent System - Eve]
-        AgentCore[Eve Agent Core]
-        Tools[Agent Tools]
-        MemoryVault[Memory Service]
+    subgraph EveFramework [Eve AI Agent System]
+        EveCore[Agent Core]
+        MemorySvc[MemoryService]
+        CanvasTools[Canvas Tools]
+        MemoryTools[Memory Vault Tools]
     end
     
-    subgraph DataLayer [Data Layer]
-        PostgreSQL[(PostgreSQL + pgvector)]
+    subgraph DataStore [Data Layer]
+        PG[(PostgreSQL Database)]
         Appwrite[(Appwrite Storage)]
     end
     
-    Canvas <-->|WebSocket| SyncSvc
-    ChatUI --> AgentGateway
-    Widgets --> AuthSvc
+    Canvas <-->|WebSocket Sync| CRDTSync
+    Chat -->|HTTP POST| AgentRoute
+    Memory -->|HTTP GET| FileRoute
     
-    SyncSvc --> PostgreSQL
-    AuthSvc --> PostgreSQL
-    BillingSvc --> PostgreSQL
+    CRDTSync --> PG
+    Auth --> PG
     
-    AgentGateway --> AgentCore
-    AgentCore --> Tools
-    Tools --> MemoryVault
-    MemoryVault --> PostgreSQL
-    Tools --> Appwrite
+    AgentRoute --> EveCore
+    EveCore --> CanvasTools
+    EveCore --> MemoryTools
+    
+    MemoryTools --> MemorySvc
+    MemorySvc --> PG
+    
+    FileRoute --> Appwrite
 ```
 
 <!-- diagram:component:app -->
-## Application Components
+## Frontend Components & State
 
 ```mermaid
 graph TD
-    subgraph Presentation [Presentation Layer]
-        Pages[Nuxt Pages]
-        Components[Vue Components]
+    subgraph Pages [Pages & Layouts]
+        AppVue[app.vue]
+        AppLayout[layouts/app.vue]
+        MemoryPage[pages/memory.vue]
     end
     
-    subgraph State [State Management]
-        Pinia[Pinia Stores]
-        Composables[Vue Composables]
-        Yjs[Yjs CRDT Document]
+    subgraph Shared UI [Global Overlays]
+        RightDrawer[RightDrawer.vue]
+        QuickAccess[QuickAccessBar.vue]
+        Settings[SettingsModal.vue]
     end
     
-    subgraph NitroAPI [Nitro API Layer]
-        Routes[API Routes]
-        Middleware[Server Middleware]
-        Services[Business Services]
+    subgraph Core Features [Feature Components]
+        CanvasWS[CanvasWorkspace.vue]
+        ChatUI[ChatInterface.vue]
+        MemoryTree[MemoryTree.vue]
     end
     
-    subgraph DBAccess [Database Access]
-        Drizzle[Drizzle ORM]
+    subgraph Pinia [Pinia State Management]
+        AppStore[useAppStore]
+        ChatStore[useChatStore]
+        ConvStore[useConversationStore]
+        WidgetStore[useWidgetStore]
+        UIStore[useUIStore]
     end
     
-    Pages --> Components
-    Components --> Composables
-    Composables --> Pinia
-    Composables --> Yjs
+    AppVue --> AppLayout
+    AppLayout --> RightDrawer
+    AppLayout --> CanvasWS
+    AppLayout --> QuickAccess
     
-    Pinia --> Routes
-    Yjs --> Routes
+    RightDrawer --> ChatUI
+    MemoryPage --> MemoryTree
     
-    Routes --> Middleware
-    Middleware --> Services
-    Services --> Drizzle
+    CanvasWS --> WidgetStore
+    ChatUI --> ChatStore
+    ChatUI --> ConvStore
+    RightDrawer --> UIStore
+    QuickAccess --> UIStore
 ```
 
 <!-- diagram:dataflow:agent -->
-## Agent Interaction Data Flow
+## Agent Tool & Execution Flow
 
 ```mermaid
 graph LR
-    User([User]) -->|Chat Input| UI[Chat Interface]
-    UI -->|API Request| Server[Nitro Server]
-    Server -->|Invoke| Eve[Eve Agent]
+    User([User Prompt]) --> AgentRoute[Server API /chat]
+    AgentRoute --> Eve[Eve Framework]
     
-    Eve --> ToolSelect{Select Tool?}
-    ToolSelect -->|Yes| ExecuteTool[Tool Execution]
-    ExecuteTool --> MemoryQuery[(Memory Vault / DB)]
-    ExecuteTool --> FileList[(File Storage)]
+    Eve --> Router{Tool Router}
     
-    ToolSelect -->|No| LLM([LLM inference])
-    LLM -->|Response| Eve
+    subgraph Canvas Manipulations
+        Router --> canvas_add[canvas_add_widget]
+        Router --> canvas_upd[canvas_update_widget]
+        Router --> canvas_rem[canvas_remove_widget]
+        Router --> canvas_read[canvas_read_widget]
+    end
     
-    Eve -->|Stream| Server
-    Server -->|SSE / WebSockets| UI
-    UI --> User
+    subgraph Agent Memory Vault
+        Router --> mem_store[memory_store]
+        Router --> mem_query[memory_query]
+        Router --> mem_tree[memory_tree]
+        Router --> file_list[file_list]
+    end
+    
+    subgraph External Web Tools
+        Router --> web_search[web_search]
+        Router --> wiki[wikipedia_search]
+        Router --> yt[youtube_search]
+        Router --> weather[get_weather]
+    end
+    
+    mem_store --> PG[(PostgreSQL)]
+    mem_query --> PG
+    file_list --> PG
+    
+    canvas_add --> UI([Frontend Client])
 ```
 
 <!-- diagram:er:database -->
