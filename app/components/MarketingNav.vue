@@ -31,6 +31,8 @@ onUnmounted(() => {
 <template>
   <nav ref="navRef" class="marketing-nav" :class="{ 'is-scrolled': isScrolled }">
     <div class="nav-container">
+      <NuxtLink to="/" class="nav-logo">BUBBLES</NuxtLink>
+      
       <div class="nav-links">
         <NuxtLink to="/about">About</NuxtLink>
         <NuxtLink to="/manifesto">Manifesto</NuxtLink>
@@ -38,6 +40,10 @@ onUnmounted(() => {
         <NuxtLink to="/investors">Investors</NuxtLink>
         <NuxtLink to="/pricing">Pricing</NuxtLink>
         <NuxtLink to="/docs">Docs</NuxtLink>
+      </div>
+      
+      <div class="nav-actions">
+        <NuxtLink to="/app" class="nav-cta">OPEN WORKSPACE</NuxtLink>
       </div>
     </div>
   </nav>
@@ -74,7 +80,7 @@ html.light .marketing-nav.is-scrolled {
   padding: 0 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .nav-logo {
