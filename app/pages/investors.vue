@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { authClient, useSession } from '~/utils/auth-client'
+
+const { data: session } = useSession()
 
 const manifestoContent = `# Bubbles: The Personal OS Manifesto
 
@@ -235,6 +238,24 @@ const scrollTo = (id: string) => {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
+
+const handleLinkClick = async (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  const link = target.closest('a')
+  
+  if (link && link.classList.contains('md-link')) {
+    const href = link.getAttribute('href')
+    
+    // Intercept checkout links if user is not authenticated
+    if (href?.startsWith('/api/checkout/') && !session.value) {
+      event.preventDefault()
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: href
+      })
+    }
+  }
+}
 </script>
 
 <template>
@@ -255,7 +276,7 @@ const scrollTo = (id: string) => {
 
       <!-- Main Document -->
       <main class="main-content">
-        <div class="md-content" v-html="parsedManifesto"></div>
+        <div class="md-content" v-html="parsedManifesto" @click="handleLinkClick"></div>
         <NuxtLink to="/" class="md-link">[Back to Bubbles]</NuxtLink> | <a href="mailto:founders@tao.hq" class="md-link">[Initialize Contact]</a>
       </main>
 
