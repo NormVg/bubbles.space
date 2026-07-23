@@ -28,7 +28,7 @@ graph TD
     end
     
     subgraph EveFramework [Eve AI Agent System]
-        EveCore[Agent Core (agent.ts)]
+        EveCore["Agent Core (agent.ts)"]
         LLM([Ollama Model])
     end
     
@@ -104,7 +104,7 @@ graph TD
 
     subgraph Server [Nitro API]
         SyncEndpoint[sync.post.ts]
-        AsyncUnpack[syncSQLTables()]
+        AsyncUnpack["syncSQLTables()"]
     end
 
     subgraph Database [PostgreSQL]
