@@ -126,7 +126,7 @@ useSeoMeta({
             </li>
           </ul>
 
-          <button class="plan-button" :class="{ 'btn-primary': tier.highlight }">
+          <button v-if="false" class="plan-button" :class="{ 'btn-primary': tier.highlight }">
             {{ tier.buttonText }}
           </button>
         </div>
