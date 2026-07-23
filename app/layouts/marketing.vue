@@ -21,7 +21,9 @@ onUnmounted(() => {
   <div class="marketing-layout">
     <nav class="marketing-nav" :class="{ 'is-scrolled': isScrolled }">
       <div class="nav-container">
-        <NuxtLink to="/" class="nav-logo">BUBBLES</NuxtLink>
+        <div class="nav-side left">
+          <NuxtLink to="/" class="nav-logo">BUBBLES</NuxtLink>
+        </div>
         
         <div class="nav-links">
           <NuxtLink to="/manifesto">Manifesto</NuxtLink>
@@ -31,8 +33,8 @@ onUnmounted(() => {
           <NuxtLink to="/docs">Docs</NuxtLink>
         </div>
         
-        <div class="nav-actions">
-          <NuxtLink to="/app" class="nav-cta">OPEN WORKSPACE</NuxtLink>
+        <div class="nav-side right">
+          <!-- CTA removed per user request -->
         </div>
       </div>
     </nav>
@@ -83,6 +85,15 @@ html.light .marketing-nav.is-scrolled {
   justify-content: space-between;
 }
 
+.nav-side {
+  flex: 1;
+  display: flex;
+}
+
+.nav-side.right {
+  justify-content: flex-end;
+}
+
 .nav-logo {
   font-size: 13px;
   font-weight: 500;
@@ -111,32 +122,7 @@ html.light .marketing-nav.is-scrolled {
   color: var(--text-primary);
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-}
 
-.nav-cta {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  padding: 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: var(--text-primary);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-}
-
-html.light .nav-cta {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-
-.nav-cta:hover {
-  background: var(--text-primary);
-  color: var(--bg-base);
-}
 
 .marketing-main {
   flex: 1;
