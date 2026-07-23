@@ -5,10 +5,9 @@
 ```mermaid
 graph LR
     SO[System Overview] --> CD[Frontend Components]
-    SO --> DF[Agent Data Flow]
-    DF --> SYNC[CRDT Sync Flow]
-    DF --> TS[Tool Execution Sequence]
+    SO --> DF[Data Flow & CRDT Sync]
     CD --> ER[Database Schema]
+    DF --> TS[Agent Tool Sequence]
 ```
 
 <!-- diagram:overview:system -->
@@ -19,43 +18,33 @@ graph TD
     subgraph ClientApp [Nuxt Client Application]
         Canvas[CanvasWorkspace.vue]
         Chat[ChatInterface.vue]
-        Memory[MemoryTree.vue]
+        AgentProv[AgentSessionProvider.vue]
     end
     
-    subgraph NitroBackend [Nitro Server & APIs]
-        Auth[utils/auth.ts]
-        CRDTSync[Yjs WebSocket Sync]
-        AgentRoute[api/chat/index.post.ts]
-        FileRoute[api/files/index.get.ts]
+    subgraph NitroBackend [Nitro Server APIs]
+        SyncPost[crdt/sync.post.ts]
+        MemoryRoute[memory/index.post.ts]
+        FileRoute[files/index.get.ts]
     end
     
     subgraph EveFramework [Eve AI Agent System]
-        EveCore[Agent Core]
-        MemorySvc[MemoryService]
-        CanvasTools[Canvas Tools]
-        MemoryTools[Memory Vault Tools]
+        EveCore[Agent Core (agent.ts)]
+        LLM([Ollama Model])
     end
     
     subgraph DataStore [Data Layer]
-        PG[(PostgreSQL Database)]
+        PG[(PostgreSQL + pgvector)]
         Appwrite[(Appwrite Storage)]
     end
     
-    Canvas <-->|WebSocket Sync| CRDTSync
-    Chat -->|HTTP POST| AgentRoute
-    Memory -->|HTTP GET| FileRoute
+    Canvas -->|Local CRDT changes| SyncPost
+    AgentProv <-->|WebSocket/SSE| EveCore
+    EveCore <--> LLM
     
-    CRDTSync --> PG
-    Auth --> PG
-    
-    AgentRoute --> EveCore
-    EveCore --> CanvasTools
-    EveCore --> MemoryTools
-    
-    MemoryTools --> MemorySvc
-    MemorySvc --> PG
-    
-    FileRoute --> Appwrite
+    SyncPost -->|Upsert crdt_sync_state| PG
+    MemoryRoute -->|Insert Embeddings| PG
+    FileRoute -->|Query Metadata| PG
+    FileRoute -->|Fetch Object| Appwrite
 ```
 
 <!-- diagram:component:app -->
@@ -72,7 +61,6 @@ graph TD
     subgraph Shared UI [Global Overlays]
         RightDrawer[RightDrawer.vue]
         QuickAccess[QuickAccessBar.vue]
-        Settings[SettingsModal.vue]
     end
     
     subgraph Core Features [Feature Components]
@@ -81,8 +69,7 @@ graph TD
         MemoryTree[MemoryTree.vue]
     end
     
-    subgraph Pinia [Pinia State Management]
-        AppStore[useAppStore]
+    subgraph State Management [Pinia Stores]
         ChatStore[useChatStore]
         ConvStore[useConversationStore]
         WidgetStore[useWidgetStore]
@@ -104,44 +91,6 @@ graph TD
     QuickAccess --> UIStore
 ```
 
-<!-- diagram:dataflow:agent -->
-## Agent Tool & Execution Flow
-
-```mermaid
-graph LR
-    User([User Prompt]) --> AgentRoute[Server API /chat]
-    AgentRoute --> Eve[Eve Framework]
-    
-    Eve --> Router{Tool Router}
-    
-    subgraph Canvas Manipulations
-        Router --> canvas_add[canvas_add_widget]
-        Router --> canvas_upd[canvas_update_widget]
-        Router --> canvas_rem[canvas_remove_widget]
-        Router --> canvas_read[canvas_read_widget]
-    end
-    
-    subgraph Agent Memory Vault
-        Router --> mem_store[memory_store]
-        Router --> mem_query[memory_query]
-        Router --> mem_tree[memory_tree]
-        Router --> file_list[file_list]
-    end
-    
-    subgraph External Web Tools
-        Router --> web_search[web_search]
-        Router --> wiki[wikipedia_search]
-        Router --> yt[youtube_search]
-        Router --> weather[get_weather]
-    end
-    
-    mem_store --> PG[(PostgreSQL)]
-    mem_query --> PG
-    file_list --> PG
-    
-    canvas_add --> UI([Frontend Client])
-```
-
 <!-- diagram:dataflow:sync -->
 ## CRDT Sync Engine Flow
 
@@ -149,14 +98,13 @@ graph LR
 graph TD
     subgraph Client [Vue Frontend]
         YDocClient[Y.Doc Local State]
-        SyncWorker[Sync Interval / Polling]
+        SyncWorker[Sync Interval Timer]
         WidgetStore[Pinia Widget Store]
     end
 
-    subgraph Server [Nitro API: /crdt/sync.post]
-        YDocServer[Y.Doc Server State]
+    subgraph Server [Nitro API]
         SyncEndpoint[sync.post.ts]
-        AsyncUnpack[SQL Upsert Worker]
+        AsyncUnpack[syncSQLTables()]
     end
 
     subgraph Database [PostgreSQL]
@@ -164,20 +112,20 @@ graph TD
         SQLTables[(workspace & widget tables)]
     end
 
-    WidgetStore -->|Observer| YDocClient
+    WidgetStore -->|Observer mutation| YDocClient
     YDocClient -->|encodeStateVector| SyncWorker
-    SyncWorker -->|HTTP POST (base64)| SyncEndpoint
+    SyncWorker -->|HTTP POST JSON {stateVector, update}| SyncEndpoint
     
-    SyncEndpoint -->|Read| CRDTTable
-    CRDTTable -->|Binary Buffer| YDocServer
+    SyncEndpoint -->|SELECT state| CRDTTable
+    CRDTTable -->|Binary bytea| SyncEndpoint
     
-    SyncEndpoint -->|applyUpdate| YDocServer
-    SyncEndpoint -->|encodeStateAsUpdate| SyncWorker
-    SyncWorker -->|applyUpdate| YDocClient
+    SyncEndpoint -->|Y.applyUpdate()| SyncEndpoint
+    SyncEndpoint -->|Y.encodeStateAsUpdate()| SyncWorker
+    SyncWorker -->|Y.applyUpdate()| YDocClient
     
-    SyncEndpoint -->|Save full state| CRDTTable
-    SyncEndpoint -->|waitUntil()| AsyncUnpack
-    AsyncUnpack -->|Extract JSON/Relational| SQLTables
+    SyncEndpoint -->|INSERT/UPDATE state| CRDTTable
+    SyncEndpoint -->|event.waitUntil()| AsyncUnpack
+    AsyncUnpack -->|Drizzle Insert/Update| SQLTables
 ```
 
 <!-- diagram:sequence:tool -->
@@ -186,23 +134,27 @@ graph TD
 ```mermaid
 sequenceDiagram
     participant User
-    participant Chat as ChatInterface (Vue)
-    participant API as /api/chat (SSE)
-    participant Eve as Eve Agent Core
-    participant Tool as canvas_add_widget
-    participant Store as useWidgetStore (Pinia)
+    participant Chat as ChatInterface.vue
+    participant AgentProv as AgentSessionProvider.vue
+    participant Eve as Eve Framework
+    participant Store as useWidgetStore
+    participant API as Nitro API
     
     User->>Chat: "Draw a red box"
-    Chat->>API: POST /api/chat { prompt }
-    API->>Eve: streamText()
+    Chat->>AgentProv: agent.send()
+    AgentProv->>Eve: Network Request
     Eve->>Eve: LLM decides to use tool
-    Eve->>Tool: execute({ type: "markdown", title: "Box" })
-    Tool-->>Eve: { action: "add_widget", payload: {...} }
-    Eve-->>API: Tool Result Object
-    API-->>Chat: SSE Stream (JSON)
-    Chat->>Chat: Parse tool result
-    Chat->>Store: dispatch action (addWidget)
-    Store-->>User: UI Updates & CRDT Sync Triggers
+    Eve-->>AgentProv: ToolCall(canvas_add_widget, args)
+    
+    AgentProv->>Store: widgetStore.addWidget(args)
+    Store-->>User: UI Renders New Widget
+    
+    AgentProv-->>Eve: ToolResult("Successfully created widget")
+    Eve-->>AgentProv: streamText("I have drawn a red box for you.")
+    AgentProv-->>Chat: Update UI Messages
+    
+    Note over Store, API: Background CRDT Sync triggers
+    Store->>API: HTTP POST /crdt/sync.post (Base64 CRDT Update)
 ```
 
 <!-- diagram:er:database -->
