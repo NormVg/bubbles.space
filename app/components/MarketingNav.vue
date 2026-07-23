@@ -32,6 +32,7 @@ onUnmounted(() => {
   <nav ref="navRef" class="marketing-nav" :class="{ 'is-scrolled': isScrolled }">
     <div class="nav-container">
       <div class="nav-links">
+        <NuxtLink to="/about">About</NuxtLink>
         <NuxtLink to="/manifesto">Manifesto</NuxtLink>
         <NuxtLink to="/use-cases">Use Cases</NuxtLink>
         <NuxtLink to="/pricing">Pricing</NuxtLink>
