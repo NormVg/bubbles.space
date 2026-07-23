@@ -6,6 +6,8 @@
 graph LR
     SO[System Overview] --> CD[Frontend Components]
     SO --> DF[Agent Data Flow]
+    DF --> SYNC[CRDT Sync Flow]
+    DF --> TS[Tool Execution Sequence]
     CD --> ER[Database Schema]
 ```
 
@@ -138,6 +140,69 @@ graph LR
     file_list --> PG
     
     canvas_add --> UI([Frontend Client])
+```
+
+<!-- diagram:dataflow:sync -->
+## CRDT Sync Engine Flow
+
+```mermaid
+graph TD
+    subgraph Client [Vue Frontend]
+        YDocClient[Y.Doc Local State]
+        SyncWorker[Sync Interval / Polling]
+        WidgetStore[Pinia Widget Store]
+    end
+
+    subgraph Server [Nitro API: /crdt/sync.post]
+        YDocServer[Y.Doc Server State]
+        SyncEndpoint[sync.post.ts]
+        AsyncUnpack[SQL Upsert Worker]
+    end
+
+    subgraph Database [PostgreSQL]
+        CRDTTable[(crdt_sync_state)]
+        SQLTables[(workspace & widget tables)]
+    end
+
+    WidgetStore -->|Observer| YDocClient
+    YDocClient -->|encodeStateVector| SyncWorker
+    SyncWorker -->|HTTP POST (base64)| SyncEndpoint
+    
+    SyncEndpoint -->|Read| CRDTTable
+    CRDTTable -->|Binary Buffer| YDocServer
+    
+    SyncEndpoint -->|applyUpdate| YDocServer
+    SyncEndpoint -->|encodeStateAsUpdate| SyncWorker
+    SyncWorker -->|applyUpdate| YDocClient
+    
+    SyncEndpoint -->|Save full state| CRDTTable
+    SyncEndpoint -->|waitUntil()| AsyncUnpack
+    AsyncUnpack -->|Extract JSON/Relational| SQLTables
+```
+
+<!-- diagram:sequence:tool -->
+## Tool Execution Sequence (e.g., canvas_add_widget)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Chat as ChatInterface (Vue)
+    participant API as /api/chat (SSE)
+    participant Eve as Eve Agent Core
+    participant Tool as canvas_add_widget
+    participant Store as useWidgetStore (Pinia)
+    
+    User->>Chat: "Draw a red box"
+    Chat->>API: POST /api/chat { prompt }
+    API->>Eve: streamText()
+    Eve->>Eve: LLM decides to use tool
+    Eve->>Tool: execute({ type: "markdown", title: "Box" })
+    Tool-->>Eve: { action: "add_widget", payload: {...} }
+    Eve-->>API: Tool Result Object
+    API-->>Chat: SSE Stream (JSON)
+    Chat->>Chat: Parse tool result
+    Chat->>Store: dispatch action (addWidget)
+    Store-->>User: UI Updates & CRDT Sync Triggers
 ```
 
 <!-- diagram:er:database -->
