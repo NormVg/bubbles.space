@@ -42,6 +42,15 @@ async function loginWithGoogle() {
         </div>
       </div>
     </div>
+    
+    <!-- Investor Link at bottom -->
+    <div class="investor-footer">
+      <NuxtLink to="/investors" class="investor-link" title="Investors & Sponsors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+        </svg>
+      </NuxtLink>
+    </div>
   </div>
 </template>
 
@@ -196,5 +205,44 @@ html.light .loader-track {
   100% { transform: translateX(350%); }
 }
 
+.investor-footer {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.investor-link {
+  color: var(--text-secondary);
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html.light .investor-link {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.investor-link:hover {
+  opacity: 1;
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html.light .investor-link:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
 
 </style>
