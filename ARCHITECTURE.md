@@ -14,26 +14,26 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph Client Application (Nuxt 4 / Vue 3)
+    subgraph ClientApp [Client Application - Nuxt 4 / Vue 3]
         Canvas[Spatial Canvas]
         ChatUI[Chat Interface]
         Widgets[Canvas Widgets]
     end
     
-    subgraph Server (Nitro API)
+    subgraph ServerAPI [Server - Nitro API]
         AuthSvc[Auth Service]
         SyncSvc[Yjs CRDT Sync]
         AgentGateway[Agent Gateway]
         BillingSvc[Billing / Dodopayments]
     end
     
-    subgraph AI Agent System (Eve)
+    subgraph AIAgent [AI Agent System - Eve]
         AgentCore[Eve Agent Core]
         Tools[Agent Tools]
         MemoryVault[Memory Service]
     end
     
-    subgraph Data Layer
+    subgraph DataLayer [Data Layer]
         PostgreSQL[(PostgreSQL + pgvector)]
         Appwrite[(Appwrite Storage)]
     end
@@ -58,24 +58,24 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph Presentation Layer
+    subgraph Presentation [Presentation Layer]
         Pages[Nuxt Pages]
         Components[Vue Components]
     end
     
-    subgraph State Management
+    subgraph State [State Management]
         Pinia[Pinia Stores]
         Composables[Vue Composables]
         Yjs[Yjs CRDT Document]
     end
     
-    subgraph Nitro API Layer
+    subgraph NitroAPI [Nitro API Layer]
         Routes[API Routes]
         Middleware[Server Middleware]
         Services[Business Services]
     end
     
-    subgraph Database Access
+    subgraph DBAccess [Database Access]
         Drizzle[Drizzle ORM]
     end
     
