@@ -31,7 +31,10 @@ export default defineNuxtConfig({
     }
   },
   nitro: {
-    experimental: { websocket: true }
+    experimental: { websocket: true },
+    routeRules: {
+      '/api/**': { maxDuration: 60 }
+    }
   },
   runtimeConfig: {
     ablyApiKey: process.env.ABLY_API_KEY || '',
