@@ -9,10 +9,10 @@ import { authClient } from '~/utils/auth-client'
     <!-- Hero Section -->
     <div class="hero-section">
       <div class="landing-content">
-        <h1 class="hero-title">About Bubbles</h1>
-        <p class="hero-subtitle">
-          Bubbles.space is your persistent AI assistant for the new era of computing—a presence that's always running, remembers everything, and helps you work naturally instead of juggling apps, notes, and endless tabs.
-        </p>
+        <div class="logo-wrapper">
+          <h1 class="logo-text">ABOUT BUBBLES</h1>
+        </div>
+        <p class="tagline">Your persistent AI assistant for the new era of computing.</p>
       </div>
     </div>
 
@@ -20,6 +20,9 @@ import { authClient } from '~/utils/auth-client'
     <section class="content-section">
       <div class="content-block">
         <h2 class="block-title">The Philosophy</h2>
+        <p class="block-text">
+          Bubbles is your persistent AI assistant for the new era of computing—a presence that's always running, remembers everything, and helps you work naturally instead of juggling apps, notes, and endless tabs.
+        </p>
         <p class="block-text">
           Software today is fragmented. People spend their days switching between apps, managing tabs, copying information between tools, and manually coordinating their digital lives. AI has made software more capable, but most AI products still operate in a simple loop: You ask. It responds.
         </p>
@@ -100,7 +103,7 @@ import { authClient } from '~/utils/auth-client'
 }
 
 .hero-section {
-  padding: 180px 24px 60px;
+  padding: 160px 24px 80px;
   display: flex;
   justify-content: center;
 }
@@ -120,20 +123,32 @@ import { authClient } from '~/utils/auth-client'
   to { opacity: 1; transform: translateY(0); }
 }
 
-.hero-title {
-  font-size: 40px;
-  font-weight: 300;
-  color: var(--text-primary);
-  margin: 0;
-  letter-spacing: -0.01em;
+.logo-wrapper {
+  overflow: hidden;
 }
 
-.hero-subtitle {
+.logo-text {
   font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 12px;
+  margin-right: -12px;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+html.light .logo-text {
   font-weight: 400;
-  line-height: 1.6;
+}
+
+.tagline {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1px;
   color: var(--text-secondary);
+  text-transform: uppercase;
   margin: 0;
+  opacity: 0.6;
 }
 
 /* ── Content Sections ── */
