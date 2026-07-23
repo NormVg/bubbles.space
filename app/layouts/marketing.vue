@@ -26,6 +26,7 @@ onUnmounted(() => {
         <div class="nav-links">
           <NuxtLink to="/manifesto">Manifesto</NuxtLink>
           <NuxtLink to="/use-cases">Use Cases</NuxtLink>
+          <NuxtLink to="/investors">Investors</NuxtLink>
           <NuxtLink to="/pricing">Pricing</NuxtLink>
           <NuxtLink to="/docs">Docs</NuxtLink>
         </div>
