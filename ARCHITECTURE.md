@@ -38,10 +38,10 @@ graph TD
     end
     
     Canvas -->|Local CRDT changes| SyncPost
-    AgentProv <-->|WebSocket/SSE| EveCore
+    AgentProv <-->|WebSocket SSE| EveCore
     EveCore <--> LLM
     
-    SyncPost -->|Upsert crdt_sync_state| PG
+    SyncPost -->|Upsert crdt sync state| PG
     MemoryRoute -->|Insert Embeddings| PG
     FileRoute -->|Query Metadata| PG
     FileRoute -->|Fetch Object| Appwrite
@@ -114,18 +114,18 @@ graph TD
 
     WidgetStore -->|Observer mutation| YDocClient
     YDocClient -->|encodeStateVector| SyncWorker
-    SyncWorker -->|HTTP POST JSON {stateVector, update}| SyncEndpoint
+    SyncWorker -->|HTTP POST JSON| SyncEndpoint
     
     SyncEndpoint -->|SELECT state| CRDTTable
     CRDTTable -->|Binary bytea| SyncEndpoint
     
-    SyncEndpoint -->|Y.applyUpdate()| SyncEndpoint
-    SyncEndpoint -->|Y.encodeStateAsUpdate()| SyncWorker
-    SyncWorker -->|Y.applyUpdate()| YDocClient
+    SyncEndpoint -->|Y applyUpdate| SyncEndpoint
+    SyncEndpoint -->|Y encodeStateAsUpdate| SyncWorker
+    SyncWorker -->|Y applyUpdate| YDocClient
     
-    SyncEndpoint -->|INSERT/UPDATE state| CRDTTable
-    SyncEndpoint -->|event.waitUntil()| AsyncUnpack
-    AsyncUnpack -->|Drizzle Insert/Update| SQLTables
+    SyncEndpoint -->|INSERT UPDATE state| CRDTTable
+    SyncEndpoint -->|event waitUntil| AsyncUnpack
+    AsyncUnpack -->|Drizzle Insert Update| SQLTables
 ```
 
 <!-- diagram:sequence:tool -->
