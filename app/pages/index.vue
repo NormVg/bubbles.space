@@ -1,17 +1,36 @@
 <script setup lang="ts">
 import { authClient } from '~/utils/auth-client'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import BubblesAvatar from '~/components/BubblesAvatar.vue'
+import { useRoute } from 'vue-router'
 
 const isLoading = ref(false)
 const config = useRuntimeConfig()
 const isLocked = config.public.appLocked
+const route = useRoute()
+
+onMounted(() => {
+  if (route.query.redirect) {
+    loginWithGoogle()
+  }
+})
 
 async function loginWithGoogle() {
   isLoading.value = true
+  
+  let cbUrl = "/app"
+  
+  if (route.query.redirect === 'founder-pass') {
+    cbUrl = "/api/checkout/founder-pass"
+  } else if (route.query.redirect === 'sponsor') {
+    cbUrl = "/api/checkout/sponsor"
+  } else if (route.query.redirect) {
+    cbUrl = route.query.redirect as string
+  }
+
   await authClient.signIn.social({
     provider: "google",
-    callbackURL: "/app"
+    callbackURL: cbUrl
   })
 }
 </script>
