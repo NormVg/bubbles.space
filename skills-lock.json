@@ -37,6 +37,12 @@
       "skillPath": "dodo-payments/credit-based-billing/SKILL.md",
       "computedHash": "d9f11fe73bc87eec7eff4303a0f93ab01eac321a7a00f06c6eb5689da26c13c7"
     },
+    "deploy": {
+      "source": "pipecat-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/deploy/SKILL.md",
+      "computedHash": "d80b69a7886df6a516cd71243d790f58efb503a1f95cbf6e878ecf832c9370f2"
+    },
     "design-taste-frontend": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
@@ -60,6 +66,12 @@
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "4eabc66183767153e404b39d1b839b1c37f2d82d86f0a0d7e880a579d8d62336"
+    },
+    "init": {
+      "source": "pipecat-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/init/SKILL.md",
+      "computedHash": "56e485a741f1e440c7fe89c4046c132faca0991449b4bd27c2c47a34191b5ff6"
     },
     "license-keys": {
       "source": "dodopayments/skills",

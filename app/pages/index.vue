@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authClient } from '~/utils/auth-client'
+import { authClient, useSession } from '~/utils/auth-client'
 import { ref, onMounted } from 'vue'
 import BubblesAvatar from '~/components/BubblesAvatar.vue'
 import { useRoute } from 'vue-router'
@@ -8,6 +8,7 @@ const isLoading = ref(false)
 const config = useRuntimeConfig()
 const isLocked = config.public.appLocked
 const route = useRoute()
+const { data: session } = useSession()
 
 onMounted(() => {
   if (route.query.redirect) {
@@ -15,17 +16,19 @@ onMounted(() => {
   }
 })
 
-async function loginWithGoogle() {
+async function loginWithGoogle(overrideRedirect?: any) {
   isLoading.value = true
   
   let cbUrl = "/app"
   
-  if (route.query.redirect === 'founder-pass') {
+  const targetRedirect = typeof overrideRedirect === 'string' ? overrideRedirect : route.query.redirect
+  
+  if (targetRedirect === 'founder-pass' || targetRedirect === '/api/checkout/founder-pass') {
     cbUrl = "/api/checkout/founder-pass"
-  } else if (route.query.redirect === 'sponsor') {
+  } else if (targetRedirect === 'sponsor' || targetRedirect === '/api/checkout/sponsor') {
     cbUrl = "/api/checkout/sponsor"
-  } else if (route.query.redirect) {
-    cbUrl = route.query.redirect as string
+  } else if (targetRedirect) {
+    cbUrl = targetRedirect as string
   }
 
   await authClient.signIn.social({
@@ -61,6 +64,8 @@ async function loginWithGoogle() {
         </div>
       </div>
     </div>
+
+
   </div>
 </template>
 
@@ -214,6 +219,5 @@ html.light .loader-track {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(350%); }
 }
-
 
 </style>

@@ -2,16 +2,17 @@
 
 
 import { defineAgent, defineDynamic } from "eve";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createOllama } from "ai-sdk-ollama";
 
-const openrouter = createOpenRouter({
-  apiKey: process.env.OPENROUTER_API_KEY,
+const ollama = createOllama({
+  apiKey: process.env.OLLAMA_API_KEY,
+  baseURL: "https://ollama.com",
 });
 
 export default defineAgent({
   model: defineDynamic({
     // The fallback model is used if dynamic selection returns null
-    fallback: openrouter("anthropic/claude-3.5-sonnet:beta"),
+    fallback: ollama("gemma4:31b-cloud"),
     events: {
       "session.started": (_event, ctx) => {
         // Read user preferences

@@ -1,7 +1,49 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { authClient, useSession } from '~/utils/auth-client'
+// useRoute is auto-imported by Nuxt
 
 const isYearly = ref(false)
+const isLoading = ref(false)
+const route = useRoute()
+// Remove unused reactive session variable that caused the crash
+
+async function handlePricingClick(checkoutUrl: string) {
+  try {
+    isLoading.value = true
+    
+    // Asynchronously fetch current session state instead of relying on reactivity
+    const { data } = await authClient.getSession()
+    
+    if (data) {
+      await navigateTo(checkoutUrl, { external: true })
+    } else {
+      await loginWithGoogle(checkoutUrl)
+    }
+  } catch (error) {
+    console.error('Pricing click error:', error)
+    isLoading.value = false
+  }
+}
+
+async function loginWithGoogle(overrideRedirect?: string) {
+  let cbUrl = "/app"
+  
+  const targetRedirect = overrideRedirect || route.query.redirect
+  
+  if (targetRedirect === 'founder-pass' || targetRedirect === '/api/checkout/founder-pass') {
+    cbUrl = "/api/checkout/founder-pass"
+  } else if (targetRedirect === 'sponsor' || targetRedirect === '/api/checkout/sponsor') {
+    cbUrl = "/api/checkout/sponsor"
+  } else if (targetRedirect) {
+    cbUrl = targetRedirect as string
+  }
+
+  await authClient.signIn.social({
+    provider: "google",
+    callbackURL: cbUrl
+  })
+}
 
 const tiers = [
   {
@@ -93,6 +135,59 @@ useSeoMeta({
           YEARLY <span class="discount-badge">SAVE 20%</span>
         </span>
       </div>
+    </div>
+
+    <!-- Founder's Pass Special Section -->
+    <div class="founder-pass-container">
+      <div class="plan-card plan-highlight">
+        <div class="highlight-glow" aria-hidden="true" />
+        <div class="plan-inner founder-inner">
+          <div class="plan-top">
+            <h3 class="plan-name">Founder's Pass</h3>
+            <div class="plan-price-wrapper">
+              <span class="currency">$</span>
+              <span class="price">100</span>
+              <span class="period">/ ONE-TIME</span>
+            </div>
+            <p class="plan-desc">Early access, lifetime pro status, and direct line to the core engineering team.</p>
+          </div>
+
+          <div class="plan-divider" />
+
+          <ul class="plan-features">
+            <li class="feature-item">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Instant access to the private beta</span>
+            </li>
+            <li class="feature-item">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Lifetime Pro Status (no subscriptions)</span>
+            </li>
+            <li class="feature-item">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Access to the private developer group</span>
+            </li>
+            <li class="feature-item">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>Early access to ecosystem applications</span>
+            </li>
+          </ul>
+
+          <button class="plan-button btn-primary" @click="handlePricingClick('/api/checkout/founder-pass')" :disabled="isLoading">
+            <span v-if="isLoading" class="loader-track"><span class="loader-fill"></span></span>
+            <span v-else>FUND & GET FOUNDER'S PASS</span>
+          </button>
+        </div>
+      </div>
+      <p class="founder-notice">Regular plans below are not active right now. We are currently only accepting Founder's Passes for early access.</p>
     </div>
 
     <div class="plans-grid">
@@ -237,6 +332,29 @@ html.light .toggle-switch {
   transform: translateX(20px);
 }
 
+/* ── Founder's Pass Section ── */
+.founder-pass-container {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fade-in-up 0.8s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.founder-inner {
+  padding: 48px 40px;
+}
+
+.founder-notice {
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
+}
+
 /* ── Grid ── */
 .plans-grid {
   display: grid;
@@ -244,6 +362,8 @@ html.light .toggle-switch {
   gap: 24px;
   width: 100%;
   max-width: 1200px;
+  opacity: 0.5; /* Dimmed since they are inactive */
+  pointer-events: none; /* Prevent interaction */
 }
 
 @media (max-width: 1024px) {
@@ -458,5 +578,40 @@ html.light .plan-button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ── Loader ── */
+.plan-button .loader-track {
+  width: 120px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: block;
+  margin: 0 auto;
+}
+
+html.light .plan-button .loader-track {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.plan-button .loader-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--text-primary);
+  width: 30%;
+  animation: indeterminate-load 1s infinite linear;
+  transform-origin: left;
+}
+
+.plan-button.btn-primary .loader-fill {
+  background: var(--bg-base);
+}
+
+@keyframes indeterminate-load {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
 }
 </style>

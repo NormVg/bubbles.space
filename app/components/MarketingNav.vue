@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
 const isScrolled = ref(false)
+const isMobileMenuOpen = ref(false)
 const navRef = ref<HTMLElement | null>(null)
 let scrollParent: HTMLElement | Window | null = null
 
@@ -14,20 +15,33 @@ function handleScroll(e: Event) {
   isScrolled.value = scrollTop > 20
 }
 
+function toggleMobileMenu() {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  if (isMobileMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+watch(() => route.path, () => {
+  if (isMobileMenuOpen.value) {
+    toggleMobileMenu()
+  }
+})
+
 onMounted(() => {
-  // Find the closest scrollable container (usually the page wrapper)
-  if (navRef.value) {
-    scrollParent = navRef.value.parentElement
-    if (scrollParent) {
-      scrollParent.addEventListener('scroll', handleScroll, { passive: true })
-    }
+  window.addEventListener('scroll', handleScroll, { capture: true })
+  
+  // Initial check
+  const scrollContainer = document.querySelector('.pricing-page') || document.querySelector('.landing-screen')
+  if (scrollContainer) {
+    isScrolled.value = (scrollContainer as HTMLElement).scrollTop > 20
   }
 })
 
 onUnmounted(() => {
-  if (scrollParent) {
-    scrollParent.removeEventListener('scroll', handleScroll)
-  }
+  window.removeEventListener('scroll', handleScroll, { capture: true })
 })
 </script>
 
@@ -38,7 +52,7 @@ onUnmounted(() => {
         <NuxtLink v-if="route.path !== '/'" to="/" class="nav-logo">BUBBLES</NuxtLink>
       </div>
       
-      <div class="nav-links">
+      <div class="nav-links desktop-only">
         <NuxtLink to="/about">About</NuxtLink>
         <NuxtLink to="/manifesto">Manifesto</NuxtLink>
         <NuxtLink to="/use-cases">Use Cases</NuxtLink>
@@ -47,8 +61,28 @@ onUnmounted(() => {
         <NuxtLink to="/docs">Docs</NuxtLink>
       </div>
       
+      <div class="nav-links mobile-only-flex">
+        <NuxtLink to="/pricing">Pricing</NuxtLink>
+      </div>
+      
       <div class="nav-side right">
-        <!-- CTA removed per user request -->
+        <button class="hamburger-btn mobile-only" @click="toggleMobileMenu">
+          <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" :class="{ 'is-open': isMobileMenuOpen }">
+      <div class="mobile-links">
+        <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/about">About</NuxtLink>
+        <NuxtLink to="/manifesto">Manifesto</NuxtLink>
+        <NuxtLink to="/use-cases">Use Cases</NuxtLink>
+        <NuxtLink to="/investors">Investors</NuxtLink>
+        <NuxtLink to="/pricing">Pricing</NuxtLink>
+        <NuxtLink to="/docs">Docs</NuxtLink>
       </div>
     </div>
   </nav>
@@ -127,9 +161,94 @@ html.light .marketing-nav.is-scrolled {
 
 
 
+.mobile-only {
+  display: none;
+}
+.mobile-only-flex {
+  display: none;
+}
+.mobile-menu-overlay {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .nav-links {
-    display: none; /* Hide standard links on mobile */
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block;
+  }
+  .mobile-only-flex {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-container {
+    padding: 0 16px;
+  }
+
+  .nav-side.left {
+    flex: 1;
+    padding-left: 0;
+  }
+  
+  .nav-side.left:empty {
+    display: none;
+  }
+
+  .nav-side.right {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .hamburger-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 8px;
+    margin-left: 16px;
+    margin-right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-base);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mobile-menu-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .mobile-links a {
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .mobile-links a.router-link-active {
+    font-weight: 500;
   }
 }
 </style>
